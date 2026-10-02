@@ -350,3 +350,65 @@ func test_attachment_cycling() -> void:
 		seen.append(player.attachments.equipped_id)
 	check("cycles hook -> grapple -> shovel -> lantern -> cannon -> hook", seen == [&"hook", &"grapple", &"shovel", &"lantern", &"cannon", &"hook"], str(seen))
 	InventoryManager.reset()
+
+
+# --- TNT snail & pelican ------------------------------------------------------------
+
+func test_tnt_snail_fuse_hurts_if_you_linger() -> void:
+	var snail := TNTSnail.new()
+	snail.position = Vector3(0, 0, -2.0)
+	_arena.add_child(snail)
+	await frames(10)
+	var lit := await wait_until(func() -> bool: return snail.state == TNTSnail.State.FUSE, 60)
+	check("fuse lights when Patchy is close", lit >= 0, "")
+	var h0 := player.health.health
+	await frames(170)
+	check("lingering by a lit snail hurts", player.health.health < h0, "health %d -> %d" % [h0, player.health.health])
+	check("the snail loses its barrel", snail.state == TNTSnail.State.NAKED, "state=%s" % TNTSnail.State.keys()[snail.state])
+
+
+func test_kicked_barrel_breaks_cracked_rock() -> void:
+	var rock := CrackedRock.new()
+	rock.position = Vector3(0, 0, -9.0)
+	_arena.add_child(rock)
+	var snail := TNTSnail.new()
+	snail.position = Vector3(0, 0, -1.6)
+	snail.rotation.y = PI
+	_arena.add_child(snail)
+	await frames(6)
+	tap(&"attack")
+	await frames(90)
+	check("swipe kicks the barrel off", snail.state in [TNTSnail.State.NAKED, TNTSnail.State.DEFEATED], "state=%s" % TNTSnail.State.keys()[snail.state])
+	check("the skidding barrel blasts cracked rock", not is_instance_valid(rock) or rock.is_queued_for_deletion(), "")
+
+
+func test_pelican_steals_and_coughs_up_coins() -> void:
+	InventoryManager.reset()
+	InventoryManager.collect_treasure(&"", &"coin", 10)
+	var bird := Pelican.new()
+	bird.position = Vector3(0, 0, -6.0)
+	bird.altitude = 7.0
+	bird.circle_radius = 4.0
+	_arena.add_child(bird)
+	bird.set(&"_cool", 0.5)
+	var stole := await wait_until(func() -> bool: return bird.pouch > 0, 600)
+	check("pelican dives and snatches coins", stole >= 0 and InventoryManager.gold_value == 7, "gold=%d pouch=%d" % [InventoryManager.gold_value, bird.pouch])
+	# Next pass: sidestep the dive, then swipe it while it bobs on the sand.
+	await wait_until(func() -> bool: return bird.state == Pelican.State.DIVE, 900)
+	player.teleport(player.global_position + Vector3(4.5, 0.05, 0), Vector3.FORWARD)
+	var bobbing := await wait_until(func() -> bool: return bird.state == Pelican.State.SKIM and bird.get(&"_t") > 0.6, 300)
+	if bobbing >= 0:
+		player.teleport(bird.global_position + Vector3(0, -0.2, 1.2) * Vector3(1, 0, 1) + Vector3(0, 0.05, 0), Player.flat(bird.global_position - player.global_position).normalized())
+		await frames(2)
+		player.facing = Player.flat(bird.global_position - player.global_position).normalized()
+		tap(&"attack")
+		await frames(10)
+	check("a swipe dazes it", bird.state in [Pelican.State.DAZED, Pelican.State.GONE], "state=%s bobbing=%d" % [Pelican.State.keys()[bird.state], bobbing])
+	await frames(120)
+	check("dazed pelican empties its pouch", bird.pouch == 0, "pouch=%d" % bird.pouch)
+	for c in find_children("*", "Collectible", true, false):
+		if is_instance_valid(c):
+			player.teleport((c as Node3D).global_position + Vector3(0, 0.05, 0), Vector3.FORWARD)
+			await frames(8)
+	check("stolen coins can be picked back up", InventoryManager.gold_value >= 10, "gold=%d" % InventoryManager.gold_value)
+	InventoryManager.reset()

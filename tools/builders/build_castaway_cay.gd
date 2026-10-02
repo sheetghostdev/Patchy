@@ -640,6 +640,19 @@ func _coins() -> void:
 	coin_trail(Vector3(-12, 3.6, 12), Vector3.ZERO, 8, 0.0, CoinTrail.TrailShape.RING)
 	crab(Vector3(-12, 3.05, 12), CrabModel.Variant.ARMORED, "castaway_crab_meadow_armored")
 	crab(Vector3(4, 3.05, 4), CrabModel.Variant.NORMAL, "castaway_crab_meadow")
+	# A greedy pelican patrols the wreck beach; TNT snails wander near cracked
+	# rock (kick a barrel at the grotto before the cannon turns up).
+	var bird := Pelican.new()
+	bird.persistent_id = &"castaway_pelican_wreck"
+	bird.position = Vector3(46, 1.2, 34)
+	b.add(bird, enemies, "PelicanWreck")
+	var snail := TNTSnail.new()
+	snail.position = Vector3(-27.5, 1.25, 37.5)
+	snail.rotation_degrees.y = 60.0
+	b.add(snail, enemies, "SnailGrotto")
+	var snail2 := TNTSnail.new()
+	snail2.position = Vector3(-30, 3.05, -10)
+	b.add(snail2, enemies, "SnailVault")
 
 
 func _checkpoints() -> void:
@@ -717,6 +730,11 @@ func _driftwood_key() -> void:
 	crab(pen + Vector3(2.0, 0.05, 1.0), CrabModel.Variant.ARMORED, "driftwood_crab_pen_1")
 	crab(pen + Vector3(-2.0, 0.05, -1.2), CrabModel.Variant.HERMIT, "driftwood_crab_pen_2")
 	crab(c + Vector3(16, 1.05, 4), CrabModel.Variant.NORMAL, "driftwood_crab_beach")
+	var gull := Pelican.new()
+	gull.persistent_id = &"driftwood_pelican"
+	gull.position = c + Vector3(6, 1.0, -12)
+	gull.circle_radius = 7.0
+	b.add(gull, enemies, "PelicanDriftwood")
 	# Treasure: a gem on an offshore rock (a swim and a climb), a heart, coins.
 	plateau(t, "IsletRock", [o + Vector2(28, 14), o + Vector2(32, 13), o + Vector2(33, 17), o + Vector2(29, 19)], 2.2, 10.0, "rock", {"seed": 47})
 	var g1 := gem(c + Vector3(30.5, 3.2, 16), "driftwood_gem_rock", Palette.GEM_BLUE)

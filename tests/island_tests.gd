@@ -61,8 +61,9 @@ func node(path: String) -> Node:
 
 ## Route tests measure movement, not combat: crabs stay home.
 func clear_enemies() -> void:
-	for c in island.find_children("*", "Crab", true, false):
-		c.queue_free()
+	for type in ["Crab", "TNTSnail", "Pelican"]:
+		for c in island.find_children("*", type, true, false):
+			c.queue_free()
 	await frames(1)
 
 
