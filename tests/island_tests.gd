@@ -600,3 +600,41 @@ func test_leaving_the_arena_resets_king_claw() -> void:
 	await place(arena.global_position + Vector3(-22.0, 0.2, 14.0), Vector3.FORWARD)
 	var reset := await wait_until(func() -> bool: return boss.state == KingClaw.State.DORMANT, 200)
 	check("walking away puts King Claw back to sleep", reset >= 0 and boss.hits == 0, "state=%s" % KingClaw.State.keys()[boss.state])
+
+
+# --- Save / continue ------------------------------------------------------------------
+
+func test_save_and_continue_returns_to_checkpoint() -> void:
+	await clear_enemies()
+	const SLOT := 2
+	var cp := node("Gameplay/CpSummit") as Checkpoint
+	var cp_pos := cp.global_position
+	await place(cp_pos + Vector3(0, 0.1, 1.0), Vector3.FORWARD)
+	await frames(10)
+	InventoryManager.collect_treasure(&"", &"coin", 37)
+	ParrotManager.rescue(&"castaway_parrot_summit", &"castaway_cay")
+	InventoryManager.unlock_attachment(&"lantern")
+	check("summit flag raised", GameManager.checkpoint_id == &"cp_summit", "id=%s" % GameManager.checkpoint_id)
+	check("save written", SaveManager.save_game(SLOT), "")
+	# Wipe everything, as if the game was quit and relaunched.
+	WorldState.reset()
+	ParrotManager.reset()
+	InventoryManager.reset()
+	GameManager.reset()
+	check("continue loads the slot", SaveManager.load_game(SLOT), "")
+	GameManager.resume_pending = true
+	# Reload the island the way Continue does.
+	_arena.queue_free()
+	await frames(2)
+	_arena = Node3D.new()
+	add_child(_arena)
+	island = _island_scene.instantiate()
+	_arena.add_child(island)
+	player = island.get_node("Player") as Player
+	rig = island.get_node("CameraRig") as CameraRig
+	await frames(12)
+	check("Patchy wakes at the summit flag", player.global_position.distance_to(cp_pos) < 2.0, "pos=%v" % player.global_position)
+	check("progress restored", InventoryManager.gold_value == 37 and ParrotManager.is_rescued(&"castaway_parrot_summit") and InventoryManager.has_attachment(&"lantern"), "gold=%d" % InventoryManager.gold_value)
+	check("rescued cage stays open", not (node("Gameplay/ParrotCage_castaway_parrot_summit") as ParrotCage).can_interact(player), "")
+	check("no replay of the intro", WorldState.is_completed(&"castaway_intro_seen") and player.state_id != &"locked", "state=%s" % player.state_id)
+	SaveManager.delete_slot(SLOT)
