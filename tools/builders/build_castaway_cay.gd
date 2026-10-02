@@ -546,6 +546,13 @@ func _gorge_and_headland() -> void:
 	chest.rotation_degrees.y = 180.0
 	b.add(chest, g, "HeadlandChest")
 	gem(Vector3(72, 8.2, -30), "castaway_gem_headland", Color("9b5cff"))
+	# Brock's croc soldiers hold the headland: flank them or pound the ground.
+	for d: Array in [[Vector3(52, 7.55, -10), "castaway_croc_1", 200.0], [Vector3(70, 7.55, -20), "castaway_croc_2", 120.0]]:
+		var croc := CrocGrunt.new()
+		croc.persistent_id = StringName(d[1])
+		croc.position = d[0]
+		croc.rotation_degrees.y = d[2]
+		b.add(croc, enemies, "CrocGrunt")
 	_boss_arena()
 	# Grapple tease: a big iron ring on a sea pillar, far out of hook range.
 	plateau(terrain, "GrapplePillar", [Vector2(86, -40), Vector2(91, -42), Vector2(94, -37), Vector2(90, -33), Vector2(85, -35)], 16.0, 22.0, "rock", {"seed": 31})

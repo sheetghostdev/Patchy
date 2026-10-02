@@ -441,3 +441,49 @@ func test_captains_cabin_displays_progress() -> void:
 	check("ship part shelf has all slots", cabin.parts_shelf.get_child_count() == CaptainsCabin.SHIP_PARTS.size(), "")
 	InventoryManager.reset()
 	ParrotManager.reset()
+
+
+# --- Croc grunt -----------------------------------------------------------------------
+
+func spawn_croc(pos: Vector3, face: Vector3) -> CrocGrunt:
+	var c := CrocGrunt.new()
+	c.position = pos
+	c.rotation.y = Player.yaw_of(face)
+	c.sight_radius = 0.0
+	c.patrol_radius = 0.05
+	c.march_speed = 0.0
+	_arena.add_child(c)
+	return c
+
+
+func test_croc_shield_blocks_from_the_front() -> void:
+	var c := spawn_croc(Vector3(0, 0, -1.4), Vector3.BACK)
+	await frames(5)
+	tap(&"attack")
+	await frames(30)
+	check("front swipe clangs off the shield", c.hp == c.max_hp, "hp=%d" % c.hp)
+
+
+func test_croc_flank_and_pound() -> void:
+	var c := spawn_croc(Vector3(0, 0, -1.4), Vector3.FORWARD)
+	await frames(5)
+	tap(&"attack")
+	await frames(30)
+	check("a swipe from behind gets through", c.hp == c.max_hp - 1, "hp=%d state=%s" % [c.hp, CrocGrunt.State.keys()[c.state]])
+	await frames(120)
+	# Face-on again: a ground pound knocks the shield aside, then swipe.
+	c._face = Vector3.BACK
+	c.global_position = Vector3(0, 0, -1.4)
+	c.velocity = Vector3.ZERO
+	player.teleport(Vector3(0, 0, 0.2), Vector3.FORWARD)
+	press(&"jump")
+	await frames(16)
+	release(&"jump")
+	tap(&"ground_pound")
+	await wait_until(func() -> bool: return c.state == CrocGrunt.State.STAGGER, 90)
+	check("ground pound staggers it", c.state == CrocGrunt.State.STAGGER, "state=%s" % CrocGrunt.State.keys()[c.state])
+	await frames(10)
+	player.facing = Vector3.FORWARD
+	tap(&"attack")
+	await frames(30)
+	check("staggered grunt goes down", c.state == CrocGrunt.State.DEFEATED, "hp=%d state=%s" % [c.hp, CrocGrunt.State.keys()[c.state]])
