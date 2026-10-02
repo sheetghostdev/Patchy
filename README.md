@@ -29,7 +29,7 @@ Debug keys:
 
 | Key | Action |
 |---|---|
-| F1 | Debug menu (debug builds): teleports, give parrots, treasure and attachments, god mode, time scale |
+| F1 | Debug menu (debug builds): teleports, parrots, treasure, attachments, invincibility, checkpoints, debug draws, time scale |
 | F3 | Movement HUD |
 | F4 | Camera debug draw |
 | F5 | Quick save |
