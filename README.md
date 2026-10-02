@@ -95,8 +95,8 @@ systems/            Camera rig, settings, zones and focus zones; collision layer
 attachments/        Hand attachments: hook, lantern, shovel, grapple, cannon
                     (AttachmentBase plus one folder each)
 resources/          Data resources (AttachmentData .tres, movement and camera settings)
-enemies/            Crabs (normal, armored, hermit), TNT snail, pelican, King Claw
-                    boss plus arena
+enemies/            Crabs (normal, armored, hermit), TNT snail, pelican, croc grunt,
+                    King Claw boss plus arena
 npcs/               Parrots, NPCs (Old Shellby)
 collectibles/       Coins, gems, treasure kinds, coin trails
 world/              Terrain (Plateau); ocean (stylized Ocean, underwater effect,
@@ -233,7 +233,7 @@ An optional argument after `--` filters test names.
 ```bash
 godot --headless --path . --fixed-fps 60 res://tests/run_movement_tests.tscn   # 53 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_camera_tests.tscn     # 21 checks
-godot --headless --path . --fixed-fps 60 res://tests/run_gameplay_tests.tscn   # 53 checks
+godot --headless --path . --fixed-fps 60 res://tests/run_gameplay_tests.tscn   # 57 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 94 checks
 godot --headless --path . --fixed-fps 60 res://ui/tests/ui_flow_test.tscn      # 76 checks
 godot --headless --path . --fixed-fps 60 res://props/tests/prop_tests.tscn     # 70 checks
@@ -250,7 +250,8 @@ What each suite covers:
 - **Camera**: zero frames inside walls across corridors, pinch points,
   tunnels and rooms; no snapping; the jump dead zone; and recentering.
 - **Gameplay**:
-  - crabs (flip, stomp, steal and burrow), TNT snails and pelicans;
+  - crabs (flip, stomp, steal and burrow), TNT snails, pelicans and croc
+    shields;
   - treasure persistence, interaction prompts, cages and parrot tasks;
   - every attachment's combat use, the grapple zip into a swing and the
     cannon hop;
@@ -301,4 +302,5 @@ More on Castaway Cay:
   stuck claw, stomp his belly three times, and he leaves the Ship's Wheel.
 - **The Captain's Cabin:** inside the wreck, the hub shows your gold,
   treasures, parrots, ship parts and attachments.
-- Enemies: crabs (normal, armored, hermit), TNT snails and pelicans.
+- Enemies: crabs (normal, armored, hermit), TNT snails, pelicans, and
+  Brock's shield-bearing croc grunts on the headland.

@@ -34,6 +34,8 @@ var enemies: Node3D
 
 
 func build() -> void:
+	# Deterministic builds: regenerating the island gives an identical scene.
+	seed(20261002)
 	b = SceneBuilder.new("CastawayCay")
 	var info := IslandInfo.new()
 	info.island_id = ISLAND
