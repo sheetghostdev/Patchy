@@ -149,6 +149,7 @@ func _process(delta: float) -> void:
 	var pose := _base.duplicate()
 	_apply_cycles(pose, st, speed, delta)
 	_apply_swipe(pose, delta)
+	_apply_tool(pose)
 	_apply_idle_actions(pose, st, delta)
 	_apply_look(pose, delta)
 	_write_pose(pose)
@@ -416,6 +417,21 @@ func _base_pose(st: StringName, speed: float) -> Dictionary:
 			p[&"head"] = Vector3(0, shake, 0)
 			p[&"sh_l"] = Vector3(lerpf(-20.0, 0.0, stand), 0, lerpf(-40.0, -7.0, stand))
 			p[&"sh_r"] = Vector3(lerpf(-20.0, 10.0, stand), 0, lerpf(40.0, 9.0, stand))
+		&"grapple_zip":
+			# Reeled in: hook arm stretched toward the anchor, legs trailing.
+			_spin_driven = false
+			var to := Vector3.UP
+			if player.swing_anchor != null and is_instance_valid(player.swing_anchor):
+				to = (player.swing_anchor.global_position - (player.global_position + Vector3.UP * 1.2)).normalized()
+			var up_ang := rad_to_deg(atan2(Player.flat(to).length(), to.y))
+			p[&"spin"] = Vector3(-clampf(90.0 - up_ang, -10.0, 60.0) * 0.5, 0, 0)
+			p[&"sh_r"] = Vector3(clampf(180.0 - up_ang, 70.0, 178.0), 0, 6)
+			p[&"el_r"] = Vector3(0, 0, 0)
+			p[&"sh_l"] = Vector3(50, 0, -60)
+			p[&"hip_l"] = Vector3(-15, 0, -6)
+			p[&"hip_r"] = Vector3(10, 0, 6)
+			p[&"knee_l"] = Vector3(-50, 0, 0)
+			p[&"knee_r"] = Vector3(-25, 0, 0)
 		&"boat_sit":
 			# Seated low on the thwart, hook on the tiller, free hand on the
 			# gunwale; sways with the boat.
@@ -621,6 +637,49 @@ func _apply_swipe(p: Dictionary, delta: float) -> void:
 			p[&"torso"] = (p[&"torso"] as Vector3) + Vector3(-6, torso_y, 0) * w
 			p[&"sh_l"] = (p[&"sh_l"] as Vector3).lerp(Vector3(35, 0, -45), w)
 	_swipe_w = move_toward(_swipe_w, 0.0, delta * 4.0)
+
+
+## Attachment actions drive the hook arm (and a little of the body).
+func _apply_tool(p: Dictionary) -> void:
+	if player.tool_anim == &"":
+		return
+	var t := clampf(player.tool_anim_t / maxf(player.tool_anim_len, 0.01), 0.0, 1.0)
+	var w := 1.0 - smoothstep(0.75, 1.0, t)
+	match player.tool_anim:
+		&"aim":
+			# Arm thrust straight out; a kick back on the first frames (recoil).
+			var kick := (1.0 - smoothstep(0.0, 0.25, t)) * 35.0
+			p[&"sh_r"] = (p[&"sh_r"] as Vector3).lerp(Vector3(88 + kick, 0, 8), w)
+			p[&"el_r"] = (p[&"el_r"] as Vector3).lerp(Vector3(4 + kick * 0.6, 0, 0), w)
+			p[&"torso"] = (p[&"torso"] as Vector3) + Vector3(-kick * 0.2, -10, 0) * w
+			p[&"sh_l"] = (p[&"sh_l"] as Vector3).lerp(Vector3(30, 0, -55), w)
+		&"pull":
+			var tug := sin(t * PI) * 40.0
+			p[&"sh_r"] = (p[&"sh_r"] as Vector3).lerp(Vector3(80 - tug, 0, 10), w)
+			p[&"el_r"] = (p[&"el_r"] as Vector3).lerp(Vector3(tug * 1.6, 0, 0), w)
+			p[&"torso"] = (p[&"torso"] as Vector3) + Vector3(-tug * 0.3, 0, 0) * w
+		&"dig":
+			# Raise, plunge, flick the sand over the shoulder.
+			var plunge := smoothstep(0.2, 0.45, t)
+			var flick := smoothstep(0.55, 0.85, t)
+			p[&"torso"] = (p[&"torso"] as Vector3) + Vector3(lerpf(-10.0, 28.0, plunge) - flick * 30.0, flick * 25.0, 0) * w
+			p[&"sh_r"] = (p[&"sh_r"] as Vector3).lerp(Vector3(lerpf(60.0, 20.0, plunge) + flick * 90.0, 0, 15), w)
+			p[&"el_r"] = (p[&"el_r"] as Vector3).lerp(Vector3(lerpf(70.0, 10.0, plunge), 0, 0), w)
+			p[&"sh_l"] = (p[&"sh_l"] as Vector3).lerp(Vector3(lerpf(70.0, 30.0, plunge) + flick * 70.0, 0, -20), w)
+			p[&"el_l"] = (p[&"el_l"] as Vector3).lerp(Vector3(60, 0, 0), w)
+			p[&"knee_l"] = (p[&"knee_l"] as Vector3) + Vector3(-30 * plunge, 0, 0) * w
+			p[&"knee_r"] = (p[&"knee_r"] as Vector3) + Vector3(-30 * plunge, 0, 0) * w
+			p[&"body_y"] = float(p[&"body_y"]) - 0.08 * plunge * w
+		&"flash":
+			var up := smoothstep(0.0, 0.15, t)
+			p[&"sh_r"] = (p[&"sh_r"] as Vector3).lerp(Vector3(165, 0, 12), up * w)
+			p[&"el_r"] = (p[&"el_r"] as Vector3).lerp(Vector3(5, 0, 0), up * w)
+			p[&"head"] = (p[&"head"] as Vector3) + Vector3(-12, 0, 0) * up * w
+		&"hold_up":
+			# Show off a new attachment.
+			p[&"sh_r"] = (p[&"sh_r"] as Vector3).lerp(Vector3(170, 0, 20), w)
+			p[&"el_r"] = (p[&"el_r"] as Vector3).lerp(Vector3(0, 0, 0), w)
+			p[&"head"] = (p[&"head"] as Vector3) + Vector3(-15, 0, 0) * w
 
 
 func _apply_idle_actions(p: Dictionary, st: StringName, delta: float) -> void:

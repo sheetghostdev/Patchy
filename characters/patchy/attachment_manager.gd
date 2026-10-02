@@ -114,7 +114,7 @@ func update(delta: float) -> void:
 	if equipped == null:
 		return
 	equipped.physics_update(delta)
-	var ground_ok := _p.state_id in [&"ground", &"swim"]
+	var ground_ok := _p.state_id in [&"ground", &"swim"] or (_p.state_id == &"air" and equipped.allows_air_action())
 	if ground_ok and inp.is_buffered(&"tool_primary", 0.1):
 		inp.consume(&"tool_primary")
 		equipped.primary_action()
@@ -123,10 +123,17 @@ func update(delta: float) -> void:
 		equipped.secondary_action()
 
 
-## Switches to the hook for ring swings when allowed (spec §54 flow).
-func ensure_hook_for_rings() -> bool:
+func get_instance(id: StringName) -> AttachmentBase:
+	return _instances.get(id, null)
+
+
+## Switches to the hook for ring swings when allowed (spec §54 flow). The
+## grapple's own button fires the grapple instead (it zips to rings).
+func ensure_hook_for_rings(via_tool_button: bool = false) -> bool:
 	if equipped_id == &"hook":
 		return true
+	if equipped_id == &"grapple" and via_tool_button:
+		return false
 	if not Settings.auto_equip_hook_for_rings or not _instances.has(&"hook"):
 		return false
 	equip(&"hook")

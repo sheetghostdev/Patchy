@@ -385,32 +385,81 @@ func _ridge_and_hill() -> void:
 
 func _cave() -> void:
 	var g := b.group("DarkCave", structures)
-	# A rocky tunnel mouth against the hill's east face. Too dark for Patchy.
-	blk(g, Vector3(13, 7.0, -37.4), Vector3(9, 4.0, 1.2), "rock", Vector3.ZERO, LevelBlock.Shape.BOX, "WallN")
-	blk(g, Vector3(13, 7.0, -31.6), Vector3(9, 4.0, 1.2), "rock", Vector3.ZERO, LevelBlock.Shape.BOX, "WallS")
-	blk(g, Vector3(13, 11.0, -34.5), Vector3(10, 1.4, 7.4), "rock", Vector3.ZERO, LevelBlock.Shape.BOX, "Roof")
+	# A rocky tunnel mouth on the ridge beside the hill, opening north into
+	# a chamber. Too dark for Patchy until he has the lantern.
+	blk(g, Vector3(14.5, 7.0, -37.4), Vector3(6, 4.0, 1.2), "rock", Vector3.ZERO, LevelBlock.Shape.BOX, "TunnelWallN")
+	blk(g, Vector3(13, 7.0, -31.6), Vector3(9, 4.0, 1.2), "rock", Vector3.ZERO, LevelBlock.Shape.BOX, "TunnelWallS")
+	blk(g, Vector3(13, 11.0, -34.5), Vector3(10, 1.4, 7.4), "rock", Vector3.ZERO, LevelBlock.Shape.BOX, "TunnelRoof")
+	# The chamber: floor slab over the ridge's edge, tall outer walls.
+	blk(g, Vector3(13.5, 6.4, -42.6), Vector3(10.4, 0.6, 10.6), "stone", Vector3.ZERO, LevelBlock.Shape.BOX, "ChamberFloor")
+	blk(g, Vector3(19.1, 3.0, -43.05), Vector3(1.2, 8.0, 11.3), "rock", Vector3.ZERO, LevelBlock.Shape.BOX, "ChamberWallE")
+	blk(g, Vector3(14.1, 3.0, -48.1), Vector3(11.2, 8.0, 1.2), "rock", Vector3.ZERO, LevelBlock.Shape.BOX, "ChamberWallN")
+	blk(g, Vector3(7.9, 7.0, -43.05), Vector3(1.2, 4.0, 11.3), "rock", Vector3.ZERO, LevelBlock.Shape.BOX, "ChamberWallW")
+	blk(g, Vector3(18.6, 3.0, -37.4), Vector3(2.2, 8.0, 1.2), "rock", Vector3.ZERO, LevelBlock.Shape.BOX, "ChamberWallSE")
+	blk(g, Vector3(13.5, 11.0, -43.05), Vector3(12.4, 1.4, 11.3), "rock", Vector3.ZERO, LevelBlock.Shape.BOX, "ChamberRoof")
 	var dz := DarknessZone.new()
 	dz.size = Vector3(8.0, 4.0, 4.6)
 	dz.inward = Vector3(-1, 0, 0)
 	dz.refusal_depth = 2.2
 	dz.position = Vector3(12.4, 9.0, -34.5)
 	b.add(dz, gameplay, "CaveDarkness")
-	var zone := CameraZone.new()
-	zone.distance_scale = 0.6
-	zone.position = Vector3(12.4, 9.0, -34.5)
-	b.add(zone, gameplay, "CaveCameraZone")
-	var cs := CollisionShape3D.new()
-	var box := BoxShape3D.new()
-	box.size = Vector3(9, 4, 4.6)
-	cs.shape = box
-	b.add(cs, zone, "Shape")
-	# Faint firefly glow deep inside hints at something to find later.
-	var glow := OmniLight3D.new()
-	glow.light_color = Color(1.0, 0.85, 0.3)
-	glow.light_energy = 0.6
-	glow.omni_range = 2.0
-	glow.position = Vector3(9.4, 8.2, -34.5)
-	b.add(glow, g, "DistantGlow")
+	var dz2 := DarknessZone.new()
+	dz2.size = Vector3(10.0, 4.0, 9.6)
+	dz2.inward = Vector3(0, 0, -1)
+	dz2.refusal_depth = 0.6
+	dz2.position = Vector3(13.5, 9.0, -42.8)
+	b.add(dz2, gameplay, "ChamberDarkness")
+	for z in [[-34.5, Vector3(9, 4, 4.6)], [-42.8, Vector3(10, 4, 9.6)]]:
+		var zone := CameraZone.new()
+		zone.distance_scale = 0.6
+		zone.position = Vector3(12.8, 9.0, z[0])
+		b.add(zone, gameplay, "CaveCameraZone")
+		var cs := CollisionShape3D.new()
+		var box := BoxShape3D.new()
+		box.size = z[1]
+		cs.shape = box
+		b.add(cs, zone, "Shape")
+	# Lantern puzzle: light both braziers to raise the gate.
+	var fire_a := Brazier.new()
+	fire_a.brazier_id = &"castaway_cave_brazier_a"
+	fire_a.position = Vector3(10.0, 7.0, -40.6)
+	b.add(fire_a, gameplay, "CaveBrazierA")
+	var fire_b := Brazier.new()
+	fire_b.brazier_id = &"castaway_cave_brazier_b"
+	fire_b.position = Vector3(17.0, 7.0, -40.6)
+	b.add(fire_b, gameplay, "CaveBrazierB")
+	dz.lit_by = [fire_a, fire_b]
+	dz2.lit_by = [fire_a, fire_b]
+	var gate := Gate.new()
+	gate.gate_id = &"castaway_cave_gate"
+	gate.size = Vector3(10.4, 4.0, 0.4)
+	gate.position = Vector3(13.5, 7.0, -42.6)
+	gate.triggers = [fire_a, fire_b]
+	b.add(gate, structures, "CaveGate")
+	# Behind it: the shovel, a mound to try it on (a treasure map!) and a gem.
+	var shovel := AttachmentPickup.new()
+	shovel.attachment_id = &"shovel"
+	shovel.position = Vector3(11.0, 7.0, -45.6)
+	b.add(shovel, gameplay, "ShovelPickup")
+	var mound := DigSpot.new()
+	mound.spot_id = &"castaway_cave_mound"
+	mound.island_id = ISLAND
+	mound.contents = "map"
+	mound.map_id = &"castaway_map_1"
+	mound.position = Vector3(16.0, 7.0, -45.6)
+	b.add(mound, gameplay, "CaveMapMound")
+	gem(Vector3(13.5, 7.6, -46.6), "castaway_gem_cave", Color("ffb347"))
+	# The map's X: under the old stump on the meadow.
+	var x_spot := DigSpot.new()
+	x_spot.spot_id = &"castaway_x_spot"
+	x_spot.island_id = ISLAND
+	x_spot.contents = "relic"
+	x_spot.coins = 10
+	x_spot.hidden = true
+	x_spot.marked_by_map = &"castaway_map_1"
+	x_spot.position = Vector3(-27.0, 3.0, 15.0)
+	b.add(x_spot, gameplay, "TreasureMapX")
+	blk(structures, Vector3(-29.2, 3.0, 13.2), Vector3(1.3, 0.9, 1.3), "wood_dark", Vector3.ZERO, LevelBlock.Shape.CYLINDER, "OldStump")
 
 
 func _gorge_and_headland() -> void:
@@ -446,6 +495,7 @@ func _gorge_and_headland() -> void:
 	chest.chest_id = &"castaway_headland_chest"
 	chest.island_id = ISLAND
 	chest.contents = "crown"
+	chest.attachment_reward = &"grapple"
 	chest.lock_posts = posts
 	chest.position = center
 	chest.rotation_degrees.y = 180.0
@@ -453,12 +503,65 @@ func _gorge_and_headland() -> void:
 	gem(Vector3(72, 8.2, -30), "castaway_gem_headland", Color("9b5cff"))
 	# Grapple tease: a big iron ring on a sea pillar, far out of hook range.
 	plateau(terrain, "GrapplePillar", [Vector2(86, -40), Vector2(91, -42), Vector2(94, -37), Vector2(90, -33), Vector2(85, -35)], 16.0, 22.0, "rock", {"seed": 31})
+	# An old lookout pole on the pillar with a big iron ring: visible from
+	# the headland, too far and too high for the hook.
+	blk(structures, Vector3(88.3, 16.0, -37.3), Vector3(0.5, 5.8, 0.5), "wood_dark", Vector3.ZERO, LevelBlock.Shape.CYLINDER, "PillarPole")
 	var tease := HookPoint.new()
-	tease.enabled = false
+	tease.grapple_only = true
+	tease.grapple_arrival = "hop"
 	tease.hang_length = 0.0
-	tease.position = Vector3(89.5, 18.5, -37.5)
-	tease.scale = Vector3.ONE * 2.2
+	tease.position = Vector3(87.6, 21.0, -36.6)
+	tease.scale = Vector3.ONE * 2.0
 	b.add(tease, g, "GrappleTease")
+	# Up top: the hand cannon.
+	var cannon := AttachmentPickup.new()
+	cannon.attachment_id = &"cannon"
+	cannon.position = Vector3(90.2, 16.0, -38.4)
+	b.add(cannon, g, "CannonPickup")
+	_cannon_secrets()
+
+
+## Hand-cannon secrets: a cracked-rock grotto in the cove's west and a
+## stone vault on the meadow that opens when two far-flung targets are hit.
+func _cannon_secrets() -> void:
+	var g := b.group("CannonSecrets", structures)
+	var grotto := Vector3(-34, 1.2, 42)
+	blk(g, grotto + Vector3(-2.4, 0, 0), Vector3(1.0, 3.2, 4.4), "rock", Vector3.ZERO, LevelBlock.Shape.BOX, "GrottoBack")
+	blk(g, grotto + Vector3(0, 0, -2.0), Vector3(4.8, 3.2, 0.8), "rock", Vector3.ZERO, LevelBlock.Shape.BOX, "GrottoSideN")
+	blk(g, grotto + Vector3(0, 0, 2.0), Vector3(4.8, 3.2, 0.8), "rock", Vector3.ZERO, LevelBlock.Shape.BOX, "GrottoSideS")
+	blk(g, grotto + Vector3(-0.1, 3.2, 0), Vector3(5.2, 0.9, 4.8), "rock", Vector3.ZERO, LevelBlock.Shape.BOX, "GrottoRoof")
+	var crack := CrackedRock.new()
+	crack.rock_id = &"castaway_grotto_rock"
+	crack.size = Vector3(3.2, 3.2, 0.9)
+	crack.position = grotto + Vector3(2.1, 0, 0)
+	crack.rotation_degrees.y = 90.0
+	b.add(crack, g, "GrottoCrackedRock")
+	gem(grotto + Vector3(-0.8, 0.6, 0), "castaway_gem_grotto", Color("3ddc97"))
+	coin_trail(grotto + Vector3(-1.6, 0.6, -1.0), grotto + Vector3(-1.6, 0.6, 1.0), 3, 0.0, CoinTrail.TrailShape.LINE)
+	# The vault: walls of fitted stone and a gate tied to two targets.
+	var v := Vector3(-36, 3.0, -16)
+	blk(g, v + Vector3(0, 0, -2.2), Vector3(5.0, 3.6, 0.8), "stone", Vector3.ZERO, LevelBlock.Shape.BOX, "VaultBack")
+	blk(g, v + Vector3(-2.2, 0, 0), Vector3(0.8, 3.6, 5.0), "stone", Vector3.ZERO, LevelBlock.Shape.BOX, "VaultW")
+	blk(g, v + Vector3(2.2, 0, 0), Vector3(0.8, 3.6, 5.0), "stone", Vector3.ZERO, LevelBlock.Shape.BOX, "VaultE")
+	blk(g, v + Vector3(0, 3.6, 0), Vector3(5.6, 0.8, 5.6), "stone", Vector3.ZERO, LevelBlock.Shape.BOX, "VaultRoof")
+	var t1 := CannonTarget.new()
+	t1.target_id = &"castaway_target_beach"
+	t1.position = Vector3(-74, 1.2, -6)
+	t1.rotation_degrees.y = -70.0
+	b.add(t1, g, "TargetBeach")
+	var t2 := CannonTarget.new()
+	t2.target_id = &"castaway_target_horn"
+	t2.position = Vector3(-26, 4.5, 49)
+	t2.rotation_degrees.y = 160.0
+	b.add(t2, g, "TargetHorn")
+	var vault := Gate.new()
+	vault.gate_id = &"castaway_vault_gate"
+	vault.size = Vector3(3.6, 3.6, 0.4)
+	vault.position = v + Vector3(0, 0, 2.2)
+	vault.triggers = [t1, t2]
+	b.add(vault, g, "VaultGate")
+	gem(v + Vector3(0, 0.8, -0.6), "castaway_relic_vault", Palette.GOLD, "relic")
+	coin_trail(v + Vector3(-1.2, 0.5, 0.6), v + Vector3(1.2, 0.5, 0.6), 4, 0.0, CoinTrail.TrailShape.LINE)
 
 
 func _ring_run() -> void:
@@ -553,6 +656,11 @@ func _driftwood_key() -> void:
 			continue
 		blk(g, pen + Vector3(cos(a) * 4.2, 0, sin(a) * 4.2), Vector3(0.3, 1.0, 0.3), "wood_dark", Vector3.ZERO, LevelBlock.Shape.CYLINDER, "PenPost")
 	cage(pen, "driftwood_parrot_pen", ParrotModel.Plumage.LIME).island_id = ISLET
+	# The storm lantern, left on the knoll by some long-gone castaway.
+	var lantern := AttachmentPickup.new()
+	lantern.attachment_id = &"lantern"
+	lantern.position = c + Vector3(-3.0, 2.8, -8.0)
+	b.add(lantern, g, "LanternPickup")
 	crab(pen + Vector3(2.0, 0.05, 1.0), CrabModel.Variant.ARMORED, "driftwood_crab_pen_1")
 	crab(pen + Vector3(-2.0, 0.05, -1.2), CrabModel.Variant.HERMIT, "driftwood_crab_pen_2")
 	crab(c + Vector3(16, 1.05, 4), CrabModel.Variant.NORMAL, "driftwood_crab_beach")

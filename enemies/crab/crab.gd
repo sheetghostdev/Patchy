@@ -425,10 +425,32 @@ func take_hit(hit: Dictionary) -> void:
 			velocity = dir.normalized() * 4.0 + Vector3.UP * 2.0
 			_enter(State.RECOVER)
 		return
-	if state == State.FLIPPED and kind in [&"swipe", &"dive", &"stomp"]:
+	if state == State.FLIPPED and kind in [&"swipe", &"dive", &"stomp", &"shovel"]:
 		_start_slide(dir.normalized())
 		return
+	if kind == &"shovel":
+		# A scoop under the legs: over it goes.
+		_flip()
+		return
 	_defeat(dir.normalized())
+
+
+## Lantern flash: dazzled crabs topple onto their backs, armored or not.
+func on_light_flash(_player: Node3D) -> void:
+	if state in [State.DEFEATED, State.BURROWED, State.FLIPPED, State.SLIDING] or dormant:
+		return
+	_drop_carried()
+	_flip()
+
+
+## Grapple tug: yanked toward Patchy and flipped over.
+func on_grapple_pull(player: Node3D) -> void:
+	if state in [State.DEFEATED, State.BURROWED] or dormant:
+		return
+	_drop_carried()
+	var to := Player.flat(player.global_position - global_position)
+	_flip()
+	velocity = to.normalized() * minf(to.length() * 2.2, 11.0) + Vector3.UP * 5.0
 
 
 func on_ground_pound(player: Node3D) -> void:

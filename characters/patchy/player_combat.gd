@@ -203,7 +203,8 @@ func try_hook_latch() -> bool:
 			best = area
 	if best == null:
 		return false
-	if not _p.attachments.ensure_hook_for_rings():
+	var via_tool := _p.input.is_buffered(&"tool_primary", 0.15) and not _p.input.is_buffered(&"interact", 0.15)
+	if not _p.attachments.ensure_hook_for_rings(via_tool):
 		return false
 	for a: StringName in [&"tool_primary", &"interact"]:
 		_p.input.consume(a)

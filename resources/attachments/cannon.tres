@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="AttachmentData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://attachments/attachment_data.gd" id="1_data"]
+[ext_resource type="PackedScene" path="res://attachments/cannon/cannon_attachment.tscn" id="2_scene"]
+
+[resource]
+script = ExtResource("1_data")
+id = &"cannon"
+display_name = "Hand Cannon"
+description = "A stubby brass cannon for the hook. Bowl over foes at range, ring bullseye targets, crumble cracked rock, and blast a hop out of thin air."
+scene = ExtResource("2_scene")
+abilities = PackedStringArray("Ranged shot", "Crack rocks", "Cannon hop")
+color = Color(0.95, 0.55, 0.3, 1)
+order = 4

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="AttachmentData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://attachments/attachment_data.gd" id="1_data"]
+[ext_resource type="PackedScene" path="res://attachments/lantern/lantern_attachment.tscn" id="2_scene"]
+
+[resource]
+script = ExtResource("1_data")
+id = &"lantern"
+display_name = "Storm Lantern"
+description = "A brass storm lantern that hangs from the hook. Explore dark caves, light braziers, and dazzle foes with a bright flash."
+scene = ExtResource("2_scene")
+abilities = PackedStringArray("Light the dark", "Light braziers", "Dazzling flash")
+color = Color(1, 0.82, 0.45, 1)
+order = 3

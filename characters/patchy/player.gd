@@ -49,6 +49,7 @@ const STATE_SCRIPTS := {
 	&"hurt": "res://characters/patchy/states/hurt_state.gd",
 	&"locked": "res://characters/patchy/states/locked_state.gd",
 	&"boat": "res://characters/patchy/states/boat_state.gd",
+	&"grapple": "res://characters/patchy/states/grapple_state.gd",
 }
 
 @export var settings: PlayerMovementSettings
@@ -116,6 +117,12 @@ var _safe_timer := 0.0
 ## Attachment currently hooked (swing anchor), for the camera.
 var swing_anchor: Node3D = null
 var swing_forward := Vector3.FORWARD
+
+## Attachment arm overlay (aim, dig, flash...): set by attachments through
+## play_tool_anim(), read by the animator. Purely cosmetic.
+var tool_anim: StringName = &""
+var tool_anim_t := 0.0
+var tool_anim_len := 0.0
 
 
 func _ready() -> void:
@@ -197,10 +204,20 @@ func _tick_timers(delta: float) -> void:
 	roll_cooldown = maxf(roll_cooldown - delta, 0.0)
 	gp_jump_timer = maxf(gp_jump_timer - delta, 0.0)
 	heavy_land_timer = maxf(heavy_land_timer - delta, 0.0)
+	if tool_anim != &"":
+		tool_anim_t += delta
+		if tool_anim_t >= tool_anim_len:
+			tool_anim = &""
 	if is_on_floor():
 		air_time = 0.0
 	else:
 		air_time += delta
+
+
+func play_tool_anim(anim: StringName, length: float) -> void:
+	tool_anim = anim
+	tool_anim_t = 0.0
+	tool_anim_len = length
 
 
 # --- State machine -----------------------------------------------------------

@@ -421,3 +421,116 @@ func test_boat_washes_back_to_dock() -> void:
 	await place(Vector3(0, 1.3, 33), Vector3.FORWARD)
 	await frames(150)
 	check("stray boat returns to Castaway's dock", Player.flat(boat.global_position - mooring.global_position).length() < 0.5, "boat=%v" % boat.global_position)
+
+
+# --- Attachments in the world -------------------------------------------------------
+
+func give(id: StringName) -> void:
+	InventoryManager.unlock_attachment(id)
+	await frames(1)
+	player.attachments.equip(id, false)
+	await frames(1)
+
+
+func test_lantern_found_on_driftwood_key() -> void:
+	await clear_enemies()
+	var pickup := node("Gameplay/DriftwoodKey/LanternPickup") as Node3D
+	await place(pickup.global_position + Vector3(0, 0.2, 2.5), Vector3.FORWARD)
+	move(Vector2(0, -1))
+	await wait_until(func() -> bool: return InventoryManager.has_attachment(&"lantern"), 90)
+	move(Vector2.ZERO)
+	await frames(10)
+	check("picks up the lantern", InventoryManager.has_attachment(&"lantern"), "")
+	check("lantern equipped on pickup", player.attachments.equipped_id == &"lantern", "equipped=%s" % player.attachments.equipped_id)
+	await frames(100)
+	check("control returns after the fanfare", player.state_id != &"locked", "state=%s" % player.state_id)
+
+
+func test_lantern_cave_braziers_open_the_gate() -> void:
+	await clear_enemies()
+	await give(&"lantern")
+	await place(Vector3(19.0, 7.1, -34.5), Vector3.LEFT)
+	move(Vector2(0, -1))
+	var refused := false
+	for i in 120:
+		await frames(1)
+		refused = refused or player.state_id == &"locked"
+		if player.global_position.x < 10.5:
+			break
+	move(Vector2.ZERO)
+	check("walks into the dark with the lantern", not refused and player.global_position.x < 11.0, "x=%.2f refused=%s" % [player.global_position.x, refused])
+	var a := node("Gameplay/CaveBrazierA") as Brazier
+	var b2 := node("Gameplay/CaveBrazierB") as Brazier
+	var gate := node("Structures/CaveGate") as Gate
+	for br: Brazier in [a, b2]:
+		await place(br.global_position + Vector3(0, 0.1, 2.0), Vector3.FORWARD)
+		await frames(4)
+		tap(&"tool_primary")
+		await frames(40)
+		check("brazier %s lit" % br.name, br.is_active(), "")
+	await frames(120)
+	check("gate opens once both burn", WorldState.is_completed(&"castaway_cave_gate"), "")
+
+
+func test_shovel_digs_up_the_treasure_map_and_its_x() -> void:
+	await clear_enemies()
+	await give(&"shovel")
+	# Burning braziers light the cave, so the shovel can work in there.
+	(node("Gameplay/CaveBrazierA") as Brazier).light_up()
+	(node("Gameplay/CaveBrazierB") as Brazier).light_up()
+	var mound := node("Gameplay/CaveMapMound") as DigSpot
+	await place(mound.global_position + Vector3(0, 0.1, 1.2), Vector3.FORWARD)
+	for k in 2:
+		tap(&"tool_primary")
+		await frames(45)
+	check("two scoops unearth a treasure map", InventoryManager.has_treasure_map(&"castaway_map_1"), "")
+	var x := node("Gameplay/TreasureMapX") as DigSpot
+	await place(x.global_position + Vector3(0, 0.1, 1.2), Vector3.FORWARD)
+	for k in 2:
+		tap(&"tool_primary")
+		await frames(45)
+	await frames(120)
+	check("X marks the spot: relic found", InventoryManager.has_treasure(&"castaway_x_spot_prize"), "gold=%d" % InventoryManager.gold_value)
+
+
+func test_grapple_zips_to_the_pillar_and_the_cannon() -> void:
+	await clear_enemies()
+	await give(&"grapple")
+	var tease := node("Gameplay/Headland/GrappleTease") as Node3D
+	var from := Vector3(73.0, 7.6, -30.0)
+	await place(from, Player.flat(tease.global_position - from).normalized())
+	tap(&"tool_primary")
+	var zipped := await wait_until(func() -> bool: return player.state_id == &"grapple", 60)
+	check("grapple fires at the iron point", zipped >= 0, "state=%s" % player.state_id)
+	await wait_until(func() -> bool: return player.is_on_floor() and player.state_id == &"ground", 240)
+	await frames(10)
+	check("lands on the pillar top", player.global_position.y > 15.5, "pos=%v state=%s" % [player.global_position, player.state_id])
+	var got := await wait_until(func() -> bool: return InventoryManager.has_attachment(&"cannon"), 120)
+	if got < 0:
+		var pickup := node("Gameplay/Headland/CannonPickup") as Node3D
+		move(stick_toward(pickup.global_position - player.global_position))
+		got = await wait_until(func() -> bool: return InventoryManager.has_attachment(&"cannon"), 120)
+		move(Vector2.ZERO)
+	check("hand cannon found on the pillar", got >= 0, "")
+
+
+func test_cannon_cracks_the_grotto_and_rings_the_targets() -> void:
+	await clear_enemies()
+	await give(&"cannon")
+	var crack := node("Structures/CannonSecrets/GrottoCrackedRock") as Node3D
+	await place(crack.global_position + Vector3(6.0, 0.1, 0), Vector3.LEFT)
+	tap(&"tool_primary")
+	await frames(60)
+	check("cannonball shatters cracked rock", WorldState.is_completed(&"castaway_grotto_rock"), "")
+	for path in ["Structures/CannonSecrets/TargetBeach", "Structures/CannonSecrets/TargetHorn"]:
+		var t := node(path) as Node3D
+		var face := -t.global_basis.z
+		var spot := t.global_position + face * 11.0
+		spot.y = t.global_position.y + 0.15
+		await place(spot, -face)
+		await frames(40)
+		tap(&"tool_primary")
+		await frames(70)
+		check("target %s rung" % t.name, (t as CannonTarget).is_active(), "pos=%v" % player.global_position)
+	await frames(100)
+	check("vault opens", WorldState.is_completed(&"castaway_vault_gate"), "")

@@ -41,6 +41,8 @@ var _magnet_t := 0.0
 var _sparkle_loop: AudioStreamPlayer3D
 ## True while a crab carries it (not collectible directly).
 var carried := false
+## Initial velocity when `launched` (zero = a random spill).
+var launch_velocity := Vector3.ZERO
 
 
 func _ready() -> void:
@@ -59,7 +61,8 @@ func _ready() -> void:
 		sph.radius = 0.55 if kind == "coin" else 0.65
 		cs.shape = sph
 		add_child(cs, false, Node.INTERNAL_MODE_FRONT)
-	body_entered.connect(_on_body_entered)
+	if not body_entered.is_connected(_on_body_entered):
+		body_entered.connect(_on_body_entered)
 	_time = randf() * TAU
 	_base_y = position.y
 	if kind != "coin" and kind != "heart":
@@ -69,7 +72,10 @@ func _ready() -> void:
 			_sparkle_loop.max_distance = 9.0
 			_sparkle_loop.play()
 	if launched:
-		_velocity = Vector3(randf_range(-2.5, 2.5), randf_range(6.0, 8.0), randf_range(-2.5, 2.5))
+		if launch_velocity != Vector3.ZERO:
+			_velocity = launch_velocity
+		else:
+			_velocity = Vector3(randf_range(-2.5, 2.5), randf_range(6.0, 8.0), randf_range(-2.5, 2.5))
 
 
 func _has_shape() -> bool:

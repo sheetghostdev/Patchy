@@ -1,11 +1,12 @@
 @tool
 class_name DarknessZone
 extends Area3D
-## Pitch-dark places (spec §59, §76). Without the Firefly Lantern, Patchy
+## Pitch-dark places (spec §59, §76). Without the Storm Lantern, Patchy
 ## refuses to go in: at the threshold he stops, eyes widen, something makes
 ## an innocuous noise, and he tiptoes back out. No text needed: animation
 ## teaches "come back later". With the lantern equipped he can explore, and
 ## the screen darkens toward the zone's depth so it reads as truly dark.
+## Once every brazier in `lit_by` burns, the place is lit for good.
 
 @export var size := Vector3(6.0, 4.0, 10.0):
 	set(v):
@@ -17,6 +18,8 @@ extends Area3D
 @export_range(0.0, 5.0, 0.1) var refusal_depth := 1.4
 ## Max screen darkening deep inside (0..1).
 @export_range(0.0, 1.0, 0.01) var max_darkness := 0.88
+## Fires (anything with is_active()) that light this place up once all burn.
+@export var lit_by: Array[Node] = []
 
 var _shape: CollisionShape3D
 var _player: Player
@@ -63,6 +66,15 @@ static func has_light() -> bool:
 	return InventoryManager.equipped_attachment == &"lantern"
 
 
+func is_lit_up() -> bool:
+	if lit_by.is_empty():
+		return false
+	for n in lit_by:
+		if n == null or not n.has_method(&"is_active") or not n.call(&"is_active"):
+			return false
+	return true
+
+
 func _depth_of(p: Node3D) -> float:
 	# Distance travelled inward from the zone's entry face.
 	var local := global_transform.affine_inverse() * p.global_position
@@ -75,7 +87,7 @@ func _process(delta: float) -> void:
 	if Engine.is_editor_hint():
 		return
 	var target_alpha := 0.0
-	if _player != null and is_instance_valid(_player):
+	if _player != null and is_instance_valid(_player) and not is_lit_up():
 		var depth := _depth_of(_player)
 		var lit := has_light()
 		var k := clampf(depth / maxf(refusal_depth * 2.0, 0.1), 0.0, 1.0)

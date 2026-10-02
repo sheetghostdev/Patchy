@@ -17,6 +17,8 @@ signal opened
 ## Posts that must be driven down first (empty = unlocked).
 @export var lock_posts: Array[PoundPost] = []
 @export var gold_variant := false
+## A hand attachment packed inside too (handed over after the treasure).
+@export var attachment_reward: StringName = &""
 
 var _lid: Node3D
 var _chains: Node3D
@@ -114,6 +116,18 @@ func open(player: Player) -> void:
 	if chest_id != &"":
 		WorldState.mark_completed(chest_id)
 	opened.emit()
+	if attachment_reward != &"" and not InventoryManager.has_attachment(attachment_reward):
+		var gift := AttachmentPickup.new()
+		gift.attachment_id = attachment_reward
+		gift.bare = true
+		get_tree().current_scene.add_child(gift)
+		gift.global_position = global_position + Vector3.UP * 0.2
+		await get_tree().create_timer(0.9, false).timeout
+		if player != null and is_instance_valid(gift):
+			if player.state_id == &"locked":
+				player.set_locked(false)
+			gift.call(&"_on_body", player)
+		return
 	await get_tree().create_timer(0.4, false).timeout
 	if player != null and player.state_id == &"locked":
 		player.set_locked(false)

@@ -228,3 +228,125 @@ func test_dark_cave_refusal() -> void:
 	move(Vector2.ZERO)
 	await frames(160)
 	check("he backs out on his own", player.global_position.z > z_at_refusal + 1.0 and player.state_id == &"ground", "dz=%.2f state=%s" % [player.global_position.z - z_at_refusal, player.state_id])
+
+
+# --- Attachments ------------------------------------------------------------------
+
+func give(id: StringName) -> void:
+	InventoryManager.unlock_attachment(id)
+	await frames(1)
+	player.attachments.equip(id, false)
+	await frames(1)
+
+
+func test_lantern_flash_topples_armored_crab() -> void:
+	InventoryManager.reset()
+	await give(&"lantern")
+	var c := spawn_crab(Vector3(0, 0, -3.0), CrabModel.Variant.ARMORED)
+	c.sight_radius = 0.0
+	await frames(5)
+	tap(&"tool_primary")
+	await frames(10)
+	check("flash flips an armored crab", c.state == Crab.State.FLIPPED, "state=%s" % Crab.State.keys()[c.state])
+	InventoryManager.reset()
+
+
+func test_shovel_scoops_crab_over() -> void:
+	InventoryManager.reset()
+	await give(&"shovel")
+	var c := spawn_crab(Vector3(0, 0, -1.2))
+	c.sight_radius = 0.0
+	await frames(5)
+	tap(&"tool_primary")
+	await frames(40)
+	check("shovel scoop flips a crab", c.state == Crab.State.FLIPPED, "state=%s" % Crab.State.keys()[c.state])
+	InventoryManager.reset()
+
+
+func test_grapple_yanks_crab() -> void:
+	InventoryManager.reset()
+	await give(&"grapple")
+	var c := spawn_crab(Vector3(0, 0, -9.0))
+	c.sight_radius = 0.0
+	await frames(5)
+	var d0 := c.global_position.distance_to(player.global_position)
+	tap(&"tool_primary")
+	await frames(45)
+	var d1 := c.global_position.distance_to(player.global_position)
+	check("grapple yanks a crab closer and over", c.state == Crab.State.FLIPPED and d1 < d0 - 2.0, "d %.1f -> %.1f state=%s" % [d0, d1, Crab.State.keys()[c.state]])
+	InventoryManager.reset()
+
+
+func test_grapple_zips_to_ring_and_swings() -> void:
+	InventoryManager.reset()
+	await give(&"grapple")
+	var ring := HookPoint.new()
+	ring.position = Vector3(0, 8.0, -14.0)
+	_arena.add_child(ring)
+	await frames(3)
+	tap(&"tool_primary")
+	var zip := await wait_until(func() -> bool: return player.state_id == &"grapple", 40)
+	check("grapple targets a far ring", zip >= 0, "state=%s" % player.state_id)
+	var swing := await wait_until(func() -> bool: return player.state_id == &"swing", 120)
+	check("zip ends in a swing", swing >= 0, "state=%s pos=%v" % [player.state_id, player.global_position])
+	InventoryManager.reset()
+
+
+func test_hook_cannot_reach_grapple_only_points() -> void:
+	InventoryManager.reset()
+	var ring := HookPoint.new()
+	ring.grapple_only = true
+	ring.position = Vector3(0, 3.4, -2.0)
+	_arena.add_child(ring)
+	await frames(3)
+	press(&"jump")
+	await frames(14)
+	tap(&"tool_primary")
+	await frames(10)
+	release(&"jump")
+	check("hook ignores iron grapple points", player.state_id != &"swing", "state=%s" % player.state_id)
+
+
+func test_cannon_hits_crab_at_range() -> void:
+	InventoryManager.reset()
+	await give(&"cannon")
+	var c := spawn_crab(Vector3(0, 0, -12.0))
+	c.sight_radius = 0.0
+	c.patrol_radius = 0.05
+	c.walk_speed = 0.0
+	await frames(5)
+	tap(&"tool_primary")
+	await frames(60)
+	check("cannonball defeats a crab at 12 m", c.state == Crab.State.DEFEATED, "state=%s" % Crab.State.keys()[c.state])
+	InventoryManager.reset()
+
+
+func test_cannon_hop_adds_height() -> void:
+	InventoryManager.reset()
+	await give(&"cannon")
+	press(&"jump")
+	var top := [0.0]
+	var fired := false
+	for i in 90:
+		await frames(1)
+		top[0] = maxf(top[0], player.global_position.y)
+		if not fired and i > 8 and player.velocity.y < 1.0:
+			tap(&"tool_primary")
+			fired = true
+	release(&"jump")
+	check("cannon hop beats a plain jump", top[0] > s.jump_height + 0.6, "apex %.2f vs %.2f" % [top[0], s.jump_height])
+	InventoryManager.reset()
+
+
+func test_attachment_cycling() -> void:
+	InventoryManager.reset()
+	for id: StringName in [&"grapple", &"shovel", &"lantern", &"cannon"]:
+		InventoryManager.unlock_attachment(id)
+	await frames(2)
+	var seen: Array[StringName] = [player.attachments.equipped_id]
+	for i in 5:
+		tap(&"tool_next")
+		await frames(6)
+		seen.append(player.attachments.equipped_id)
+	check("cycles hook -> grapple -> shovel -> lantern -> cannon -> hook", seen == [&"hook", &"grapple", &"shovel", &"lantern", &"cannon", &"hook"], str(seen))
+	InventoryManager.reset()

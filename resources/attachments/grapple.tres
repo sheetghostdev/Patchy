@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="AttachmentData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://attachments/attachment_data.gd" id="1_data"]
+[ext_resource type="PackedScene" path="res://attachments/grapple/grapple_attachment.tscn" id="2_scene"]
+
+[resource]
+script = ExtResource("1_data")
+id = &"grapple"
+display_name = "Grappling Claw"
+description = "A three-pronged claw on a long rope. Reel yourself to rings and iron grapple points from far away, even mid-air, and yank crabs off their feet."
+scene = ExtResource("2_scene")
+abilities = PackedStringArray("Long-range zip", "Swing", "Yank foes")
+color = Color(0.55, 0.75, 1, 1)
+order = 1

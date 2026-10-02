@@ -15,6 +15,15 @@ enum Kind { RING, BEAM, CHAIN }
 		kind = v
 		_rebuild()
 @export var enabled := true
+## Too far or too heavy for the hook: only the grapple can reach it. Drawn
+## as a dark iron ring.
+@export var grapple_only := false:
+	set(v):
+		grapple_only = v
+		_rebuild()
+## What a grapple zip does on arrival: swing from it, or hop up past it
+## (for rings mounted just above a ledge).
+@export_enum("swing", "hop") var grapple_arrival := "swing"
 ## Draw a hanging rope/chain up to this height above the anchor (0 = none).
 @export_range(0.0, 20.0, 0.1) var hang_length := 1.2:
 	set(v):
@@ -47,6 +56,10 @@ func get_anchor_position() -> Vector3:
 
 
 func can_attach(_player: Node3D) -> bool:
+	return enabled and not grapple_only
+
+
+func can_grapple() -> bool:
 	return enabled
 
 
@@ -56,7 +69,10 @@ func _process(delta: float) -> void:
 	var p := GameManager.player
 	var near := false
 	if p != null:
-		near = p.global_position.distance_to(global_position) < 5.5
+		var reach := 5.5
+		if InventoryManager.equipped_attachment == &"grapple":
+			reach = GrappleAttachment.RANGE
+		near = enabled and p.global_position.distance_to(global_position) < reach
 	_highlight = move_toward(_highlight, 1.0 if near else 0.0, delta * 4.0)
 	var pulse := 0.5 + 0.5 * sin(Time.get_ticks_msec() * 0.008)
 	_ring_mat.emission_energy_multiplier = 0.25 + _highlight * (0.6 + 0.6 * pulse)
@@ -71,11 +87,11 @@ func _rebuild() -> void:
 	_visual.name = "Visual"
 	add_child(_visual, false, Node.INTERNAL_MODE_FRONT)
 	_ring_mat = StandardMaterial3D.new()
-	_ring_mat.albedo_color = Color(1.0, 0.78, 0.25)
+	_ring_mat.albedo_color = Color(1.0, 0.78, 0.25) if not grapple_only else Color(0.5, 0.56, 0.66)
 	_ring_mat.metallic = 0.6
 	_ring_mat.roughness = 0.35
 	_ring_mat.emission_enabled = true
-	_ring_mat.emission = Color(1.0, 0.7, 0.2)
+	_ring_mat.emission = Color(1.0, 0.7, 0.2) if not grapple_only else Color(0.45, 0.75, 1.0)
 	_ring_mat.emission_energy_multiplier = 0.25
 	var ring := MeshInstance3D.new()
 	var torus := TorusMesh.new()
