@@ -266,7 +266,7 @@ An optional argument after `--` filters test names.
 godot --headless --path . --fixed-fps 60 res://tests/run_movement_tests.tscn   # 53 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_camera_tests.tscn     # 21 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_gameplay_tests.tscn   # 64 checks
-godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 136 checks
+godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 139 checks
 godot --headless --path . --fixed-fps 60 res://ui/tests/ui_flow_test.tscn      # 84 checks
 godot --headless --path . --fixed-fps 60 res://props/tests/prop_tests.tscn     # 70 checks
 godot --headless --path . --fixed-fps 60 res://world/ocean/tests/ocean_swim_check.tscn
@@ -306,6 +306,7 @@ What each suite covers:
   - a full King Claw fight, including the hand-off to his theme and back;
   - recovered ship parts appearing on the wreck, and the helm's sea chart;
   - Brock's cameo after King Claw;
+  - a crab lighting a TNT snail that blows open the grotto;
   - a check that no pickup is buried or floating.
 
 ## Content
@@ -378,3 +379,6 @@ More on Castaway Cay:
 - Enemies: crabs (normal, armored, hermit, and cannon crabs that lob
   telegraphed shots), TNT snails, pelicans, and
   Brock's shield-bearing croc grunts on the headland.
+- Emergent mischief (spec §173–174): a crab that blunders into a TNT
+  snail lights its barrel and freezes in horror. The blast launches the
+  crab and can crack open the grotto by accident.

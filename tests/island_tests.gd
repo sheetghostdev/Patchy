@@ -359,6 +359,29 @@ func test_wreck_shows_recovered_parts() -> void:
 	await frames(6)
 
 
+func test_crab_bumps_tnt_snail_and_the_rock_goes_too() -> void:
+	var snail := node("Enemies/SnailGrotto") as TNTSnail
+	var rock := node("Structures/CannonSecrets/GrottoCrackedRock") as Node3D
+	var crab: Crab = null
+	for c in island.find_children("*", "Crab", true, false):
+		if (c as Crab).persistent_id == &"castaway_crab_grotto":
+			crab = c
+		elif c != crab:
+			c.queue_free()
+	await frames(2)
+	# Patchy is far off: this one is all the crab's doing.
+	await place(Vector3(0, 1.3, 33), Vector3.FORWARD)
+	snail.crawl_speed = 0.0
+	snail.global_position = rock.global_position + Vector3(2.2, 0.05, 0.2)
+	snail.home = snail.global_position
+	crab.global_position = snail.global_position + Vector3(0.9, 0.05, 0.4)
+	var lit := await wait_until(func() -> bool: return snail.state == TNTSnail.State.FUSE, 60)
+	check("a crab blundering into the snail lights its fuse", lit >= 0, "state=%s" % TNTSnail.State.keys()[snail.state])
+	var boom := await wait_until(func() -> bool: return WorldState.is_completed(&"castaway_grotto_rock"), 300)
+	check("the blast cracks open the grotto", boom >= 0, "")
+	check("and sends the crab flying", not is_instance_valid(crab) or crab.state == Crab.State.DEFEATED, "")
+
+
 func test_brock_rows_in_after_king_claw() -> void:
 	await clear_enemies()
 	var boss := node("Enemies/KingClaw")

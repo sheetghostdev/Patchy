@@ -56,6 +56,7 @@ var _spin := 0.0
 var _scripted_grab: Collectible = null
 ## A scripted thief (opening sequence) ignores Patchy until the loot is home.
 var _scripted_run := false
+var _freeze_t := 0.0
 ## Cannon crabs: lob timer, the marked landing spot and its warning ring.
 var _shot_cool := 1.5
 var _shot_target := Vector3.ZERO
@@ -92,6 +93,14 @@ func _physics_process(delta: float) -> void:
 	_t += delta
 	var player := GameManager.player as Player
 	if dormant:
+		_halt(delta)
+		if not is_on_floor():
+			velocity.y -= GRAVITY * delta
+		move_and_slide()
+		_animate(delta)
+		return
+	if _freeze_t > 0.0:
+		_freeze_t -= delta
 		_halt(delta)
 		if not is_on_floor():
 			velocity.y -= GRAVITY * delta
@@ -172,6 +181,16 @@ func _physics_process(delta: float) -> void:
 		velocity.y = maxf(velocity.y, -1.0)
 	move_and_slide()
 	_animate(delta)
+
+
+## Frozen in shock for `duration` seconds ("!" and not a step), e.g. on
+## lighting a TNT snail's barrel by bumping into it.
+func startle(duration: float) -> void:
+	if state in [State.DEFEATED, State.BURROWED] or dormant:
+		return
+	_freeze_t = duration
+	_show_alert()
+	AudioManager.play(&"enemy_alert", global_position, 0.0, 1.3)
 
 
 func _enter(s: State) -> void:

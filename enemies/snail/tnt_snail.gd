@@ -23,6 +23,7 @@ var state := State.CRAWL
 var home := Vector3.ZERO
 var _t := 0.0
 var _fuse_t := 0.0
+var _bump_check := 0.0
 var _face := Vector3.FORWARD
 var _wander_target := Vector3.ZERO
 var _body: Node3D
@@ -118,6 +119,14 @@ func _physics_process(delta: float) -> void:
 			_crawl(p, delta)
 			if p != null and p.state_id != &"locked" and p.global_position.distance_to(global_position) < fuse_radius:
 				_light_fuse()
+			else:
+				# Emergent mischief (spec §173–174): a crab blundering into the
+				# barrel lights it too, freezes in horror, and whatever is
+				# nearby goes up with it.
+				var bumper := _crab_bumper(delta)
+				if bumper != null:
+					bumper.startle(fuse_time + 0.5)
+					_light_fuse()
 		State.FUSE:
 			AudioManager.report_threat()
 			_crawl(p, delta)
@@ -170,6 +179,19 @@ func _crawl(p: Player, delta: float) -> void:
 func _pick_wander() -> void:
 	var a := randf() * TAU
 	_wander_target = home + Vector3(cos(a), 0, sin(a)) * randf_range(0.8, wander_radius)
+
+
+func _crab_bumper(delta: float) -> Crab:
+	_bump_check -= delta
+	if _bump_check > 0.0:
+		return null
+	_bump_check = 0.2
+	for n in get_tree().get_nodes_in_group(&"enemy"):
+		var c := n as Crab
+		if c != null and c.state != Crab.State.DEFEATED and c.visible \
+				and Player.flat(c.global_position - global_position).length() < 1.3 and absf(c.global_position.y - global_position.y) < 1.0:
+			return c
+	return null
 
 
 func _light_fuse() -> void:

@@ -77,6 +77,7 @@ func build() -> void:
 	_islanders()
 	_crossing()
 	_brock_cameo()
+	_grotto_mischief()
 
 	var player := b.instance(PLAYER, null, Vector3(0, 1.25, 33), 0.0, "Player")
 	var rig := b.instance(RIG, null, Vector3(0, 3, 40), 0.0, "CameraRig")
@@ -698,7 +699,7 @@ func _coins() -> void:
 	bird.position = Vector3(46, 1.2, 34)
 	b.add(bird, enemies, "PelicanWreck")
 	var snail := TNTSnail.new()
-	snail.position = Vector3(-27.5, 1.25, 37.5)
+	snail.position = Vector3(-28.5, 1.25, 39.0)
 	snail.rotation_degrees.y = 60.0
 	b.add(snail, enemies, "SnailGrotto")
 	var snail2 := TNTSnail.new()
@@ -1068,6 +1069,15 @@ func _brock_cameo() -> void:
 	barge.position = (marks["EnterFrom"] as Marker3D).position
 	b.add(barge, g, "RoyalBarge")
 	cameo.barge = barge
+
+
+## Emergent mischief at the grotto (spec §173–174): a crab scuttles about
+## beside the TNT snail. Sooner or later it bumps the barrel, the snail
+## blows, the crab goes flying and, as often as not, so does the cracked
+## rock hiding the grotto.
+func _grotto_mischief() -> void:
+	var c := crab(Vector3(-25.5, 1.25, 36.5), CrabModel.Variant.NORMAL, "castaway_crab_grotto")
+	c.patrol_radius = 3.5
 
 
 # --- Tutorial hints -----------------------------------------------------------------
