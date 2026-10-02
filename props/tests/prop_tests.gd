@@ -311,6 +311,25 @@ func test_rock_and_palm_collision(arena: Node3D) -> void:
 	check("palm trunk blocks", not trunk.is_empty() and trunk.collider == palm)
 
 
+func test_beak_rock(arena: Node3D) -> void:
+	ground(arena, Vector3(20, 1, 20), "sand")
+	var rock := BeakRock.new()
+	arena.add_child(rock)
+	await frames(3)
+	var top := ray(Vector3(0, 8, 0.2), Vector3(0, -1, 0.2))
+	check("Beak Rock is solid right up to its head, nearly 4 m up", not top.is_empty() and top.collider == rock and (top.position as Vector3).y > 3.6, str(top.get("position")))
+	var aim := rock.beak_target()
+	check("its beak points at the sand a few steps in front", is_zero_approx(aim.y) and aim.z < -2.5 and aim.z > -4.5 and absf(aim.x) < 0.01, str(aim))
+	var spot := ray(aim + Vector3.UP * 6.0, aim + Vector3.DOWN)
+	check("and nothing of the rock hangs over that spot", not spot.is_empty() and spot.collider != rock, str(spot.get("collider")))
+	var tris := 0
+	for c in rock.get_children(true):
+		if c is MeshInstance3D:
+			for si in (c as MeshInstance3D).mesh.get_surface_count():
+				tris += (c as MeshInstance3D).mesh.surface_get_array_index_len(si) / 3
+	check("Beak Rock < 3000 triangles", tris > 0 and tris < 3000, str(tris))
+
+
 # --- Budgets & meshes -------------------------------------------------------------------
 
 func test_triangle_budgets(arena: Node3D) -> void:

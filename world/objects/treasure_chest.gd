@@ -19,6 +19,8 @@ signal opened
 @export var gold_variant := false
 ## A hand attachment packed inside too (handed over after the treasure).
 @export var attachment_reward: StringName = &""
+## Treasure map tucked in with the prize (TreasureMaps id).
+@export var map_reward: StringName = &""
 
 var _lid: Node3D
 var _chains: Node3D
@@ -120,6 +122,8 @@ func open(player: Player) -> void:
 		c.launched = true
 		get_tree().current_scene.add_child(c)
 		c.global_position = global_position + Vector3.UP * 0.8
+	if map_reward != &"" and not InventoryManager.has_treasure_map(map_reward):
+		InventoryManager.add_treasure_map(map_reward)
 	if chest_id != &"":
 		WorldState.mark_completed(chest_id)
 	opened.emit()

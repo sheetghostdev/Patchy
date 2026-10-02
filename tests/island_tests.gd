@@ -380,6 +380,58 @@ func test_dive_to_the_sunken_sloop() -> void:
 	check("it opens and Patchy grabs the goblet", opened >= 0 and InventoryManager.has_treasure(&"castaway_sunken_chest_prize"), "")
 	check("and Patchy is still swimming afterwards, not sinking", player.state_id == &"swim" and player.global_position.y > chest.global_position.y - 0.5,
 		"state=%s y=%.1f" % [player.state_id, player.global_position.y])
+	check("a soggy map of another island was tucked in with the goblet", InventoryManager.has_treasure_map(&"driftwood_map_1"), "")
+	check("and it goes in the captain's log", QuestLog.build().any(func(q: Dictionary) -> bool: return q.title == "Where the Beak Points" and not q.done), "")
+
+
+## Spec §194: the sloop's map sketches a stone parrot on another island.
+## It is Driftwood Key's Beak Rock, and the X is where its beak points.
+func test_beak_rock_marks_the_spot() -> void:
+	await clear_enemies()
+	var rock := node("Gameplay/BeakRock/BeakRock") as BeakRock
+	var x := node("Gameplay/BeakRock/BeakX") as DigSpot
+	var map := TreasureMaps.get_map(&"driftwood_map_1")
+	var drawn := {}
+	for item: Dictionary in map["sketch"]:
+		drawn[item["kind"]] = item.get("at", Vector2.ZERO)
+	var flat := func(v: Vector3) -> Vector2: return Vector2(v.x, v.z)
+	var rock_at: Vector2 = flat.call(rock.global_position)
+	var x_at: Vector2 = flat.call(x.global_position)
+	check("the map sketches the rock where it really is, on Driftwood Key", (drawn["beak_rock"] as Vector2).distance_to(rock_at) < 0.5
+		and TreasureMaps.island_of(&"driftwood_map_1") == &"driftwood_key" and x.island_id == &"driftwood_key" and map["frame"].has_point(rock_at),
+		"rock=%s" % rock.global_position)
+	var aim := rock.global_transform * rock.beak_target()
+	check("the X lies where the beak points", Player.flat(aim - x.global_position).length() < 0.3, "aim=%s x=%s" % [aim, x.global_position])
+	var face := flat.call(Player.dir_from_yaw(rock.global_rotation.y)) as Vector2
+	var sketched := (drawn["x"] as Vector2) - rock_at
+	check("the map's X sits out along the beak's gaze, close enough for a warm hint",
+		sketched.normalized().dot(face) > 0.97 and (drawn["x"] as Vector2).distance_to(x_at) < ShovelAttachment.WARM_RADIUS,
+		"off=%.1f" % (drawn["x"] as Vector2).distance_to(x_at))
+	var hit := player.raycast(x.global_position + Vector3.UP * 6.0, x.global_position + Vector3.DOWN * 2.0)
+	check("in open sand, clear of the rock", not hit.is_empty() and absf((hit.position as Vector3).y - x.global_position.y) < 0.3 and hit.collider != rock,
+		"hit=%s" % [hit.get("collider")])
+	InventoryManager.add_treasure_map(&"driftwood_map_1")
+	await give(&"shovel")
+	# Digging right on the sketch's X: not quite, but warm.
+	var said: Array[String] = []
+	var listen := func(t: String, _d: float) -> void: said.append(t)
+	Events.hud_message.connect(listen)
+	var gaze := Player.dir_from_yaw(rock.global_rotation.y)
+	await place(Vector3(drawn["x"].x, x.global_position.y + 0.1, drawn["x"].y) - gaze * 0.9, gaze)
+	tap(&"tool_primary")
+	await frames(45)
+	Events.hud_message.disconnect(listen)
+	check("digging on the sketched X: something's buried close by", said.any(func(t: String) -> bool: return "buried close by" in t)
+		and not WorldState.is_completed(&"driftwood_x_beak"), "said=%s" % [said])
+	var out := Player.flat(x.global_position - rock.global_position).normalized()
+	await place(x.global_position + out * 1.2 + Vector3.UP * 0.1, -out)
+	for k in 2:
+		tap(&"tool_primary")
+		await frames(45)
+	await frames(120)
+	check("dig there: a crown!", InventoryManager.has_treasure(&"driftwood_x_beak_prize"), "gold=%d" % InventoryManager.gold_value)
+	check("the map is marked solved and the log entry done", TreasureMaps.is_solved(&"driftwood_map_1")
+		and QuestLog.build().any(func(q: Dictionary) -> bool: return q.title == "Where the Beak Points" and q.done), "")
 
 
 func test_crab_bumps_tnt_snail_and_the_rock_goes_too() -> void:

@@ -3,7 +3,8 @@ extends Node3D
 ## small island so the photo tool can frame them.
 ##   tools/photo/shoot.sh scene=res://props/tests/prop_viewer.tscn show=palms \
 ##       out=/tmp/palms_%d.png "cams=0,4,14>0,3,0"
-## Sets (show=): palms, rocks, foliage, crates, dock, wreck, treasure, misc.
+## Sets (show=): palms, rocks, foliage, crates, dock, wreck, treasure, misc,
+## landmarks.
 ## Options: night=1 (dark preset to judge torches/lanterns), break=N (smash
 ## every breakable after N frames), vcam=x,y,z>lx,ly,lz (own camera, for
 ## the photo tool's snaps=), nossao=1 / noglow=1 / nomsaa=1 (render debug).
@@ -27,7 +28,7 @@ func _ready() -> void:
 			env.preset = SkyEnvironment.Preset.CAVE
 	var ground := LevelBlock.new()
 	ground.size = Vector3(60, 1, 60)
-	ground.surface = "grass" if which != "dock" else "sand"
+	ground.surface = "sand" if which in ["dock", "landmarks"] else "grass"
 	ground.position = Vector3(0, -1, 0)
 	add_child(ground)
 	var method := "_show_%s" % which
@@ -85,6 +86,17 @@ func _show_rocks() -> void:
 		_place(tall, Vector3(-6.8 + k * 4.0, 0, -2.6))
 	var p := Node3D.new()
 	_place(p, Vector3.ZERO)
+
+
+## Landmarks: Beak Rock, with a stake where its beak points.
+func _show_landmarks() -> void:
+	var beak := BeakRock.new()
+	_place(beak, Vector3.ZERO)
+	var stake := MeshInstance3D.new()
+	var mb := MeshBuilder.new()
+	mb.cylinder(0.04, 0.04, 0.6, Transform3D(Basis.IDENTITY, Vector3(0, 0.3, 0)), Color("e63b2e"), 6)
+	stake.mesh = mb.build(null, MaterialLibrary.toon(Color.WHITE, &"matte"))
+	_place(stake, beak.beak_target())
 
 
 func _show_foliage() -> void:

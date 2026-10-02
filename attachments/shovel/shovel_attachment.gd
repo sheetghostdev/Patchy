@@ -8,8 +8,9 @@ extends AttachmentBase
 
 const DIG_TIME := 0.5
 const REACH := 1.5
-## A miss this close to a hidden spot earns a "warmer" hint.
-const WARM_RADIUS := 4.5
+## A miss this close to a hidden spot earns a "warmer" hint (maps are
+## sketches: their X is only roughly where the treasure lies).
+const WARM_RADIUS := 6.0
 
 var _busy := 0.0
 

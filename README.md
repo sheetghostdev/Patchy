@@ -108,8 +108,8 @@ world/              Terrain (Plateau); ocean (stylized Ocean, underwater effect,
                     chests, dig spots, braziers, gates, targets, cracked rock,
                     doors, Shellby's fishing boat, drag marks...)
 props/              Art kit: palms, rocks, foliage scatter, coral, kelp, crates and barrels,
-                    docks, rope bridges, wreck pieces, signs, torches; plus
-                    level blocks
+                    docks, rope bridges, wreck pieces, signs, torches, Beak
+                    Rock; plus level blocks
 ui/                 HUD, dialogue, pause menu (map, treasure, attachments, quests,
                     settings), title screen, sea chart, debug menu, input glyphs
 effects/            VFX helpers (dust, rings, splashes, sparkles)
@@ -246,6 +246,10 @@ tools/photo/shoot.sh scene=res://world/islands/castaway_cay/castaway_cay.tscn \
 # UI states (pause pages, a treasure map unrolled at zoom 1.5):
 tools/photo/shoot.sh scene=res://ui/tests/ui_preview.tscn size=1600x900 state=treasure_map map=castaway_map_2 zoom=1.5
 
+# Props on their own (sets: palms, rocks, foliage, crates, dock, wreck,
+# treasure, misc, landmarks):
+tools/photo/shoot.sh scene=res://props/tests/prop_viewer.tscn show=landmarks "cams=-7,3.2,-1>0,2.4,-0.8"
+
 # The islanders (and Patchy for scale) lined up for a close look:
 tools/photo/shoot.sh scene=res://tests/npc_gallery.tscn hud=0 "cams=-0.6,1.3,3.6>-0.6,0.65,0"
 
@@ -266,9 +270,9 @@ An optional argument after `--` filters test names.
 godot --headless --path . --fixed-fps 60 res://tests/run_movement_tests.tscn   # 53 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_camera_tests.tscn     # 21 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_gameplay_tests.tscn   # 68 checks
-godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 143 checks
+godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 152 checks
 godot --headless --path . --fixed-fps 60 res://ui/tests/ui_flow_test.tscn      # 84 checks
-godot --headless --path . --fixed-fps 60 res://props/tests/prop_tests.tscn     # 70 checks
+godot --headless --path . --fixed-fps 60 res://props/tests/prop_tests.tscn     # 74 checks
 godot --headless --path . --fixed-fps 60 res://world/ocean/tests/ocean_swim_check.tscn
 godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn -- sail
 ```
@@ -310,6 +314,8 @@ What each suite covers:
   - Brock's cameo after King Claw;
   - a crab lighting a TNT snail that blows open the grotto;
   - diving to the Sunken Sloop and opening its chest underwater;
+  - the sloop's map of Beak Rock: the sketch matches the world, the X lies
+    where the stone beak points, and digging there turns up a crown;
   - a check that no pickup is buried or floating.
 
 ## Content
@@ -334,11 +340,16 @@ gold.
 
 **Driftwood Key** is a small islet one short sail away, with parrot 5 on a
 driftwood tower, parrot 6 in a guarded crab pen, and the Storm Lantern.
+Beside the tower stands Beak Rock, a stack of weathered stone that looks
+for all the world like a parrot's head, peering down at the sand.
 
 **The Sunken Sloop** (spec §114) lies on the seabed off the cove: a broken
 hull, its bow and a tattered mast among coral, kelp and schools of reef
 fish. A trail of coins leads down from the shallows to a chest in its
-lee. Dive with the dive or crouch button and rise with jump; chests and
+lee. Packed in with its goblet is a soggy map of an island that isn't
+Castaway Cay (spec §194): a stone parrot, a dotted line from its beak and
+an X. It's Beak Rock on Driftwood Key, sailed past on the way to the tower
+parrot, and the crown is buried where the beak points. Dive with the dive or crouch button and rise with jump; chests and
 chats work underwater too.
 
 **The crossing** between them is never empty water (spec §117). A bell
@@ -353,8 +364,8 @@ More on Castaway Cay:
   which are the shovel and a treasure map. The map sketches the place
   where a relic is buried.
 - **Treasure maps** (spec §86–87) are parchment sketches of landmarks (a
-  stump under the ridge, a cairn on the north sand) with a riddle, never
-  a marker in the world. Unroll them under Pause > Treasure to zoom, turn
+  stump under the ridge, a cairn on the north sand, a parrot made of
+  stone) with a riddle, never a marker in the world. Unroll them under Pause > Treasure to zoom, turn
   and inspect them. Dig a few steps off and Patchy can tell something is
   buried close by.
 - **The headland:** across the six-parrot log bridge, the chained chest

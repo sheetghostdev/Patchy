@@ -73,6 +73,8 @@ func _draw() -> void:
 	for item: Dictionary in _map.get("sketch", []):
 		if item["kind"] == "shore":
 			_draw_shore(item, area, u)
+		elif item["kind"] == "coast":
+			_draw_coast(item, area, u)
 	for item: Dictionary in _map.get("sketch", []):
 		_draw_item(item, area, u)
 	var cpos: Vector2 = _map.get("compass", Vector2(0.92, 0.88))
@@ -185,6 +187,128 @@ func _draw_shore(item: Dictionary, area: Rect2, u: float) -> void:
 			draw_polyline(arc, Color(SEA, 0.55), u * 0.12, true)
 
 
+## A whole island: sea tint all round, sand inside, an inked shoreline
+## with a shallows line outside it and wave marks out at sea.
+func _draw_coast(item: Dictionary, area: Rect2, u: float) -> void:
+	var line := _area_points(item, area)
+	var c := _centroid(line)
+	draw_rect(area, Color(SEA, 0.14))
+	draw_colored_polygon(line, PAPER.lightened(0.05))
+	var loop := line.duplicate()
+	loop.append(line[0])
+	var outer := PackedVector2Array()
+	for q in loop:
+		outer.append(c + (q - c) * 1.08)
+	_ink(outer, Color(SEA, 0.4), u * 0.14, _rng_seed + 2)
+	_ink(loop, Color(SEA, 0.95), u * 0.28, _rng_seed + 1)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = _rng_seed + 3
+	for i in 30:
+		var pt := Vector2(rng.randf_range(area.position.x + u, area.end.x - u * 3.0), rng.randf_range(area.position.y + u, area.end.y - u))
+		if Geometry2D.is_point_in_polygon(pt, outer) or (c - pt).length() < u * 2.0:
+			continue
+		for k in 2:
+			var arc := PackedVector2Array()
+			for j in 7:
+				var t := float(j) / 6.0
+				arc.append(pt + Vector2((k + t) * u * 1.1, -sin(t * PI) * u * 0.45))
+			draw_polyline(arc, Color(SEA, 0.55), u * 0.12, true)
+
+
+func _centroid(pts: PackedVector2Array) -> Vector2:
+	var c := Vector2.ZERO
+	for q in pts:
+		c += q
+	return c / maxf(pts.size(), 1.0)
+
+
+## A raised rise (a knoll): grassy tint, inked rim, hatching outward.
+func _draw_knoll(pts: PackedVector2Array, u: float) -> void:
+	var c := _centroid(pts)
+	draw_colored_polygon(pts, Color(0.45, 0.7, 0.3, 0.16))
+	var loop := pts.duplicate()
+	loop.append(pts[0])
+	_ink(loop, INK, u * 0.22, _rng_seed + 31)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = _rng_seed + 32
+	for i in pts.size():
+		var a := pts[i]
+		var b := pts[(i + 1) % pts.size()]
+		var n := int(a.distance_to(b) / (u * 0.9))
+		for k in n:
+			var q := a.lerp(b, (k + 0.5) / maxf(n, 1.0))
+			var out := (q - c).normalized()
+			draw_line(q, q + out * u * rng.randf_range(0.6, 1.0), INK_SOFT, u * 0.1, true)
+
+
+func _draw_jetty(at: Vector2, u: float, yaw: float) -> void:
+	var dir := Vector2(-sin(yaw), -cos(yaw))
+	var side := dir.orthogonal()
+	var end := at + dir * u * 4.5
+	draw_line(at, end, Color("b07c48"), u * 0.9, true)
+	var n := 7
+	for k in n + 1:
+		var q := at.lerp(end, float(k) / n)
+		draw_line(q - side * u * 0.45, q + side * u * 0.45, INK, u * 0.08, true)
+	draw_line(at - side * u * 0.45, end - side * u * 0.45, INK, u * 0.1, true)
+	draw_line(at + side * u * 0.45, end + side * u * 0.45, INK, u * 0.1, true)
+
+
+## The parrot-headed rock: a boulder topped by a round stone head with a
+## crest of shards, a pale-ringed eye and a big tawny hooked beak. With `to`
+## (area space) it faces that way, and a dotted sight line runs from the tip
+## of the beak to the spot.
+func _draw_beak_rock(at: Vector2, u: float, to: Vector2 = Vector2.INF) -> void:
+	var f := -1.0 if to != Vector2.INF and to.x < at.x else 1.0
+	var rock := Color("b9ab98")
+	draw_colored_polygon(UIIcons.ellipse_pts(at + Vector2(0, u * 0.15), u * 2.1, u * 0.45, 16), Color(0.3, 0.2, 0.1, 0.12))
+	var base := _blob(at + Vector2(0, -u * 0.55), u * 1.7, _rng_seed + 52, 0.5)
+	draw_colored_polygon(base, rock.darkened(0.08))
+	base.append(base[0])
+	draw_polyline(base, INK, u * 0.13, true)
+	var h := at + Vector2(-0.1 * f, -2.55) * u
+	# Crest shards, swept back behind the head.
+	for k in 3:
+		var a := -PI * 0.5 - f * (0.45 + k * 0.45)
+		var d := Vector2(cos(a), sin(a))
+		var back := Vector2(cos(a - f * 0.3), sin(a - f * 0.3))
+		var shard := PackedVector2Array([h + d * u * 0.8 - d.orthogonal() * u * 0.3, h + back * u * (1.95 - k * 0.2), h + d * u * 0.8 + d.orthogonal() * u * 0.3])
+		draw_colored_polygon(shard, rock.darkened(0.15))
+		draw_polyline(shard, INK, u * 0.11, true)
+	var hb := _blob(h, u * 1.2, _rng_seed + 51, 0.92)
+	draw_colored_polygon(hb, rock)
+	hb.append(hb[0])
+	draw_polyline(hb, INK, u * 0.14, true)
+	# The jaw, then the great hooked upper beak over it.
+	var jaw := PackedVector2Array()
+	for v: Vector2 in [Vector2(0.85, 0.35), Vector2(1.8, 0.55), Vector2(1.5, 0.95), Vector2(0.95, 0.85)]:
+		jaw.append(h + Vector2(v.x * f, v.y) * u)
+	draw_colored_polygon(jaw, Color("6a6168"))
+	jaw.append(jaw[0])
+	draw_polyline(jaw, INK, u * 0.11, true)
+	var beak := PackedVector2Array()
+	for v: Vector2 in [Vector2(0.75, -0.6), Vector2(1.7, -0.55), Vector2(2.3, -0.05), Vector2(2.38, 0.6), Vector2(2.05, 1.12), Vector2(1.86, 0.5), Vector2(0.88, 0.4)]:
+		beak.append(h + Vector2(v.x * f, v.y) * u)
+	draw_colored_polygon(beak, Color("d9a050"))
+	var tip := beak[4]
+	beak.append(beak[0])
+	draw_polyline(beak, INK, u * 0.14, true)
+	draw_line(h + Vector2(1.0 * f, -0.2) * u, h + Vector2(1.95 * f, -0.05) * u, INK_SOFT, u * 0.08, true)
+	# A wide pale-ringed eye under a heavy brow.
+	var eye := h + Vector2(0.25 * f, -0.25) * u
+	draw_circle(eye, u * 0.38, Color("ece6d3"))
+	draw_arc(eye, u * 0.38, 0, TAU, 18, INK, u * 0.09, true)
+	draw_circle(eye + Vector2(0.08 * f, 0.02) * u, u * 0.18, INK)
+	draw_line(eye + Vector2(-0.45 * f, -0.6) * u, eye + Vector2(0.5 * f, -0.4) * u, INK, u * 0.14, true)
+	if to == Vector2.INF:
+		return
+	# The sight line: dots from the beak's tip toward the spot.
+	var gap := to - tip
+	var n := int(gap.length() / (u * 0.6))
+	for k in range(1, n - 1):
+		draw_circle(tip + gap * (float(k) / n), u * 0.12, INK_SOFT)
+
+
 func _shore_y_at(line: PackedVector2Array, x: float) -> float:
 	for i in line.size() - 1:
 		if (line[i].x - x) * (line[i + 1].x - x) <= 0.0:
@@ -212,6 +336,12 @@ func _draw_item(item: Dictionary, area: Rect2, u: float) -> void:
 			_draw_rock(at, u * s, hash(item["at"]))
 		"cairn":
 			_draw_cairn(at, u * s)
+		"knoll":
+			_draw_knoll(_area_points(item, area), u)
+		"jetty":
+			_draw_jetty(at, u * s, deg_to_rad(float(item.get("yaw", 0.0))))
+		"beak_rock":
+			_draw_beak_rock(at, u * s, _to_area(item["to"], area) if item.has("to") else Vector2.INF)
 		"hill_mast":
 			_draw_hill_mast(at, u * s)
 		"x":

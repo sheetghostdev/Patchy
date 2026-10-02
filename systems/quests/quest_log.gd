@@ -51,6 +51,9 @@ static func build() -> Array:
 			"done": WorldState.is_completed(&"castaway_betty_reward")})
 	if InventoryManager.has_treasure_map(&"castaway_map_2"):
 		q.append({"title": "Shellby's Old Chart", "description": "Shellby's chart sketches a spot somewhere on Castaway Cay. Find it and dig.", "done": WorldState.is_completed(&"castaway_x_north")})
+	if InventoryManager.has_treasure_map(&"driftwood_map_1"):
+		q.append({"title": "Where the Beak Points", "description": "The Sunken Sloop's soggy map sketches an island that isn't Castaway Cay. Haven't you sailed past it somewhere?",
+			"done": WorldState.is_completed(&"driftwood_x_beak")})
 	if WorldState.is_completed(&"driftwood_met_pip"):
 		q.append({"title": "Pip's Lucky Clam", "description": "A pelican swiped Pip's clam on Driftwood Key. Bop it when it swoops low!",
 			"done": WorldState.is_completed(&"driftwood_pip_reward")})

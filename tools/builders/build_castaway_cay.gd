@@ -77,6 +77,7 @@ func build() -> void:
 	_brock_cameo()
 	_grotto_mischief()
 	_sunken_reef()
+	_beak_rock()
 
 	var player := b.instance(PLAYER, null, Vector3(0, 1.25, 33), 0.0, "Player")
 	var rig := b.instance(RIG, null, Vector3(0, 3, 40), 0.0, "CameraRig")
@@ -1119,6 +1120,7 @@ func _sunken_reef() -> void:
 	chest.coins = 8
 	chest.position = c + Vector3(1.6, 0, 2.2)
 	chest.rotation_degrees.y = 200.0
+	chest.map_reward = &"driftwood_map_1"
 	b.add(chest, g, "SunkenChest")
 	var k := 0
 	for d: Array in [[Vector3(-5, 0, -3), 1.2], [Vector3(4, 0, 4.5), 1.0], [Vector3(-1.5, 0, -5.5), 0.8], [Vector3(8.5, 0, 2), 1.1],
@@ -1156,6 +1158,28 @@ func _sunken_reef() -> void:
 	hint.size = Vector3(18, 6, 12)
 	hint.position = Vector3(12, -1.0, 62)
 	b.add(hint, g, "HintSwimDown")
+
+
+## Beak Rock (spec §194): the Sunken Sloop's chest holds a map of a little
+## island with a stone parrot on it. It's Driftwood Key, sailed past on the
+## way to the tower parrot: the parrot-shaped rock by the raft tower keeps
+## watch along the south beach, and the X is in the sand where its beak
+## points.
+func _beak_rock() -> void:
+	var g := b.group("BeakRock", gameplay)
+	var rock := BeakRock.new()
+	rock.position = DRIFTWOOD + Vector3(-13.5, 1.0, 14.0)
+	rock.rotation.y = Player.yaw_of(Vector3(1, 0, -0.25))
+	b.add(rock, g, "BeakRock")
+	var x_spot := DigSpot.new()
+	x_spot.spot_id = &"driftwood_x_beak"
+	x_spot.island_id = ISLET
+	x_spot.contents = "crown"
+	x_spot.coins = 10
+	x_spot.hidden = true
+	x_spot.marked_by_map = &"driftwood_map_1"
+	x_spot.position = rock.transform * rock.beak_target()
+	b.add(x_spot, g, "BeakX")
 
 
 # --- Tutorial hints -----------------------------------------------------------------

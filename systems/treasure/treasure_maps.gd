@@ -10,6 +10,10 @@ class_name TreasureMaps
 ##   shore   points        coastline, sea to the north of the line
 ##   cliff   points, side  hatched cliff edge (side: 1 = drop to the south)
 ##   palm / hut / tower / stump / rock / cairn / hill_mast   at
+##   coast   points        a whole island's shoreline (closed), sea all round
+##   knoll   points        a raised, hatched rise (closed)
+##   jetty   at, yaw       a little wooden jetty
+##   beak_rock  at         the parrot-headed rock on Driftwood Key
 ##   x       at            where to dig
 ##   label   at, text      handwritten note
 ## "compass" places the compass rose (fractions of the map area).
@@ -54,6 +58,30 @@ const MAPS := {
 			{"kind": "x", "at": Vector2(-11, -64.5)},
 			{"kind": "label", "at": Vector2(-26, -76.5), "text": "open sea"},
 			{"kind": "label", "at": Vector2(-24, -66.5), "text": "north sand"},
+		],
+	},
+	# Found in the Sunken Sloop's chest: it shows an island the player has
+	# already sailed past (spec §194).
+	&"driftwood_map_1": {
+		"island": &"driftwood_key",
+		"title": "Where the Beak Points",
+		"riddle": "On a little isle of driftwood, a parrot of stone keeps watch. Dig where its beak points.",
+		"spot": &"driftwood_x_beak",
+		"frame": Rect2(-164, 108, 68, 64),
+		"compass": Vector2(0.9, 0.12),
+		"sketch": [
+			{"kind": "coast", "points": [Vector2(-152, 132), Vector2(-146, 120), Vector2(-130, 114), Vector2(-112, 118), Vector2(-104, 132),
+				Vector2(-108, 150), Vector2(-122, 160), Vector2(-140, 160), Vector2(-152, 148)]},
+			{"kind": "knoll", "points": [Vector2(-138, 128), Vector2(-128, 125), Vector2(-118, 130), Vector2(-116, 142), Vector2(-126, 149), Vector2(-137, 146)]},
+			{"kind": "tower", "at": Vector2(-148.5, 144), "size": 0.8},
+			{"kind": "jetty", "at": Vector2(-117, 118), "yaw": 20.0},
+			{"kind": "palm", "at": Vector2(-144, 128), "size": 0.8},
+			{"kind": "palm", "at": Vector2(-110, 134), "size": 0.8},
+			{"kind": "palm", "at": Vector2(-130, 142), "size": 0.8},
+			{"kind": "palm", "at": Vector2(-116, 152), "size": 0.8},
+			{"kind": "beak_rock", "at": Vector2(-143.5, 154.0), "to": Vector2(-135.4, 152.0), "size": 0.75},
+			{"kind": "x", "at": Vector2(-135.4, 152.0), "size": 0.6},
+			{"kind": "label", "at": Vector2(-134, 166.5), "text": "a parrot made of stone?"},
 		],
 	},
 }

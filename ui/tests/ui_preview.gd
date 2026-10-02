@@ -144,6 +144,7 @@ func _seed_progress() -> void:
 	InventoryManager.collect_treasure(&"", &"coin", 940)
 	InventoryManager.add_treasure_map(&"castaway_map_1")
 	InventoryManager.add_treasure_map(&"castaway_map_2")
+	InventoryManager.add_treasure_map(&"driftwood_map_1")
 	WorldState.mark_completed(&"castaway_x_spot")
 	InventoryManager.add_ship_part(&"castaway_cay_mast")
 	ui.set_island_totals(&"castaway_cay", {"treasure": 12, "maps": 2, "ship_parts": 1})
