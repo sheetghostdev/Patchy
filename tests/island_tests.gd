@@ -638,3 +638,27 @@ func test_save_and_continue_returns_to_checkpoint() -> void:
 	check("rescued cage stays open", not (node("Gameplay/ParrotCage_castaway_parrot_summit") as ParrotCage).can_interact(player), "")
 	check("no replay of the intro", WorldState.is_completed(&"castaway_intro_seen") and player.state_id != &"locked", "state=%s" % player.state_id)
 	SaveManager.delete_slot(SLOT)
+
+
+func test_tutorial_hint_waits_for_control_and_shows_once() -> void:
+	var shown := [0]
+	var count := func(text: String, _d: float) -> void:
+		if text.begins_with("{jump} Jump"):
+			shown[0] += 1
+	Events.hud_message.connect(count)
+	await place(Vector3(0, 1.3, 30.0), Vector3.FORWARD)
+	# Locked (as in a cutscene) inside the box, with the hint re-armed (the
+	# default spawn already triggered it during setup).
+	player.set_locked(true, {"anim": &"idle"})
+	WorldState.set_state(&"hint_jump", {})
+	(node("Gameplay/Hints/HintJump") as Node).set_physics_process(true)
+	await frames(30)
+	check("no hint while Patchy isn't in control", shown[0] == 0, "shown=%d" % shown[0])
+	player.set_locked(false)
+	await frames(30)
+	check("hint appears once he can move", shown[0] == 1, "shown=%d" % shown[0])
+	await place(Vector3(0, 1.3, 26.5), Vector3.BACK)
+	await place(Vector3(0, 1.3, 30.0), Vector3.FORWARD)
+	await frames(30)
+	check("and only once", shown[0] == 1 and WorldState.is_completed(&"hint_jump"), "shown=%d" % shown[0])
+	Events.hud_message.disconnect(count)

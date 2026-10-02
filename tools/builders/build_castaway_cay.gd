@@ -69,6 +69,7 @@ func build() -> void:
 	_driftwood_key()
 	_sea_regions()
 	_decorate()
+	_hints()
 
 	var player := b.instance(PLAYER, null, Vector3(0, 1.25, 33), 0.0, "Player")
 	var rig := b.instance(RIG, null, Vector3(0, 3, 40), 0.0, "CameraRig")
@@ -798,6 +799,30 @@ func _driftwood_key() -> void:
 	scatter(n, c + Vector3(3, 20, -3), Vector2(30, 30), PropScatter.Kind.GRASS, 0.5, grass_only, 13, 900)
 	scatter(n, c + Vector3(3, 20, -3), Vector2(30, 30), PropScatter.Kind.FLOWERS, 0.05, grass_only, 17, 100)
 	crate_prop(n, c + Vector3(16, 1.0, -14), "driftwood_crate_1", 3, 15.0)
+
+
+# --- Tutorial hints -----------------------------------------------------------------
+
+func _hints() -> void:
+	var g := b.group("Hints", gameplay)
+	for d: Array in [
+			["hint_jump", Vector3(0, 1.2, 29.5), Vector3(14, 4, 8), "{jump} Jump - hold it to jump higher", &""],
+			["hint_dive", Vector3(18, 1.2, 35), Vector3(10, 4, 8), "While running, {dive} to dive  ·  {jump} to roll out", &""],
+			["hint_swipe", Vector3(4, 3.0, 8), Vector3(14, 4, 10), "{attack} Hook swipe  ·  armored crabs need a ground pound", &""],
+			["hint_ledge", Vector3(-4, 3.0, 7), Vector3(14, 4, 5), "Jump at a ledge to grab it  ·  {jump} to climb up", &""],
+			["hint_wall_kick", Vector3(1.2, 7.0, -20.5), Vector3(5, 4, 4), "Slide down a wall and press {jump} to wall-kick", &""],
+			["hint_long_jump", Vector3(55.5, 8.0, 38), Vector3(4, 3, 4), "Long jump: run, hold {crouch} and press {jump}", &""],
+			["hint_ground_pound", Vector3(62, 7.5, -16), Vector3(14, 4, 14), "In the air, press {ground_pound} to ground pound", &""],
+			["hint_ring", Vector3(-25, 4.5, 49), Vector3(7, 3, 7), "Jump at a golden ring and press {tool_primary} to swing", &""],
+			["hint_boat", Vector3(-52, 1.35, 78), Vector3(6, 3, 10), "{interact} Board the boat  ·  steer with the stick, {jump} to hop out", &""],
+			["hint_tools", Vector3(11, 7.0, -36), Vector3(8, 4, 6), "Swap hand attachments with {tool_previous} / {tool_next}", &"shovel"]]:
+		var h := TutorialHint.new()
+		h.hint_id = StringName(d[0])
+		h.position = d[1]
+		h.size = d[2]
+		h.text = d[3]
+		h.require_attachment = d[4]
+		b.add(h, g, String(d[0]).capitalize().replace(" ", ""))
 
 
 # --- Dressing (props kit) -----------------------------------------------------------
