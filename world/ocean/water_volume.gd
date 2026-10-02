@@ -18,6 +18,11 @@ extends Area3D
 		show_surface = v
 		_rebuild()
 
+## Optional object that owns the real surface (e.g. an Ocean). When set,
+## get_surface_height() delegates to its get_surface_height(at) so swimming
+## follows the rendered waves; the box then only marks the swimmable region.
+var surface_provider: Object = null
+
 var _shape: CollisionShape3D
 var _surface: MeshInstance3D
 
@@ -62,6 +67,8 @@ func _rebuild() -> void:
 ## World-space height of the water surface above `at` (the volume's origin
 ## marks the surface; the box extends downward).
 func get_surface_height(at: Vector3) -> float:
+	if surface_provider != null and is_instance_valid(surface_provider):
+		return surface_provider.get_surface_height(at)
 	var base := global_position.y
 	if wave_height <= 0.0:
 		return base
@@ -71,3 +78,11 @@ func get_surface_height(at: Vector3) -> float:
 
 func get_bottom_height() -> float:
 	return global_position.y - size.y
+
+
+## True when `point` lies inside the box horizontally and between its bottom
+## and top (the top is the node origin).
+func contains_point(point: Vector3) -> bool:
+	var local := global_transform.affine_inverse() * point
+	return absf(local.x) <= size.x * 0.5 and absf(local.z) <= size.z * 0.5 \
+			and local.y <= 0.0 and local.y >= -size.y
