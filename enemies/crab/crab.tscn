@@ -1,0 +1,48 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://enemies/crab/crab.gd" id="1_crab"]
+[ext_resource type="Script" path="res://enemies/crab/crab_model.gd" id="2_model"]
+
+[sub_resource type="BoxShape3D" id="Box_body"]
+size = Vector3(0.9, 0.55, 0.75)
+
+[sub_resource type="SphereShape3D" id="Sphere_attack"]
+radius = 0.6
+
+[sub_resource type="SphereShape3D" id="Sphere_slide"]
+radius = 0.75
+
+[sub_resource type="CylinderShape3D" id="Cyl_none"]
+height = 0.1
+radius = 0.1
+
+[node name="Crab" type="CharacterBody3D" groups=["enemy", "stompable"]]
+collision_layer = 4
+script = ExtResource("1_crab")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+shape = SubResource("Box_body")
+
+[node name="CrabModel" type="Node3D" parent="."]
+script = ExtResource("2_model")
+
+[node name="AttackArea" type="Area3D" parent="CrabModel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.35, -0.65)
+collision_layer = 4096
+collision_mask = 2
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CrabModel/AttackArea"]
+shape = SubResource("Sphere_attack")
+
+[node name="SlideArea" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.35, 0)
+collision_layer = 0
+collision_mask = 1044
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SlideArea"]
+shape = SubResource("Sphere_slide")

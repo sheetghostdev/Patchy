@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3]
+[gd_scene load_steps=18 format=3]
 
 [ext_resource type="Script" path="res://characters/patchy/player.gd" id="1_player"]
 [ext_resource type="Resource" path="res://resources/settings/patchy_movement.tres" id="2_settings"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://characters/patchy/patchy_model.gd" id="6_model"]
 [ext_resource type="Script" path="res://characters/patchy/patchy_animator.gd" id="7_anim"]
 [ext_resource type="Script" path="res://characters/patchy/player_feedback.gd" id="8_feedback"]
+[ext_resource type="Script" path="res://characters/patchy/player_interaction.gd" id="9_interact"]
 
 [sub_resource type="CapsuleShape3D" id="Capsule_body"]
 radius = 0.35
@@ -25,6 +26,9 @@ radius = 0.45
 
 [sub_resource type="SphereShape3D" id="Sphere_hook"]
 radius = 5.4
+
+[sub_resource type="SphereShape3D" id="Sphere_interact"]
+radius = 1.9
 
 [sub_resource type="Gradient" id="Gradient_shadow"]
 offsets = PackedFloat32Array(0, 0.6, 1)
@@ -59,6 +63,19 @@ script = ExtResource("5_combat")
 swipe_box = NodePath("../Facing/SwipeHitbox")
 body_box = NodePath("../BodyHitbox")
 stomp_box = NodePath("../StompSensor")
+
+[node name="Interaction" type="Node" parent="." node_paths=PackedStringArray("sensor")]
+script = ExtResource("9_interact")
+sensor = NodePath("../InteractionSensor")
+
+[node name="InteractionSensor" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+collision_layer = 0
+collision_mask = 16
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractionSensor"]
+shape = SubResource("Sphere_interact")
 
 [node name="Facing" type="Node3D" parent="."]
 

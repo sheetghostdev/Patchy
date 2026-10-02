@@ -1,0 +1,807 @@
+{
+  "sfx": {
+    "footstep_sand_01": {
+      "file": "res://audio/sfx/footstep_sand_01.wav",
+      "duration": 0.1997,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -9.0
+    },
+    "footstep_sand_02": {
+      "file": "res://audio/sfx/footstep_sand_02.wav",
+      "duration": 0.2071,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -9.0
+    },
+    "footstep_sand_03": {
+      "file": "res://audio/sfx/footstep_sand_03.wav",
+      "duration": 0.1993,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -9.0
+    },
+    "footstep_sand_04": {
+      "file": "res://audio/sfx/footstep_sand_04.wav",
+      "duration": 0.1908,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -9.0
+    },
+    "footstep_grass_01": {
+      "file": "res://audio/sfx/footstep_grass_01.wav",
+      "duration": 0.2072,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -9.0
+    },
+    "footstep_grass_02": {
+      "file": "res://audio/sfx/footstep_grass_02.wav",
+      "duration": 0.2122,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -9.0
+    },
+    "footstep_grass_03": {
+      "file": "res://audio/sfx/footstep_grass_03.wav",
+      "duration": 0.1989,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -9.0
+    },
+    "footstep_grass_04": {
+      "file": "res://audio/sfx/footstep_grass_04.wav",
+      "duration": 0.2166,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -9.0
+    },
+    "footstep_wood_01": {
+      "file": "res://audio/sfx/footstep_wood_01.wav",
+      "duration": 0.2353,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -8.0
+    },
+    "footstep_wood_02": {
+      "file": "res://audio/sfx/footstep_wood_02.wav",
+      "duration": 0.2335,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -8.0
+    },
+    "footstep_wood_03": {
+      "file": "res://audio/sfx/footstep_wood_03.wav",
+      "duration": 0.2288,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -8.0
+    },
+    "footstep_wood_04": {
+      "file": "res://audio/sfx/footstep_wood_04.wav",
+      "duration": 0.229,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -8.0
+    },
+    "footstep_stone_01": {
+      "file": "res://audio/sfx/footstep_stone_01.wav",
+      "duration": 0.1323,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -8.0
+    },
+    "footstep_stone_02": {
+      "file": "res://audio/sfx/footstep_stone_02.wav",
+      "duration": 0.1312,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -8.0
+    },
+    "footstep_stone_03": {
+      "file": "res://audio/sfx/footstep_stone_03.wav",
+      "duration": 0.1238,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -8.0
+    },
+    "footstep_stone_04": {
+      "file": "res://audio/sfx/footstep_stone_04.wav",
+      "duration": 0.1293,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -8.0
+    },
+    "jump": {
+      "file": "res://audio/sfx/jump.wav",
+      "duration": 0.2,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -5.0
+    },
+    "jump_high": {
+      "file": "res://audio/sfx/jump_high.wav",
+      "duration": 0.4,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -4.0
+    },
+    "long_jump": {
+      "file": "res://audio/sfx/long_jump.wav",
+      "duration": 0.4896,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -4.0
+    },
+    "land_soft": {
+      "file": "res://audio/sfx/land_soft.wav",
+      "duration": 0.1677,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -8.0
+    },
+    "land_normal": {
+      "file": "res://audio/sfx/land_normal.wav",
+      "duration": 0.2726,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -5.0
+    },
+    "land_heavy": {
+      "file": "res://audio/sfx/land_heavy.wav",
+      "duration": 0.8859,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -2.0
+    },
+    "dive": {
+      "file": "res://audio/sfx/dive.wav",
+      "duration": 0.3177,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -4.0
+    },
+    "roll": {
+      "file": "res://audio/sfx/roll.wav",
+      "duration": 0.5,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -5.0
+    },
+    "skid": {
+      "file": "res://audio/sfx/skid.wav",
+      "duration": 0.3587,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -4.0
+    },
+    "slide_loop": {
+      "file": "res://audio/sfx/slide_loop.wav",
+      "duration": 1.5,
+      "loop": true,
+      "bus": "SFX",
+      "volume_db": -8.0
+    },
+    "ground_pound_start": {
+      "file": "res://audio/sfx/ground_pound_start.wav",
+      "duration": 0.3549,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -4.0
+    },
+    "ground_pound_impact": {
+      "file": "res://audio/sfx/ground_pound_impact.wav",
+      "duration": 0.9,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -1.0
+    },
+    "ledge_grab": {
+      "file": "res://audio/sfx/ledge_grab.wav",
+      "duration": 0.118,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -4.0
+    },
+    "ledge_climb": {
+      "file": "res://audio/sfx/ledge_climb.wav",
+      "duration": 0.5415,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -6.0
+    },
+    "wall_kick": {
+      "file": "res://audio/sfx/wall_kick.wav",
+      "duration": 0.3066,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -3.0
+    },
+    "hurt": {
+      "file": "res://audio/sfx/hurt.wav",
+      "duration": 0.49,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -2.0
+    },
+    "fall_whoosh": {
+      "file": "res://audio/sfx/fall_whoosh.wav",
+      "duration": 1.35,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -3.0
+    },
+    "respawn_poof": {
+      "file": "res://audio/sfx/respawn_poof.wav",
+      "duration": 0.387,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -4.0
+    },
+    "swim_stroke_01": {
+      "file": "res://audio/sfx/swim_stroke_01.wav",
+      "duration": 0.5314,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -7.0
+    },
+    "swim_stroke_02": {
+      "file": "res://audio/sfx/swim_stroke_02.wav",
+      "duration": 0.5279,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -7.0
+    },
+    "swim_stroke_03": {
+      "file": "res://audio/sfx/swim_stroke_03.wav",
+      "duration": 0.5302,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -7.0
+    },
+    "splash_small": {
+      "file": "res://audio/sfx/splash_small.wav",
+      "duration": 0.5612,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -4.0
+    },
+    "splash_big": {
+      "file": "res://audio/sfx/splash_big.wav",
+      "duration": 1.1527,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -2.0
+    },
+    "water_exit": {
+      "file": "res://audio/sfx/water_exit.wav",
+      "duration": 0.8797,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -6.0
+    },
+    "underwater_loop": {
+      "file": "res://audio/sfx/underwater_loop.wav",
+      "duration": 3.0,
+      "loop": true,
+      "bus": "Ambience",
+      "volume_db": -6.0
+    },
+    "hook_swipe": {
+      "file": "res://audio/sfx/hook_swipe.wav",
+      "duration": 0.3167,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -3.0
+    },
+    "hook_hit": {
+      "file": "res://audio/sfx/hook_hit.wav",
+      "duration": 0.7,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -2.0
+    },
+    "hook_latch": {
+      "file": "res://audio/sfx/hook_latch.wav",
+      "duration": 0.835,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -3.0
+    },
+    "hook_release": {
+      "file": "res://audio/sfx/hook_release.wav",
+      "duration": 0.333,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -4.0
+    },
+    "rope_creak": {
+      "file": "res://audio/sfx/rope_creak.wav",
+      "duration": 0.5881,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -6.0
+    },
+    "attachment_clunk": {
+      "file": "res://audio/sfx/attachment_clunk.wav",
+      "duration": 0.53,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -2.0
+    },
+    "grapple_fire": {
+      "file": "res://audio/sfx/grapple_fire.wav",
+      "duration": 0.5595,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -3.0
+    },
+    "grapple_hit": {
+      "file": "res://audio/sfx/grapple_hit.wav",
+      "duration": 0.25,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -3.0
+    },
+    "grapple_reel_loop": {
+      "file": "res://audio/sfx/grapple_reel_loop.wav",
+      "duration": 0.96,
+      "loop": true,
+      "bus": "SFX",
+      "volume_db": -6.0
+    },
+    "cannon_fire": {
+      "file": "res://audio/sfx/cannon_fire.wav",
+      "duration": 0.9,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -1.0
+    },
+    "explosion": {
+      "file": "res://audio/sfx/explosion.wav",
+      "duration": 1.5793,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": 0.0
+    },
+    "shovel_dig_01": {
+      "file": "res://audio/sfx/shovel_dig_01.wav",
+      "duration": 0.5118,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -5.0
+    },
+    "shovel_dig_02": {
+      "file": "res://audio/sfx/shovel_dig_02.wav",
+      "duration": 0.4955,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -5.0
+    },
+    "shovel_dig_03": {
+      "file": "res://audio/sfx/shovel_dig_03.wav",
+      "duration": 0.5067,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -5.0
+    },
+    "shovel_find": {
+      "file": "res://audio/sfx/shovel_find.wav",
+      "duration": 1.4705,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -3.0
+    },
+    "lantern_on": {
+      "file": "res://audio/sfx/lantern_on.wav",
+      "duration": 1.3034,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -5.0
+    },
+    "firefly_buzz_loop": {
+      "file": "res://audio/sfx/firefly_buzz_loop.wav",
+      "duration": 2.0,
+      "loop": true,
+      "bus": "Ambience",
+      "volume_db": -12.0
+    },
+    "coin_01": {
+      "file": "res://audio/sfx/coin_01.wav",
+      "duration": 0.7666,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -5.0
+    },
+    "coin_02": {
+      "file": "res://audio/sfx/coin_02.wav",
+      "duration": 0.792,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -5.0
+    },
+    "coin_03": {
+      "file": "res://audio/sfx/coin_03.wav",
+      "duration": 0.7414,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -5.0
+    },
+    "gem": {
+      "file": "res://audio/sfx/gem.wav",
+      "duration": 1.1081,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -4.0
+    },
+    "treasure_big": {
+      "file": "res://audio/sfx/treasure_big.wav",
+      "duration": 1.2651,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -2.0
+    },
+    "chest_open": {
+      "file": "res://audio/sfx/chest_open.wav",
+      "duration": 1.3193,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -3.0
+    },
+    "sparkle_loop": {
+      "file": "res://audio/sfx/sparkle_loop.wav",
+      "duration": 2.0,
+      "loop": true,
+      "bus": "Ambience",
+      "volume_db": -14.0
+    },
+    "heart_pickup": {
+      "file": "res://audio/sfx/heart_pickup.wav",
+      "duration": 1.0116,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -4.0
+    },
+    "parrot_chirp_01": {
+      "file": "res://audio/sfx/parrot_chirp_01.wav",
+      "duration": 0.4658,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -5.0
+    },
+    "parrot_chirp_02": {
+      "file": "res://audio/sfx/parrot_chirp_02.wav",
+      "duration": 0.5063,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -5.0
+    },
+    "parrot_chirp_03": {
+      "file": "res://audio/sfx/parrot_chirp_03.wav",
+      "duration": 0.5882,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -5.0
+    },
+    "parrot_chirp_04": {
+      "file": "res://audio/sfx/parrot_chirp_04.wav",
+      "duration": 0.5287,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -5.0
+    },
+    "parrot_squawk": {
+      "file": "res://audio/sfx/parrot_squawk.wav",
+      "duration": 0.7069,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -3.0
+    },
+    "cage_break": {
+      "file": "res://audio/sfx/cage_break.wav",
+      "duration": 0.7471,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -2.0
+    },
+    "parrot_rescue": {
+      "file": "res://audio/sfx/parrot_rescue.wav",
+      "duration": 1.5466,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -2.0
+    },
+    "crab_step": {
+      "file": "res://audio/sfx/crab_step.wav",
+      "duration": 0.063,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -10.0
+    },
+    "crab_pinch": {
+      "file": "res://audio/sfx/crab_pinch.wav",
+      "duration": 0.1462,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -4.0
+    },
+    "crab_hit": {
+      "file": "res://audio/sfx/crab_hit.wav",
+      "duration": 0.25,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -3.0
+    },
+    "crab_defeat": {
+      "file": "res://audio/sfx/crab_defeat.wav",
+      "duration": 1.12,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -3.0
+    },
+    "enemy_alert": {
+      "file": "res://audio/sfx/enemy_alert.wav",
+      "duration": 0.175,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -4.0
+    },
+    "snail_fuse_loop": {
+      "file": "res://audio/sfx/snail_fuse_loop.wav",
+      "duration": 1.5,
+      "loop": true,
+      "bus": "SFX",
+      "volume_db": -7.0
+    },
+    "crate_break": {
+      "file": "res://audio/sfx/crate_break.wav",
+      "duration": 0.6839,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -2.0
+    },
+    "barrel_break": {
+      "file": "res://audio/sfx/barrel_break.wav",
+      "duration": 1.26,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -2.0
+    },
+    "switch_click": {
+      "file": "res://audio/sfx/switch_click.wav",
+      "duration": 0.105,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -5.0
+    },
+    "door_open": {
+      "file": "res://audio/sfx/door_open.wav",
+      "duration": 1.1712,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -3.0
+    },
+    "bell_ring": {
+      "file": "res://audio/sfx/bell_ring.wav",
+      "duration": 2.345,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -3.0
+    },
+    "sail_flap": {
+      "file": "res://audio/sfx/sail_flap.wav",
+      "duration": 0.8842,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -4.0
+    },
+    "wood_creak": {
+      "file": "res://audio/sfx/wood_creak.wav",
+      "duration": 0.9466,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -6.0
+    },
+    "seagull_01": {
+      "file": "res://audio/sfx/seagull_01.wav",
+      "duration": 1.1104,
+      "loop": false,
+      "bus": "Ambience",
+      "volume_db": -8.0
+    },
+    "seagull_02": {
+      "file": "res://audio/sfx/seagull_02.wav",
+      "duration": 1.3068,
+      "loop": false,
+      "bus": "Ambience",
+      "volume_db": -8.0
+    },
+    "ocean_waves_loop": {
+      "file": "res://audio/sfx/ocean_waves_loop.wav",
+      "duration": 6.0,
+      "loop": true,
+      "bus": "Ambience",
+      "volume_db": -6.0
+    },
+    "wind_loop": {
+      "file": "res://audio/sfx/wind_loop.wav",
+      "duration": 4.0,
+      "loop": true,
+      "bus": "Ambience",
+      "volume_db": -8.0
+    },
+    "boat_splash": {
+      "file": "res://audio/sfx/boat_splash.wav",
+      "duration": 1.093,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -3.0
+    },
+    "ui_move": {
+      "file": "res://audio/sfx/ui_move.wav",
+      "duration": 0.06,
+      "loop": false,
+      "bus": "UI",
+      "volume_db": -8.0
+    },
+    "ui_select": {
+      "file": "res://audio/sfx/ui_select.wav",
+      "duration": 0.4553,
+      "loop": false,
+      "bus": "UI",
+      "volume_db": -5.0
+    },
+    "ui_back": {
+      "file": "res://audio/sfx/ui_back.wav",
+      "duration": 0.4977,
+      "loop": false,
+      "bus": "UI",
+      "volume_db": -5.0
+    },
+    "ui_pause": {
+      "file": "res://audio/sfx/ui_pause.wav",
+      "duration": 0.7451,
+      "loop": false,
+      "bus": "UI",
+      "volume_db": -5.0
+    },
+    "ui_map": {
+      "file": "res://audio/sfx/ui_map.wav",
+      "duration": 0.5896,
+      "loop": false,
+      "bus": "UI",
+      "volume_db": -6.0
+    },
+    "prompt_appear": {
+      "file": "res://audio/sfx/prompt_appear.wav",
+      "duration": 0.4043,
+      "loop": false,
+      "bus": "UI",
+      "volume_db": -6.0
+    },
+    "checkpoint": {
+      "file": "res://audio/sfx/checkpoint.wav",
+      "duration": 1.3649,
+      "loop": false,
+      "bus": "UI",
+      "volume_db": -3.0
+    }
+  },
+  "music": {
+    "castaway_explore": {
+      "file": "res://audio/music/castaway_explore.ogg",
+      "duration": 71.1111,
+      "loop": true,
+      "bpm": 108,
+      "bars": 32,
+      "time_signature": "4/4",
+      "samples": 3136000
+    },
+    "castaway_combat_layer": {
+      "file": "res://audio/music/castaway_combat_layer.ogg",
+      "duration": 71.1111,
+      "loop": true,
+      "bpm": 108,
+      "bars": 32,
+      "layer_of": "castaway_explore",
+      "time_signature": "4/4",
+      "samples": 3136000
+    },
+    "cave_explore": {
+      "file": "res://audio/music/cave_explore.ogg",
+      "duration": 45.7143,
+      "loop": true,
+      "bpm": 84,
+      "bars": 16,
+      "time_signature": "4/4",
+      "samples": 2016000
+    },
+    "title_theme": {
+      "file": "res://audio/music/title_theme.ogg",
+      "duration": 25.7143,
+      "loop": true,
+      "bpm": 112,
+      "bars": 12,
+      "time_signature": "4/4",
+      "samples": 1134000
+    },
+    "stinger_discovery": {
+      "file": "res://audio/music/stinger_discovery.ogg",
+      "duration": 3.0,
+      "loop": false,
+      "bpm": 112,
+      "bars": 1.4,
+      "time_signature": "4/4",
+      "samples": 132300
+    },
+    "stinger_parrot": {
+      "file": "res://audio/music/stinger_parrot.ogg",
+      "duration": 2.0,
+      "loop": false,
+      "bpm": 112,
+      "bars": 0.93,
+      "time_signature": "4/4",
+      "samples": 88200
+    },
+    "stinger_treasure": {
+      "file": "res://audio/music/stinger_treasure.ogg",
+      "duration": 2.5,
+      "loop": false,
+      "bpm": 112,
+      "bars": 1.17,
+      "time_signature": "4/4",
+      "samples": 110250
+    }
+  },
+  "groups": {
+    "footstep_sand": [
+      "footstep_sand_01",
+      "footstep_sand_02",
+      "footstep_sand_03",
+      "footstep_sand_04"
+    ],
+    "footstep_grass": [
+      "footstep_grass_01",
+      "footstep_grass_02",
+      "footstep_grass_03",
+      "footstep_grass_04"
+    ],
+    "footstep_wood": [
+      "footstep_wood_01",
+      "footstep_wood_02",
+      "footstep_wood_03",
+      "footstep_wood_04"
+    ],
+    "footstep_stone": [
+      "footstep_stone_01",
+      "footstep_stone_02",
+      "footstep_stone_03",
+      "footstep_stone_04"
+    ],
+    "swim_stroke": [
+      "swim_stroke_01",
+      "swim_stroke_02",
+      "swim_stroke_03"
+    ],
+    "shovel_dig": [
+      "shovel_dig_01",
+      "shovel_dig_02",
+      "shovel_dig_03"
+    ],
+    "coin": [
+      "coin_01",
+      "coin_02",
+      "coin_03"
+    ],
+    "parrot_chirp": [
+      "parrot_chirp_01",
+      "parrot_chirp_02",
+      "parrot_chirp_03",
+      "parrot_chirp_04"
+    ],
+    "seagull": [
+      "seagull_01",
+      "seagull_02"
+    ]
+  }
+}

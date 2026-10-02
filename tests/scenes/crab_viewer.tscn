@@ -1,0 +1,35 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://world/environment/sky_environment.gd" id="1_env"]
+[ext_resource type="Script" path="res://props/blocks/level_block.gd" id="2_block"]
+[ext_resource type="Script" path="res://characters/patchy/patchy_model.gd" id="3_model"]
+[ext_resource type="Script" path="res://enemies/crab/crab_model.gd" id="4_crab"]
+
+[node name="CrabViewer" type="Node3D"]
+
+[node name="SkyEnvironment" type="Node3D" parent="."]
+script = ExtResource("1_env")
+
+[node name="Ground" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+script = ExtResource("2_block")
+size = Vector3(14, 1, 14)
+surface = "sand"
+
+[node name="Patchy" type="Node3D" parent="."]
+transform = Transform3D(0.5, 0, -0.866, 0, 1, 0, 0.866, 0, 0.5, -1.6, 0, 0.4)
+script = ExtResource("3_model")
+
+[node name="Crab" type="Node3D" parent="."]
+transform = Transform3D(-0.766, 0, -0.643, 0, 1, 0, 0.643, 0, -0.766, 0.2, 0, -0.4)
+script = ExtResource("4_crab")
+
+[node name="CrabArmored" type="Node3D" parent="."]
+transform = Transform3D(-0.94, 0, -0.34, 0, 1, 0, 0.34, 0, -0.94, 1.6, 0, 0.6)
+script = ExtResource("4_crab")
+variant = 1
+
+[node name="CrabHermit" type="Node3D" parent="."]
+transform = Transform3D(-0.5, 0, -0.866, 0, 1, 0, 0.866, 0, -0.5, 0.9, 0, -1.9)
+script = ExtResource("4_crab")
+variant = 2

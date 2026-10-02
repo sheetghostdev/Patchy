@@ -123,6 +123,9 @@ func _check_stomp() -> void:
 	for n: Node in stomp_box.get_overlapping_areas() + stomp_box.get_overlapping_bodies():
 		if not n.is_in_group(&"stompable"):
 			continue
+		# Only from above: feet must be over the target's upper half.
+		if n is Node3D and _p.global_position.y < (n as Node3D).global_position.y + 0.25:
+			continue
 		var target := _resolve_target(n)
 		if target == null or _hit.has(target):
 			continue
