@@ -101,6 +101,8 @@ func _apply() -> void:
 			_sky_mat.set_shader_parameter(&"horizon_color", Color(1.0, 0.82, 0.62))
 			_sky_mat.set_shader_parameter(&"mid_color", Color(0.62, 0.7, 0.92))
 			_sky_mat.set_shader_parameter(&"zenith_color", Color(0.3, 0.42, 0.8))
+			# Warm the below-horizon tone too: fog blends it into the far sea.
+			_sky_mat.set_shader_parameter(&"below_color", Color(0.62, 0.55, 0.52))
 			env.fog_light_color = Color(0.98, 0.8, 0.66)
 		Preset.OVERCAST:
 			sun_col = Color(0.85, 0.88, 0.95)
