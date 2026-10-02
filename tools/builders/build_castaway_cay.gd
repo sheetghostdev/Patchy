@@ -50,6 +50,7 @@ func build() -> void:
 	env.shadow_distance = 160.0
 	b.add(env, null, "SkyEnvironment")
 	b.add(Ambience.new(), null, "Ambience")
+	b.add(Weather.new(), null, "Weather")
 	terrain = b.group("Terrain")
 	structures = b.group("Structures")
 	gameplay = b.group("Gameplay")

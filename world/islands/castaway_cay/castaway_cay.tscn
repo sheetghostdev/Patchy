@@ -1,101 +1,105 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://world/islands/island_info.gd" id="1_xtnq8"]
-[ext_resource type="Script" path="res://world/environment/sky_environment.gd" id="2_gi1ov"]
-[ext_resource type="Script" path="res://world/environment/ambience.gd" id="3_l6a4q"]
-[ext_resource type="Script" path="res://world/terrain/plateau.gd" id="4_mr0kx"]
-[ext_resource type="Script" path="res://props/blocks/level_block.gd" id="5_pvgmt"]
-[ext_resource type="Script" path="res://world/objects/scene_door.gd" id="6_uqisf"]
-[ext_resource type="Script" path="res://props/structures/wreck/bow_piece.gd" id="7_j52ya"]
-[ext_resource type="Script" path="res://props/structures/wreck/hull_section.gd" id="8_jnrws"]
-[ext_resource type="Script" path="res://props/structures/signpost.gd" id="9_ocooh"]
-[ext_resource type="Script" path="res://props/structures/dock.gd" id="10_2k0k3"]
-[ext_resource type="Script" path="res://props/structures/lantern_post.gd" id="11_bwaeg"]
-[ext_resource type="Script" path="res://world/vehicles/tiny_boat.gd" id="12_88y3p"]
-[ext_resource type="Script" path="res://world/objects/gate.gd" id="13_78ci4"]
-[ext_resource type="Script" path="res://world/objects/cracked_rock.gd" id="14_bv8vl"]
-[ext_resource type="Script" path="res://world/objects/cannon_target.gd" id="15_cd1tu"]
-[ext_resource type="Script" path="res://world/objects/crab_burrow.gd" id="16_em1l2"]
-[ext_resource type="Script" path="res://world/objects/parrot_cage.gd" id="17_mxya1"]
-[ext_resource type="Script" path="res://npcs/npc.gd" id="18_bj6br"]
-[ext_resource type="Script" path="res://npcs/turtle_model.gd" id="19_g4s4h"]
-[ext_resource type="Script" path="res://world/objects/ship_part_pickup.gd" id="20_nc280"]
-[ext_resource type="Script" path="res://systems/triggers/darkness_zone.gd" id="21_roskh"]
-[ext_resource type="Script" path="res://systems/camera/camera_zone.gd" id="22_71kc5"]
-[ext_resource type="Script" path="res://world/objects/brazier.gd" id="23_q7dvc"]
-[ext_resource type="Script" path="res://world/objects/attachment_pickup.gd" id="24_15xfc"]
-[ext_resource type="Script" path="res://world/objects/dig_spot.gd" id="25_s07ti"]
-[ext_resource type="Script" path="res://world/objects/fallen_log.gd" id="26_lthe7"]
-[ext_resource type="Script" path="res://world/objects/parrot_task.gd" id="27_yxlh4"]
-[ext_resource type="Script" path="res://world/objects/pound_post.gd" id="28_ivtn7"]
-[ext_resource type="Script" path="res://world/objects/treasure_chest.gd" id="29_ev3ca"]
-[ext_resource type="Script" path="res://attachments/hook/hook_point.gd" id="30_rns0o"]
-[ext_resource type="Script" path="res://enemies/boss/boss_arena.gd" id="31_x65qw"]
-[ext_resource type="Script" path="res://systems/camera/focus_camera_zone.gd" id="32_qhkp3"]
-[ext_resource type="Script" path="res://systems/triggers/checkpoint.gd" id="33_nwuhc"]
-[ext_resource type="Script" path="res://world/islands/island_zone.gd" id="34_tmche"]
-[ext_resource type="Script" path="res://world/ocean/sea_region.gd" id="35_pek5p"]
-[ext_resource type="Script" path="res://systems/tutorial/tutorial_hint.gd" id="36_or4im"]
-[ext_resource type="Script" path="res://collectibles/coin_trail.gd" id="37_y4k0n"]
-[ext_resource type="Script" path="res://collectibles/collectible.gd" id="38_uicok"]
-[ext_resource type="PackedScene" path="res://enemies/crab/crab.tscn" id="39_d3wp1"]
-[ext_resource type="Script" path="res://enemies/crab/crab.gd" id="40_elbx0"]
-[ext_resource type="Script" path="res://enemies/croc/croc_grunt.gd" id="41_0f6tf"]
-[ext_resource type="Script" path="res://enemies/boss/king_claw.gd" id="42_4nrtu"]
-[ext_resource type="Script" path="res://enemies/pelican/pelican.gd" id="43_xk06a"]
-[ext_resource type="Script" path="res://enemies/snail/tnt_snail.gd" id="44_hcncg"]
-[ext_resource type="Script" path="res://world/ocean/ocean.gd" id="45_uw3mp"]
-[ext_resource type="Script" path="res://world/ocean/underwater_effect.gd" id="46_yepsc"]
-[ext_resource type="Script" path="res://props/nature/palm_tree.gd" id="47_dqjl2"]
-[ext_resource type="Script" path="res://props/nature/stylized_rock.gd" id="48_wyrmp"]
-[ext_resource type="Script" path="res://props/nature/prop_scatter.gd" id="49_nd3lp"]
-[ext_resource type="Script" path="res://props/structures/crate.gd" id="50_5ydqe"]
-[ext_resource type="PackedScene" path="res://collectibles/coin.tscn" id="51_dj4s0"]
-[ext_resource type="Script" path="res://world/ocean/open_sea.gd" id="52_lrwh6"]
-[ext_resource type="Script" path="res://props/structures/barrel.gd" id="53_pwqnk"]
-[ext_resource type="Script" path="res://props/structures/wreck/ship_debris.gd" id="54_24eoo"]
-[ext_resource type="Script" path="res://props/structures/anchor.gd" id="55_hq1qa"]
-[ext_resource type="Script" path="res://props/structures/torch.gd" id="56_6xbcc"]
-[ext_resource type="Script" path="res://props/structures/decor_cannon.gd" id="57_b0ocj"]
-[ext_resource type="PackedScene" path="res://characters/patchy/player.tscn" id="58_k0nn6"]
-[ext_resource type="Script" path="res://characters/patchy/player.gd" id="59_kj3rr"]
-[ext_resource type="Resource" path="res://resources/settings/patchy_movement.tres" id="60_1wbuk"]
-[ext_resource type="PackedScene" path="res://systems/camera/camera_rig.tscn" id="61_tdmtu"]
-[ext_resource type="Script" path="res://systems/camera/camera_rig.gd" id="62_hu42u"]
-[ext_resource type="Resource" path="res://resources/settings/camera_default.tres" id="63_rmo6r"]
-[ext_resource type="Script" path="res://world/islands/castaway_cay/opening_sequence.gd" id="64_kxl7a"]
+[ext_resource type="Script" path="res://world/islands/island_info.gd" id="1_gi1ov"]
+[ext_resource type="Script" path="res://world/environment/sky_environment.gd" id="2_l6a4q"]
+[ext_resource type="Script" path="res://world/environment/ambience.gd" id="3_mr0kx"]
+[ext_resource type="Script" path="res://world/environment/weather.gd" id="4_pvgmt"]
+[ext_resource type="Script" path="res://world/terrain/plateau.gd" id="5_uqisf"]
+[ext_resource type="Script" path="res://props/blocks/level_block.gd" id="6_j52ya"]
+[ext_resource type="Script" path="res://world/objects/scene_door.gd" id="7_jnrws"]
+[ext_resource type="Script" path="res://props/structures/wreck/bow_piece.gd" id="8_ocooh"]
+[ext_resource type="Script" path="res://props/structures/wreck/hull_section.gd" id="9_2k0k3"]
+[ext_resource type="Script" path="res://props/structures/signpost.gd" id="10_bwaeg"]
+[ext_resource type="Script" path="res://props/structures/dock.gd" id="11_88y3p"]
+[ext_resource type="Script" path="res://props/structures/lantern_post.gd" id="12_78ci4"]
+[ext_resource type="Script" path="res://world/vehicles/tiny_boat.gd" id="13_bv8vl"]
+[ext_resource type="Script" path="res://world/objects/gate.gd" id="14_cd1tu"]
+[ext_resource type="Script" path="res://world/objects/cracked_rock.gd" id="15_em1l2"]
+[ext_resource type="Script" path="res://world/objects/cannon_target.gd" id="16_mxya1"]
+[ext_resource type="Script" path="res://world/objects/crab_burrow.gd" id="17_bj6br"]
+[ext_resource type="Script" path="res://world/objects/parrot_cage.gd" id="18_g4s4h"]
+[ext_resource type="Script" path="res://npcs/npc.gd" id="19_nc280"]
+[ext_resource type="Script" path="res://npcs/turtle_model.gd" id="20_roskh"]
+[ext_resource type="Script" path="res://world/objects/ship_part_pickup.gd" id="21_71kc5"]
+[ext_resource type="Script" path="res://systems/triggers/darkness_zone.gd" id="22_q7dvc"]
+[ext_resource type="Script" path="res://systems/camera/camera_zone.gd" id="23_15xfc"]
+[ext_resource type="Script" path="res://world/objects/brazier.gd" id="24_s07ti"]
+[ext_resource type="Script" path="res://world/objects/attachment_pickup.gd" id="25_lthe7"]
+[ext_resource type="Script" path="res://world/objects/dig_spot.gd" id="26_yxlh4"]
+[ext_resource type="Script" path="res://world/objects/fallen_log.gd" id="27_ivtn7"]
+[ext_resource type="Script" path="res://world/objects/parrot_task.gd" id="28_ev3ca"]
+[ext_resource type="Script" path="res://world/objects/pound_post.gd" id="29_rns0o"]
+[ext_resource type="Script" path="res://world/objects/treasure_chest.gd" id="30_x65qw"]
+[ext_resource type="Script" path="res://attachments/hook/hook_point.gd" id="31_qhkp3"]
+[ext_resource type="Script" path="res://enemies/boss/boss_arena.gd" id="32_nwuhc"]
+[ext_resource type="Script" path="res://systems/camera/focus_camera_zone.gd" id="33_tmche"]
+[ext_resource type="Script" path="res://systems/triggers/checkpoint.gd" id="34_pek5p"]
+[ext_resource type="Script" path="res://world/islands/island_zone.gd" id="35_or4im"]
+[ext_resource type="Script" path="res://world/ocean/sea_region.gd" id="36_y4k0n"]
+[ext_resource type="Script" path="res://systems/tutorial/tutorial_hint.gd" id="37_uicok"]
+[ext_resource type="Script" path="res://collectibles/coin_trail.gd" id="38_d3wp1"]
+[ext_resource type="Script" path="res://collectibles/collectible.gd" id="39_elbx0"]
+[ext_resource type="PackedScene" path="res://enemies/crab/crab.tscn" id="40_0f6tf"]
+[ext_resource type="Script" path="res://enemies/crab/crab.gd" id="41_4nrtu"]
+[ext_resource type="Script" path="res://enemies/croc/croc_grunt.gd" id="42_xk06a"]
+[ext_resource type="Script" path="res://enemies/boss/king_claw.gd" id="43_hcncg"]
+[ext_resource type="Script" path="res://enemies/pelican/pelican.gd" id="44_uw3mp"]
+[ext_resource type="Script" path="res://enemies/snail/tnt_snail.gd" id="45_yepsc"]
+[ext_resource type="Script" path="res://world/ocean/ocean.gd" id="46_dqjl2"]
+[ext_resource type="Script" path="res://world/ocean/underwater_effect.gd" id="47_wyrmp"]
+[ext_resource type="Script" path="res://props/nature/palm_tree.gd" id="48_nd3lp"]
+[ext_resource type="Script" path="res://props/nature/stylized_rock.gd" id="49_5ydqe"]
+[ext_resource type="Script" path="res://props/nature/prop_scatter.gd" id="50_dj4s0"]
+[ext_resource type="Script" path="res://props/structures/crate.gd" id="51_lrwh6"]
+[ext_resource type="PackedScene" path="res://collectibles/coin.tscn" id="52_pwqnk"]
+[ext_resource type="Script" path="res://world/ocean/open_sea.gd" id="53_24eoo"]
+[ext_resource type="Script" path="res://props/structures/barrel.gd" id="54_hq1qa"]
+[ext_resource type="Script" path="res://props/structures/wreck/ship_debris.gd" id="55_6xbcc"]
+[ext_resource type="Script" path="res://props/structures/anchor.gd" id="56_b0ocj"]
+[ext_resource type="Script" path="res://props/structures/torch.gd" id="57_k0nn6"]
+[ext_resource type="Script" path="res://props/structures/decor_cannon.gd" id="58_kj3rr"]
+[ext_resource type="PackedScene" path="res://characters/patchy/player.tscn" id="59_1wbuk"]
+[ext_resource type="Script" path="res://characters/patchy/player.gd" id="60_tdmtu"]
+[ext_resource type="Resource" path="res://resources/settings/patchy_movement.tres" id="61_hu42u"]
+[ext_resource type="PackedScene" path="res://systems/camera/camera_rig.tscn" id="62_rmo6r"]
+[ext_resource type="Script" path="res://systems/camera/camera_rig.gd" id="63_kxl7a"]
+[ext_resource type="Resource" path="res://resources/settings/camera_default.tres" id="64_c2d58"]
+[ext_resource type="Script" path="res://world/islands/castaway_cay/opening_sequence.gd" id="65_ijjky"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_c2d58"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_eikxq"]
 size = Vector3(9, 4, 4.6)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_ijjky"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_wssub"]
 size = Vector3(10, 4, 9.6)
 
-[sub_resource type="CylinderShape3D" id="CylinderShape3D_eikxq"]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_5r5ic"]
 height = 12.0
 radius = 13.0
 
-[node name="CastawayCay" type="Node3D" unique_id=1326927249]
+[node name="CastawayCay" type="Node3D" unique_id=1221230743]
 
-[node name="IslandInfo" type="Node" parent="." unique_id=1789746654]
-script = ExtResource("1_xtnq8")
+[node name="IslandInfo" type="Node" parent="." unique_id=1639039642]
+script = ExtResource("1_gi1ov")
 island_id = &"castaway_cay"
 display_name = "Castaway Cay"
 music = &"castaway_explore"
 extra_treasures = 1
 sub_islands = Array[StringName]([&"driftwood_key"])
 
-[node name="SkyEnvironment" type="Node3D" parent="." unique_id=470490903]
-script = ExtResource("2_gi1ov")
+[node name="SkyEnvironment" type="Node3D" parent="." unique_id=300774439]
+script = ExtResource("2_l6a4q")
 shadow_distance = 160.0
 
-[node name="Ambience" type="Node3D" parent="." unique_id=1606911149]
-script = ExtResource("3_l6a4q")
+[node name="Ambience" type="Node3D" parent="." unique_id=1216429161]
+script = ExtResource("3_mr0kx")
 
-[node name="Terrain" type="Node3D" parent="." unique_id=883993784]
+[node name="Weather" type="Node3D" parent="." unique_id=1073239354]
+script = ExtResource("4_pvgmt")
 
-[node name="Beach" type="StaticBody3D" parent="Terrain" unique_id=1456139918]
-script = ExtResource("4_mr0kx")
+[node name="Terrain" type="Node3D" parent="." unique_id=1358441422]
+
+[node name="Beach" type="StaticBody3D" parent="Terrain" unique_id=1105269860]
+script = ExtResource("5_uqisf")
 outline = PackedVector2Array(-84, 12, -80, -22, -66, -48, -40, -66, -8, -74, 24, -70, 52, -60, 76, -38, 88, -8, 86, 22, 72, 40, 54, 52, 34, 56, 18, 46, 2, 42, -14, 46, -28, 58, -50, 64, -70, 48)
 height = 1.2
 depth = 10.0
@@ -105,103 +109,103 @@ shore_width = 16.0
 shore_drop = 5.0
 noise_seed = 66
 
-[node name="Meadow" type="StaticBody3D" parent="Terrain" unique_id=979072208]
-script = ExtResource("4_mr0kx")
+[node name="Meadow" type="StaticBody3D" parent="Terrain" unique_id=1987852715]
+script = ExtResource("5_uqisf")
 outline = PackedVector2Array(-62, 6, -58, -26, -40, -48, -10, -58, 18, -56, 26, -40, 26, -12, 24, 10, 14, 22, 0, 26, -16, 28, -36, 32, -56, 26)
 height = 3.0
 depth = 4.0
 noise_seed = 18
 
-[node name="MeadowRamp" type="StaticBody3D" parent="Terrain" unique_id=292389563]
+[node name="MeadowRamp" type="StaticBody3D" parent="Terrain" unique_id=1373347203]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -44, 1.15, 33)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 1
 size = Vector3(7, 1.9, 7)
 surface = "grass"
 
-[node name="Ridge" type="StaticBody3D" parent="Terrain" unique_id=1344353495]
-script = ExtResource("4_mr0kx")
+[node name="Ridge" type="StaticBody3D" parent="Terrain" unique_id=601205016]
+script = ExtResource("5_uqisf")
 outline = PackedVector2Array(-48, -12, -44, -32, -28, -46, -6, -52, 12, -50, 19, -36, 19, -8, 8, 2, -12, 4, -34, 0)
 height = 7.0
 depth = 4.2
 noise_seed = 45
 
-[node name="Hill" type="StaticBody3D" parent="Terrain" unique_id=715633717]
-script = ExtResource("4_mr0kx")
+[node name="Hill" type="StaticBody3D" parent="Terrain" unique_id=369458086]
+script = ExtResource("5_uqisf")
 outline = PackedVector2Array(-26, -30, -20, -42, -6, -46, 6, -42, 8, -30, -4, -24, -18, -22)
 height = 12.4
 depth = 5.6
 noise_seed = 5
 
-[node name="Terrace1" type="StaticBody3D" parent="Terrain" unique_id=1645761450]
-script = ExtResource("4_mr0kx")
+[node name="Terrace1" type="StaticBody3D" parent="Terrain" unique_id=1279938045]
+script = ExtResource("5_uqisf")
 outline = PackedVector2Array(-36, -26, -29, -31, -23, -27, -25, -18, -33, -18)
 height = 8.8
 depth = 2.0
 noise_seed = 7
 
-[node name="Terrace2" type="StaticBody3D" parent="Terrain" unique_id=1839043079]
-script = ExtResource("4_mr0kx")
+[node name="Terrace2" type="StaticBody3D" parent="Terrain" unique_id=568449789]
+script = ExtResource("5_uqisf")
 outline = PackedVector2Array(-24, -21, -15, -23, -10, -19, -13, -12, -21, -13)
 height = 10.6
 depth = 3.8
 noise_seed = 9
 
-[node name="Headland" type="StaticBody3D" parent="Terrain" unique_id=1513045673 groups=["no_wall_kick"]]
-script = ExtResource("4_mr0kx")
+[node name="Headland" type="StaticBody3D" parent="Terrain" unique_id=1730889855 groups=["no_wall_kick"]]
+script = ExtResource("5_uqisf")
 outline = PackedVector2Array(36, -56, 58, -50, 76, -30, 82, -4, 74, 14, 54, 18, 40, 10, 35, -14, 35, -38)
 height = 7.5
 depth = 6.5
 noise_seed = 13
 
-[node name="WestHorn" type="StaticBody3D" parent="Terrain" unique_id=1418428431]
-script = ExtResource("4_mr0kx")
+[node name="WestHorn" type="StaticBody3D" parent="Terrain" unique_id=190128187]
+script = ExtResource("5_uqisf")
 outline = PackedVector2Array(-30, 46, -24, 44, -20, 49, -24, 54, -30, 52)
 height = 4.5
 surface = "rock"
 noise_seed = 21
 
-[node name="GemPillar" type="StaticBody3D" parent="Terrain" unique_id=1056958358]
-script = ExtResource("4_mr0kx")
+[node name="GemPillar" type="StaticBody3D" parent="Terrain" unique_id=642900052]
+script = ExtResource("5_uqisf")
 outline = PackedVector2Array(-4, 62, 1, 61, 3, 65, -1, 68, -5, 66)
 depth = 12.0
 surface = "rock"
 noise_seed = 23
 
-[node name="SummitSlide" type="StaticBody3D" parent="Terrain" unique_id=963538608]
+[node name="SummitSlide" type="StaticBody3D" parent="Terrain" unique_id=1172728707]
 transform = Transform3D(-0.57357645, 0, 0.819152, 0, 1, 0, -0.819152, 0, -0.57357645, -33, 2.95, -40)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 1
 size = Vector3(5, 9.4, 18)
 surface = "sand"
 slide_surface = true
 
-[node name="Seabed" type="StaticBody3D" parent="Terrain" unique_id=1803451607]
+[node name="Seabed" type="StaticBody3D" parent="Terrain" unique_id=1129773451]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -11, 0)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(560, 1, 560)
 surface = "sand"
 
-[node name="WreckStack" type="StaticBody3D" parent="Terrain" unique_id=1729421693 groups=["no_wall_kick"]]
-script = ExtResource("4_mr0kx")
+[node name="WreckStack" type="StaticBody3D" parent="Terrain" unique_id=779374040 groups=["no_wall_kick"]]
+script = ExtResource("5_uqisf")
 outline = PackedVector2Array(59, 46, 62.5, 45.6, 64, 48.5, 62, 51.2, 58.8, 50.4)
 height = 6.2
 depth = 14.0
 surface = "rock"
 noise_seed = 25
 
-[node name="GrapplePillar" type="StaticBody3D" parent="Terrain" unique_id=1400444581]
-script = ExtResource("4_mr0kx")
+[node name="GrapplePillar" type="StaticBody3D" parent="Terrain" unique_id=521859671]
+script = ExtResource("5_uqisf")
 outline = PackedVector2Array(86, -40, 91, -42, 94, -37, 90, -33, 85, -35)
 height = 16.0
 depth = 22.0
 surface = "rock"
 noise_seed = 31
 
-[node name="DriftwoodTerrain" type="Node3D" parent="Terrain" unique_id=1224015381]
+[node name="DriftwoodTerrain" type="Node3D" parent="Terrain" unique_id=138460451]
 
-[node name="IsletBeach" type="StaticBody3D" parent="Terrain/DriftwoodTerrain" unique_id=1003437346]
-script = ExtResource("4_mr0kx")
+[node name="IsletBeach" type="StaticBody3D" parent="Terrain/DriftwoodTerrain" unique_id=1060830777]
+script = ExtResource("5_uqisf")
 outline = PackedVector2Array(-152, 132, -146, 120, -130, 114, -112, 118, -104, 132, -108, 150, -122, 160, -140, 160, -152, 148)
 height = 1.0
 depth = 9.0
@@ -211,811 +215,811 @@ shore_width = 12.0
 shore_drop = 4.5
 noise_seed = 41
 
-[node name="IsletKnoll" type="StaticBody3D" parent="Terrain/DriftwoodTerrain" unique_id=24621829]
-script = ExtResource("4_mr0kx")
+[node name="IsletKnoll" type="StaticBody3D" parent="Terrain/DriftwoodTerrain" unique_id=619477638]
+script = ExtResource("5_uqisf")
 outline = PackedVector2Array(-138, 128, -128, 125, -118, 130, -116, 142, -126, 149, -137, 146)
 height = 2.8
 depth = 2.6
 noise_seed = 43
 
-[node name="IsletRock" type="StaticBody3D" parent="Terrain/DriftwoodTerrain" unique_id=1056712054]
-script = ExtResource("4_mr0kx")
+[node name="IsletRock" type="StaticBody3D" parent="Terrain/DriftwoodTerrain" unique_id=1030779852]
+script = ExtResource("5_uqisf")
 outline = PackedVector2Array(-102, 154, -98, 153, -97, 157, -101, 159)
 height = 2.2
 depth = 10.0
 surface = "rock"
 noise_seed = 47
 
-[node name="Structures" type="Node3D" parent="." unique_id=1744441492]
+[node name="Structures" type="Node3D" parent="." unique_id=1373241492]
 
-[node name="RidgeStairs" type="StaticBody3D" parent="Structures" unique_id=118442679]
+[node name="RidgeStairs" type="StaticBody3D" parent="Structures" unique_id=220021213]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -50, 2.95, -8)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 2
 size = Vector3(3, 4.1, 7)
 surface = "wood"
 
-[node name="Shipwreck" type="Node3D" parent="Structures" unique_id=406756322]
+[node name="Shipwreck" type="Node3D" parent="Structures" unique_id=560539109]
 
-[node name="SternDeck" type="StaticBody3D" parent="Structures/Shipwreck" unique_id=1996474842]
+[node name="SternDeck" type="StaticBody3D" parent="Structures/Shipwreck" unique_id=1113086451]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 44, 1.2, 38)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 1
 size = Vector3(5, 3, 10)
 surface = "wood"
 
-[node name="HullSide" type="StaticBody3D" parent="Structures/Shipwreck" unique_id=1810557112]
+[node name="HullSide" type="StaticBody3D" parent="Structures/Shipwreck" unique_id=1507291604]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 44, 1.2, 35.32)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 1
 size = Vector3(0.35, 3.7, 10)
 surface = "wood_dark"
 
-[node name="HullSide2" type="StaticBody3D" parent="Structures/Shipwreck" unique_id=2034596487]
+[node name="HullSide2" type="StaticBody3D" parent="Structures/Shipwreck" unique_id=1287103037]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 44, 1.2, 40.68)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 1
 size = Vector3(0.35, 3.7, 10)
 surface = "wood_dark"
 
-[node name="Cabin" type="StaticBody3D" parent="Structures/Shipwreck" unique_id=708264115]
+[node name="Cabin" type="StaticBody3D" parent="Structures/Shipwreck" unique_id=1273031137]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 51.25, 1.2, 38)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(4.5, 4.8, 5.7)
 surface = "wood_dark"
 
-[node name="CabinRoof" type="StaticBody3D" parent="Structures/Shipwreck" unique_id=985401084]
+[node name="CabinRoof" type="StaticBody3D" parent="Structures/Shipwreck" unique_id=318106467]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 51.25, 6, 38)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(4.9, 0.25, 6.1)
 surface = "wood"
 
-[node name="CabinDoor" type="Area3D" parent="Structures/Shipwreck" unique_id=58607972]
+[node name="CabinDoor" type="Area3D" parent="Structures/Shipwreck" unique_id=1213230279]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 51.25, 1.2, 40.95)
-script = ExtResource("6_uqisf")
+script = ExtResource("7_jnrws")
 target_scene = "res://world/hub/captains_cabin.tscn"
 spawn_id = &"door"
 label = "Captain's cabin"
 
-[node name="Mast" type="StaticBody3D" parent="Structures/Shipwreck" unique_id=1594359852]
+[node name="Mast" type="StaticBody3D" parent="Structures/Shipwreck" unique_id=90830072]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55.5, 1.2, 38)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 3
 size = Vector3(0.9, 8.6, 0.9)
 surface = "wood"
 
-[node name="CrowsNest" type="StaticBody3D" parent="Structures/Shipwreck" unique_id=1160234701]
+[node name="CrowsNest" type="StaticBody3D" parent="Structures/Shipwreck" unique_id=66058883]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55.5, 7.6, 38)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 3
 size = Vector3(3.4, 0.45, 3.4)
 surface = "wood"
 
-[node name="Bow" type="StaticBody3D" parent="Structures/Shipwreck" unique_id=1388789479]
+[node name="Bow" type="StaticBody3D" parent="Structures/Shipwreck" unique_id=1730221655]
 transform = Transform3D(-0.1736482, 0, -0.9848077, 0, 1, 0, 0.9848077, 0, -0.1736482, 60.5, 1.2, 36.5)
-script = ExtResource("7_j52ya")
+script = ExtResource("8_ocooh")
 length = 5.0
 height = 2.6
 damage_seed = 4
 
-[node name="HullSection" type="StaticBody3D" parent="Structures/Shipwreck" unique_id=2033299377]
+[node name="HullSection" type="StaticBody3D" parent="Structures/Shipwreck" unique_id=1281604454]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 44, 1.2, 34.4)
-script = ExtResource("8_jnrws")
+script = ExtResource("9_2k0k3")
 length = 9.5
 height = 3.4
 lean_degrees = 18.0
 damage_seed = 7
 
-[node name="Crate" type="StaticBody3D" parent="Structures/Shipwreck" unique_id=1704805990]
+[node name="Crate" type="StaticBody3D" parent="Structures/Shipwreck" unique_id=1357414403]
 transform = Transform3D(0.90630776, 0, 0.42261827, 0, 1, 0, -0.42261827, 0, 0.90630776, 40.5, 1.2, 32.5)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(1.2, 1.2, 1.2)
 surface = "wood"
 
-[node name="Crate2" type="StaticBody3D" parent="Structures/Shipwreck" unique_id=1919288596]
+[node name="Crate2" type="StaticBody3D" parent="Structures/Shipwreck" unique_id=879064556]
 transform = Transform3D(0.90630776, 0, 0.42261827, 0, 1, 0, -0.42261827, 0, 0.90630776, 42, 1.2, 31.6)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(1.2, 1.2, 1.2)
 surface = "wood"
 
-[node name="Crate3" type="StaticBody3D" parent="Structures/Shipwreck" unique_id=433959439]
+[node name="Crate3" type="StaticBody3D" parent="Structures/Shipwreck" unique_id=613142894]
 transform = Transform3D(0.90630776, 0, 0.42261827, 0, 1, 0, -0.42261827, 0, 0.90630776, 58.5, 1.2, 41.5)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(1.2, 1.2, 1.2)
 surface = "wood"
 
-[node name="FallenMast" type="StaticBody3D" parent="Structures/Shipwreck" unique_id=1354808735]
+[node name="FallenMast" type="StaticBody3D" parent="Structures/Shipwreck" unique_id=1242808417]
 transform = Transform3D(0.49999997, 0, -0.86602545, 0, 1, 0, 0.86602545, 0, 0.49999997, 36, 1.2, 44.5)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 3
 size = Vector3(0.9, 0.9, 12)
 surface = "wood"
 
-[node name="Outpost" type="Node3D" parent="Structures" unique_id=1323174308]
+[node name="Outpost" type="Node3D" parent="Structures" unique_id=1480043956]
 
-[node name="Hut" type="Node3D" parent="Structures/Outpost" unique_id=2138072432]
+[node name="Hut" type="Node3D" parent="Structures/Outpost" unique_id=1576226665]
 transform = Transform3D(0.9848077, 0, 0.17364818, 0, 1, 0, -0.17364818, 0, 0.9848077, -54, 3, 4)
 
-[node name="Stilt" type="StaticBody3D" parent="Structures/Outpost/Hut" unique_id=1549134542]
+[node name="Stilt" type="StaticBody3D" parent="Structures/Outpost/Hut" unique_id=349753389]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7, 0, -1.7)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 3
 size = Vector3(0.35, 1.2, 0.35)
 surface = "wood"
 
-[node name="Stilt2" type="StaticBody3D" parent="Structures/Outpost/Hut" unique_id=123076999]
+[node name="Stilt2" type="StaticBody3D" parent="Structures/Outpost/Hut" unique_id=1377666138]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7, 0, 1.7)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 3
 size = Vector3(0.35, 1.2, 0.35)
 surface = "wood"
 
-[node name="Stilt3" type="StaticBody3D" parent="Structures/Outpost/Hut" unique_id=953528379]
+[node name="Stilt3" type="StaticBody3D" parent="Structures/Outpost/Hut" unique_id=1881848541]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7, 0, -1.7)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 3
 size = Vector3(0.35, 1.2, 0.35)
 surface = "wood"
 
-[node name="Stilt4" type="StaticBody3D" parent="Structures/Outpost/Hut" unique_id=228965352]
+[node name="Stilt4" type="StaticBody3D" parent="Structures/Outpost/Hut" unique_id=1407900649]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7, 0, 1.7)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 3
 size = Vector3(0.35, 1.2, 0.35)
 surface = "wood"
 
-[node name="Floor" type="StaticBody3D" parent="Structures/Outpost/Hut" unique_id=1421405938]
+[node name="Floor" type="StaticBody3D" parent="Structures/Outpost/Hut" unique_id=59168017]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(4.4, 0.3, 4.4)
 surface = "wood"
 
-[node name="Back" type="StaticBody3D" parent="Structures/Outpost/Hut" unique_id=1549610576]
+[node name="Back" type="StaticBody3D" parent="Structures/Outpost/Hut" unique_id=484242023]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 2)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(4, 2.4, 0.3)
 surface = "wood"
 
-[node name="Left" type="StaticBody3D" parent="Structures/Outpost/Hut" unique_id=249702371]
+[node name="Left" type="StaticBody3D" parent="Structures/Outpost/Hut" unique_id=1458860144]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1.5, 0)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(0.3, 2.4, 4)
 surface = "wood"
 
-[node name="Right" type="StaticBody3D" parent="Structures/Outpost/Hut" unique_id=862120959]
+[node name="Right" type="StaticBody3D" parent="Structures/Outpost/Hut" unique_id=1855950982]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1.5, 0)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(0.3, 2.4, 4)
 surface = "wood"
 
-[node name="FrontL" type="StaticBody3D" parent="Structures/Outpost/Hut" unique_id=908547091]
+[node name="FrontL" type="StaticBody3D" parent="Structures/Outpost/Hut" unique_id=13571971]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.35, 1.5, -2)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(1.4, 2.4, 0.3)
 surface = "wood"
 
-[node name="FrontR" type="StaticBody3D" parent="Structures/Outpost/Hut" unique_id=1455964590]
+[node name="FrontR" type="StaticBody3D" parent="Structures/Outpost/Hut" unique_id=1577683726]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.35, 1.5, -2)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(1.4, 2.4, 0.3)
 surface = "wood"
 
-[node name="RoofL" type="StaticBody3D" parent="Structures/Outpost/Hut" unique_id=1862645694]
+[node name="RoofL" type="StaticBody3D" parent="Structures/Outpost/Hut" unique_id=385465237]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -1.25, 3.9, 0)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 1
 size = Vector3(5.2, 1.5, 2.6)
 surface = "roof_red"
 bevel = 0.05
 
-[node name="RoofR" type="StaticBody3D" parent="Structures/Outpost/Hut" unique_id=931931006]
+[node name="RoofR" type="StaticBody3D" parent="Structures/Outpost/Hut" unique_id=79355823]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 1.25, 3.9, 0)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 1
 size = Vector3(5.2, 1.5, 2.6)
 surface = "roof_red"
 bevel = 0.05
 
-[node name="Hut2" type="Node3D" parent="Structures/Outpost" unique_id=594199747]
+[node name="Hut2" type="Node3D" parent="Structures/Outpost" unique_id=2116461101]
 transform = Transform3D(0.9659258, 0, -0.25881904, 0, 1, 0, 0.25881904, 0, 0.9659258, -46, 3, 18)
 
-[node name="Stilt" type="StaticBody3D" parent="Structures/Outpost/Hut2" unique_id=719830206]
+[node name="Stilt" type="StaticBody3D" parent="Structures/Outpost/Hut2" unique_id=1840884148]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7, 0, -1.7)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 3
 size = Vector3(0.35, 1.2, 0.35)
 surface = "wood"
 
-[node name="Stilt2" type="StaticBody3D" parent="Structures/Outpost/Hut2" unique_id=1502300770]
+[node name="Stilt2" type="StaticBody3D" parent="Structures/Outpost/Hut2" unique_id=679175046]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7, 0, 1.7)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 3
 size = Vector3(0.35, 1.2, 0.35)
 surface = "wood"
 
-[node name="Stilt3" type="StaticBody3D" parent="Structures/Outpost/Hut2" unique_id=631853166]
+[node name="Stilt3" type="StaticBody3D" parent="Structures/Outpost/Hut2" unique_id=727408732]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7, 0, -1.7)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 3
 size = Vector3(0.35, 1.2, 0.35)
 surface = "wood"
 
-[node name="Stilt4" type="StaticBody3D" parent="Structures/Outpost/Hut2" unique_id=73360960]
+[node name="Stilt4" type="StaticBody3D" parent="Structures/Outpost/Hut2" unique_id=380402832]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7, 0, 1.7)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 3
 size = Vector3(0.35, 1.2, 0.35)
 surface = "wood"
 
-[node name="Floor" type="StaticBody3D" parent="Structures/Outpost/Hut2" unique_id=27855071]
+[node name="Floor" type="StaticBody3D" parent="Structures/Outpost/Hut2" unique_id=842254279]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(4.4, 0.3, 4.4)
 surface = "wood"
 
-[node name="Back" type="StaticBody3D" parent="Structures/Outpost/Hut2" unique_id=426064657]
+[node name="Back" type="StaticBody3D" parent="Structures/Outpost/Hut2" unique_id=1780845792]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 2)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(4, 2.4, 0.3)
 surface = "wood"
 
-[node name="Left" type="StaticBody3D" parent="Structures/Outpost/Hut2" unique_id=1506534925]
+[node name="Left" type="StaticBody3D" parent="Structures/Outpost/Hut2" unique_id=453772611]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1.5, 0)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(0.3, 2.4, 4)
 surface = "wood"
 
-[node name="Right" type="StaticBody3D" parent="Structures/Outpost/Hut2" unique_id=1326131914]
+[node name="Right" type="StaticBody3D" parent="Structures/Outpost/Hut2" unique_id=1746658627]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1.5, 0)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(0.3, 2.4, 4)
 surface = "wood"
 
-[node name="FrontL" type="StaticBody3D" parent="Structures/Outpost/Hut2" unique_id=42960983]
+[node name="FrontL" type="StaticBody3D" parent="Structures/Outpost/Hut2" unique_id=1824538534]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.35, 1.5, -2)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(1.4, 2.4, 0.3)
 surface = "wood"
 
-[node name="FrontR" type="StaticBody3D" parent="Structures/Outpost/Hut2" unique_id=1491100253]
+[node name="FrontR" type="StaticBody3D" parent="Structures/Outpost/Hut2" unique_id=1879307327]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.35, 1.5, -2)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(1.4, 2.4, 0.3)
 surface = "wood"
 
-[node name="RoofL" type="StaticBody3D" parent="Structures/Outpost/Hut2" unique_id=2135283348]
+[node name="RoofL" type="StaticBody3D" parent="Structures/Outpost/Hut2" unique_id=1337814579]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -1.25, 3.9, 0)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 1
 size = Vector3(5.2, 1.5, 2.6)
 surface = "roof_blue"
 bevel = 0.05
 
-[node name="RoofR" type="StaticBody3D" parent="Structures/Outpost/Hut2" unique_id=324816601]
+[node name="RoofR" type="StaticBody3D" parent="Structures/Outpost/Hut2" unique_id=2091282456]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 1.25, 3.9, 0)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 1
 size = Vector3(5.2, 1.5, 2.6)
 surface = "roof_blue"
 bevel = 0.05
 
-[node name="Hut3" type="Node3D" parent="Structures/Outpost" unique_id=23488493]
+[node name="Hut3" type="Node3D" parent="Structures/Outpost" unique_id=434138821]
 transform = Transform3D(0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254, -60, 3, 18)
 
-[node name="Stilt" type="StaticBody3D" parent="Structures/Outpost/Hut3" unique_id=1736613361]
+[node name="Stilt" type="StaticBody3D" parent="Structures/Outpost/Hut3" unique_id=1749468594]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7, 0, -1.7)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 3
 size = Vector3(0.35, 1.2, 0.35)
 surface = "wood"
 
-[node name="Stilt2" type="StaticBody3D" parent="Structures/Outpost/Hut3" unique_id=1786549474]
+[node name="Stilt2" type="StaticBody3D" parent="Structures/Outpost/Hut3" unique_id=1626576334]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7, 0, 1.7)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 3
 size = Vector3(0.35, 1.2, 0.35)
 surface = "wood"
 
-[node name="Stilt3" type="StaticBody3D" parent="Structures/Outpost/Hut3" unique_id=1736009303]
+[node name="Stilt3" type="StaticBody3D" parent="Structures/Outpost/Hut3" unique_id=948568343]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7, 0, -1.7)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 3
 size = Vector3(0.35, 1.2, 0.35)
 surface = "wood"
 
-[node name="Stilt4" type="StaticBody3D" parent="Structures/Outpost/Hut3" unique_id=2123226102]
+[node name="Stilt4" type="StaticBody3D" parent="Structures/Outpost/Hut3" unique_id=642300911]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7, 0, 1.7)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 3
 size = Vector3(0.35, 1.2, 0.35)
 surface = "wood"
 
-[node name="Floor" type="StaticBody3D" parent="Structures/Outpost/Hut3" unique_id=1405751232]
+[node name="Floor" type="StaticBody3D" parent="Structures/Outpost/Hut3" unique_id=1251384029]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(4.4, 0.3, 4.4)
 surface = "wood"
 
-[node name="Back" type="StaticBody3D" parent="Structures/Outpost/Hut3" unique_id=246860]
+[node name="Back" type="StaticBody3D" parent="Structures/Outpost/Hut3" unique_id=1268199485]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 2)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(4, 2.4, 0.3)
 surface = "wood"
 
-[node name="Left" type="StaticBody3D" parent="Structures/Outpost/Hut3" unique_id=184274117]
+[node name="Left" type="StaticBody3D" parent="Structures/Outpost/Hut3" unique_id=1424399624]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1.5, 0)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(0.3, 2.4, 4)
 surface = "wood"
 
-[node name="Right" type="StaticBody3D" parent="Structures/Outpost/Hut3" unique_id=524698793]
+[node name="Right" type="StaticBody3D" parent="Structures/Outpost/Hut3" unique_id=8362487]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1.5, 0)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(0.3, 2.4, 4)
 surface = "wood"
 
-[node name="FrontL" type="StaticBody3D" parent="Structures/Outpost/Hut3" unique_id=1988825730]
+[node name="FrontL" type="StaticBody3D" parent="Structures/Outpost/Hut3" unique_id=1316536744]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.35, 1.5, -2)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(1.4, 2.4, 0.3)
 surface = "wood"
 
-[node name="FrontR" type="StaticBody3D" parent="Structures/Outpost/Hut3" unique_id=1599949863]
+[node name="FrontR" type="StaticBody3D" parent="Structures/Outpost/Hut3" unique_id=840640303]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.35, 1.5, -2)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(1.4, 2.4, 0.3)
 surface = "wood"
 
-[node name="RoofL" type="StaticBody3D" parent="Structures/Outpost/Hut3" unique_id=1061473983]
+[node name="RoofL" type="StaticBody3D" parent="Structures/Outpost/Hut3" unique_id=1564626146]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -1.25, 3.9, 0)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 1
 size = Vector3(5.2, 1.5, 2.6)
 surface = "thatch"
 bevel = 0.05
 
-[node name="RoofR" type="StaticBody3D" parent="Structures/Outpost/Hut3" unique_id=928267658]
+[node name="RoofR" type="StaticBody3D" parent="Structures/Outpost/Hut3" unique_id=509371536]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 1.25, 3.9, 0)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 1
 size = Vector3(5.2, 1.5, 2.6)
 surface = "thatch"
 bevel = 0.05
 
-[node name="Stilt" type="StaticBody3D" parent="Structures/Outpost" unique_id=1031445005]
+[node name="Stilt" type="StaticBody3D" parent="Structures/Outpost" unique_id=1426160316]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38, 3, 2)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 3
 size = Vector3(0.5, 6, 0.5)
 surface = "wood"
 
-[node name="Stilt2" type="StaticBody3D" parent="Structures/Outpost" unique_id=2074623133]
+[node name="Stilt2" type="StaticBody3D" parent="Structures/Outpost" unique_id=597575389]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38, 3, 6)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 3
 size = Vector3(0.5, 6, 0.5)
 surface = "wood"
 
-[node name="Stilt3" type="StaticBody3D" parent="Structures/Outpost" unique_id=800941742]
+[node name="Stilt3" type="StaticBody3D" parent="Structures/Outpost" unique_id=763679291]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -42, 3, 2)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 3
 size = Vector3(0.5, 6, 0.5)
 surface = "wood"
 
-[node name="Stilt4" type="StaticBody3D" parent="Structures/Outpost" unique_id=1400386537]
+[node name="Stilt4" type="StaticBody3D" parent="Structures/Outpost" unique_id=221765749]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -42, 3, 6)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 3
 size = Vector3(0.5, 6, 0.5)
 surface = "wood"
 
-[node name="TowerDeck" type="StaticBody3D" parent="Structures/Outpost" unique_id=1275527247]
+[node name="TowerDeck" type="StaticBody3D" parent="Structures/Outpost" unique_id=1087330319]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, 9, 4)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(5.4, 0.4, 5.4)
 surface = "wood"
 
-[node name="Rail" type="StaticBody3D" parent="Structures/Outpost" unique_id=545557538]
+[node name="Rail" type="StaticBody3D" parent="Structures/Outpost" unique_id=1828267991]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, 9.4, 1.5)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(5.4, 0.9, 0.3)
 surface = "wood"
 
-[node name="CrateStep1" type="StaticBody3D" parent="Structures/Outpost" unique_id=2124654972]
+[node name="CrateStep1" type="StaticBody3D" parent="Structures/Outpost" unique_id=1384924694]
 transform = Transform3D(0.9848077, 0, 0.17364818, 0, 1, 0, -0.17364818, 0, 0.9848077, -44.5, 3, 9)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(1.6, 1.6, 1.6)
 surface = "wood"
 
-[node name="CrateStep2" type="StaticBody3D" parent="Structures/Outpost" unique_id=1251633346]
+[node name="CrateStep2" type="StaticBody3D" parent="Structures/Outpost" unique_id=1932350692]
 transform = Transform3D(0.99026805, 0, -0.1391731, 0, 1, 0, 0.1391731, 0, 0.99026805, -46, 3, 11.2)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(1.6, 3.2, 1.6)
 surface = "wood"
 
-[node name="OutpostSign" type="StaticBody3D" parent="Structures/Outpost" unique_id=1308634999]
+[node name="OutpostSign" type="StaticBody3D" parent="Structures/Outpost" unique_id=206322700]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -48, 3, 28.6)
-script = ExtResource("9_ocooh")
+script = ExtResource("10_bwaeg")
 texts = PackedStringArray("Castaway Outpost", "Dock", "Ridge", "Shipwreck")
 directions = PackedFloat32Array(90, 180, 0, -90)
 post_height = 2.6
 
-[node name="Dock" type="Node3D" parent="Structures" unique_id=1337261312]
+[node name="Dock" type="Node3D" parent="Structures" unique_id=1164825971]
 
-[node name="DockA" type="StaticBody3D" parent="Structures/Dock" unique_id=1209872488]
+[node name="DockA" type="StaticBody3D" parent="Structures/Dock" unique_id=1040963818]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -52, 1.35, 57)
-script = ExtResource("10_2k0k3")
+script = ExtResource("11_88y3p")
 length = 14.0
 width = 3.2
 post_depth = 9.0
 water_line = -1.2
 
-[node name="DockB" type="StaticBody3D" parent="Structures/Dock" unique_id=932823560]
+[node name="DockB" type="StaticBody3D" parent="Structures/Dock" unique_id=1748866033]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -52, 1.35, 74)
-script = ExtResource("10_2k0k3")
+script = ExtResource("11_88y3p")
 length = 10.0
 width = 3.2
 post_depth = 9.0
 water_line = -1.2
 
-[node name="DockLamp" type="StaticBody3D" parent="Structures/Dock" unique_id=410605341]
+[node name="DockLamp" type="StaticBody3D" parent="Structures/Dock" unique_id=1626754591]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -54.2, 1.2, 55.5)
-script = ExtResource("11_bwaeg")
+script = ExtResource("12_78ci4")
 
-[node name="TinyBoat" type="CharacterBody3D" parent="Structures/Dock" unique_id=1508277613]
+[node name="TinyBoat" type="CharacterBody3D" parent="Structures/Dock" unique_id=385731353]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -48.6, 0, 80)
-script = ExtResource("12_88y3p")
+script = ExtResource("13_bv8vl")
 
-[node name="BoatMooring" type="Marker3D" parent="Structures/Dock" unique_id=468690226]
+[node name="BoatMooring" type="Marker3D" parent="Structures/Dock" unique_id=50053540]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -48.6, 0, 80)
 
-[node name="ChimneyA" type="StaticBody3D" parent="Structures" unique_id=1194362361]
+[node name="ChimneyA" type="StaticBody3D" parent="Structures" unique_id=440568117]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 7, -23)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(1.4, 6.2, 3)
 surface = "rock"
 
-[node name="ChimneyB" type="StaticBody3D" parent="Structures" unique_id=1621317081]
+[node name="ChimneyB" type="StaticBody3D" parent="Structures" unique_id=396228041]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 7, -23)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(1.4, 6.2, 3)
 surface = "rock"
 
-[node name="BrokenMast" type="StaticBody3D" parent="Structures" unique_id=1203903656]
+[node name="BrokenMast" type="StaticBody3D" parent="Structures" unique_id=899692564]
 transform = Transform3D(0.9945219, 0.104528464, 0, -0.104528464, 0.9945219, 0, 0, 0, 1, 2, 12.4, -38)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 3
 size = Vector3(0.9, 6, 0.9)
 surface = "wood"
 
-[node name="LookoutNest" type="StaticBody3D" parent="Structures" unique_id=1811176270]
+[node name="LookoutNest" type="StaticBody3D" parent="Structures" unique_id=643696056]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.6, 18, -38)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 3
 size = Vector3(3, 0.4, 3)
 surface = "wood"
 
-[node name="DarkCave" type="Node3D" parent="Structures" unique_id=582799116]
+[node name="DarkCave" type="Node3D" parent="Structures" unique_id=1738681656]
 
-[node name="TunnelWallN" type="StaticBody3D" parent="Structures/DarkCave" unique_id=568600201]
+[node name="TunnelWallN" type="StaticBody3D" parent="Structures/DarkCave" unique_id=592245535]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.5, 7, -37.4)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(6, 4, 1.2)
 surface = "rock"
 
-[node name="TunnelWallS" type="StaticBody3D" parent="Structures/DarkCave" unique_id=542312720]
+[node name="TunnelWallS" type="StaticBody3D" parent="Structures/DarkCave" unique_id=1881030673]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 7, -31.6)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(9, 4, 1.2)
 surface = "rock"
 
-[node name="TunnelRoof" type="StaticBody3D" parent="Structures/DarkCave" unique_id=803503899]
+[node name="TunnelRoof" type="StaticBody3D" parent="Structures/DarkCave" unique_id=132017260]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 11, -34.5)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(10, 1.4, 7.4)
 surface = "rock"
 
-[node name="ChamberFloor" type="StaticBody3D" parent="Structures/DarkCave" unique_id=548536872]
+[node name="ChamberFloor" type="StaticBody3D" parent="Structures/DarkCave" unique_id=1456112140]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.5, 6.4, -42.6)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(10.4, 0.6, 10.6)
 surface = "stone"
 
-[node name="ChamberWallE" type="StaticBody3D" parent="Structures/DarkCave" unique_id=1922701492]
+[node name="ChamberWallE" type="StaticBody3D" parent="Structures/DarkCave" unique_id=1331921772]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.1, 3, -43.05)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(1.2, 8, 11.3)
 surface = "rock"
 
-[node name="ChamberWallN" type="StaticBody3D" parent="Structures/DarkCave" unique_id=268910587]
+[node name="ChamberWallN" type="StaticBody3D" parent="Structures/DarkCave" unique_id=565701880]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.1, 3, -48.1)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(11.2, 8, 1.2)
 surface = "rock"
 
-[node name="ChamberWallW" type="StaticBody3D" parent="Structures/DarkCave" unique_id=708196431]
+[node name="ChamberWallW" type="StaticBody3D" parent="Structures/DarkCave" unique_id=1425474056]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.9, 7, -43.05)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(1.2, 4, 11.3)
 surface = "rock"
 
-[node name="ChamberWallSE" type="StaticBody3D" parent="Structures/DarkCave" unique_id=2095126993]
+[node name="ChamberWallSE" type="StaticBody3D" parent="Structures/DarkCave" unique_id=594166671]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.6, 3, -37.4)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(2.2, 8, 1.2)
 surface = "rock"
 
-[node name="ChamberRoof" type="StaticBody3D" parent="Structures/DarkCave" unique_id=343819250]
+[node name="ChamberRoof" type="StaticBody3D" parent="Structures/DarkCave" unique_id=717921215]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.5, 11, -43.05)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(12.4, 1.4, 11.3)
 surface = "rock"
 
-[node name="CaveGate" type="StaticBody3D" parent="Structures" unique_id=404055143 node_paths=PackedStringArray("triggers")]
+[node name="CaveGate" type="StaticBody3D" parent="Structures" unique_id=746690237 node_paths=PackedStringArray("triggers")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.5, 7, -42.6)
-script = ExtResource("13_78ci4")
+script = ExtResource("14_cd1tu")
 gate_id = &"castaway_cave_gate"
 size = Vector3(10.4, 4, 0.4)
 triggers = [NodePath("../../Gameplay/CaveBrazierA"), NodePath("../../Gameplay/CaveBrazierB")]
 
-[node name="OldStump" type="StaticBody3D" parent="Structures" unique_id=2003954902]
+[node name="OldStump" type="StaticBody3D" parent="Structures" unique_id=1485405824]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.2, 3, 13.2)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 3
 size = Vector3(1.3, 0.9, 1.3)
 surface = "wood_dark"
 
-[node name="ClawArena" type="Node3D" parent="Structures" unique_id=1113430270]
+[node name="ClawArena" type="Node3D" parent="Structures" unique_id=1172544822]
 
-[node name="Spire" type="StaticBody3D" parent="Structures/ClawArena" unique_id=1803848899 groups=["no_ledge_grab"]]
+[node name="Spire" type="StaticBody3D" parent="Structures/ClawArena" unique_id=1135160592 groups=["no_ledge_grab"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 66.152824, 7.5, -35.5365)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 3
 size = Vector3(1.8, 3.6, 1.8)
 surface = "rock"
 
-[node name="Spire2" type="StaticBody3D" parent="Structures/ClawArena" unique_id=151860326 groups=["no_ledge_grab"]]
+[node name="Spire2" type="StaticBody3D" parent="Structures/ClawArena" unique_id=1600677316 groups=["no_ledge_grab"]]
 transform = Transform3D(0.79863554, 0, 0.601815, 0, 1, 0, -0.601815, 0, 0.79863554, 62.383835, 7.5, -28.863735)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 3
 size = Vector3(1.8, 4.4948463, 1.8)
 surface = "rock"
 
-[node name="Spire3" type="StaticBody3D" parent="Structures/ClawArena" unique_id=276526185 groups=["no_ledge_grab"]]
+[node name="Spire3" type="StaticBody3D" parent="Structures/ClawArena" unique_id=364130034 groups=["no_ledge_grab"]]
 transform = Transform3D(0.2756374, 0, 0.9612617, 0, 1, 0, -0.9612617, 0, 0.2756374, 55.412502, 7.5, -25.680714)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 3
 size = Vector3(1.8, 2.4075708, 1.8)
 surface = "rock"
 
-[node name="Spire4" type="StaticBody3D" parent="Structures/ClawArena" unique_id=489478404 groups=["no_ledge_grab"]]
+[node name="Spire4" type="StaticBody3D" parent="Structures/ClawArena" unique_id=932227511 groups=["no_ledge_grab"]]
 transform = Transform3D(-0.35836795, 0, 0.93358046, 0, 1, 0, -0.93358046, 0, -0.35836795, 47.90164, 7.5, -27.20324)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 3
 size = Vector3(1.8, 4.294128, 1.8)
 surface = "rock"
 
-[node name="Spire5" type="StaticBody3D" parent="Structures/ClawArena" unique_id=1562332371 groups=["no_ledge_grab"]]
+[node name="Spire5" type="StaticBody3D" parent="Structures/ClawArena" unique_id=1174684377 groups=["no_ledge_grab"]]
 transform = Transform3D(-0.84804803, 0, 0.5299193, 0, 1, 0, -0.5299193, 0, -0.84804803, 42.72015, 7.5, -32.849762)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 3
 size = Vector3(1.8, 3.8674679, 1.8)
 surface = "rock"
 
-[node name="Spire6" type="StaticBody3D" parent="Structures/ClawArena" unique_id=1746580626 groups=["no_ledge_grab"]]
+[node name="Spire6" type="StaticBody3D" parent="Structures/ClawArena" unique_id=759489271 groups=["no_ledge_grab"]]
 transform = Transform3D(-0.9961947, 0, -0.08715581, 0, 1, 0, 0.08715581, 0, -0.9961947, 41.847176, 7.5, -40.4635)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 3
 size = Vector3(1.8, 2.5494573, 1.8)
 surface = "rock"
 
-[node name="Spire7" type="StaticBody3D" parent="Structures/ClawArena" unique_id=252825266 groups=["no_ledge_grab"]]
+[node name="Spire7" type="StaticBody3D" parent="Structures/ClawArena" unique_id=911193420 groups=["no_ledge_grab"]]
 transform = Transform3D(0.438371, 0, -0.8987941, 0, 1, 0, 0.8987941, 0, 0.438371, 60.09836, 7.5, -48.79676)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 3
 size = Vector3(1.8, 3.0785213, 1.8)
 surface = "rock"
 
-[node name="Spire8" type="StaticBody3D" parent="Structures/ClawArena" unique_id=795626097 groups=["no_ledge_grab"]]
+[node name="Spire8" type="StaticBody3D" parent="Structures/ClawArena" unique_id=58976322 groups=["no_ledge_grab"]]
 transform = Transform3D(0.8910065, 0, -0.45399052, 0, 1, 0, 0.45399052, 0, 0.8910065, 65.279854, 7.5, -43.150238)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 3
 size = Vector3(1.8, 4.753383, 1.8)
 surface = "rock"
 
-[node name="PillarPole" type="StaticBody3D" parent="Structures" unique_id=1262076958]
+[node name="PillarPole" type="StaticBody3D" parent="Structures" unique_id=2080469436]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 88.3, 16, -37.3)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 3
 size = Vector3(0.5, 5.8, 0.5)
 surface = "wood_dark"
 
-[node name="CannonSecrets" type="Node3D" parent="Structures" unique_id=2042547327]
+[node name="CannonSecrets" type="Node3D" parent="Structures" unique_id=886439394]
 
-[node name="GrottoBack" type="StaticBody3D" parent="Structures/CannonSecrets" unique_id=1375255649]
+[node name="GrottoBack" type="StaticBody3D" parent="Structures/CannonSecrets" unique_id=874193898]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36.4, 1.2, 42)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(1, 3.2, 4.4)
 surface = "rock"
 
-[node name="GrottoSideN" type="StaticBody3D" parent="Structures/CannonSecrets" unique_id=1917307207]
+[node name="GrottoSideN" type="StaticBody3D" parent="Structures/CannonSecrets" unique_id=1356013080]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34, 1.2, 40)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(4.8, 3.2, 0.8)
 surface = "rock"
 
-[node name="GrottoSideS" type="StaticBody3D" parent="Structures/CannonSecrets" unique_id=1531575380]
+[node name="GrottoSideS" type="StaticBody3D" parent="Structures/CannonSecrets" unique_id=960307269]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34, 1.2, 44)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(4.8, 3.2, 0.8)
 surface = "rock"
 
-[node name="GrottoRoof" type="StaticBody3D" parent="Structures/CannonSecrets" unique_id=1371145984]
+[node name="GrottoRoof" type="StaticBody3D" parent="Structures/CannonSecrets" unique_id=1629749887]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.1, 4.4, 42)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(5.2, 0.9, 4.8)
 surface = "rock"
 
-[node name="GrottoCrackedRock" type="StaticBody3D" parent="Structures/CannonSecrets" unique_id=1747537853]
+[node name="GrottoCrackedRock" type="StaticBody3D" parent="Structures/CannonSecrets" unique_id=607379588]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -31.9, 1.2, 42)
-script = ExtResource("14_bv8vl")
+script = ExtResource("15_em1l2")
 rock_id = &"castaway_grotto_rock"
 size = Vector3(3.2, 3.2, 0.9)
 
-[node name="VaultBack" type="StaticBody3D" parent="Structures/CannonSecrets" unique_id=332737644]
+[node name="VaultBack" type="StaticBody3D" parent="Structures/CannonSecrets" unique_id=2007203403]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36, 3, -18.2)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(5, 3.6, 0.8)
 surface = "stone"
 
-[node name="VaultW" type="StaticBody3D" parent="Structures/CannonSecrets" unique_id=872823585]
+[node name="VaultW" type="StaticBody3D" parent="Structures/CannonSecrets" unique_id=1170750287]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38.2, 3, -16)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(0.8, 3.6, 5)
 surface = "stone"
 
-[node name="VaultE" type="StaticBody3D" parent="Structures/CannonSecrets" unique_id=241455748]
+[node name="VaultE" type="StaticBody3D" parent="Structures/CannonSecrets" unique_id=1528899139]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -33.8, 3, -16)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(0.8, 3.6, 5)
 surface = "stone"
 
-[node name="VaultRoof" type="StaticBody3D" parent="Structures/CannonSecrets" unique_id=1264845327]
+[node name="VaultRoof" type="StaticBody3D" parent="Structures/CannonSecrets" unique_id=47586252]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36, 6.6, -16)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(5.6, 0.8, 5.6)
 surface = "stone"
 
-[node name="TargetBeach" type="StaticBody3D" parent="Structures/CannonSecrets" unique_id=455103112]
+[node name="TargetBeach" type="StaticBody3D" parent="Structures/CannonSecrets" unique_id=1767574192]
 transform = Transform3D(0.34202015, 0, -0.9396926, 0, 1, 0, 0.9396926, 0, 0.34202015, -74, 1.2, -6)
-script = ExtResource("15_cd1tu")
+script = ExtResource("16_mxya1")
 target_id = &"castaway_target_beach"
 
-[node name="TargetHorn" type="StaticBody3D" parent="Structures/CannonSecrets" unique_id=980254183]
+[node name="TargetHorn" type="StaticBody3D" parent="Structures/CannonSecrets" unique_id=975990228]
 transform = Transform3D(-0.9396926, 0, 0.3420202, 0, 1, 0, -0.3420202, 0, -0.9396926, -26, 4.5, 49)
-script = ExtResource("15_cd1tu")
+script = ExtResource("16_mxya1")
 target_id = &"castaway_target_horn"
 
-[node name="VaultGate" type="StaticBody3D" parent="Structures/CannonSecrets" unique_id=1909992728 node_paths=PackedStringArray("triggers")]
+[node name="VaultGate" type="StaticBody3D" parent="Structures/CannonSecrets" unique_id=589759542 node_paths=PackedStringArray("triggers")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36, 3, -13.8)
-script = ExtResource("13_78ci4")
+script = ExtResource("14_cd1tu")
 gate_id = &"castaway_vault_gate"
 size = Vector3(3.6, 3.6, 0.4)
 triggers = [NodePath("../TargetBeach"), NodePath("../TargetHorn")]
 
-[node name="Gameplay" type="Node3D" parent="." unique_id=1256196933]
+[node name="Gameplay" type="Node3D" parent="." unique_id=713419491]
 
-[node name="CoveBurrow" type="StaticBody3D" parent="Gameplay" unique_id=162791026]
+[node name="CoveBurrow" type="StaticBody3D" parent="Gameplay" unique_id=144876376]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34, 1.2, 28)
-script = ExtResource("16_em1l2")
+script = ExtResource("17_bj6br")
 
-[node name="SpawnCabinDoor" type="Marker3D" parent="Gameplay" unique_id=1698544905 groups=["spawn_point"]]
+[node name="SpawnCabinDoor" type="Marker3D" parent="Gameplay" unique_id=1248688112 groups=["spawn_point"]]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 51.25, 1.3, 42.6)
 metadata/spawn_id = &"cabin_door"
 
-[node name="ParrotCage_castaway_parrot_wreck" type="Area3D" parent="Gameplay" unique_id=228369886]
+[node name="ParrotCage_castaway_parrot_wreck" type="Area3D" parent="Gameplay" unique_id=439493698]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55.5, 8.05, 39.2)
-script = ExtResource("17_mxya1")
+script = ExtResource("18_g4s4h")
 parrot_id = &"castaway_parrot_wreck"
 island_id = &"castaway_cay"
 
-[node name="ParrotCage_castaway_parrot_stack" type="Area3D" parent="Gameplay" unique_id=882704912]
+[node name="ParrotCage_castaway_parrot_stack" type="Area3D" parent="Gameplay" unique_id=870481007]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 61.4, 6.2, 48.6)
-script = ExtResource("17_mxya1")
+script = ExtResource("18_g4s4h")
 parrot_id = &"castaway_parrot_stack"
 island_id = &"castaway_cay"
 plumage = 2
 
-[node name="ParrotCage_castaway_parrot_outpost" type="Area3D" parent="Gameplay" unique_id=1515634490]
+[node name="ParrotCage_castaway_parrot_outpost" type="Area3D" parent="Gameplay" unique_id=745343964]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, 9.4, 5)
-script = ExtResource("17_mxya1")
+script = ExtResource("18_g4s4h")
 parrot_id = &"castaway_parrot_outpost"
 island_id = &"castaway_cay"
 plumage = 1
 
-[node name="OldShellby" type="Area3D" parent="Gameplay" unique_id=1120927874 node_paths=PackedStringArray("model")]
+[node name="OldShellby" type="Area3D" parent="Gameplay" unique_id=1321578560 node_paths=PackedStringArray("model")]
 transform = Transform3D(-0.9396926, 0, 0.3420202, 0, 1, 0, -0.3420202, 0, -0.9396926, -50, 3, 26)
-script = ExtResource("18_bj6br")
+script = ExtResource("19_nc280")
 display_name = "Old Shellby"
 lines = PackedStringArray("Well, shiver my shell! You washed up with half the sea\'s driftwood.", "Brock the Croc\'s crabs have been hauling gold up and down this beach all morning. Yours, I take it?", "Free the parrots he\'s caged. They never forget a friend. Folks say a big enough flock can lift a whole tree.", "If you\'re heading out, that little boat at the dock floats... mostly.")
 repeat_lines = PackedStringArray("Mind the dark cave up on the ridge. Even I don\'t go in there without a light.")
 talked_flag = &"castaway_met_shellby"
 model = NodePath("TurtleModel")
 
-[node name="TurtleModel" type="Node3D" parent="Gameplay/OldShellby" unique_id=245305068]
-script = ExtResource("19_g4s4h")
+[node name="TurtleModel" type="Node3D" parent="Gameplay/OldShellby" unique_id=574129474]
+script = ExtResource("20_roskh")
 
-[node name="RidgeHill" type="Node3D" parent="Gameplay" unique_id=1269378792]
+[node name="RidgeHill" type="Node3D" parent="Gameplay" unique_id=113977025]
 
-[node name="ShipCompass" type="Area3D" parent="Gameplay/RidgeHill" unique_id=607593299]
+[node name="ShipCompass" type="Area3D" parent="Gameplay/RidgeHill" unique_id=1737483808]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 12.4, -36)
-script = ExtResource("20_nc280")
+script = ExtResource("21_71kc5")
 
-[node name="ParrotCage_castaway_parrot_summit" type="Area3D" parent="Gameplay" unique_id=1822007319]
+[node name="ParrotCage_castaway_parrot_summit" type="Area3D" parent="Gameplay" unique_id=1505307897]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 12.4, -38)
-script = ExtResource("17_mxya1")
+script = ExtResource("18_g4s4h")
 parrot_id = &"castaway_parrot_summit"
 island_id = &"castaway_cay"
 plumage = 3
 
-[node name="CaveDarkness" type="Area3D" parent="Gameplay" unique_id=1516386447 node_paths=PackedStringArray("lit_by")]
+[node name="CaveDarkness" type="Area3D" parent="Gameplay" unique_id=612582808 node_paths=PackedStringArray("lit_by")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.4, 9, -34.5)
-script = ExtResource("21_roskh")
+script = ExtResource("22_q7dvc")
 size = Vector3(8, 4, 4.6)
 inward = Vector3(-1, 0, 0)
 refusal_depth = 2.2
 lit_by = [NodePath("../CaveBrazierA"), NodePath("../CaveBrazierB")]
 
-[node name="ChamberDarkness" type="Area3D" parent="Gameplay" unique_id=1329418559 node_paths=PackedStringArray("lit_by")]
+[node name="ChamberDarkness" type="Area3D" parent="Gameplay" unique_id=722976668 node_paths=PackedStringArray("lit_by")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.5, 9, -42.8)
-script = ExtResource("21_roskh")
+script = ExtResource("22_q7dvc")
 size = Vector3(10, 4, 9.6)
 refusal_depth = 0.6
 lit_by = [NodePath("../CaveBrazierA"), NodePath("../CaveBrazierB")]
 
-[node name="CaveCameraZone" type="Area3D" parent="Gameplay" unique_id=212504397]
+[node name="CaveCameraZone" type="Area3D" parent="Gameplay" unique_id=65499800]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.8, 9, -34.5)
-script = ExtResource("22_71kc5")
+script = ExtResource("23_15xfc")
 distance_scale = 0.6
 
-[node name="Shape" type="CollisionShape3D" parent="Gameplay/CaveCameraZone" unique_id=946270134]
-shape = SubResource("BoxShape3D_c2d58")
+[node name="Shape" type="CollisionShape3D" parent="Gameplay/CaveCameraZone" unique_id=1207839380]
+shape = SubResource("BoxShape3D_eikxq")
 
-[node name="CaveCameraZone2" type="Area3D" parent="Gameplay" unique_id=943471122]
+[node name="CaveCameraZone2" type="Area3D" parent="Gameplay" unique_id=1623678377]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.8, 9, -42.8)
-script = ExtResource("22_71kc5")
+script = ExtResource("23_15xfc")
 distance_scale = 0.6
 
-[node name="Shape" type="CollisionShape3D" parent="Gameplay/CaveCameraZone2" unique_id=1393685518]
-shape = SubResource("BoxShape3D_ijjky")
+[node name="Shape" type="CollisionShape3D" parent="Gameplay/CaveCameraZone2" unique_id=1581374007]
+shape = SubResource("BoxShape3D_wssub")
 
-[node name="CaveBrazierA" type="Area3D" parent="Gameplay" unique_id=1834481512]
+[node name="CaveBrazierA" type="Area3D" parent="Gameplay" unique_id=2073067280]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 7, -40.6)
-script = ExtResource("23_q7dvc")
+script = ExtResource("24_s07ti")
 brazier_id = &"castaway_cave_brazier_a"
 
-[node name="CaveBrazierB" type="Area3D" parent="Gameplay" unique_id=1366645648]
+[node name="CaveBrazierB" type="Area3D" parent="Gameplay" unique_id=663481912]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 7, -40.6)
-script = ExtResource("23_q7dvc")
+script = ExtResource("24_s07ti")
 brazier_id = &"castaway_cave_brazier_b"
 
-[node name="ShovelPickup" type="Area3D" parent="Gameplay" unique_id=908573806]
+[node name="ShovelPickup" type="Area3D" parent="Gameplay" unique_id=38251578]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 7, -45.6)
-script = ExtResource("24_15xfc")
+script = ExtResource("25_lthe7")
 attachment_id = &"shovel"
 
-[node name="CaveMapMound" type="Node3D" parent="Gameplay" unique_id=485458078]
+[node name="CaveMapMound" type="Node3D" parent="Gameplay" unique_id=304953883]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 7, -45.6)
-script = ExtResource("25_s07ti")
+script = ExtResource("26_yxlh4")
 spot_id = &"castaway_cave_mound"
 island_id = &"castaway_cay"
 contents = "map"
 map_id = &"castaway_map_1"
 
-[node name="TreasureMapX" type="Node3D" parent="Gameplay" unique_id=162670262]
+[node name="TreasureMapX" type="Node3D" parent="Gameplay" unique_id=573084832]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27, 3, 15)
-script = ExtResource("25_s07ti")
+script = ExtResource("26_yxlh4")
 spot_id = &"castaway_x_spot"
 island_id = &"castaway_cay"
 contents = "relic"
@@ -1023,805 +1027,805 @@ coins = 10
 hidden = true
 marked_by_map = &"castaway_map_1"
 
-[node name="Headland" type="Node3D" parent="Gameplay" unique_id=31856605]
+[node name="Headland" type="Node3D" parent="Gameplay" unique_id=264986558]
 
-[node name="FallenLog" type="StaticBody3D" parent="Gameplay/Headland" unique_id=567912401]
+[node name="FallenLog" type="StaticBody3D" parent="Gameplay/Headland" unique_id=1813720823]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 15, 7.75, -20)
-script = ExtResource("26_lthe7")
+script = ExtResource("27_ivtn7")
 length = 20.0
 
-[node name="LogBridgeSpot" type="Marker3D" parent="Gameplay/Headland" unique_id=1233502313]
+[node name="LogBridgeSpot" type="Marker3D" parent="Gameplay/Headland" unique_id=1298020809]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27, 6.55, -22)
 
-[node name="LogBridgeTask" type="Area3D" parent="Gameplay/Headland" unique_id=309083053 node_paths=PackedStringArray("carried", "destination")]
+[node name="LogBridgeTask" type="Area3D" parent="Gameplay/Headland" unique_id=869366975 node_paths=PackedStringArray("carried", "destination")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, 7, -18)
-script = ExtResource("27_yxlh4")
+script = ExtResource("28_ev3ca")
 task_id = &"castaway_log_bridge"
 carried = NodePath("../FallenLog")
 destination = NodePath("../LogBridgeSpot")
 
-[node name="PoundPost0" type="StaticBody3D" parent="Gameplay/Headland" unique_id=1779761257]
+[node name="PoundPost0" type="StaticBody3D" parent="Gameplay/Headland" unique_id=21775236]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 65.68424, 7.5, -14.442327)
-script = ExtResource("28_ivtn7")
+script = ExtResource("29_rns0o")
 post_id = &"castaway_chest_post_0"
 
-[node name="PoundPost1" type="StaticBody3D" parent="Gameplay/Headland" unique_id=429983295]
+[node name="PoundPost1" type="StaticBody3D" parent="Gameplay/Headland" unique_id=2107150383]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 58.80889, 7.5, -13.588188)
-script = ExtResource("28_ivtn7")
+script = ExtResource("29_rns0o")
 post_id = &"castaway_chest_post_1"
 
-[node name="PoundPost2" type="StaticBody3D" parent="Gameplay/Headland" unique_id=408036033]
+[node name="PoundPost2" type="StaticBody3D" parent="Gameplay/Headland" unique_id=871430008]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 61.506863, 7.5, -19.969486)
-script = ExtResource("28_ivtn7")
+script = ExtResource("29_rns0o")
 post_id = &"castaway_chest_post_2"
 
-[node name="HeadlandChest" type="Area3D" parent="Gameplay/Headland" unique_id=665431149 node_paths=PackedStringArray("lock_posts")]
+[node name="HeadlandChest" type="Area3D" parent="Gameplay/Headland" unique_id=510186881 node_paths=PackedStringArray("lock_posts")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 62, 7.5, -16)
-script = ExtResource("29_ev3ca")
+script = ExtResource("30_x65qw")
 chest_id = &"castaway_headland_chest"
 island_id = &"castaway_cay"
 lock_posts = [NodePath("../PoundPost0"), NodePath("../PoundPost1"), NodePath("../PoundPost2")]
 attachment_reward = &"grapple"
 
-[node name="GrappleTease" type="Area3D" parent="Gameplay/Headland" unique_id=118135400]
+[node name="GrappleTease" type="Area3D" parent="Gameplay/Headland" unique_id=1131628107]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 87.6, 21, -36.6)
-script = ExtResource("30_rns0o")
+script = ExtResource("31_qhkp3")
 grapple_only = true
 grapple_arrival = "hop"
 hang_length = 0.0
 
-[node name="CannonPickup" type="Area3D" parent="Gameplay/Headland" unique_id=704126546]
+[node name="CannonPickup" type="Area3D" parent="Gameplay/Headland" unique_id=2011049498]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 90.2, 16, -38.4)
-script = ExtResource("24_15xfc")
+script = ExtResource("25_lthe7")
 attachment_id = &"cannon"
 
-[node name="ClawArena" type="Area3D" parent="Gameplay" unique_id=789242735 node_paths=PackedStringArray("boss")]
+[node name="ClawArena" type="Area3D" parent="Gameplay" unique_id=1578511693 node_paths=PackedStringArray("boss")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 54, 7.5, -38)
-script = ExtResource("31_x65qw")
+script = ExtResource("32_nwuhc")
 boss = NodePath("../../Enemies/KingClaw")
 radius = 11.0
 
-[node name="ClawCameraZone" type="Area3D" parent="Gameplay" unique_id=2123596376 node_paths=PackedStringArray("focus")]
+[node name="ClawCameraZone" type="Area3D" parent="Gameplay" unique_id=1174190477 node_paths=PackedStringArray("focus")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 54, 7.5, -38)
-script = ExtResource("32_qhkp3")
+script = ExtResource("33_tmche")
 focus = NodePath("../../Enemies/KingClaw")
 zone_priority = 2
 distance_scale = 1.35
 pitch_offset = -6.0
 fov_offset = 4.0
 
-[node name="Shape" type="CollisionShape3D" parent="Gameplay/ClawCameraZone" unique_id=64497698]
+[node name="Shape" type="CollisionShape3D" parent="Gameplay/ClawCameraZone" unique_id=1496010073]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
-shape = SubResource("CylinderShape3D_eikxq")
+shape = SubResource("CylinderShape3D_5r5ic")
 
-[node name="CpClawArena" type="Area3D" parent="Gameplay" unique_id=410030564]
+[node name="CpClawArena" type="Area3D" parent="Gameplay" unique_id=1601459913]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 41.5, 7.5, -28.5)
-script = ExtResource("33_nwuhc")
+script = ExtResource("34_pek5p")
 checkpoint_id = &"cp_claw_arena"
 respawn_yaw = 50.0
 
-[node name="RingRun" type="Node3D" parent="Gameplay" unique_id=35000640]
+[node name="RingRun" type="Node3D" parent="Gameplay" unique_id=844123665]
 
-[node name="HookRing" type="Area3D" parent="Gameplay/RingRun" unique_id=1629234830]
+[node name="HookRing" type="Area3D" parent="Gameplay/RingRun" unique_id=969456644]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.5, 8.4, 53.5)
-script = ExtResource("30_rns0o")
+script = ExtResource("31_qhkp3")
 hang_length = 1.6
 
-[node name="HookRing2" type="Area3D" parent="Gameplay/RingRun" unique_id=655115795]
+[node name="HookRing2" type="Area3D" parent="Gameplay/RingRun" unique_id=2112415079]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 8.6, 58.5)
-script = ExtResource("30_rns0o")
+script = ExtResource("31_qhkp3")
 hang_length = 1.6
 
-[node name="CpCove" type="Area3D" parent="Gameplay" unique_id=892719626]
+[node name="CpCove" type="Area3D" parent="Gameplay" unique_id=1542629525]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 1.2, 30)
-script = ExtResource("33_nwuhc")
+script = ExtResource("34_pek5p")
 checkpoint_id = &"cp_cove"
 
-[node name="CpOutpost" type="Area3D" parent="Gameplay" unique_id=1064617165]
+[node name="CpOutpost" type="Area3D" parent="Gameplay" unique_id=707870786]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -48, 3, 12)
-script = ExtResource("33_nwuhc")
+script = ExtResource("34_pek5p")
 checkpoint_id = &"cp_outpost"
 
-[node name="CpRidge" type="Area3D" parent="Gameplay" unique_id=95298023]
+[node name="CpRidge" type="Area3D" parent="Gameplay" unique_id=237843614]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 7, -4)
-script = ExtResource("33_nwuhc")
+script = ExtResource("34_pek5p")
 checkpoint_id = &"cp_ridge"
 
-[node name="CpSummit" type="Area3D" parent="Gameplay" unique_id=300649869]
+[node name="CpSummit" type="Area3D" parent="Gameplay" unique_id=492933563]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 12.4, -32)
-script = ExtResource("33_nwuhc")
+script = ExtResource("34_pek5p")
 checkpoint_id = &"cp_summit"
 
-[node name="TeleportCove" type="Marker3D" parent="Gameplay" unique_id=1781763656 groups=["debug_teleport"]]
+[node name="TeleportCove" type="Marker3D" parent="Gameplay" unique_id=1434095039 groups=["debug_teleport"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 33)
 
-[node name="TeleportWreck" type="Marker3D" parent="Gameplay" unique_id=144576122 groups=["debug_teleport"]]
+[node name="TeleportWreck" type="Marker3D" parent="Gameplay" unique_id=1848575513 groups=["debug_teleport"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40, 1.3, 30)
 
-[node name="TeleportOutpost" type="Marker3D" parent="Gameplay" unique_id=467528657 groups=["debug_teleport"]]
+[node name="TeleportOutpost" type="Marker3D" parent="Gameplay" unique_id=147834399 groups=["debug_teleport"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -48, 3.1, 12)
 
-[node name="TeleportRidge" type="Marker3D" parent="Gameplay" unique_id=1711376292 groups=["debug_teleport"]]
+[node name="TeleportRidge" type="Marker3D" parent="Gameplay" unique_id=2144203184 groups=["debug_teleport"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 7.1, -4)
 
-[node name="TeleportSummit" type="Marker3D" parent="Gameplay" unique_id=291896661 groups=["debug_teleport"]]
+[node name="TeleportSummit" type="Marker3D" parent="Gameplay" unique_id=530729643 groups=["debug_teleport"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 12.5, -32)
 
-[node name="TeleportHeadland" type="Marker3D" parent="Gameplay" unique_id=1300815640 groups=["debug_teleport"]]
+[node name="TeleportHeadland" type="Marker3D" parent="Gameplay" unique_id=1154044833 groups=["debug_teleport"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55, 7.6, -14)
 
-[node name="TeleportDock" type="Marker3D" parent="Gameplay" unique_id=1862023087 groups=["debug_teleport"]]
+[node name="TeleportDock" type="Marker3D" parent="Gameplay" unique_id=692911237 groups=["debug_teleport"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -52, 1.4, 62)
 
-[node name="SpawnDock" type="Marker3D" parent="Gameplay" unique_id=1802149498 groups=["spawn_point"]]
+[node name="SpawnDock" type="Marker3D" parent="Gameplay" unique_id=1544420678 groups=["spawn_point"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -52, 1.4, 80)
 metadata/spawn_id = &"dock"
 
-[node name="DriftwoodKey" type="Node3D" parent="Gameplay" unique_id=675278060]
+[node name="DriftwoodKey" type="Node3D" parent="Gameplay" unique_id=174599892]
 
-[node name="IslandZoneDriftwood" type="Area3D" parent="Gameplay/DriftwoodKey" unique_id=800083772]
+[node name="IslandZoneDriftwood" type="Area3D" parent="Gameplay/DriftwoodKey" unique_id=160350775]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -128, 10, 137)
-script = ExtResource("34_tmche")
+script = ExtResource("35_or4im")
 island_id = &"driftwood_key"
 display_name = "Driftwood Key"
 size = Vector3(64, 40, 56)
 
-[node name="BoatLanding" type="Marker3D" parent="Gameplay/DriftwoodKey" unique_id=1327693959]
+[node name="BoatLanding" type="Marker3D" parent="Gameplay/DriftwoodKey" unique_id=1004026427]
 transform = Transform3D(-0.9396926, 0, -0.34202015, 0, 1, 0, 0.34202015, 0, -0.9396926, -116, 0, 110)
 
-[node name="CpDriftwood" type="Area3D" parent="Gameplay/DriftwoodKey" unique_id=297313627]
+[node name="CpDriftwood" type="Area3D" parent="Gameplay/DriftwoodKey" unique_id=1489713137]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -120, 1, 123)
-script = ExtResource("33_nwuhc")
+script = ExtResource("34_pek5p")
 checkpoint_id = &"cp_driftwood"
 respawn_yaw = 200.0
 
-[node name="Raft1" type="StaticBody3D" parent="Gameplay/DriftwoodKey" unique_id=1114893024]
+[node name="Raft1" type="StaticBody3D" parent="Gameplay/DriftwoodKey" unique_id=417627631]
 transform = Transform3D(0.9781476, 0, 0.2079117, 0, 1, 0, -0.2079117, 0, 0.9781476, -142, 1, 144)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(3.2, 1.7, 3.2)
 surface = "wood"
 
-[node name="Raft2" type="StaticBody3D" parent="Gameplay/DriftwoodKey" unique_id=782954072]
+[node name="Raft2" type="StaticBody3D" parent="Gameplay/DriftwoodKey" unique_id=1155432960]
 transform = Transform3D(0.99026805, 0, -0.1391731, 0, 1, 0, 0.1391731, 0, 0.99026805, -145.5, 1, 147.5)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(2.6, 3.4, 2.6)
 surface = "wood_dark"
 
-[node name="Raft3" type="StaticBody3D" parent="Gameplay/DriftwoodKey" unique_id=991737181]
+[node name="Raft3" type="StaticBody3D" parent="Gameplay/DriftwoodKey" unique_id=2128840938]
 transform = Transform3D(0.9396926, 0, 0.34202012, 0, 1, 0, -0.34202012, 0, 0.9396926, -148.5, 1, 144)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 size = Vector3(2.4, 5.1, 2.4)
 surface = "wood"
 
-[node name="PenPost" type="StaticBody3D" parent="Gameplay/DriftwoodKey" unique_id=306996482]
+[node name="PenPost" type="StaticBody3D" parent="Gameplay/DriftwoodKey" unique_id=679654079]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -121.8, 2.8, 137)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 3
 size = Vector3(0.3, 1, 0.3)
 surface = "wood_dark"
 
-[node name="PenPost2" type="StaticBody3D" parent="Gameplay/DriftwoodKey" unique_id=1857233391]
+[node name="PenPost2" type="StaticBody3D" parent="Gameplay/DriftwoodKey" unique_id=1329710391]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -122.60213, 2.8, 139.4687)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 3
 size = Vector3(0.3, 1, 0.3)
 surface = "wood_dark"
 
-[node name="PenPost3" type="StaticBody3D" parent="Gameplay/DriftwoodKey" unique_id=619797200]
+[node name="PenPost3" type="StaticBody3D" parent="Gameplay/DriftwoodKey" unique_id=568259424]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -124.702126, 2.8, 140.99443)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 3
 size = Vector3(0.3, 1, 0.3)
 surface = "wood_dark"
 
-[node name="PenPost4" type="StaticBody3D" parent="Gameplay/DriftwoodKey" unique_id=980253265]
+[node name="PenPost4" type="StaticBody3D" parent="Gameplay/DriftwoodKey" unique_id=105259362]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -127.297874, 2.8, 140.99443)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 3
 size = Vector3(0.3, 1, 0.3)
 surface = "wood_dark"
 
-[node name="PenPost5" type="StaticBody3D" parent="Gameplay/DriftwoodKey" unique_id=120833991]
+[node name="PenPost5" type="StaticBody3D" parent="Gameplay/DriftwoodKey" unique_id=606897413]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -129.39787, 2.8, 139.4687)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 3
 size = Vector3(0.3, 1, 0.3)
 surface = "wood_dark"
 
-[node name="PenPost6" type="StaticBody3D" parent="Gameplay/DriftwoodKey" unique_id=1377827088]
+[node name="PenPost6" type="StaticBody3D" parent="Gameplay/DriftwoodKey" unique_id=1591939060]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -130.2, 2.8, 137)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 3
 size = Vector3(0.3, 1, 0.3)
 surface = "wood_dark"
 
-[node name="PenPost7" type="StaticBody3D" parent="Gameplay/DriftwoodKey" unique_id=924758801]
+[node name="PenPost7" type="StaticBody3D" parent="Gameplay/DriftwoodKey" unique_id=1166797956]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -129.39787, 2.8, 134.5313)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 3
 size = Vector3(0.3, 1, 0.3)
 surface = "wood_dark"
 
-[node name="PenPost8" type="StaticBody3D" parent="Gameplay/DriftwoodKey" unique_id=1487956507]
+[node name="PenPost8" type="StaticBody3D" parent="Gameplay/DriftwoodKey" unique_id=1887334853]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -124.702126, 2.8, 133.00557)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 3
 size = Vector3(0.3, 1, 0.3)
 surface = "wood_dark"
 
-[node name="PenPost9" type="StaticBody3D" parent="Gameplay/DriftwoodKey" unique_id=907154930]
+[node name="PenPost9" type="StaticBody3D" parent="Gameplay/DriftwoodKey" unique_id=403827788]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -122.60213, 2.8, 134.5313)
-script = ExtResource("5_pvgmt")
+script = ExtResource("6_j52ya")
 shape = 3
 size = Vector3(0.3, 1, 0.3)
 surface = "wood_dark"
 
-[node name="LanternPickup" type="Area3D" parent="Gameplay/DriftwoodKey" unique_id=255463763]
+[node name="LanternPickup" type="Area3D" parent="Gameplay/DriftwoodKey" unique_id=920643775]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -133, 2.8, 132)
-script = ExtResource("24_15xfc")
+script = ExtResource("25_lthe7")
 
-[node name="ParrotCage_driftwood_parrot_tower" type="Area3D" parent="Gameplay" unique_id=1169355856]
+[node name="ParrotCage_driftwood_parrot_tower" type="Area3D" parent="Gameplay" unique_id=1651031433]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -148.5, 6.1, 144)
-script = ExtResource("17_mxya1")
+script = ExtResource("18_g4s4h")
 parrot_id = &"driftwood_parrot_tower"
 island_id = &"driftwood_key"
 plumage = 1
 
-[node name="ParrotCage_driftwood_parrot_pen" type="Area3D" parent="Gameplay" unique_id=1732650378]
+[node name="ParrotCage_driftwood_parrot_pen" type="Area3D" parent="Gameplay" unique_id=2133625295]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -126, 2.8, 137)
-script = ExtResource("17_mxya1")
+script = ExtResource("18_g4s4h")
 parrot_id = &"driftwood_parrot_pen"
 island_id = &"driftwood_key"
 plumage = 3
 
-[node name="TeleportDriftwood" type="Marker3D" parent="Gameplay" unique_id=439591523 groups=["debug_teleport"]]
+[node name="TeleportDriftwood" type="Marker3D" parent="Gameplay" unique_id=900428487 groups=["debug_teleport"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -120, 1.1, 124)
 
-[node name="SeaRegionCastaway" type="Marker3D" parent="Gameplay" unique_id=144676110 node_paths=PackedStringArray("boat_dock", "arrival")]
+[node name="SeaRegionCastaway" type="Marker3D" parent="Gameplay" unique_id=683801528 node_paths=PackedStringArray("boat_dock", "arrival")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5)
-script = ExtResource("35_pek5p")
+script = ExtResource("36_y4k0n")
 region_name = "Castaway Cay"
 island_id = &"castaway_cay"
 radius = 108.0
 boat_dock = NodePath("../../Structures/Dock/BoatMooring")
 arrival = NodePath("../SpawnDock")
 
-[node name="DriftwoodArrival" type="Marker3D" parent="Gameplay" unique_id=983253420]
+[node name="DriftwoodArrival" type="Marker3D" parent="Gameplay" unique_id=1286371021]
 transform = Transform3D(-0.9396926, 0, -0.34202015, 0, 1, 0, 0.34202015, 0, -0.9396926, -118, 1.3, 116)
 
-[node name="SeaRegionDriftwood" type="Marker3D" parent="Gameplay" unique_id=1899141781 node_paths=PackedStringArray("boat_dock", "arrival")]
+[node name="SeaRegionDriftwood" type="Marker3D" parent="Gameplay" unique_id=1527865804 node_paths=PackedStringArray("boat_dock", "arrival")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -130, 0, 140)
-script = ExtResource("35_pek5p")
+script = ExtResource("36_y4k0n")
 region_name = "Driftwood Key"
 island_id = &"driftwood_key"
 radius = 42.0
 boat_dock = NodePath("../DriftwoodKey/BoatLanding")
 arrival = NodePath("../DriftwoodArrival")
 
-[node name="IslandZoneCastaway" type="Area3D" parent="Gameplay" unique_id=937016423]
+[node name="IslandZoneCastaway" type="Area3D" parent="Gameplay" unique_id=977925912]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 10, -6)
-script = ExtResource("34_tmche")
+script = ExtResource("35_or4im")
 island_id = &"castaway_cay"
 display_name = "Castaway Cay"
 announce = false
 size = Vector3(190, 60, 184)
 
-[node name="Hints" type="Node3D" parent="Gameplay" unique_id=1188359928]
+[node name="Hints" type="Node3D" parent="Gameplay" unique_id=891625739]
 
-[node name="HintJump" type="Node3D" parent="Gameplay/Hints" unique_id=1713848221]
+[node name="HintJump" type="Node3D" parent="Gameplay/Hints" unique_id=230019551]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 29.5)
-script = ExtResource("36_or4im")
+script = ExtResource("37_uicok")
 hint_id = &"hint_jump"
 text = "{jump} Jump - hold it to jump higher"
 size = Vector3(14, 4, 8)
 
-[node name="HintDive" type="Node3D" parent="Gameplay/Hints" unique_id=1204817646]
+[node name="HintDive" type="Node3D" parent="Gameplay/Hints" unique_id=726445164]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 1.2, 35)
-script = ExtResource("36_or4im")
+script = ExtResource("37_uicok")
 hint_id = &"hint_dive"
 text = "While running, {dive} to dive  ·  {jump} to roll out"
 size = Vector3(10, 4, 8)
 
-[node name="HintSwipe" type="Node3D" parent="Gameplay/Hints" unique_id=1779548735]
+[node name="HintSwipe" type="Node3D" parent="Gameplay/Hints" unique_id=427543716]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 3, 8)
-script = ExtResource("36_or4im")
+script = ExtResource("37_uicok")
 hint_id = &"hint_swipe"
 text = "{attack} Hook swipe  ·  armored crabs need a ground pound"
 size = Vector3(14, 4, 10)
 
-[node name="HintLedge" type="Node3D" parent="Gameplay/Hints" unique_id=825556330]
+[node name="HintLedge" type="Node3D" parent="Gameplay/Hints" unique_id=841862647]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 3, 7)
-script = ExtResource("36_or4im")
+script = ExtResource("37_uicok")
 hint_id = &"hint_ledge"
 text = "Jump at a ledge to grab it  ·  {jump} to climb up"
 size = Vector3(14, 4, 5)
 
-[node name="HintWallKick" type="Node3D" parent="Gameplay/Hints" unique_id=723965453]
+[node name="HintWallKick" type="Node3D" parent="Gameplay/Hints" unique_id=2118824873]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 7, -20.5)
-script = ExtResource("36_or4im")
+script = ExtResource("37_uicok")
 hint_id = &"hint_wall_kick"
 text = "Slide down a wall and press {jump} to wall-kick"
 size = Vector3(5, 4, 4)
 
-[node name="HintLongJump" type="Node3D" parent="Gameplay/Hints" unique_id=1541255005]
+[node name="HintLongJump" type="Node3D" parent="Gameplay/Hints" unique_id=42538952]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55.5, 8, 38)
-script = ExtResource("36_or4im")
+script = ExtResource("37_uicok")
 hint_id = &"hint_long_jump"
 text = "Long jump: run, hold {crouch} and press {jump}"
 size = Vector3(4, 3, 4)
 
-[node name="HintGroundPound" type="Node3D" parent="Gameplay/Hints" unique_id=1199474762]
+[node name="HintGroundPound" type="Node3D" parent="Gameplay/Hints" unique_id=1614253079]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62, 7.5, -16)
-script = ExtResource("36_or4im")
+script = ExtResource("37_uicok")
 hint_id = &"hint_ground_pound"
 text = "In the air, press {ground_pound} to ground pound"
 size = Vector3(14, 4, 14)
 
-[node name="HintRing" type="Node3D" parent="Gameplay/Hints" unique_id=1970370152]
+[node name="HintRing" type="Node3D" parent="Gameplay/Hints" unique_id=1569020132]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 4.5, 49)
-script = ExtResource("36_or4im")
+script = ExtResource("37_uicok")
 hint_id = &"hint_ring"
 text = "Jump at a golden ring and press {tool_primary} to swing"
 size = Vector3(7, 3, 7)
 
-[node name="HintBoat" type="Node3D" parent="Gameplay/Hints" unique_id=2088431018]
+[node name="HintBoat" type="Node3D" parent="Gameplay/Hints" unique_id=758433282]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -52, 1.35, 78)
-script = ExtResource("36_or4im")
+script = ExtResource("37_uicok")
 hint_id = &"hint_boat"
 text = "{interact} Board the boat  ·  steer with the stick, {jump} to hop out"
 size = Vector3(6, 3, 10)
 
-[node name="HintTools" type="Node3D" parent="Gameplay/Hints" unique_id=1890769789]
+[node name="HintTools" type="Node3D" parent="Gameplay/Hints" unique_id=296152800]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 7, -36)
-script = ExtResource("36_or4im")
+script = ExtResource("37_uicok")
 hint_id = &"hint_tools"
 text = "Swap hand attachments with {tool_previous} / {tool_next}"
 size = Vector3(8, 4, 6)
 require_attachment = &"shovel"
 
-[node name="Treasure" type="Node3D" parent="." unique_id=392231601]
+[node name="Treasure" type="Node3D" parent="." unique_id=2027235912]
 
-[node name="CoinTrail" type="Node3D" parent="Treasure" unique_id=1781423827]
+[node name="CoinTrail" type="Node3D" parent="Treasure" unique_id=1012622387]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 1.2, 30)
-script = ExtResource("37_y4k0n")
+script = ExtResource("38_d3wp1")
 end_point = Vector3(0, 1.8, -6)
 count = 6
 
-[node name="Heart" type="Area3D" parent="Treasure" unique_id=949566548]
+[node name="Heart" type="Area3D" parent="Treasure" unique_id=1940567686]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 3.6, 18)
-script = ExtResource("38_uicok")
+script = ExtResource("39_elbx0")
 kind = "heart"
 
-[node name="CastawayGemMasthead" type="Area3D" parent="Treasure" unique_id=419712451]
+[node name="CastawayGemMasthead" type="Area3D" parent="Treasure" unique_id=710518278]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55.5, 10.6, 38)
-script = ExtResource("38_uicok")
+script = ExtResource("39_elbx0")
 kind = "gem"
 treasure_id = &"castaway_gem_masthead"
 island_id = &"castaway_cay"
 gem_color = Color(0.30980393, 0.7647059, 1, 1)
 
-[node name="CoinTrail2" type="Node3D" parent="Treasure" unique_id=1145513273]
+[node name="CoinTrail2" type="Node3D" parent="Treasure" unique_id=1112083548]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 56.4, 8.6, 40)
-script = ExtResource("37_y4k0n")
+script = ExtResource("38_d3wp1")
 end_point = Vector3(3.7999992, -1.6000004, 6.200001)
 arc_height = 1.6
 count = 5
 
-[node name="CastawayGemRoof" type="Area3D" parent="Treasure" unique_id=379880580]
+[node name="CastawayGemRoof" type="Area3D" parent="Treasure" unique_id=250601917]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -46, 9.2, 18)
-script = ExtResource("38_uicok")
+script = ExtResource("39_elbx0")
 kind = "gem"
 treasure_id = &"castaway_gem_roof"
 island_id = &"castaway_cay"
 
-[node name="Heart2" type="Area3D" parent="Treasure" unique_id=137442216]
+[node name="Heart2" type="Area3D" parent="Treasure" unique_id=259485505]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -56, 3.6, 10)
-script = ExtResource("38_uicok")
+script = ExtResource("39_elbx0")
 kind = "heart"
 
-[node name="CoinTrail3" type="Node3D" parent="Treasure" unique_id=1267674823]
+[node name="CoinTrail3" type="Node3D" parent="Treasure" unique_id=695796482]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -52, 1.35, 60)
-script = ExtResource("37_y4k0n")
+script = ExtResource("38_d3wp1")
 shape = 0
 end_point = Vector3(0, 0, 9)
 arc_height = 0.0
 count = 5
 
-[node name="CoinTrail4" type="Node3D" parent="Treasure" unique_id=575797557]
+[node name="CoinTrail4" type="Node3D" parent="Treasure" unique_id=1201704064]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -52, 1.35, 70.4)
-script = ExtResource("37_y4k0n")
+script = ExtResource("38_d3wp1")
 end_point = Vector3(0, 0, 4.199997)
 arc_height = 1.6
 count = 4
 
-[node name="CastawayGobletDock" type="Area3D" parent="Treasure" unique_id=832800356]
+[node name="CastawayGobletDock" type="Area3D" parent="Treasure" unique_id=1897289129]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -52, 2.2, 83)
-script = ExtResource("38_uicok")
+script = ExtResource("39_elbx0")
 kind = "goblet"
 treasure_id = &"castaway_goblet_dock"
 island_id = &"castaway_cay"
 
-[node name="CoinTrail5" type="Node3D" parent="Treasure" unique_id=1895980257]
+[node name="CoinTrail5" type="Node3D" parent="Treasure" unique_id=1931659573]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 3.6, 7.5)
-script = ExtResource("37_y4k0n")
+script = ExtResource("38_d3wp1")
 shape = 0
 end_point = Vector3(0, 3, -1.5)
 arc_height = 0.0
 count = 4
 
-[node name="CoinTrail6" type="Node3D" parent="Treasure" unique_id=652539849]
+[node name="CoinTrail6" type="Node3D" parent="Treasure" unique_id=1688257169]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 8, -21.6)
-script = ExtResource("37_y4k0n")
+script = ExtResource("38_d3wp1")
 shape = 0
 end_point = Vector3(0, 4.6000004, -1)
 arc_height = 0.0
 count = 5
 
-[node name="CoinTrail7" type="Node3D" parent="Treasure" unique_id=1168160279]
+[node name="CoinTrail7" type="Node3D" parent="Treasure" unique_id=698236092]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 7.2, -14)
-script = ExtResource("37_y4k0n")
+script = ExtResource("38_d3wp1")
 end_point = Vector3(1, 1.8000002, -8)
 arc_height = 1.6
 count = 4
 
-[node name="CoinTrail8" type="Node3D" parent="Treasure" unique_id=443589117]
+[node name="CoinTrail8" type="Node3D" parent="Treasure" unique_id=1814187926]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 9, -22)
-script = ExtResource("37_y4k0n")
+script = ExtResource("38_d3wp1")
 end_point = Vector3(7, 1.8000002, 4)
 arc_height = 1.6
 count = 4
 
-[node name="CoinTrail9" type="Node3D" parent="Treasure" unique_id=1877167715]
+[node name="CoinTrail9" type="Node3D" parent="Treasure" unique_id=1878829040]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 10.8, -19)
-script = ExtResource("37_y4k0n")
+script = ExtResource("38_d3wp1")
 end_point = Vector3(3, 1.8000002, -8)
 arc_height = 1.6
 count = 4
 
-[node name="CastawayGemLookout" type="Area3D" parent="Treasure" unique_id=358102297]
+[node name="CastawayGemLookout" type="Area3D" parent="Treasure" unique_id=2020295869]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.6, 19, -38)
-script = ExtResource("38_uicok")
+script = ExtResource("39_elbx0")
 kind = "gem"
 treasure_id = &"castaway_gem_lookout"
 island_id = &"castaway_cay"
 gem_color = Color(0.30980393, 0.7647059, 1, 1)
 
-[node name="CastawayGemCave" type="Area3D" parent="Treasure" unique_id=278689070]
+[node name="CastawayGemCave" type="Area3D" parent="Treasure" unique_id=641625940]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.5, 7.6, -46.6)
-script = ExtResource("38_uicok")
+script = ExtResource("39_elbx0")
 kind = "gem"
 treasure_id = &"castaway_gem_cave"
 island_id = &"castaway_cay"
 gem_color = Color(1, 0.7019608, 0.2784314, 1)
 
-[node name="CastawayGemHeadland" type="Area3D" parent="Treasure" unique_id=2073588555]
+[node name="CastawayGemHeadland" type="Area3D" parent="Treasure" unique_id=53955198]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 72, 8.2, -30)
-script = ExtResource("38_uicok")
+script = ExtResource("39_elbx0")
 kind = "gem"
 treasure_id = &"castaway_gem_headland"
 island_id = &"castaway_cay"
 gem_color = Color(0.60784316, 0.36078432, 1, 1)
 
-[node name="CastawayGemGrotto" type="Area3D" parent="Treasure" unique_id=1346410008]
+[node name="CastawayGemGrotto" type="Area3D" parent="Treasure" unique_id=1401373799]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.8, 1.8000001, 42)
-script = ExtResource("38_uicok")
+script = ExtResource("39_elbx0")
 kind = "gem"
 treasure_id = &"castaway_gem_grotto"
 island_id = &"castaway_cay"
 gem_color = Color(0.23921569, 0.8627451, 0.5921569, 1)
 
-[node name="CoinTrail10" type="Node3D" parent="Treasure" unique_id=105371987]
+[node name="CoinTrail10" type="Node3D" parent="Treasure" unique_id=1291310031]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.6, 1.8000001, 41)
-script = ExtResource("37_y4k0n")
+script = ExtResource("38_d3wp1")
 shape = 0
 end_point = Vector3(0, 0, 2)
 arc_height = 0.0
 count = 3
 
-[node name="CastawayRelicVault" type="Area3D" parent="Treasure" unique_id=814763445]
+[node name="CastawayRelicVault" type="Area3D" parent="Treasure" unique_id=969122509]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36, 3.8, -16.6)
-script = ExtResource("38_uicok")
+script = ExtResource("39_elbx0")
 kind = "relic"
 treasure_id = &"castaway_relic_vault"
 island_id = &"castaway_cay"
 gem_color = Color(1, 0.7882353, 0.23529412, 1)
 
-[node name="CoinTrail11" type="Node3D" parent="Treasure" unique_id=1074895329]
+[node name="CoinTrail11" type="Node3D" parent="Treasure" unique_id=1709938660]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -37.2, 3.5, -15.4)
-script = ExtResource("37_y4k0n")
+script = ExtResource("38_d3wp1")
 shape = 0
 end_point = Vector3(2.4000015, 0, 0)
 arc_height = 0.0
 count = 4
 
-[node name="CastawayGemPillar" type="Area3D" parent="Treasure" unique_id=2034835975]
+[node name="CastawayGemPillar" type="Area3D" parent="Treasure" unique_id=1977813901]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 5.2, 64.5)
-script = ExtResource("38_uicok")
+script = ExtResource("39_elbx0")
 kind = "gem"
 treasure_id = &"castaway_gem_pillar"
 island_id = &"castaway_cay"
 
-[node name="CoinTrail12" type="Node3D" parent="Treasure" unique_id=1943051810]
+[node name="CoinTrail12" type="Node3D" parent="Treasure" unique_id=2128681944]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21, 5.5, 51)
-script = ExtResource("37_y4k0n")
+script = ExtResource("38_d3wp1")
 end_point = Vector3(3.5, 1, 2.2000008)
 arc_height = 0.8
 count = 3
 
-[node name="CoinTrail13" type="Node3D" parent="Treasure" unique_id=1791679498]
+[node name="CoinTrail13" type="Node3D" parent="Treasure" unique_id=66502809]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 1.8, 34)
-script = ExtResource("37_y4k0n")
+script = ExtResource("38_d3wp1")
 shape = 0
 end_point = Vector3(18, 0, 2)
 arc_height = 0.0
 
-[node name="CoinTrail14" type="Node3D" parent="Treasure" unique_id=139083040]
+[node name="CoinTrail14" type="Node3D" parent="Treasure" unique_id=849848380]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40.5, 1.9, 38)
-script = ExtResource("37_y4k0n")
+script = ExtResource("38_d3wp1")
 shape = 0
 end_point = Vector3(7, 2.4, 0)
 arc_height = 0.0
 count = 5
 
-[node name="CoinTrail15" type="Node3D" parent="Treasure" unique_id=1896806194]
+[node name="CoinTrail15" type="Node3D" parent="Treasure" unique_id=1401863813]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 48.4, 4.6, 38)
-script = ExtResource("37_y4k0n")
+script = ExtResource("38_d3wp1")
 end_point = Vector3(1.7999992, 2, 0)
 arc_height = 1.0
 count = 3
 
-[node name="CoinTrail16" type="Node3D" parent="Treasure" unique_id=822150379]
+[node name="CoinTrail16" type="Node3D" parent="Treasure" unique_id=755697110]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.5, 2.6, 47.1)
-script = ExtResource("37_y4k0n")
+script = ExtResource("38_d3wp1")
 shape = 0
 end_point = Vector3(9, 0, -5.199997)
 arc_height = 0.0
 count = 5
 
-[node name="CoinTrail17" type="Node3D" parent="Treasure" unique_id=1672951477]
+[node name="CoinTrail17" type="Node3D" parent="Treasure" unique_id=1225393139]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 3.6, 12)
-script = ExtResource("37_y4k0n")
+script = ExtResource("38_d3wp1")
 shape = 2
 end_point = Vector3(12, -3.6, -12)
 arc_height = 0.0
 count = 8
 
-[node name="CoinTrail18" type="Node3D" parent="Treasure" unique_id=2127540821]
+[node name="CoinTrail18" type="Node3D" parent="Treasure" unique_id=2127714223]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -139.4, 1.5, 143.2)
-script = ExtResource("37_y4k0n")
+script = ExtResource("38_d3wp1")
 end_point = Vector3(-2.2000122, 1.7, 1)
 arc_height = 0.8
 count = 3
 
-[node name="CoinTrail19" type="Node3D" parent="Treasure" unique_id=1898535533]
+[node name="CoinTrail19" type="Node3D" parent="Treasure" unique_id=466981657]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -143.2, 3.4, 145.6)
-script = ExtResource("37_y4k0n")
+script = ExtResource("38_d3wp1")
 end_point = Vector3(-2, 1.5, 1.5999908)
 arc_height = 1.0
 count = 3
 
-[node name="DriftwoodGemRock" type="Area3D" parent="Treasure" unique_id=1135009153]
+[node name="DriftwoodGemRock" type="Area3D" parent="Treasure" unique_id=115377754]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -99.5, 3.2, 156)
-script = ExtResource("38_uicok")
+script = ExtResource("39_elbx0")
 kind = "gem"
 treasure_id = &"driftwood_gem_rock"
 island_id = &"driftwood_key"
 gem_color = Color(0.30980393, 0.7647059, 1, 1)
 
-[node name="Heart3" type="Area3D" parent="Treasure" unique_id=1055869077]
+[node name="Heart3" type="Area3D" parent="Treasure" unique_id=1569782946]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -122, 3.4, 144)
-script = ExtResource("38_uicok")
+script = ExtResource("39_elbx0")
 kind = "heart"
 
-[node name="CoinTrail20" type="Node3D" parent="Treasure" unique_id=1500135230]
+[node name="CoinTrail20" type="Node3D" parent="Treasure" unique_id=718560795]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -118, 1.5, 120)
-script = ExtResource("37_y4k0n")
+script = ExtResource("38_d3wp1")
 shape = 0
 end_point = Vector3(-6, 0, 10)
 arc_height = 0.0
 count = 5
 
-[node name="CoinTrail21" type="Node3D" parent="Treasure" unique_id=546931336]
+[node name="CoinTrail21" type="Node3D" parent="Treasure" unique_id=435235473]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -134, 1.5, 154)
-script = ExtResource("37_y4k0n")
+script = ExtResource("38_d3wp1")
 shape = 0
 end_point = Vector3(14, 0, 0)
 arc_height = 0.0
 count = 5
 
-[node name="Enemies" type="Node3D" parent="." unique_id=454594305]
+[node name="Enemies" type="Node3D" parent="." unique_id=1744721308]
 
-[node name="Crab" type="CharacterBody3D" parent="Enemies" unique_id=201327941 groups=["enemy", "stompable"] instance=ExtResource("39_d3wp1")]
+[node name="Crab" type="CharacterBody3D" parent="Enemies" unique_id=124643702 groups=["enemy", "stompable"] instance=ExtResource("40_0f6tf")]
 transform = Transform3D(0.8903616, 0, -0.45525402, 0, 1, 0, 0.45525402, 0, 0.8903616, 46, 1.25, 31)
 collision_layer = 4
-script = ExtResource("40_elbx0")
+script = ExtResource("41_4nrtu")
 variant = 2
 persistent_id = &"castaway_crab_wreck_1"
 
-[node name="Crab2" type="CharacterBody3D" parent="Enemies" unique_id=468034036 groups=["enemy", "stompable"] instance=ExtResource("39_d3wp1")]
+[node name="Crab2" type="CharacterBody3D" parent="Enemies" unique_id=352166257 groups=["enemy", "stompable"] instance=ExtResource("40_0f6tf")]
 transform = Transform3D(0.74576694, 0, -0.66620696, 0, 1, 0, 0.66620696, 0, 0.74576694, 58, 1.25, 33)
 collision_layer = 4
-script = ExtResource("40_elbx0")
+script = ExtResource("41_4nrtu")
 persistent_id = &"castaway_crab_wreck_2"
 
-[node name="Crab3" type="CharacterBody3D" parent="Enemies" unique_id=716601763 groups=["enemy", "stompable"] instance=ExtResource("39_d3wp1")]
+[node name="Crab3" type="CharacterBody3D" parent="Enemies" unique_id=594441886 groups=["enemy", "stompable"] instance=ExtResource("40_0f6tf")]
 transform = Transform3D(-0.85134614, 0, 0.5246043, 0, 1, 0, -0.5246043, 0, -0.85134614, -42, 3.05, 10)
 collision_layer = 4
-script = ExtResource("40_elbx0")
+script = ExtResource("41_4nrtu")
 persistent_id = &"castaway_crab_outpost_1"
 
-[node name="Crab4" type="CharacterBody3D" parent="Enemies" unique_id=578323041 groups=["enemy", "stompable"] instance=ExtResource("39_d3wp1")]
+[node name="Crab4" type="CharacterBody3D" parent="Enemies" unique_id=233599763 groups=["enemy", "stompable"] instance=ExtResource("40_0f6tf")]
 transform = Transform3D(-0.40408754, 0, 0.9147203, 0, 1, 0, -0.9147203, 0, -0.40408754, -36, 3.05, 8)
 collision_layer = 4
-script = ExtResource("40_elbx0")
+script = ExtResource("41_4nrtu")
 variant = 1
 persistent_id = &"castaway_crab_outpost_2"
 
-[node name="Crab5" type="CharacterBody3D" parent="Enemies" unique_id=1665830992 groups=["enemy", "stompable"] instance=ExtResource("39_d3wp1")]
+[node name="Crab5" type="CharacterBody3D" parent="Enemies" unique_id=1909408584 groups=["enemy", "stompable"] instance=ExtResource("40_0f6tf")]
 transform = Transform3D(0.19919378, 0, 0.97996014, 0, 1, 0, -0.97996014, 0, 0.19919378, -22, 7.05, -6)
 collision_layer = 4
-script = ExtResource("40_elbx0")
+script = ExtResource("41_4nrtu")
 persistent_id = &"castaway_crab_ridge"
 
-[node name="CrocGrunt" type="CharacterBody3D" parent="Enemies" unique_id=796812008]
+[node name="CrocGrunt" type="CharacterBody3D" parent="Enemies" unique_id=922081207]
 transform = Transform3D(-0.9396926, 0, -0.34202015, 0, 1, 0, 0.34202015, 0, -0.9396926, 52, 7.55, -10)
-script = ExtResource("41_0f6tf")
+script = ExtResource("42_xk06a")
 persistent_id = &"castaway_croc_1"
 
-[node name="CrocGrunt2" type="CharacterBody3D" parent="Enemies" unique_id=1498601516]
+[node name="CrocGrunt2" type="CharacterBody3D" parent="Enemies" unique_id=356135927]
 transform = Transform3D(-0.50000006, 0, 0.8660254, 0, 1, 0, -0.8660254, 0, -0.50000006, 70, 7.55, -20)
-script = ExtResource("41_0f6tf")
+script = ExtResource("42_xk06a")
 persistent_id = &"castaway_croc_2"
 
-[node name="KingClaw" type="CharacterBody3D" parent="Enemies" unique_id=2045440927]
+[node name="KingClaw" type="CharacterBody3D" parent="Enemies" unique_id=1281543336]
 transform = Transform3D(-0.7071068, 0, -0.7071067, 0, 1, 0, 0.7071067, 0, -0.7071068, 54, 7.5, -38)
-script = ExtResource("42_4nrtu")
+script = ExtResource("43_hcncg")
 arena_center = Vector3(54, 7.5, -38)
 arena_radius = 11.0
 
-[node name="Crab6" type="CharacterBody3D" parent="Enemies" unique_id=2010236288 groups=["enemy", "stompable"] instance=ExtResource("39_d3wp1")]
+[node name="Crab6" type="CharacterBody3D" parent="Enemies" unique_id=729235106 groups=["enemy", "stompable"] instance=ExtResource("40_0f6tf")]
 transform = Transform3D(0.61739266, 0, -0.7866551, 0, 1, 0, 0.7866551, 0, 0.61739266, -12, 3.05, 12)
 collision_layer = 4
-script = ExtResource("40_elbx0")
+script = ExtResource("41_4nrtu")
 variant = 1
 persistent_id = &"castaway_crab_meadow_armored"
 
-[node name="Crab7" type="CharacterBody3D" parent="Enemies" unique_id=767231517 groups=["enemy", "stompable"] instance=ExtResource("39_d3wp1")]
+[node name="Crab7" type="CharacterBody3D" parent="Enemies" unique_id=167158836 groups=["enemy", "stompable"] instance=ExtResource("40_0f6tf")]
 transform = Transform3D(-0.9947802, 0, -0.102041036, 0, 1, 0, 0.102041036, 0, -0.9947802, 4, 3.05, 4)
 collision_layer = 4
-script = ExtResource("40_elbx0")
+script = ExtResource("41_4nrtu")
 persistent_id = &"castaway_crab_meadow"
 
-[node name="PelicanWreck" type="Node3D" parent="Enemies" unique_id=2047868191]
+[node name="PelicanWreck" type="Node3D" parent="Enemies" unique_id=1532392005]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 46, 1.2, 34)
-script = ExtResource("43_xk06a")
+script = ExtResource("44_uw3mp")
 persistent_id = &"castaway_pelican_wreck"
 
-[node name="SnailGrotto" type="CharacterBody3D" parent="Enemies" unique_id=1118289074]
+[node name="SnailGrotto" type="CharacterBody3D" parent="Enemies" unique_id=807997891]
 transform = Transform3D(0.49999997, 0, 0.86602545, 0, 1, 0, -0.86602545, 0, 0.49999997, -27.5, 1.25, 37.5)
-script = ExtResource("44_hcncg")
+script = ExtResource("45_yepsc")
 
-[node name="SnailVault" type="CharacterBody3D" parent="Enemies" unique_id=290926171]
+[node name="SnailVault" type="CharacterBody3D" parent="Enemies" unique_id=742616459]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 3.05, -10)
-script = ExtResource("44_hcncg")
+script = ExtResource("45_yepsc")
 
-[node name="Crab8" type="CharacterBody3D" parent="Enemies" unique_id=219803747 groups=["enemy", "stompable"] instance=ExtResource("39_d3wp1")]
+[node name="Crab8" type="CharacterBody3D" parent="Enemies" unique_id=1173112990 groups=["enemy", "stompable"] instance=ExtResource("40_0f6tf")]
 transform = Transform3D(-0.81478715, 0, 0.5797602, 0, 1, 0, -0.5797602, 0, -0.81478715, -124, 2.85, 138)
 collision_layer = 4
-script = ExtResource("40_elbx0")
+script = ExtResource("41_4nrtu")
 variant = 1
 persistent_id = &"driftwood_crab_pen_1"
 
-[node name="Crab9" type="CharacterBody3D" parent="Enemies" unique_id=1747632244 groups=["enemy", "stompable"] instance=ExtResource("39_d3wp1")]
+[node name="Crab9" type="CharacterBody3D" parent="Enemies" unique_id=786932094 groups=["enemy", "stompable"] instance=ExtResource("40_0f6tf")]
 transform = Transform3D(0.43850812, 0, -0.89872724, 0, 1, 0, 0.89872724, 0, 0.43850812, -128, 2.85, 135.8)
 collision_layer = 4
-script = ExtResource("40_elbx0")
+script = ExtResource("41_4nrtu")
 variant = 2
 persistent_id = &"driftwood_crab_pen_2"
 
-[node name="Crab10" type="CharacterBody3D" parent="Enemies" unique_id=1408122546 groups=["enemy", "stompable"] instance=ExtResource("39_d3wp1")]
+[node name="Crab10" type="CharacterBody3D" parent="Enemies" unique_id=755273667 groups=["enemy", "stompable"] instance=ExtResource("40_0f6tf")]
 transform = Transform3D(-0.88173425, 0, -0.4717464, 0, 1, 0, 0.4717464, 0, -0.88173425, -114, 1.05, 144)
 collision_layer = 4
-script = ExtResource("40_elbx0")
+script = ExtResource("41_4nrtu")
 persistent_id = &"driftwood_crab_beach"
 
-[node name="PelicanDriftwood" type="Node3D" parent="Enemies" unique_id=2098493516]
+[node name="PelicanDriftwood" type="Node3D" parent="Enemies" unique_id=86712108]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -124, 1, 128)
-script = ExtResource("43_xk06a")
+script = ExtResource("44_uw3mp")
 circle_radius = 7.0
 persistent_id = &"driftwood_pelican"
 
-[node name="Crab11" type="CharacterBody3D" parent="Enemies" unique_id=1609162840 node_paths=PackedStringArray("burrow") groups=["enemy", "stompable"] instance=ExtResource("39_d3wp1")]
+[node name="Crab11" type="CharacterBody3D" parent="Enemies" unique_id=2005610136 node_paths=PackedStringArray("burrow") groups=["enemy", "stompable"] instance=ExtResource("40_0f6tf")]
 transform = Transform3D(0.08161803, 0, -0.9966637, 0, 1, 0, 0.9966637, 0, 0.08161803, 5, 1.25, 31.5)
 collision_layer = 4
-script = ExtResource("40_elbx0")
+script = ExtResource("41_4nrtu")
 burrow = NodePath("../../Gameplay/CoveBurrow")
 dormant = true
 
-[node name="Crab12" type="CharacterBody3D" parent="Enemies" unique_id=1826950868 node_paths=PackedStringArray("burrow") groups=["enemy", "stompable"] instance=ExtResource("39_d3wp1")]
+[node name="Crab12" type="CharacterBody3D" parent="Enemies" unique_id=1429886659 node_paths=PackedStringArray("burrow") groups=["enemy", "stompable"] instance=ExtResource("40_0f6tf")]
 transform = Transform3D(-0.7216112, 0, -0.69229853, 0, 1, 0, 0.69229853, 0, -0.7216112, -3.5, 1.25, 30.5)
 collision_layer = 4
-script = ExtResource("40_elbx0")
+script = ExtResource("41_4nrtu")
 burrow = NodePath("../../Gameplay/CoveBurrow")
 dormant = true
 
-[node name="Ocean" type="Node3D" parent="." unique_id=859556460]
-script = ExtResource("45_uw3mp")
+[node name="Ocean" type="Node3D" parent="." unique_id=716526655]
+script = ExtResource("46_dqjl2")
 swim_area_size = Vector2(560, 560)
 swim_depth = 14.0
 gameplay_wave_scale = 0.6
 
-[node name="UnderwaterEffect" type="CanvasLayer" parent="." unique_id=2146362078]
+[node name="UnderwaterEffect" type="CanvasLayer" parent="." unique_id=226274384]
 layer = -1
-script = ExtResource("46_yepsc")
+script = ExtResource("47_wyrmp")
 
-[node name="DriftwoodNature" type="Node3D" parent="." unique_id=781399564]
+[node name="DriftwoodNature" type="Node3D" parent="." unique_id=431633913]
 
-[node name="Palm" type="StaticBody3D" parent="DriftwoodNature" unique_id=1396935019]
+[node name="Palm" type="StaticBody3D" parent="DriftwoodNature" unique_id=724657792]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -144, 1, 128)
-script = ExtResource("47_dqjl2")
+script = ExtResource("48_nd3lp")
 height = 7.0
 lean_degrees = 16.0
 lean_direction = 220.0
 seed = 103
 
-[node name="Palm2" type="StaticBody3D" parent="DriftwoodNature" unique_id=2047528681]
+[node name="Palm2" type="StaticBody3D" parent="DriftwoodNature" unique_id=61963628]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -110, 1, 134)
-script = ExtResource("47_dqjl2")
+script = ExtResource("48_nd3lp")
 height = 6.5
 lean_degrees = 22.0
 lean_direction = -60.0
 coconut_count = 2
 seed = 106
 
-[node name="Palm3" type="StaticBody3D" parent="DriftwoodNature" unique_id=2046071161]
+[node name="Palm3" type="StaticBody3D" parent="DriftwoodNature" unique_id=15173496]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -130, 2.8, 142)
-script = ExtResource("47_dqjl2")
+script = ExtResource("48_nd3lp")
 height = 8.0
 lean_degrees = 6.0
 coconut_count = 1
 seed = 109
 
-[node name="Palm4" type="StaticBody3D" parent="DriftwoodNature" unique_id=1910823587]
+[node name="Palm4" type="StaticBody3D" parent="DriftwoodNature" unique_id=1556061428]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -136, 1, 155)
-script = ExtResource("47_dqjl2")
+script = ExtResource("48_nd3lp")
 lean_degrees = 20.0
 lean_direction = 170.0
 coconut_count = 0
 seed = 112
 
-[node name="Palm5" type="StaticBody3D" parent="DriftwoodNature" unique_id=15804414]
+[node name="Palm5" type="StaticBody3D" parent="DriftwoodNature" unique_id=1754829554]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -116, 1, 152)
-script = ExtResource("47_dqjl2")
+script = ExtResource("48_nd3lp")
 height = 7.5
 lean_degrees = 18.0
 lean_direction = -140.0
 seed = 115
 
-[node name="Jetty" type="StaticBody3D" parent="DriftwoodNature" unique_id=1201171311]
+[node name="Jetty" type="StaticBody3D" parent="DriftwoodNature" unique_id=1428087401]
 transform = Transform3D(0.9396926, 0, 0.34202012, 0, 1, 0, -0.34202012, 0, 0.9396926, -117, 1.1, 118)
-script = ExtResource("10_2k0k3")
+script = ExtResource("11_88y3p")
 length = 7.0
 width = 2.4
 post_depth = 6.0
 water_line = -1.0
 
-[node name="Rock" type="StaticBody3D" parent="DriftwoodNature" unique_id=501921499]
+[node name="Rock" type="StaticBody3D" parent="DriftwoodNature" unique_id=1485065723]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -150, 1, 142)
-script = ExtResource("48_wyrmp")
+script = ExtResource("49_5ydqe")
 preset = 0
 size = Vector3(2, 1.4, 1.8)
 seed = 61
 
-[node name="Rock2" type="StaticBody3D" parent="DriftwoodNature" unique_id=1270623869]
+[node name="Rock2" type="StaticBody3D" parent="DriftwoodNature" unique_id=72898255]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -108, 1, 146)
-script = ExtResource("48_wyrmp")
+script = ExtResource("49_5ydqe")
 preset = 3
 seed = 67
 
-[node name="Scatter" type="Node3D" parent="DriftwoodNature" unique_id=2107037420]
+[node name="Scatter" type="Node3D" parent="DriftwoodNature" unique_id=528703113]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -127, 20, 137)
-script = ExtResource("49_nd3lp")
+script = ExtResource("50_dj4s0")
 area_size = Vector2(30, 30)
 polygon = PackedVector2Array()
 ray_height = 30.0
@@ -1831,9 +1835,9 @@ seed = 13
 density = 0.5
 max_instances = 900
 
-[node name="Scatter2" type="Node3D" parent="DriftwoodNature" unique_id=1708578996]
+[node name="Scatter2" type="Node3D" parent="DriftwoodNature" unique_id=453529405]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -127, 20, 137)
-script = ExtResource("49_nd3lp")
+script = ExtResource("50_dj4s0")
 kind = 1
 area_size = Vector2(30, 30)
 polygon = PackedVector2Array()
@@ -1844,307 +1848,307 @@ seed = 17
 density = 0.05
 max_instances = 100
 
-[node name="Crate" type="StaticBody3D" parent="DriftwoodNature" unique_id=1982760384]
+[node name="Crate" type="StaticBody3D" parent="DriftwoodNature" unique_id=1411774529]
 transform = Transform3D(0.9659258, 0, 0.25881904, 0, 1, 0, -0.25881904, 0, 0.9659258, -114, 1, 126)
-script = ExtResource("50_5ydqe")
-contents = ExtResource("51_dj4s0")
+script = ExtResource("51_lrwh6")
+contents = ExtResource("52_pwqnk")
 contents_count = 3
 persistent_id = &"driftwood_crate_1"
 
-[node name="OpenSea" type="Node" parent="." unique_id=334879619]
-script = ExtResource("52_lrwh6")
+[node name="OpenSea" type="Node" parent="." unique_id=436016401]
+script = ExtResource("53_24eoo")
 
-[node name="Nature" type="Node3D" parent="." unique_id=1412117460]
+[node name="Nature" type="Node3D" parent="." unique_id=2010756217]
 
-[node name="Palm" type="StaticBody3D" parent="Nature" unique_id=678559907]
+[node name="Palm" type="StaticBody3D" parent="Nature" unique_id=834783070]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 1.2, 38.5)
-script = ExtResource("47_dqjl2")
+script = ExtResource("48_nd3lp")
 height = 7.5
 lean_degrees = 18.0
 lean_direction = 160.0
 seed = 7
 
-[node name="Palm2" type="StaticBody3D" parent="Nature" unique_id=1491058941]
+[node name="Palm2" type="StaticBody3D" parent="Nature" unique_id=836579170]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 1.2, 40)
-script = ExtResource("47_dqjl2")
+script = ExtResource("48_nd3lp")
 height = 6.5
 lean_degrees = 22.0
 lean_direction = 200.0
 coconut_count = 2
 seed = 14
 
-[node name="Palm3" type="StaticBody3D" parent="Nature" unique_id=1162855064]
+[node name="Palm3" type="StaticBody3D" parent="Nature" unique_id=2129550270]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 1.2, 38.5)
-script = ExtResource("47_dqjl2")
+script = ExtResource("48_nd3lp")
 height = 8.5
 lean_degrees = 14.0
 lean_direction = 150.0
 coconut_count = 1
 seed = 21
 
-[node name="Palm4" type="StaticBody3D" parent="Nature" unique_id=2027329925]
+[node name="Palm4" type="StaticBody3D" parent="Nature" unique_id=800409648]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19, 1.2, 39)
-script = ExtResource("47_dqjl2")
+script = ExtResource("48_nd3lp")
 lean_degrees = 20.0
 lean_direction = 190.0
 coconut_count = 0
 seed = 28
 
-[node name="Palm5" type="StaticBody3D" parent="Nature" unique_id=1897044875]
+[node name="Palm5" type="StaticBody3D" parent="Nature" unique_id=1629241665]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -73, 1.2, 9)
-script = ExtResource("47_dqjl2")
+script = ExtResource("48_nd3lp")
 height = 7.0
 lean_degrees = 18.0
 lean_direction = 90.0
 seed = 35
 
-[node name="Palm6" type="StaticBody3D" parent="Nature" unique_id=1190585607]
+[node name="Palm6" type="StaticBody3D" parent="Nature" unique_id=1030762660]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -70, 1.2, -20)
-script = ExtResource("47_dqjl2")
+script = ExtResource("48_nd3lp")
 height = 8.0
 lean_direction = 70.0
 coconut_count = 2
 seed = 42
 
-[node name="Palm7" type="StaticBody3D" parent="Nature" unique_id=1738140387]
+[node name="Palm7" type="StaticBody3D" parent="Nature" unique_id=1860359108]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -58, 1.2, -44)
-script = ExtResource("47_dqjl2")
+script = ExtResource("48_nd3lp")
 height = 6.5
 lean_degrees = 20.0
 lean_direction = 40.0
 coconut_count = 1
 seed = 49
 
-[node name="Palm8" type="StaticBody3D" parent="Nature" unique_id=1217626623]
+[node name="Palm8" type="StaticBody3D" parent="Nature" unique_id=379575172]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -74, 1.2, 24)
-script = ExtResource("47_dqjl2")
+script = ExtResource("48_nd3lp")
 height = 7.5
 lean_degrees = 16.0
 lean_direction = 110.0
 coconut_count = 0
 seed = 56
 
-[node name="Palm9" type="StaticBody3D" parent="Nature" unique_id=657696108]
+[node name="Palm9" type="StaticBody3D" parent="Nature" unique_id=1371693955]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -63, 1.2, 40)
-script = ExtResource("47_dqjl2")
+script = ExtResource("48_nd3lp")
 lean_degrees = 24.0
 lean_direction = 135.0
 seed = 63
 
-[node name="Palm10" type="StaticBody3D" parent="Nature" unique_id=335529935]
+[node name="Palm10" type="StaticBody3D" parent="Nature" unique_id=1670490820]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 1.2, -60)
-script = ExtResource("47_dqjl2")
+script = ExtResource("48_nd3lp")
 height = 7.0
 lean_degrees = 18.0
 coconut_count = 2
 seed = 70
 
-[node name="Palm11" type="StaticBody3D" parent="Nature" unique_id=1183765851]
+[node name="Palm11" type="StaticBody3D" parent="Nature" unique_id=294714215]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1.2, -66)
-script = ExtResource("47_dqjl2")
+script = ExtResource("48_nd3lp")
 height = 8.5
 lean_degrees = 14.0
 lean_direction = 10.0
 coconut_count = 1
 seed = 77
 
-[node name="Palm12" type="StaticBody3D" parent="Nature" unique_id=100181764]
+[node name="Palm12" type="StaticBody3D" parent="Nature" unique_id=132280949]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 1.2, -62)
-script = ExtResource("47_dqjl2")
+script = ExtResource("48_nd3lp")
 height = 6.5
 lean_degrees = 20.0
 lean_direction = -20.0
 coconut_count = 0
 seed = 84
 
-[node name="Palm13" type="StaticBody3D" parent="Nature" unique_id=1532813239]
+[node name="Palm13" type="StaticBody3D" parent="Nature" unique_id=869386254]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44, 1.2, -57)
-script = ExtResource("47_dqjl2")
+script = ExtResource("48_nd3lp")
 height = 7.0
 lean_degrees = 16.0
 lean_direction = -40.0
 seed = 91
 
-[node name="Palm14" type="StaticBody3D" parent="Nature" unique_id=196654117]
+[node name="Palm14" type="StaticBody3D" parent="Nature" unique_id=210020098]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 80, 1.2, 12)
-script = ExtResource("47_dqjl2")
+script = ExtResource("48_nd3lp")
 height = 7.5
 lean_degrees = 20.0
 lean_direction = -90.0
 coconut_count = 2
 seed = 98
 
-[node name="Palm15" type="StaticBody3D" parent="Nature" unique_id=106302348]
+[node name="Palm15" type="StaticBody3D" parent="Nature" unique_id=1067797901]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70, 1.2, 27)
-script = ExtResource("47_dqjl2")
+script = ExtResource("48_nd3lp")
 lean_degrees = 22.0
 lean_direction = -130.0
 coconut_count = 1
 seed = 105
 
-[node name="Palm16" type="StaticBody3D" parent="Nature" unique_id=1144265470]
+[node name="Palm16" type="StaticBody3D" parent="Nature" unique_id=1249179277]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 3, 21)
-script = ExtResource("47_dqjl2")
+script = ExtResource("48_nd3lp")
 height = 8.0
 lean_degrees = 8.0
 lean_direction = 30.0
 coconut_count = 0
 seed = 112
 
-[node name="Palm17" type="StaticBody3D" parent="Nature" unique_id=255725151]
+[node name="Palm17" type="StaticBody3D" parent="Nature" unique_id=1860941894]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 3, 14)
-script = ExtResource("47_dqjl2")
+script = ExtResource("48_nd3lp")
 height = 7.0
 lean_degrees = 10.0
 lean_direction = -60.0
 seed = 119
 
-[node name="Palm18" type="StaticBody3D" parent="Nature" unique_id=1465064782]
+[node name="Palm18" type="StaticBody3D" parent="Nature" unique_id=1478666806]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 3, -30)
-script = ExtResource("47_dqjl2")
+script = ExtResource("48_nd3lp")
 height = 7.5
 lean_direction = -90.0
 coconut_count = 2
 seed = 126
 
-[node name="Palm19" type="StaticBody3D" parent="Nature" unique_id=1022206306]
+[node name="Palm19" type="StaticBody3D" parent="Nature" unique_id=1352739914]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38, 7, -20)
-script = ExtResource("47_dqjl2")
+script = ExtResource("48_nd3lp")
 height = 6.5
 lean_degrees = 10.0
 lean_direction = 120.0
 coconut_count = 1
 seed = 133
 
-[node name="Palm20" type="StaticBody3D" parent="Nature" unique_id=577615525]
+[node name="Palm20" type="StaticBody3D" parent="Nature" unique_id=741684371]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 7, -6)
-script = ExtResource("47_dqjl2")
+script = ExtResource("48_nd3lp")
 height = 7.0
 lean_degrees = 8.0
 coconut_count = 0
 seed = 140
 
-[node name="Palm21" type="StaticBody3D" parent="Nature" unique_id=932565371]
+[node name="Palm21" type="StaticBody3D" parent="Nature" unique_id=1678499391]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44, 7.5, -4)
-script = ExtResource("47_dqjl2")
+script = ExtResource("48_nd3lp")
 height = 8.0
 lean_degrees = 14.0
 lean_direction = 60.0
 seed = 147
 
-[node name="Palm22" type="StaticBody3D" parent="Nature" unique_id=2136422924]
+[node name="Palm22" type="StaticBody3D" parent="Nature" unique_id=631373216]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 66, 7.5, 4)
-script = ExtResource("47_dqjl2")
+script = ExtResource("48_nd3lp")
 height = 7.0
 lean_degrees = 18.0
 lean_direction = -120.0
 coconut_count = 2
 seed = 154
 
-[node name="Palm23" type="StaticBody3D" parent="Nature" unique_id=957892234]
+[node name="Palm23" type="StaticBody3D" parent="Nature" unique_id=1641070689]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 12.4, -40)
-script = ExtResource("47_dqjl2")
+script = ExtResource("48_nd3lp")
 lean_degrees = 10.0
 lean_direction = 150.0
 coconut_count = 1
 seed = 161
 
-[node name="Rock" type="StaticBody3D" parent="Nature" unique_id=1356793039]
+[node name="Rock" type="StaticBody3D" parent="Nature" unique_id=151981151]
 transform = Transform3D(0.79863554, 0, 0.601815, 0, 1, 0, -0.601815, 0, 0.79863554, 26, 1.2, 30)
-script = ExtResource("48_wyrmp")
+script = ExtResource("49_5ydqe")
 preset = 0
 size = Vector3(2.4, 1.6, 2)
 seed = 11
 
-[node name="Rock2" type="StaticBody3D" parent="Nature" unique_id=1969471611]
+[node name="Rock2" type="StaticBody3D" parent="Nature" unique_id=1550134050]
 transform = Transform3D(0.2756374, 0, 0.9612617, 0, 1, 0, -0.9612617, 0, 0.2756374, 27.5, 1.2, 28.2)
-script = ExtResource("48_wyrmp")
+script = ExtResource("49_5ydqe")
 preset = 0
 size = Vector3(1.2, 0.8, 1.1)
 seed = 22
 
-[node name="Rock3" type="StaticBody3D" parent="Nature" unique_id=1895414034]
+[node name="Rock3" type="StaticBody3D" parent="Nature" unique_id=915252409]
 transform = Transform3D(-0.35836795, 0, 0.93358046, 0, 1, 0, -0.93358046, 0, -0.35836795, -38, 1.2, 36.5)
-script = ExtResource("48_wyrmp")
+script = ExtResource("49_5ydqe")
 size = Vector3(1.8, 1.2, 1.6)
 seed = 33
 
-[node name="Rock4" type="StaticBody3D" parent="Nature" unique_id=1181487014]
+[node name="Rock4" type="StaticBody3D" parent="Nature" unique_id=1870864073]
 transform = Transform3D(-0.84804803, 0, 0.5299193, 0, 1, 0, -0.5299193, 0, -0.84804803, 60, 1.2, 21)
-script = ExtResource("48_wyrmp")
+script = ExtResource("49_5ydqe")
 size = Vector3(2.6, 1.8, 2.2)
 seed = 44
 
-[node name="Rock5" type="StaticBody3D" parent="Nature" unique_id=1353128367]
+[node name="Rock5" type="StaticBody3D" parent="Nature" unique_id=1583587627]
 transform = Transform3D(-0.9961947, 0, -0.08715581, 0, 1, 0, 0.08715581, 0, -0.9961947, -62, 1.2, -30)
-script = ExtResource("48_wyrmp")
+script = ExtResource("49_5ydqe")
 preset = 3
 size = Vector3(2.2, 1.4, 2)
 seed = 55
 
-[node name="Rock6" type="StaticBody3D" parent="Nature" unique_id=946084387]
+[node name="Rock6" type="StaticBody3D" parent="Nature" unique_id=1882368976]
 transform = Transform3D(-0.7431448, 0, -0.6691306, 0, 1, 0, 0.6691306, 0, -0.7431448, 8, 1.2, -60)
-script = ExtResource("48_wyrmp")
+script = ExtResource("49_5ydqe")
 preset = 0
 seed = 66
 
-[node name="Rock7" type="StaticBody3D" parent="Nature" unique_id=1200155759]
+[node name="Rock7" type="StaticBody3D" parent="Nature" unique_id=1238051286]
 transform = Transform3D(-0.19080885, 0, -0.9816272, 0, 1, 0, 0.9816272, 0, -0.19080885, 32, 0.2, 50)
-script = ExtResource("48_wyrmp")
+script = ExtResource("49_5ydqe")
 preset = 2
 size = Vector3(2, 1.6, 1.8)
 seed = 77
 
-[node name="Rock8" type="StaticBody3D" parent="Nature" unique_id=1700225384]
+[node name="Rock8" type="StaticBody3D" parent="Nature" unique_id=1138396683]
 transform = Transform3D(0.438371, 0, -0.8987941, 0, 1, 0, 0.8987941, 0, 0.438371, -78, 0.2, -30)
-script = ExtResource("48_wyrmp")
+script = ExtResource("49_5ydqe")
 preset = 2
 size = Vector3(2.4, 1.8, 2.2)
 seed = 88
 
-[node name="Rock9" type="StaticBody3D" parent="Nature" unique_id=1902059425]
+[node name="Rock9" type="StaticBody3D" parent="Nature" unique_id=1440257795]
 transform = Transform3D(0.8910065, 0, -0.45399052, 0, 1, 0, 0.45399052, 0, 0.8910065, -30, 3, 4.5)
-script = ExtResource("48_wyrmp")
+script = ExtResource("49_5ydqe")
 preset = 3
 size = Vector3(1.4, 1, 1.2)
 seed = 99
 
-[node name="Rock10" type="StaticBody3D" parent="Nature" unique_id=1776845035]
+[node name="Rock10" type="StaticBody3D" parent="Nature" unique_id=769088072]
 transform = Transform3D(0.9848077, 0, 0.17364831, 0, 1, 0, -0.17364831, 0, 0.9848077, -8, 3, 22)
-script = ExtResource("48_wyrmp")
+script = ExtResource("49_5ydqe")
 size = Vector3(1, 0.7, 0.9)
 seed = 110
 
-[node name="Rock11" type="StaticBody3D" parent="Nature" unique_id=2009797134]
+[node name="Rock11" type="StaticBody3D" parent="Nature" unique_id=336986318]
 transform = Transform3D(0.6819985, 0, 0.7313536, 0, 1, 0, -0.7313536, 0, 0.6819985, -14, 7, -18)
-script = ExtResource("48_wyrmp")
+script = ExtResource("49_5ydqe")
 preset = 3
 size = Vector3(1.6, 1, 1.4)
 seed = 121
 
-[node name="Rock12" type="StaticBody3D" parent="Nature" unique_id=1727974084]
+[node name="Rock12" type="StaticBody3D" parent="Nature" unique_id=740231930]
 transform = Transform3D(0.10452849, 0, 0.9945219, 0, 1, 0, -0.9945219, 0, 0.10452849, 76, 7.5, -10)
-script = ExtResource("48_wyrmp")
+script = ExtResource("49_5ydqe")
 size = Vector3(1.8, 1.2, 1.6)
 seed = 132
 
-[node name="Rock13" type="StaticBody3D" parent="Nature" unique_id=880268054]
+[node name="Rock13" type="StaticBody3D" parent="Nature" unique_id=1022784578]
 transform = Transform3D(-0.5150382, 0, 0.85716724, 0, 1, 0, -0.85716724, 0, -0.5150382, 18.5, 7, -29.6)
-script = ExtResource("48_wyrmp")
+script = ExtResource("49_5ydqe")
 preset = 2
 size = Vector3(1.4, 1.2, 1.2)
 seed = 143
 
-[node name="Rock14" type="StaticBody3D" parent="Nature" unique_id=1965522131]
+[node name="Rock14" type="StaticBody3D" parent="Nature" unique_id=1274839181]
 transform = Transform3D(-0.927184, 0, 0.3746063, 0, 1, 0, -0.3746063, 0, -0.927184, 84, 1.2, 0)
-script = ExtResource("48_wyrmp")
+script = ExtResource("49_5ydqe")
 preset = 0
 size = Vector3(2.2, 1.5, 2)
 seed = 154
 
-[node name="Scatter" type="Node3D" parent="Nature" unique_id=1655007339]
+[node name="Scatter" type="Node3D" parent="Nature" unique_id=1859325248]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 20, -5)
-script = ExtResource("49_nd3lp")
+script = ExtResource("50_dj4s0")
 area_size = Vector2(190, 160)
 polygon = PackedVector2Array()
 ray_height = 30.0
@@ -2154,9 +2158,9 @@ seed = 3
 density = 0.42
 max_instances = 9000
 
-[node name="Scatter2" type="Node3D" parent="Nature" unique_id=1538084367]
+[node name="Scatter2" type="Node3D" parent="Nature" unique_id=527655758]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 20, -5)
-script = ExtResource("49_nd3lp")
+script = ExtResource("50_dj4s0")
 kind = 1
 area_size = Vector2(190, 160)
 polygon = PackedVector2Array()
@@ -2167,9 +2171,9 @@ seed = 5
 density = 0.035
 max_instances = 900
 
-[node name="Scatter3" type="Node3D" parent="Nature" unique_id=1166512034]
+[node name="Scatter3" type="Node3D" parent="Nature" unique_id=820646619]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 20, -5)
-script = ExtResource("49_nd3lp")
+script = ExtResource("50_dj4s0")
 kind = 3
 area_size = Vector2(190, 160)
 polygon = PackedVector2Array()
@@ -2180,9 +2184,9 @@ seed = 7
 density = 0.004
 max_instances = 120
 
-[node name="Scatter4" type="Node3D" parent="Nature" unique_id=32029582]
+[node name="Scatter4" type="Node3D" parent="Nature" unique_id=1433274437]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 25, -35)
-script = ExtResource("49_nd3lp")
+script = ExtResource("50_dj4s0")
 kind = 2
 area_size = Vector2(50, 30)
 polygon = PackedVector2Array()
@@ -2193,9 +2197,9 @@ seed = 9
 density = 0.05
 max_instances = 200
 
-[node name="Scatter5" type="Node3D" parent="Nature" unique_id=1209178179]
+[node name="Scatter5" type="Node3D" parent="Nature" unique_id=1500215538]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 20, -5)
-script = ExtResource("49_nd3lp")
+script = ExtResource("50_dj4s0")
 kind = 4
 area_size = Vector2(190, 160)
 polygon = PackedVector2Array()
@@ -2206,114 +2210,114 @@ seed = 11
 density = 0.01
 max_instances = 600
 
-[node name="Props" type="Node3D" parent="." unique_id=527708653]
+[node name="Props" type="Node3D" parent="." unique_id=653314611]
 
-[node name="Crate" type="StaticBody3D" parent="Props" unique_id=1880646543]
+[node name="Crate" type="StaticBody3D" parent="Props" unique_id=722120267]
 transform = Transform3D(0.9781476, 0, 0.2079117, 0, 1, 0, -0.2079117, 0, 0.9781476, -50.5, 3, 9.5)
-script = ExtResource("50_5ydqe")
-contents = ExtResource("51_dj4s0")
+script = ExtResource("51_lrwh6")
+contents = ExtResource("52_pwqnk")
 contents_count = 3
 persistent_id = &"castaway_crate_outpost_1"
 
-[node name="Crate2" type="StaticBody3D" parent="Props" unique_id=1818337847]
+[node name="Crate2" type="StaticBody3D" parent="Props" unique_id=1215416476]
 transform = Transform3D(0.9396926, 0, -0.34202012, 0, 1, 0, 0.34202012, 0, 0.9396926, -51.6, 3, 10.8)
-script = ExtResource("50_5ydqe")
-contents = ExtResource("51_dj4s0")
+script = ExtResource("51_lrwh6")
+contents = ExtResource("52_pwqnk")
 contents_count = 2
 persistent_id = &"castaway_crate_outpost_2"
 
-[node name="Barrel" type="StaticBody3D" parent="Props" unique_id=480230633]
+[node name="Barrel" type="StaticBody3D" parent="Props" unique_id=44314916]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -57.5, 3, 12.5)
-script = ExtResource("53_pwqnk")
-contents = ExtResource("51_dj4s0")
+script = ExtResource("54_hq1qa")
+contents = ExtResource("52_pwqnk")
 contents_count = 2
 persistent_id = &"castaway_barrel_outpost_1"
 
-[node name="Barrel2" type="StaticBody3D" parent="Props" unique_id=1818769365]
+[node name="Barrel2" type="StaticBody3D" parent="Props" unique_id=1268566747]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -44, 3, 22.5)
-script = ExtResource("53_pwqnk")
-contents = ExtResource("51_dj4s0")
+script = ExtResource("54_hq1qa")
+contents = ExtResource("52_pwqnk")
 contents_count = 3
 persistent_id = &"castaway_barrel_outpost_2"
 
-[node name="Barrel3" type="StaticBody3D" parent="Props" unique_id=1827958866]
+[node name="Barrel3" type="StaticBody3D" parent="Props" unique_id=1529094914]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -53, 1.35, 59.5)
-script = ExtResource("53_pwqnk")
+script = ExtResource("54_hq1qa")
 lying = true
-contents = ExtResource("51_dj4s0")
+contents = ExtResource("52_pwqnk")
 contents_count = 2
 persistent_id = &"castaway_barrel_dock"
 
-[node name="Crate3" type="StaticBody3D" parent="Props" unique_id=314114452]
+[node name="Crate3" type="StaticBody3D" parent="Props" unique_id=108141990]
 transform = Transform3D(0.99026805, 0, 0.1391731, 0, 1, 0, -0.1391731, 0, 0.99026805, -50.8, 1.35, 66)
-script = ExtResource("50_5ydqe")
-contents = ExtResource("51_dj4s0")
+script = ExtResource("51_lrwh6")
+contents = ExtResource("52_pwqnk")
 contents_count = 3
 persistent_id = &"castaway_crate_dock"
 
-[node name="ShipDebris" type="StaticBody3D" parent="Props" unique_id=1669304146]
+[node name="ShipDebris" type="StaticBody3D" parent="Props" unique_id=1518367350]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 1.2, 30)
-script = ExtResource("54_24eoo")
+script = ExtResource("55_6xbcc")
 radius = 4.0
 seed = 3
 
-[node name="ShipDebris2" type="StaticBody3D" parent="Props" unique_id=80545601]
+[node name="ShipDebris2" type="StaticBody3D" parent="Props" unique_id=71090608]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36, 1.2, 39)
-script = ExtResource("54_24eoo")
+script = ExtResource("55_6xbcc")
 seed = 5
 
-[node name="ShipDebris3" type="StaticBody3D" parent="Props" unique_id=1389502972]
+[node name="ShipDebris3" type="StaticBody3D" parent="Props" unique_id=1598691090]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 64, 1.2, 30)
-script = ExtResource("54_24eoo")
+script = ExtResource("55_6xbcc")
 radius = 3.5
 seed = 9
 
-[node name="Crate4" type="StaticBody3D" parent="Props" unique_id=813364051]
+[node name="Crate4" type="StaticBody3D" parent="Props" unique_id=1561139614]
 transform = Transform3D(0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254, 57, 1.2, 33)
-script = ExtResource("50_5ydqe")
-contents = ExtResource("51_dj4s0")
+script = ExtResource("51_lrwh6")
+contents = ExtResource("52_pwqnk")
 contents_count = 4
 persistent_id = &"castaway_crate_wreck"
 
-[node name="Anchor" type="StaticBody3D" parent="Props" unique_id=388394296]
+[node name="Anchor" type="StaticBody3D" parent="Props" unique_id=1041726232]
 transform = Transform3D(0.76604444, 0, 0.6427876, 0, 1, 0, -0.6427876, 0, 0.76604444, 57.5, 1.2, 43)
-script = ExtResource("55_hq1qa")
+script = ExtResource("56_b0ocj")
 
-[node name="CaveTorch" type="StaticBody3D" parent="Props" unique_id=167400059]
+[node name="CaveTorch" type="StaticBody3D" parent="Props" unique_id=1990816250]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.8, 7, -30.6)
-script = ExtResource("56_6xbcc")
+script = ExtResource("57_k0nn6")
 
-[node name="CaveTorch2" type="StaticBody3D" parent="Props" unique_id=432629970]
+[node name="CaveTorch2" type="StaticBody3D" parent="Props" unique_id=518230464]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.8, 7, -38.4)
-script = ExtResource("56_6xbcc")
+script = ExtResource("57_k0nn6")
 
-[node name="TowerCannon" type="StaticBody3D" parent="Props" unique_id=148024946]
+[node name="TowerCannon" type="StaticBody3D" parent="Props" unique_id=1573894136]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -38.4, 9.4, 2.9)
-script = ExtResource("57_b0ocj")
+script = ExtResource("58_kj3rr")
 
-[node name="Player" type="CharacterBody3D" parent="." unique_id=1595409169 groups=["player"] instance=ExtResource("58_k0nn6")]
+[node name="Player" type="CharacterBody3D" parent="." unique_id=1814516743 groups=["player"] instance=ExtResource("59_1wbuk")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 33)
 collision_layer = 2
 collision_mask = 1033
-script = ExtResource("59_kj3rr")
-settings = ExtResource("60_1wbuk")
+script = ExtResource("60_tdmtu")
+settings = ExtResource("61_hu42u")
 
-[node name="CameraRig" type="Node3D" parent="." unique_id=2060841931 node_paths=PackedStringArray("target") instance=ExtResource("61_tdmtu")]
+[node name="CameraRig" type="Node3D" parent="." unique_id=178044121 node_paths=PackedStringArray("target") instance=ExtResource("62_rmo6r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 40)
-script = ExtResource("62_hu42u")
-settings = ExtResource("63_rmo6r")
+script = ExtResource("63_kxl7a")
+settings = ExtResource("64_c2d58")
 target = NodePath("../Player")
 
-[node name="OpeningSequence" type="Node3D" parent="." unique_id=2118244870 node_paths=PackedStringArray("player", "crab_dragging", "crab_noticing", "vignette_camera", "vignette_target")]
-script = ExtResource("64_kxl7a")
+[node name="OpeningSequence" type="Node3D" parent="." unique_id=205190204 node_paths=PackedStringArray("player", "crab_dragging", "crab_noticing", "vignette_camera", "vignette_target")]
+script = ExtResource("65_ijjky")
 player = NodePath("../Player")
 crab_dragging = NodePath("../Enemies/Crab11")
 crab_noticing = NodePath("../Enemies/Crab12")
 vignette_camera = NodePath("VignetteCamera")
 vignette_target = NodePath("VignetteTarget")
 
-[node name="VignetteCamera" type="Marker3D" parent="OpeningSequence" unique_id=71288174]
+[node name="VignetteCamera" type="Marker3D" parent="OpeningSequence" unique_id=558492311]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 5.5, 118)
 
-[node name="VignetteTarget" type="Marker3D" parent="OpeningSequence" unique_id=573473087]
+[node name="VignetteTarget" type="Marker3D" parent="OpeningSequence" unique_id=466444632]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 96)

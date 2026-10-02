@@ -234,7 +234,7 @@ An optional argument after `--` filters test names.
 godot --headless --path . --fixed-fps 60 res://tests/run_movement_tests.tscn   # 53 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_camera_tests.tscn     # 21 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_gameplay_tests.tscn   # 57 checks
-godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 94 checks
+godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 96 checks
 godot --headless --path . --fixed-fps 60 res://ui/tests/ui_flow_test.tscn      # 76 checks
 godot --headless --path . --fixed-fps 60 res://props/tests/prop_tests.tscn     # 70 checks
 godot --headless --path . --fixed-fps 60 res://world/ocean/tests/ocean_swim_check.tscn
@@ -302,5 +302,7 @@ More on Castaway Cay:
   stuck claw, stomp his belly three times, and he leaves the Ship's Wheel.
 - **The Captain's Cabin:** inside the wreck, the hub shows your gold,
   treasures, parrots, ship parts and attachments.
+- Weather: every few minutes a tropical shower greys the sky, rains for
+  a minute and roughens the sea, then the sun returns.
 - Enemies: crabs (normal, armored, hermit), TNT snails, pelicans, and
   Brock's shield-bearing croc grunts on the headland.

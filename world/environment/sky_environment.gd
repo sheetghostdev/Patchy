@@ -25,6 +25,21 @@ const SKY_SHADER := preload("res://shaders/sky_stylized.gdshader")
 var world_env: WorldEnvironment
 var sun: DirectionalLight3D
 var _sky_mat: ShaderMaterial
+## Clear-weather values captured after each preset is applied, so weather
+## can blend toward a shower and back.
+var _clear := {}
+var _weather := 0.0
+
+const SKY_DEFAULTS := {
+	&"zenith_color": Color(0.24, 0.55, 0.9), &"mid_color": Color(0.47, 0.75, 0.97),
+	&"horizon_color": Color(0.8, 0.93, 1.0), &"cloud_light": Color(1, 1, 1),
+	&"cloud_shade": Color(0.74, 0.83, 0.95), &"cloud_coverage": 0.56,
+}
+const SHOWER := {
+	&"zenith_color": Color(0.36, 0.44, 0.56), &"mid_color": Color(0.52, 0.6, 0.7),
+	&"horizon_color": Color(0.68, 0.74, 0.8), &"cloud_light": Color(0.82, 0.86, 0.92),
+	&"cloud_shade": Color(0.5, 0.56, 0.66), &"cloud_coverage": 0.88,
+}
 
 
 func _ready() -> void:
@@ -155,6 +170,12 @@ func _apply() -> void:
 			env.fog_depth_begin = 20.0
 			env.fog_depth_end = 260.0
 	world_env.environment = env
+	_clear.clear()
+	for key: StringName in SKY_DEFAULTS:
+		var v: Variant = _sky_mat.get_shader_parameter(key)
+		_clear[key] = v if v != null else SKY_DEFAULTS[key]
+	_clear[&"sun_energy"] = energy
+	_clear[&"fog_end"] = env.fog_depth_end
 	sun.rotation_degrees = sun_rot
 	sun.light_color = sun_col
 	sun.light_energy = energy
@@ -167,3 +188,25 @@ func _apply() -> void:
 	sun.directional_shadow_max_distance = shadow_distance
 	sun.directional_shadow_blend_splits = true
 	sun.light_angular_distance = 1.2
+
+
+## Blends the sky toward a passing shower: 0 = the preset's clear look,
+## 1 = grey, low cloud, dimmer sun and a closer horizon. Used by Weather.
+func set_weather(amount: float) -> void:
+	_weather = clampf(amount, 0.0, 1.0)
+	if _sky_mat == null or _clear.is_empty():
+		return
+	for key: StringName in SHOWER:
+		var a: Variant = _clear[key]
+		var b: Variant = SHOWER[key]
+		if a is Color:
+			_sky_mat.set_shader_parameter(key, (a as Color).lerp(b, _weather))
+		else:
+			_sky_mat.set_shader_parameter(key, lerpf(float(a), float(b), _weather))
+	sun.light_energy = lerpf(float(_clear[&"sun_energy"]), float(_clear[&"sun_energy"]) * 0.45, _weather)
+	if world_env != null and world_env.environment != null:
+		world_env.environment.fog_depth_end = lerpf(float(_clear[&"fog_end"]), 260.0, _weather)
+
+
+func get_weather() -> float:
+	return _weather

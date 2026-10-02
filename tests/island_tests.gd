@@ -684,3 +684,15 @@ func test_sea_chart_fast_travel() -> void:
 	GameManager.sail_to(&"castaway_cay")
 	await frames(90)
 	check("and back home to the dock", player.global_position.distance_to((node("Gameplay/SpawnDock") as Node3D).global_position) < 1.5, "pos=%v" % player.global_position)
+
+
+func test_passing_shower_comes_and_goes() -> void:
+	var weather := node("Weather") as Weather
+	var sky := node("SkyEnvironment") as SkyEnvironment
+	weather.start_shower(true)
+	await frames(3)
+	check("shower: rain and grey sky", weather.phase == Weather.Phase.RAIN and sky.get_weather() > 0.99, "phase=%s" % Weather.Phase.keys()[weather.phase])
+	weather.set(&"_timer", 0.0)
+	weather.blend_time = 0.5
+	await frames(60)
+	check("the sun comes back", weather.phase == Weather.Phase.CLEAR and sky.get_weather() < 0.01, "phase=%s w=%.2f" % [Weather.Phase.keys()[weather.phase], sky.get_weather()])

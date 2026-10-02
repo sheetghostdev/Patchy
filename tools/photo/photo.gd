@@ -6,7 +6,7 @@ extends Node
 ##       [cam=x,y,z look=x,y,z] [move=x,y] [press=jump@10-20,dive@30]
 ##       [snaps=f1,f2,...] [follow=dx,dy,dz (camera offset that tracks Patchy)]
 ##       [flags=castaway_intro_seen,... (WorldState completions set before loading)]
-##       [progress=demo (mid-game inventory)] [hud=0 (hide the HUD)]
+##       [progress=demo (mid-game inventory)] [hud=0 (hide the HUD)] [weather=rain]
 ## Multiple free-camera shots: cams="x,y,z>lx,ly,lz;x,y,z>lx,ly,lz" with out=/tmp/shot_%d.png
 
 var _args := {}
@@ -34,6 +34,10 @@ func _ready() -> void:
 	var scene: Node = load(scene_path).instantiate()
 	add_child(scene)
 	await get_tree().process_frame
+	if _args.get("weather", "") == "rain":
+		await get_tree().process_frame
+		for w in scene.find_children("*", "Weather", true, false):
+			w.call(&"start_shower", true)
 	var player := GameManager.player as Player
 	if player != null and _args.has("player"):
 		var pos := _vec3(_args.player)
