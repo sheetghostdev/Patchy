@@ -198,6 +198,11 @@ func _physics_process(delta: float) -> void:
 	_animate(delta)
 
 
+## True while an attack is being telegraphed (Crackers squawks a warning).
+func is_winding_up() -> bool:
+	return state == State.WINDUP
+
+
 func _enter(s: State) -> void:
 	state = s
 	_t = 0.0

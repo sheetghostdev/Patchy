@@ -156,6 +156,7 @@ func _ready() -> void:
 	if camera_rig == null:
 		_find_camera_rig.call_deferred()
 	GameManager.register_player(self)
+	CompanionParrot.setup(self)
 
 
 func _exit_tree() -> void:

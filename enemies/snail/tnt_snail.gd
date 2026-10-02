@@ -181,6 +181,11 @@ func _pick_wander() -> void:
 	_wander_target = home + Vector3(cos(a), 0, sin(a)) * randf_range(0.8, wander_radius)
 
 
+## True while the barrel's fuse burns (Crackers squawks a warning).
+func is_winding_up() -> bool:
+	return state == State.FUSE
+
+
 func _crab_bumper(delta: float) -> Crab:
 	_bump_check -= delta
 	if _bump_check > 0.0:

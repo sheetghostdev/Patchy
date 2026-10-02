@@ -112,6 +112,11 @@ func _ready() -> void:
 	model.position.y = -1.9
 
 
+## True while a slam or sweep is being telegraphed.
+func is_winding_up() -> bool:
+	return state in [State.SLAM_TELL, State.SWEEP_TELL]
+
+
 func is_active() -> bool:
 	return state not in [State.DORMANT, State.DEFEAT]
 

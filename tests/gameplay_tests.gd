@@ -501,6 +501,31 @@ func test_combat_music_layer_follows_the_fight() -> void:
 	check("and drops once things are calm", off >= 0, "")
 
 
+func test_crackers_rides_along_and_warns() -> void:
+	ParrotManager.reset()
+	var crackers := player.get_node(^"Crackers") as CompanionParrot
+	check("no companion before any parrot is free", not crackers.is_perched(), "")
+	ParrotManager.rescue(&"test_parrot_crackers")
+	var perched := await wait_until(func() -> bool: return crackers.is_perched(), 150)
+	check("the first freed parrot hops onto Patchy's shoulder", perched >= 0, "")
+	var warned := [false]
+	crackers.warned.connect(func() -> void: warned[0] = true)
+	var c := spawn_crab(Vector3(0, 0, -3.0))
+	var squawk := await wait_until(func() -> bool: return warned[0], 300)
+	check("Crackers squawks when a crab winds up nearby", squawk >= 0, "state=%s" % Crab.State.keys()[c.state])
+	c.queue_free()
+	var seen: Array = []
+	crackers.noticed.connect(func(t: Node3D) -> void: seen.append(t))
+	var g := Collectible.new()
+	g.kind = "gem"
+	g.treasure_id = &"test_gem_for_crackers"
+	g.position = Vector3(4.0, 0.6, 2.0)
+	_arena.add_child(g)
+	crackers.set(&"_curious_cool", 0.0)
+	var spotted := await wait_until(func() -> bool: return not seen.is_empty(), 120)
+	check("and cocks his head at a gem close by", spotted >= 0 and seen[0] == g, "")
+
+
 func test_cannon_crab_lobs_telegraphed_shots() -> void:
 	var c := spawn_crab(Vector3(0, 0, -9.0), CrabModel.Variant.CANNON)
 	c.sight_radius = 12.0

@@ -265,7 +265,7 @@ An optional argument after `--` filters test names.
 ```bash
 godot --headless --path . --fixed-fps 60 res://tests/run_movement_tests.tscn   # 53 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_camera_tests.tscn     # 21 checks
-godot --headless --path . --fixed-fps 60 res://tests/run_gameplay_tests.tscn   # 64 checks
+godot --headless --path . --fixed-fps 60 res://tests/run_gameplay_tests.tscn   # 68 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 143 checks
 godot --headless --path . --fixed-fps 60 res://ui/tests/ui_flow_test.tscn      # 84 checks
 godot --headless --path . --fixed-fps 60 res://props/tests/prop_tests.tscn     # 70 checks
@@ -288,6 +288,8 @@ What each suite covers:
   - every attachment's combat use, the grapple zip into a swing and the
     cannon hop;
   - the combat music layer coming in and dropping out;
+  - Crackers joining after the first rescue, his warnings and his nose
+    for secrets;
   - the cabin hub's displays.
 - **Island**: Castaway Cay end to end:
   - the opening sequence;
@@ -372,6 +374,11 @@ More on Castaway Cay:
   boat up the beach; the drag marks lead to Gull Rock. Climb the crabs'
   plank ramp, grab the ledge to the top, and call three parrots to fly
   her home. Shellby pays with his old chart: a second treasure map.
+- **Crackers** (spec §67), the first parrot Patchy frees, flies down to
+  ride on his left shoulder from then on. He flaps for balance in the
+  air, squawks a warning when something nearby winds up an attack, and
+  cocks his head with a soft chirp at a secret close by. He is rarely
+  heard and never in the way.
 - **Islanders:** Tok, the outpost's lookout monkey, always knows where the
   next locked cage is. On Driftwood Key, Pip the otter wants her lucky
   clam back from the pelican.
