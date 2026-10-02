@@ -14,6 +14,8 @@ signal opened
 		size = v
 		_rebuild()
 @export var triggers: Array[Node] = []
+## Begins sunk in the ground (a scripted barrier raised with close()).
+@export var start_open := false
 
 var _mesh: MeshInstance3D
 var _col: CollisionShape3D
@@ -27,10 +29,11 @@ func _ready() -> void:
 	_rebuild()
 	if Engine.is_editor_hint():
 		return
-	if gate_id != &"" and WorldState.is_completed(gate_id):
+	if (gate_id != &"" and WorldState.is_completed(gate_id)) or start_open:
 		_open = true
 		visible = false
 		_col.disabled = true
+		_mesh.position.y = -size.y - 0.1
 		return
 	for t in triggers:
 		if t != null and t.has_signal(&"activated"):
@@ -91,3 +94,15 @@ func open() -> void:
 	_col.disabled = true
 	visible = false
 	opened.emit()
+
+
+## Raises the gate back up out of the ground (arena barriers).
+func close() -> void:
+	if not _open:
+		return
+	_open = false
+	visible = true
+	_col.disabled = false
+	AudioManager.play(&"door_open", global_position, 0.0, 0.8)
+	var tw := create_tween()
+	tw.tween_property(_mesh, "position:y", 0.0, 0.6).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)

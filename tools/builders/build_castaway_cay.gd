@@ -506,6 +506,7 @@ func _gorge_and_headland() -> void:
 	chest.rotation_degrees.y = 180.0
 	b.add(chest, g, "HeadlandChest")
 	gem(Vector3(72, 8.2, -30), "castaway_gem_headland", Color("9b5cff"))
+	_boss_arena()
 	# Grapple tease: a big iron ring on a sea pillar, far out of hook range.
 	plateau(terrain, "GrapplePillar", [Vector2(86, -40), Vector2(91, -42), Vector2(94, -37), Vector2(90, -33), Vector2(85, -35)], 16.0, 22.0, "rock", {"seed": 31})
 	# An old lookout pole on the pillar with a big iron ring: visible from
@@ -524,6 +525,53 @@ func _gorge_and_headland() -> void:
 	cannon.position = Vector3(90.2, 16.0, -38.4)
 	b.add(cannon, g, "CannonPickup")
 	_cannon_secrets()
+
+
+## King Claw's ring on the headland's north: tall rock spires with gaps.
+## Stepping in wakes him; leaving resets the fight.
+func _boss_arena() -> void:
+	var g := b.group("ClawArena", structures)
+	var center := Vector3(54, 7.5, -38)
+	var arena_r := 11.0
+	for k in 10:
+		var a := TAU * k / 10.0 + 0.2
+		# Leave a wide way in facing the log bridge (south-west).
+		if k == 6 or k == 7:
+			continue
+		var h := 3.6 + 1.2 * sin(k * 2.3)
+		var spire := blk(g, center + Vector3(cos(a), 0, sin(a)) * (arena_r + 1.4), Vector3(1.8, h, 1.8), "rock", Vector3(0, k * 37.0, 0), LevelBlock.Shape.CYLINDER, "Spire")
+		spire.add_to_group(&"no_ledge_grab", true)
+	var boss := KingClaw.new()
+	boss.position = center
+	boss.arena_center = center
+	boss.arena_radius = arena_r
+	boss.rotation_degrees.y = 225.0
+	b.add(boss, enemies, "KingClaw")
+	var arena := BossArena.new()
+	arena.boss = boss
+	arena.radius = arena_r
+	arena.position = center
+	b.add(arena, gameplay, "ClawArena")
+	var cam := FocusCameraZone.new()
+	cam.focus = boss
+	cam.zone_priority = 2
+	cam.distance_scale = 1.35
+	cam.pitch_offset = -6.0
+	cam.fov_offset = 4.0
+	cam.position = center
+	b.add(cam, gameplay, "ClawCameraZone")
+	var cs := CollisionShape3D.new()
+	var cyl := CylinderShape3D.new()
+	cyl.radius = arena_r + 2.0
+	cyl.height = 12.0
+	cs.shape = cyl
+	cs.position = Vector3(0, 4.0, 0)
+	b.add(cs, cam, "Shape")
+	var cp := Checkpoint.new()
+	cp.checkpoint_id = &"cp_claw_arena"
+	cp.position = center + Vector3(-12.5, 0, 9.5)
+	cp.respawn_yaw = 50.0
+	b.add(cp, gameplay, "CpClawArena")
 
 
 ## Hand-cannon secrets: a cracked-rock grotto in the cove's west and a

@@ -47,6 +47,7 @@ var _recenter_from := Vector2.ZERO
 var _recenter_to := Vector2.ZERO
 var _zones: Array[Node] = []
 var _zone_weight := 0.0
+var _zone_node: Node = null
 var _zone_params := {}
 var _probe_shape := SphereShape3D.new()
 var _debug_mesh: MeshInstance3D
@@ -278,7 +279,8 @@ func _update_auto(delta: float, player: Player) -> void:
 			yaw += deg_to_rad(rate) * delta
 		var hint: Variant = _zone_raw(&"yaw_hint")
 		if hint != null:
-			yaw = lerp_angle(yaw, float(hint), _smooth(1.2, delta) * ramp * _zone_weight)
+			var hint_time := float(_zone_params.get(&"yaw_hint_time", 1.2))
+			yaw = lerp_angle(yaw, float(hint), _smooth(hint_time, delta) * ramp * _zone_weight)
 
 	if _since_manual_pitch > s.auto_pitch_delay and _recenter_t < 0.0 and not _is_underwater(player):
 		var goal_pitch := s.default_pitch + _zone_value(&"pitch_offset", 0.0)
@@ -420,20 +422,25 @@ func _update_zone_blend(delta: float) -> void:
 		if is_instance_valid(z) and (best == null or int(z.get(&"zone_priority")) > int(best.get(&"zone_priority"))):
 			best = z
 	if best != null:
+		# Zones may animate their params (a boss zone tracks its boss), so a
+		# switch is detected by zone identity, not by comparing values.
 		var params: Dictionary = best.call(&"get_params")
-		if params != _zone_params and _zone_weight > 0.0 and not _zone_params.is_empty():
+		if best != _zone_node and _zone_weight > 0.0 and not _zone_params.is_empty():
 			# Switching zones: fade weight down, then swap parameters.
 			_zone_weight = maxf(_zone_weight - delta / maxf(float(params.get(&"blend_time", 0.6)), 0.05), 0.0)
 			if _zone_weight <= 0.0:
 				_zone_params = params
+				_zone_node = best
 		else:
 			_zone_params = params
+			_zone_node = best
 			_zone_weight = minf(_zone_weight + delta / maxf(float(params.get(&"blend_time", 0.6)), 0.05), 1.0)
 	else:
 		var bt := float(_zone_params.get(&"blend_time", 0.6)) if not _zone_params.is_empty() else 0.6
 		_zone_weight = maxf(_zone_weight - delta / maxf(bt, 0.05), 0.0)
 		if _zone_weight <= 0.0:
 			_zone_params = {}
+			_zone_node = null
 
 
 ## Blends a numeric zone parameter with its neutral value by zone weight.

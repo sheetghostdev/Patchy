@@ -534,3 +534,59 @@ func test_cannon_cracks_the_grotto_and_rings_the_targets() -> void:
 		check("target %s rung" % t.name, (t as CannonTarget).is_active(), "pos=%v" % player.global_position)
 	await frames(100)
 	check("vault opens", WorldState.is_completed(&"castaway_vault_gate"), "")
+
+
+# --- Boss ---------------------------------------------------------------------------
+
+func test_king_claw_fight() -> void:
+	await clear_enemies()
+	var boss := node("Enemies/KingClaw") as KingClaw
+	var arena := node("Gameplay/ClawArena") as Node3D
+	player.health.invincible = true
+	await place(arena.global_position + Vector3(-13.0, 0.2, 9.0), Player.flat(arena.global_position - (arena.global_position + Vector3(-13.0, 0, 9.0))).normalized())
+	move(Vector2(0, -1))
+	var woke := await wait_until(func() -> bool: return boss.state != KingClaw.State.DORMANT, 120)
+	move(Vector2.ZERO)
+	check("King Claw rises when Patchy steps in", woke >= 0, "state=%s" % KingClaw.State.keys()[boss.state])
+	var topples := 0
+	var last_state := boss.state
+	for i in 3600:
+		await frames(1)
+		if boss.state == KingClaw.State.DEFEAT or not is_instance_valid(boss):
+			break
+		if boss.state != last_state:
+			last_state = boss.state
+			if boss.state == KingClaw.State.STUCK:
+				# Pound the stuck claw.
+				await place(boss.get(&"_slam_point") + Vector3(0.6, 3.0, 0.6), Vector3.FORWARD)
+				tap(&"ground_pound")
+			elif boss.state == KingClaw.State.STUNNED:
+				topples += 1
+				await place(boss.global_position + Vector3(0, 4.5, 0), Vector3.FORWARD)
+				tap(&"ground_pound")
+			elif boss.state == KingClaw.State.SLAM_TELL:
+				# Step out of the target ring.
+				await place(player.global_position + Vector3(3.5, 0.1, 0), Vector3.FORWARD)
+	check("pounding the stuck claw topples him (x3)", topples >= 3, "topples=%d hits=%d" % [topples, boss.hits])
+	check("three belly hits defeat King Claw", WorldState.is_completed(&"king_claw"), "hits=%d state=%s" % [boss.hits, KingClaw.State.keys()[boss.state] if is_instance_valid(boss) else "freed"])
+	await frames(30)
+	var wheel: Node3D = null
+	for n in find_children("*", "ShipPartPickup", true, false):
+		wheel = n
+	check("the Ship's Wheel is left behind", wheel != null, "")
+	if wheel != null:
+		await place(wheel.global_position + Vector3(0, 0.2, 0), Vector3.FORWARD)
+		await frames(30)
+		check("Ship's Wheel recovered", InventoryManager.has_ship_part(&"ships_wheel"), "")
+	player.health.invincible = false
+
+
+func test_leaving_the_arena_resets_king_claw() -> void:
+	await clear_enemies()
+	var boss := node("Enemies/KingClaw") as KingClaw
+	var arena := node("Gameplay/ClawArena") as Node3D
+	await place(arena.global_position + Vector3(-6.0, 0.2, 4.0), Vector3.FORWARD)
+	await wait_until(func() -> bool: return boss.state != KingClaw.State.DORMANT, 60)
+	await place(arena.global_position + Vector3(-22.0, 0.2, 14.0), Vector3.FORWARD)
+	var reset := await wait_until(func() -> bool: return boss.state == KingClaw.State.DORMANT, 200)
+	check("walking away puts King Claw back to sleep", reset >= 0 and boss.hits == 0, "state=%s" % KingClaw.State.keys()[boss.state])
