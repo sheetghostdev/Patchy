@@ -90,6 +90,12 @@ extends Resource
 @export_range(0.0, 89.0, 0.5) var underwater_pitch_max: float = 75.0
 @export_range(0.0, 3.0, 0.05) var underwater_target_height: float = 0.7
 
+@export_group("Boat")
+## Extra distance while sailing so the boat and the sea ahead read well.
+@export_range(0.0, 10.0, 0.05) var boat_distance_bonus: float = 3.0
+@export_range(-30.0, 30.0, 0.5) var boat_pitch_offset: float = -4.0
+@export_range(0.0, 20.0, 0.5) var boat_fov_bonus: float = 4.0
+
 @export_group("Shake")
 @export_range(0.0, 15.0, 0.1) var shake_max_yaw: float = 2.2
 @export_range(0.0, 15.0, 0.1) var shake_max_pitch: float = 2.2

@@ -5,6 +5,7 @@ extends PatchyTestHarness
 ##   godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn [filter]
 
 const ISLAND_PATH := "res://world/islands/castaway_cay/castaway_cay.tscn"
+const DRIFTWOOD_CENTER := Vector3(-130, 0, 140)
 
 var island: Node3D
 var _island_scene: PackedScene
@@ -74,10 +75,11 @@ func test_island_contents() -> void:
 		cages += 1
 	for n in island.find_children("*", "Crab", true, false):
 		crabs += 1
-	check("four parrot cages", cages == 4, "cages=%d" % cages)
+	check("six parrot cages (4 + 2 on Driftwood Key)", cages == 6, "cages=%d" % cages)
 	check("crabs placed", crabs >= 8, "crabs=%d" % crabs)
 	await frames(2)
 	check("parrot total registered", ParrotManager.get_island_total(&"castaway_cay") == 4, "total=%d" % ParrotManager.get_island_total(&"castaway_cay"))
+	check("islet parrot total registered", ParrotManager.get_island_total(&"driftwood_key") == 2, "total=%d" % ParrotManager.get_island_total(&"driftwood_key"))
 	check("treasure total registered", InventoryManager.get_island_treasure_total(&"castaway_cay") >= 7, "total=%d" % InventoryManager.get_island_treasure_total(&"castaway_cay"))
 	check("island discovered without intro", GameManager.is_island_discovered(&"castaway_cay"), "")
 
@@ -317,3 +319,105 @@ func test_checkpoint_respawn() -> void:
 	player.health.die()
 	await frames(90)
 	check("fainting returns to the flag", player.global_position.distance_to(cp.global_position) < 1.5, "pos=%v" % player.global_position)
+
+
+# --- Boat & open sea -----------------------------------------------------------------
+
+## Camera-relative stick that steers toward a world direction.
+func stick_toward(dir: Vector3) -> Vector2:
+	var basis := rig.get_input_basis()
+	var fwd := Player.flat(-basis.z).normalized()
+	var right := Player.flat(basis.x).normalized()
+	var d := Player.flat(dir).normalized()
+	return Vector2(d.dot(right), -d.dot(fwd))
+
+
+func board_boat() -> TinyBoat:
+	var boat := node("Structures/Dock/TinyBoat") as TinyBoat
+	await place(Vector3(-52.0, 1.4, 80.0), Vector3.RIGHT)
+	await frames(6)
+	tap(&"interact")
+	await wait_until(func() -> bool: return player.state_id == &"boat", 30)
+	await frames(30)
+	return boat
+
+
+func test_board_and_sail_to_driftwood_key() -> void:
+	await clear_enemies()
+	var boat := await board_boat()
+	check("boards the boat from the dock", player.state_id == &"boat", "state=%s" % player.state_id)
+	var landing := node("Gameplay/DriftwoodKey/BoatLanding") as Node3D
+	var top := 0.0
+	var arrived := -1
+	# Pull away from the dock's end first, then head for the islet.
+	var waypoints: Array[Vector3] = [Vector3(-47.0, 0, 92.0), landing.global_position]
+	for i in 1500:
+		var to := Player.flat(waypoints[0] - boat.global_position)
+		if waypoints.size() > 1 and to.length() < 4.0:
+			waypoints.pop_front()
+			continue
+		if waypoints.size() == 1 and to.length() < 6.0:
+			arrived = i
+			break
+		move(stick_toward(to))
+		await frames(1)
+		top = maxf(top, Player.flat(boat.velocity).length())
+		if i % 60 == 0 and player.global_position.distance_to(boat.get_seat_transform().origin) > 0.3:
+			break
+	check("sails at speed", top > 9.0, "top=%.1f" % top)
+	check("reaches Driftwood Key", arrived >= 0, "pos=%v" % boat.global_position)
+	check("Patchy stays in his seat", player.global_position.distance_to(boat.get_seat_transform().origin) < 0.3, "")
+	move(Vector2.ZERO)
+	await frames(30)
+	var shore := Player.flat(DRIFTWOOD_CENTER - boat.global_position)
+	move(stick_toward(shore))
+	await frames(2)
+	tap(&"jump")
+	await wait_until(func() -> bool: return player.state_id != &"boat", 10)
+	var landed := await wait_until(func() -> bool: return player.state_id in [&"ground", &"swim"], 120)
+	if player.state_id == &"swim":
+		# Short swim up the beach.
+		for i in 240:
+			move(stick_toward(Player.flat(DRIFTWOOD_CENTER - player.global_position)))
+			await frames(1)
+			if player.state_id == &"ground":
+				break
+	move(Vector2.ZERO)
+	await frames(20)
+	check("steps ashore", player.state_id == &"ground" and player.global_position.y > 0.0, "state=%s pos=%v landed=%d" % [player.state_id, player.global_position, landed])
+	check("Driftwood Key discovered", GameManager.is_island_discovered(&"driftwood_key"), "")
+	check("boat remembered where it was left", WorldState.get_flag(&"tiny_boat", "pos") != null, "")
+
+
+func test_cannot_hop_out_in_open_sea() -> void:
+	var boat := await board_boat()
+	boat.global_position = Vector3(-90, 0, 115)
+	await frames(10)
+	tap(&"jump")
+	await frames(20)
+	check("stays aboard between islands", player.state_id == &"boat", "state=%s" % player.state_id)
+
+
+func test_open_sea_current_pushes_back() -> void:
+	await clear_enemies()
+	var region := node("Gameplay/SeaRegionCastaway") as SeaRegion
+	var start := Vector3(0, -0.4, 115)
+	await place(start, Vector3.BACK)
+	await wait_until(func() -> bool: return player.state_id == &"swim", 60)
+	var e0 := region.excess(player.global_position)
+	for i in 300:
+		move(stick_toward(Vector3.BACK))
+		await frames(1)
+	move(Vector2.ZERO)
+	var e1 := region.excess(player.global_position)
+	check("swimming out to sea is held back", player.state_id == &"swim" and e1 < e0 + 3.0, "excess %.1f -> %.1f" % [e0, e1])
+
+
+func test_boat_washes_back_to_dock() -> void:
+	await clear_enemies()
+	var boat := node("Structures/Dock/TinyBoat") as TinyBoat
+	var mooring := node("Structures/Dock/BoatMooring") as Node3D
+	boat.global_position = DRIFTWOOD_CENTER + Vector3(14, 0, -30)
+	await place(Vector3(0, 1.3, 33), Vector3.FORWARD)
+	await frames(150)
+	check("stray boat returns to Castaway's dock", Player.flat(boat.global_position - mooring.global_position).length() < 0.5, "boat=%v" % boat.global_position)

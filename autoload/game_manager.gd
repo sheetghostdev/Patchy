@@ -6,6 +6,7 @@ extends Node
 ## Island id -> scene. Saves store ids, never paths, so scenes can move.
 const ISLAND_SCENES := {
 	&"castaway_cay": "res://world/islands/castaway_cay/castaway_cay.tscn",
+	&"driftwood_key": "res://world/islands/castaway_cay/castaway_cay.tscn",
 }
 const FIRST_ISLAND := &"castaway_cay"
 

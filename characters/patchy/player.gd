@@ -48,6 +48,7 @@ const STATE_SCRIPTS := {
 	&"swing": "res://characters/patchy/states/swing_state.gd",
 	&"hurt": "res://characters/patchy/states/hurt_state.gd",
 	&"locked": "res://characters/patchy/states/locked_state.gd",
+	&"boat": "res://characters/patchy/states/boat_state.gd",
 }
 
 @export var settings: PlayerMovementSettings

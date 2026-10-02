@@ -13,6 +13,8 @@ extends Node
 @export var extra_parrots := 0
 ## Unique treasures that are spawned at runtime (chest contents, rewards).
 @export var extra_treasures := 0
+## Smaller islands that live in this scene (each has an IslandZone).
+@export var sub_islands: Array[StringName] = []
 
 
 func _ready() -> void:
@@ -31,21 +33,33 @@ func _ready() -> void:
 
 
 func _register_totals() -> void:
-	var parrots := extra_parrots
-	var treasures := extra_treasures
+	var parrots := {island_id: extra_parrots}
+	var treasures := {island_id: extra_treasures}
 	for n in _walk(get_tree().current_scene):
-		if n is ParrotCage and (n as ParrotCage).island_id == island_id:
-			parrots += 1
+		if n is ParrotCage:
+			var id := (n as ParrotCage).island_id
+			parrots[id] = int(parrots.get(id, 0)) + 1
 		elif n is Collectible and (n as Collectible).treasure_id != &"":
-			treasures += 1
-	ParrotManager.register_island_total(island_id, parrots)
-	InventoryManager.register_island_treasure_total(island_id, treasures)
+			var id := (n as Collectible).island_id
+			if id == &"":
+				id = island_id
+			treasures[id] = int(treasures.get(id, 0)) + 1
+	for id: StringName in parrots:
+		if id != &"":
+			ParrotManager.register_island_total(id, parrots[id])
+	for id: StringName in treasures:
+		if id != &"":
+			InventoryManager.register_island_treasure_total(id, treasures[id])
+
+
+func covers(id: StringName) -> bool:
+	return id == island_id or id in sub_islands
 
 
 func _place_player(player: Player) -> void:
 	if player == null:
 		return
-	if GameManager.resume_pending and GameManager.checkpoint_island == island_id:
+	if GameManager.resume_pending and covers(GameManager.checkpoint_island):
 		GameManager.resume_pending = false
 		var xf := GameManager.get_checkpoint_transform()
 		player.teleport(xf.origin, -xf.basis.z)

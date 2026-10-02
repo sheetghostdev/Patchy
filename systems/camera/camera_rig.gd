@@ -226,7 +226,7 @@ func _update_follow(delta: float, feet: Vector3, player: Player) -> void:
 
 	# Vertical: track the ground height; while airborne only follow once
 	# Patchy leaves a dead zone so jumps don't bob the camera (spec §39).
-	var grounded := player == null or player.is_on_floor() or player.state_id in [&"ledge", &"swim", &"locked"]
+	var grounded := player == null or player.is_on_floor() or player.state_id in [&"ledge", &"swim", &"locked", &"boat"]
 	var y_goal := feet.y
 	if player != null and player.state_id == &"swing" and player.swing_anchor != null:
 		var anchor_feet := player.swing_anchor.global_position.y - 3.0
@@ -269,7 +269,7 @@ func _update_auto(delta: float, player: Player) -> void:
 		yaw = lerp_angle(yaw, goal, _smooth(1.0 / maxf(s.swing_yaw_follow, 0.01), delta))
 	elif Settings.auto_camera and _since_manual_yaw > s.auto_align_delay and _recenter_t < 0.0:
 		var ramp := clampf((_since_manual_yaw - s.auto_align_delay) / 0.6, 0.0, 1.0)
-		var allowed := player.state_id in [&"ground", &"air", &"slide", &"roll", &"dive", &"belly_slide", &"swim"]
+		var allowed := player.state_id in [&"ground", &"air", &"slide", &"roll", &"dive", &"belly_slide", &"swim", &"boat"]
 		if allowed:
 			var right := get_input_basis().x
 			var lateral := Player.flat(player.velocity).dot(right)
@@ -282,6 +282,8 @@ func _update_auto(delta: float, player: Player) -> void:
 
 	if _since_manual_pitch > s.auto_pitch_delay and _recenter_t < 0.0 and not _is_underwater(player):
 		var goal_pitch := s.default_pitch + _zone_value(&"pitch_offset", 0.0)
+		if player.state_id == &"boat":
+			goal_pitch += s.boat_pitch_offset
 		if not player.is_on_floor() and player.velocity.y < -9.0 and player.air_time > 0.45:
 			goal_pitch += s.fall_pitch
 		elif player.is_on_floor() and player.floor_angle > 0.05:
@@ -319,6 +321,9 @@ func _update_distance_fov(delta: float, player: Player) -> void:
 		if player.state_id == &"swing":
 			goal_dist += s.swing_distance_bonus
 			goal_fov += s.action_fov_bonus * 0.5
+		elif player.state_id == &"boat":
+			goal_dist += s.boat_distance_bonus
+			goal_fov += s.boat_fov_bonus
 		elif player.state_id == &"dive" or (player.state_id == &"air" and player.jump_kind == &"long"):
 			goal_fov += s.action_fov_bonus
 	_distance = lerpf(_distance, goal_dist, _smooth(s.distance_time, delta))

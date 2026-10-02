@@ -416,6 +416,23 @@ func _base_pose(st: StringName, speed: float) -> Dictionary:
 			p[&"head"] = Vector3(0, shake, 0)
 			p[&"sh_l"] = Vector3(lerpf(-20.0, 0.0, stand), 0, lerpf(-40.0, -7.0, stand))
 			p[&"sh_r"] = Vector3(lerpf(-20.0, 10.0, stand), 0, lerpf(40.0, 9.0, stand))
+		&"boat_sit":
+			# Seated low on the thwart, hook on the tiller, free hand on the
+			# gunwale; sways with the boat.
+			var sway := sin(Time.get_ticks_msec() * 0.0021) * 3.0
+			p[&"body_y"] = -0.42
+			p[&"torso"] = Vector3(-6, 0, sway)
+			p[&"head"] = Vector3(4, 0, -sway * 0.6)
+			p[&"hip_l"] = Vector3(82, 0, -10)
+			p[&"hip_r"] = Vector3(82, 0, 10)
+			p[&"knee_l"] = Vector3(-88, 0, 0)
+			p[&"knee_r"] = Vector3(-88, 0, 0)
+			p[&"ank_l"] = Vector3(8, 0, 0)
+			p[&"ank_r"] = Vector3(8, 0, 0)
+			p[&"sh_r"] = Vector3(-28, 0, 22)
+			p[&"el_r"] = Vector3(40, 0, 0)
+			p[&"sh_l"] = Vector3(18, 0, -42)
+			p[&"el_l"] = Vector3(30, 0, 0)
 		&"cheer":
 			var hop := absf(sin(t * 9.0))
 			p[&"body_y"] = hop * 0.12

@@ -21,6 +21,9 @@ const PLAYER := "res://characters/patchy/player.tscn"
 const RIG := "res://systems/camera/camera_rig.tscn"
 const CRAB := "res://enemies/crab/crab.tscn"
 const ISLAND := &"castaway_cay"
+const ISLET := &"driftwood_key"
+## Driftwood Key: a small neighbor islet south-west of the dock (by boat).
+const DRIFTWOOD := Vector3(-130, 0, 140)
 
 var b: SceneBuilder
 var terrain: Node3D
@@ -38,6 +41,7 @@ func build() -> void:
 	info.music = &"castaway_explore"
 	# The chest's crown is spawned when it opens.
 	info.extra_treasures = 1
+	info.sub_islands = [ISLET]
 	b.add(info, null, "IslandInfo")
 	var env := SkyEnvironment.new()
 	env.preset = SkyEnvironment.Preset.CASTAWAY_DAY
@@ -62,6 +66,8 @@ func build() -> void:
 	_ring_run()
 	_coins()
 	_checkpoints()
+	_driftwood_key()
+	_sea_regions()
 
 	var player := b.instance(PLAYER, null, Vector3(0, 1.25, 33), 0.0, "Player")
 	var rig := b.instance(RIG, null, Vector3(0, 3, 40), 0.0, "CameraRig")
@@ -198,6 +204,30 @@ func _sea() -> void:
 	blk(terrain, Vector3(0, -11, 0), Vector3(560, 1, 560), "sand", Vector3.ZERO, LevelBlock.Shape.BOX, "Seabed")
 
 
+func _sea_regions() -> void:
+	var sea := OpenSea.new()
+	b.add(sea, null, "OpenSea")
+	var home := SeaRegion.new()
+	home.region_name = "Castaway Cay"
+	home.radius = 108.0
+	home.position = Vector3(0, 0, -5)
+	home.boat_dock = structures.get_node("Dock/BoatMooring")
+	b.add(home, gameplay, "SeaRegionCastaway")
+	var islet := SeaRegion.new()
+	islet.region_name = "Driftwood Key"
+	islet.radius = 42.0
+	islet.position = DRIFTWOOD
+	islet.boat_dock = gameplay.get_node("DriftwoodKey/BoatLanding")
+	b.add(islet, gameplay, "SeaRegionDriftwood")
+	var zone := IslandZone.new()
+	zone.island_id = ISLAND
+	zone.display_name = "Castaway Cay"
+	zone.announce = false
+	zone.size = Vector3(190, 60, 184)
+	zone.position = Vector3(2, 10, -6)
+	b.add(zone, gameplay, "IslandZoneCastaway")
+
+
 # --- Areas --------------------------------------------------------------------------
 
 func _cove() -> void:
@@ -319,14 +349,13 @@ func _dock() -> void:
 	coin_trail(Vector3(x, 1.35, 70.4), Vector3(x, 1.35, 74.6), 4, 1.6)
 	var goblet := gem(Vector3(x, 2.2, 83), "castaway_goblet_dock", Palette.GOLD, "goblet")
 	goblet.gem_color = Palette.GEM_RED
-	# The tiny patched sailboat (travel comes with the boat system).
-	var boat := LevelBlock.new()
-	boat.size = Vector3(2.2, 0.8, 4.2)
-	boat.surface = "wood"
-	boat.bevel = 0.35
-	boat.position = Vector3(x + 3.2, -0.3, 82)
+	# Patchy's tiny patched sailboat, tied up beside the dock's far end.
+	var boat := TinyBoat.new()
+	boat.position = Vector3(x + 3.4, 0.0, 80)
 	b.add(boat, g, "TinyBoat")
-	blk(g, Vector3(x + 3.2, 0.5, 82), Vector3(0.18, 3.6, 0.18), "wood", Vector3(0, 0, 6), LevelBlock.Shape.CYLINDER, "BoatMast")
+	var mooring := Marker3D.new()
+	mooring.position = boat.position
+	b.add(mooring, g, "BoatMooring")
 
 
 func _ridge_and_hill() -> void:
@@ -477,6 +506,67 @@ func _checkpoints() -> void:
 	dock.set_meta(&"spawn_id", &"dock")
 	b.add(dock, gameplay, "SpawnDock")
 	dock.add_to_group(&"spawn_point", true)
+
+
+func _driftwood_key() -> void:
+	var g := b.group("DriftwoodKey", gameplay)
+	var t := b.group("DriftwoodTerrain", terrain)
+	var c := DRIFTWOOD
+	var o := Vector2(c.x, c.z)
+	var ring: Array = []
+	for v: Vector2 in [Vector2(-22, -8), Vector2(-16, -20), Vector2(0, -26), Vector2(18, -22), Vector2(26, -8),
+			Vector2(22, 10), Vector2(8, 20), Vector2(-10, 20), Vector2(-22, 8)]:
+		ring.append(o + v)
+	plateau(t, "IsletBeach", ring, 1.0, 9.0, "sand", {"shore": true, "shore_width": 12.0, "shore_drop": 4.5, "seed": 41})
+	var knoll: Array = []
+	for v: Vector2 in [Vector2(-8, -12), Vector2(2, -15), Vector2(12, -10), Vector2(14, 2), Vector2(4, 9), Vector2(-7, 6)]:
+		knoll.append(o + v)
+	plateau(t, "IsletKnoll", knoll, 2.8, 2.6, "cliff", {"seed": 43})
+	var isl := IslandZone.new()
+	isl.island_id = ISLET
+	isl.display_name = "Driftwood Key"
+	isl.size = Vector3(64, 40, 56)
+	isl.position = c + Vector3(2, 10, -3)
+	b.add(isl, g, "IslandZoneDriftwood")
+	# Landing beach facing Castaway Cay (north-east) with a checkpoint.
+	var landing := Marker3D.new()
+	landing.position = c + Vector3(14, 0.0, -30)
+	landing.rotation_degrees.y = 200.0
+	b.add(landing, g, "BoatLanding")
+	var cp := Checkpoint.new()
+	cp.checkpoint_id = &"cp_driftwood"
+	cp.position = c + Vector3(10, 1.0, -17)
+	cp.respawn_yaw = 200.0
+	b.add(cp, g, "CpDriftwood")
+	# Parrot #5: atop a tower of lashed driftwood platforms.
+	blk(g, c + Vector3(-12, 1.0, 4), Vector3(3.2, 1.7, 3.2), "wood", Vector3(0, 12, 0), LevelBlock.Shape.BOX, "Raft1")
+	blk(g, c + Vector3(-15.5, 1.0, 7.5), Vector3(2.6, 3.4, 2.6), "wood_dark", Vector3(0, -8, 0), LevelBlock.Shape.BOX, "Raft2")
+	blk(g, c + Vector3(-18.5, 1.0, 4.0), Vector3(2.4, 5.1, 2.4), "wood", Vector3(0, 20, 0), LevelBlock.Shape.BOX, "Raft3")
+	cage(c + Vector3(-18.5, 6.1, 4.0), "driftwood_parrot_tower", ParrotModel.Plumage.AZURE).island_id = ISLET
+	coin_trail(c + Vector3(-9.4, 1.5, 3.2), c + Vector3(-11.6, 3.2, 4.2), 3, 0.8)
+	coin_trail(c + Vector3(-13.2, 3.4, 5.6), c + Vector3(-15.2, 4.9, 7.2), 3, 1.0)
+	# Parrot #6: in the crab pen on the knoll, guarded.
+	var pen := c + Vector3(4, 2.8, -3)
+	for k in 10:
+		var a := TAU * k / 10.0
+		if k == 7:
+			continue
+		blk(g, pen + Vector3(cos(a) * 4.2, 0, sin(a) * 4.2), Vector3(0.3, 1.0, 0.3), "wood_dark", Vector3.ZERO, LevelBlock.Shape.CYLINDER, "PenPost")
+	cage(pen, "driftwood_parrot_pen", ParrotModel.Plumage.LIME).island_id = ISLET
+	crab(pen + Vector3(2.0, 0.05, 1.0), CrabModel.Variant.ARMORED, "driftwood_crab_pen_1")
+	crab(pen + Vector3(-2.0, 0.05, -1.2), CrabModel.Variant.HERMIT, "driftwood_crab_pen_2")
+	crab(c + Vector3(16, 1.05, 4), CrabModel.Variant.NORMAL, "driftwood_crab_beach")
+	# Treasure: a gem on an offshore rock (a swim and a climb), a heart, coins.
+	plateau(t, "IsletRock", [o + Vector2(28, 14), o + Vector2(32, 13), o + Vector2(33, 17), o + Vector2(29, 19)], 2.2, 10.0, "rock", {"seed": 47})
+	var g1 := gem(c + Vector3(30.5, 3.2, 16), "driftwood_gem_rock", Palette.GEM_BLUE)
+	g1.island_id = ISLET
+	heart(c + Vector3(8, 3.4, 4))
+	coin_trail(c + Vector3(12, 1.5, -20), c + Vector3(6, 1.5, -10), 5, 0.0, CoinTrail.TrailShape.LINE)
+	coin_trail(c + Vector3(-4, 1.5, 14), c + Vector3(10, 1.5, 14), 5, 0.0, CoinTrail.TrailShape.LINE)
+	var m := Marker3D.new()
+	m.position = c + Vector3(10, 1.1, -16)
+	b.add(m, gameplay, "TeleportDriftwood")
+	m.add_to_group(&"debug_teleport", true)
 
 
 func _opening(player: Node3D) -> void:
