@@ -1,0 +1,632 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://world/environment/sky_environment.gd" id="1_o0r5d"]
+[ext_resource type="Script" path="res://props/blocks/level_block.gd" id="2_w73ku"]
+[ext_resource type="Script" path="res://world/ocean/water_volume.gd" id="3_6kr35"]
+[ext_resource type="Script" path="res://props/nature/palm_tree.gd" id="4_cd46u"]
+[ext_resource type="Script" path="res://props/nature/stylized_rock.gd" id="5_whgxn"]
+[ext_resource type="Script" path="res://characters/patchy/patchy_model.gd" id="6_4ljw0"]
+[ext_resource type="Script" path="res://props/nature/bush.gd" id="7_uqdc1"]
+[ext_resource type="Script" path="res://props/nature/grass_tuft.gd" id="8_12ata"]
+[ext_resource type="Script" path="res://props/nature/flower_patch.gd" id="9_667cs"]
+[ext_resource type="Script" path="res://props/nature/fern.gd" id="10_m7e4q"]
+[ext_resource type="Script" path="res://props/nature/prop_scatter.gd" id="11_liqts"]
+[ext_resource type="Script" path="res://props/structures/crate.gd" id="12_0v4r8"]
+[ext_resource type="Script" path="res://props/structures/barrel.gd" id="13_b0wqs"]
+[ext_resource type="Script" path="res://props/structures/signpost.gd" id="14_s6ova"]
+[ext_resource type="Script" path="res://props/structures/fence_segment.gd" id="15_nk0ip"]
+[ext_resource type="Script" path="res://props/structures/torch.gd" id="16_b1r6a"]
+[ext_resource type="Script" path="res://props/structures/lantern_post.gd" id="17_0nxcn"]
+[ext_resource type="Script" path="res://props/structures/bollard.gd" id="18_mcfq4"]
+[ext_resource type="Script" path="res://props/structures/rope_coil.gd" id="19_btawb"]
+[ext_resource type="Script" path="res://props/structures/anchor.gd" id="20_g0yf4"]
+[ext_resource type="Script" path="res://props/structures/decor_cannon.gd" id="21_ky6ig"]
+[ext_resource type="Script" path="res://props/structures/bell.gd" id="22_b8kyb"]
+[ext_resource type="Script" path="res://props/structures/physics_crate.gd" id="23_2kmhd"]
+[ext_resource type="Script" path="res://props/treasure/parrot_cage_model.gd" id="24_kms68"]
+[ext_resource type="Script" path="res://props/treasure/treasure_chest_model.gd" id="25_trtii"]
+[ext_resource type="Script" path="res://props/treasure/treasure_display.gd" id="26_uqb1c"]
+[ext_resource type="Script" path="res://props/structures/wreck/hull_section.gd" id="27_ou210"]
+[ext_resource type="Script" path="res://props/structures/wreck/ship_debris.gd" id="28_uc3rh"]
+[ext_resource type="Script" path="res://props/structures/wreck/broken_mast.gd" id="29_bsjo5"]
+[ext_resource type="Script" path="res://props/structures/wreck/bow_piece.gd" id="30_sohy7"]
+[ext_resource type="Script" path="res://props/structures/dock.gd" id="31_chain"]
+[ext_resource type="Script" path="res://props/structures/rope_bridge.gd" id="32_yofdw"]
+
+[node name="PropGallery" type="Node3D" unique_id=1081284695]
+
+[node name="SkyEnvironment" type="Node3D" parent="." unique_id=900070354]
+script = ExtResource("1_o0r5d")
+
+[node name="Ground" type="Node3D" parent="." unique_id=547994340]
+
+[node name="Meadow" type="StaticBody3D" parent="Ground" unique_id=57715069]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -3)
+script = ExtResource("2_w73ku")
+size = Vector3(52, 1, 26)
+surface = "grass"
+
+[node name="Beach" type="StaticBody3D" parent="Ground" unique_id=1607120061]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 17)
+script = ExtResource("2_w73ku")
+size = Vector3(52, 1, 14)
+surface = "sand"
+
+[node name="SeaFloor" type="StaticBody3D" parent="Ground" unique_id=1307364851]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4, 35)
+script = ExtResource("2_w73ku")
+size = Vector3(52, 1, 22)
+surface = "sand"
+
+[node name="CliffA" type="StaticBody3D" parent="Ground" unique_id=1033966506]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, -1, 12.5)
+script = ExtResource("2_w73ku")
+size = Vector3(4, 4, 5)
+surface = "cliff"
+
+[node name="CliffB" type="StaticBody3D" parent="Ground" unique_id=2017786698]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, -4, 26.5)
+script = ExtResource("2_w73ku")
+size = Vector3(4, 7, 5)
+surface = "cliff"
+
+[node name="Sea" type="Area3D" parent="Ground" unique_id=212326254]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 35)
+script = ExtResource("3_6kr35")
+size = Vector3(52, 4, 22)
+
+[node name="PalmsAndRocks" type="Node3D" parent="." unique_id=202580479]
+
+[node name="Label" type="Label3D" parent="PalmsAndRocks" unique_id=842554836]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23, 3, -12)
+pixel_size = 0.006
+billboard = 1
+modulate = Color(1, 0.93, 0.7, 1)
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "PALMS & ROCKS"
+font_size = 84
+outline_size = 16
+
+[node name="PalmTree" type="StaticBody3D" parent="PalmsAndRocks" unique_id=1382625893]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 0, -12)
+script = ExtResource("4_cd46u")
+height = 4.0
+lean_degrees = 4.0
+frond_count = 7
+frond_length = 2.6
+
+[node name="PalmTree2" type="StaticBody3D" parent="PalmsAndRocks" unique_id=704460748]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.6, 0, -12)
+script = ExtResource("4_cd46u")
+height = 7.0
+lean_degrees = 14.0
+lean_direction = 30.0
+frond_length = 3.4
+seed = 2
+
+[node name="PalmTree3" type="StaticBody3D" parent="PalmsAndRocks" unique_id=1940640279]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.2, 0, -12)
+script = ExtResource("4_cd46u")
+height = 11.0
+lean_degrees = 22.0
+lean_direction = -50.0
+frond_count = 9
+frond_length = 4.0
+seed = 3
+
+[node name="PalmTree4" type="StaticBody3D" parent="PalmsAndRocks" unique_id=585845412]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8, 0, -12)
+script = ExtResource("4_cd46u")
+lean_degrees = 2.0
+seed = 4
+
+[node name="StylizedRock" type="StaticBody3D" parent="PalmsAndRocks" unique_id=1606560960]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, -12)
+script = ExtResource("5_whgxn")
+preset = 0
+size = Vector3(2.6, 1.8, 2.2)
+seed = 3
+
+[node name="StylizedRock2" type="StaticBody3D" parent="PalmsAndRocks" unique_id=405309106]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.8, 0, -9.8)
+script = ExtResource("5_whgxn")
+preset = 0
+size = Vector3(1, 0.7, 0.9)
+seed = 30
+
+[node name="StylizedRock3" type="StaticBody3D" parent="PalmsAndRocks" unique_id=1765625714]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 0, -12)
+script = ExtResource("5_whgxn")
+size = Vector3(3, 2.2, 2.6)
+seed = 4
+
+[node name="StylizedRock4" type="StaticBody3D" parent="PalmsAndRocks" unique_id=583528069]
+transform = Transform3D(0.76604444, 0, 0.6427876, 0, 1, 0, -0.6427876, 0, 0.76604444, 7.8, 0, -9.8)
+script = ExtResource("5_whgxn")
+size = Vector3(1, 0.7, 0.9)
+seed = 31
+
+[node name="StylizedRock5" type="StaticBody3D" parent="PalmsAndRocks" unique_id=860421321]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.5, 0, -12)
+script = ExtResource("5_whgxn")
+preset = 2
+size = Vector3(2.4, 1.6, 2)
+seed = 5
+
+[node name="StylizedRock6" type="StaticBody3D" parent="PalmsAndRocks" unique_id=822549666]
+transform = Transform3D(0.17364822, 0, 0.9848077, 0, 1, 0, -0.9848077, 0, 0.17364822, 11.8, 0, -9.8)
+script = ExtResource("5_whgxn")
+preset = 2
+size = Vector3(1, 0.7, 0.9)
+seed = 32
+
+[node name="StylizedRock7" type="StaticBody3D" parent="PalmsAndRocks" unique_id=1437206733]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.5, 0, -12)
+script = ExtResource("5_whgxn")
+preset = 3
+size = Vector3(3.2, 1.6, 2.6)
+seed = 6
+
+[node name="StylizedRock8" type="StaticBody3D" parent="PalmsAndRocks" unique_id=261779998]
+transform = Transform3D(-0.50000006, 0, 0.8660254, 0, 1, 0, -0.8660254, 0, -0.50000006, 15.8, 0, -9.8)
+script = ExtResource("5_whgxn")
+preset = 3
+size = Vector3(1, 0.7, 0.9)
+seed = 33
+
+[node name="StylizedRock9" type="StaticBody3D" parent="PalmsAndRocks" unique_id=682397131]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.2, 0, -12)
+script = ExtResource("5_whgxn")
+size = Vector3(1.4, 3, 1.3)
+seed = 9
+facets = 8
+
+[node name="PatchyForScale" type="Node3D" parent="PalmsAndRocks" unique_id=837826905]
+transform = Transform3D(0.9396926, 0, -0.34202012, 0, 1, 0, 0.34202012, 0, 0.9396926, -15.6, 0, -10.5)
+script = ExtResource("6_4ljw0")
+
+[node name="Foliage" type="Node3D" parent="." unique_id=2112366930]
+
+[node name="Label" type="Label3D" parent="Foliage" unique_id=688380706]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23, 2.2, -5.5)
+pixel_size = 0.006
+billboard = 1
+modulate = Color(1, 0.93, 0.7, 1)
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "FOLIAGE & SCATTER"
+font_size = 84
+outline_size = 16
+
+[node name="Bush" type="StaticBody3D" parent="Foliage" unique_id=1005629097]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.5, 0, -5.5)
+script = ExtResource("7_uqdc1")
+
+[node name="Bush2" type="StaticBody3D" parent="Foliage" unique_id=1785320496]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.2, 0, -5.5)
+script = ExtResource("7_uqdc1")
+size = Vector3(1.38, 1.035, 1.38)
+seed = 2
+flowers = 8
+
+[node name="Bush3" type="StaticBody3D" parent="Foliage" unique_id=239094715]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.9, 0, -5.5)
+script = ExtResource("7_uqdc1")
+size = Vector3(1.6800001, 1.26, 1.6800001)
+seed = 3
+flowers = 10
+bloom = 3
+
+[node name="GrassTuft" type="Node3D" parent="Foliage" unique_id=1255918394]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.6, 0, -5.5)
+script = ExtResource("8_12ata")
+
+[node name="GrassTuft2" type="Node3D" parent="Foliage" unique_id=2012047862]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.75, 0, -5.5)
+script = ExtResource("8_12ata")
+seed = 2
+
+[node name="GrassTuft3" type="Node3D" parent="Foliage" unique_id=2053771546]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.9, 0, -5.5)
+script = ExtResource("8_12ata")
+seed = 3
+
+[node name="FlowerPatch" type="Node3D" parent="Foliage" unique_id=164263061]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.6, 0, -5.5)
+script = ExtResource("9_667cs")
+
+[node name="FlowerPatch2" type="Node3D" parent="Foliage" unique_id=2136904425]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 0, -5.5)
+script = ExtResource("9_667cs")
+bloom = 2
+seed = 2
+
+[node name="FlowerPatch3" type="Node3D" parent="Foliage" unique_id=388930399]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.4, 0, -5.5)
+script = ExtResource("9_667cs")
+bloom = 3
+seed = 3
+
+[node name="Fern" type="Node3D" parent="Foliage" unique_id=1776350232]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.6, 0, -5.5)
+script = ExtResource("10_m7e4q")
+size = 0.85
+
+[node name="Fern2" type="Node3D" parent="Foliage" unique_id=1714875780]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.7, 0, -5.5)
+script = ExtResource("10_m7e4q")
+size = 1.25
+seed = 2
+
+[node name="Scatter0" type="Node3D" parent="Foliage" unique_id=1257975036]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.5, 0.5, -5.5)
+script = ExtResource("11_liqts")
+area_size = Vector2(17, 5)
+polygon = PackedVector2Array()
+surface_filter = Array[StringName]([&"grass"])
+density = 3.0
+min_spacing = 0.3
+
+[node name="Scatter1" type="Node3D" parent="Foliage" unique_id=1108754610]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.5, 0.5, -5.5)
+script = ExtResource("11_liqts")
+kind = 1
+area_size = Vector2(17, 5)
+polygon = PackedVector2Array()
+surface_filter = Array[StringName]([&"grass"])
+seed = 2
+density = 0.5
+min_spacing = 0.5
+
+[node name="Scatter2" type="Node3D" parent="Foliage" unique_id=1168286974]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.5, 0.5, -5.5)
+script = ExtResource("11_liqts")
+kind = 4
+area_size = Vector2(17, 5)
+polygon = PackedVector2Array()
+surface_filter = Array[StringName]([&"grass"])
+seed = 3
+density = 0.15
+min_spacing = 0.6
+
+[node name="Scatter3" type="Node3D" parent="Foliage" unique_id=1227418220]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.5, 0.5, -5.5)
+script = ExtResource("11_liqts")
+kind = 2
+area_size = Vector2(17, 5)
+polygon = PackedVector2Array()
+surface_filter = Array[StringName]([&"grass"])
+seed = 4
+density = 0.06
+min_spacing = 1.2
+
+[node name="Structures" type="Node3D" parent="." unique_id=31127995]
+
+[node name="Label" type="Label3D" parent="Structures" unique_id=495604098]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23, 2.6, 1)
+pixel_size = 0.006
+billboard = 1
+modulate = Color(1, 0.93, 0.7, 1)
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "STRUCTURES"
+font_size = 84
+outline_size = 16
+
+[node name="Crate" type="StaticBody3D" parent="Structures" unique_id=1993975543]
+transform = Transform3D(0.9781476, 0, 0.2079117, 0, 1, 0, -0.2079117, 0, 0.9781476, -19, 0, 1)
+script = ExtResource("12_0v4r8")
+
+[node name="Crate2" type="StaticBody3D" parent="Structures" unique_id=398012941]
+transform = Transform3D(0.9848077, 0, -0.17364818, 0, 1, 0, 0.17364818, 0, 0.9848077, -17.5, 0, 1.2)
+script = ExtResource("12_0v4r8")
+breakable = false
+
+[node name="Crate3" type="StaticBody3D" parent="Structures" unique_id=1055246633]
+transform = Transform3D(0.76604444, 0, 0.6427876, 0, 1, 0, -0.6427876, 0, 0.76604444, -19, 1, 1)
+script = ExtResource("12_0v4r8")
+size = Vector3(0.7, 0.7, 0.7)
+seed = 3
+
+[node name="Crate4" type="StaticBody3D" parent="Structures" unique_id=1245198673]
+transform = Transform3D(0.9961947, 0, 0.08715574, 0, 1, 0, -0.08715574, 0, 0.9961947, -15.8, 0, 1.4)
+script = ExtResource("12_0v4r8")
+size = Vector3(1.4, 0.8, 1)
+style = 1
+
+[node name="Barrel" type="StaticBody3D" parent="Structures" unique_id=2102070942]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.9, 0, 0.8)
+script = ExtResource("13_b0wqs")
+
+[node name="Barrel2" type="StaticBody3D" parent="Structures" unique_id=614930552]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.8, 0, 0.6)
+script = ExtResource("13_b0wqs")
+hoops = 1
+seed = 2
+
+[node name="Barrel3" type="StaticBody3D" parent="Structures" unique_id=587382425]
+transform = Transform3D(0.25881907, 0, 0.9659258, 0, 1, 0, -0.9659258, 0, 0.25881907, -13.3, 0, 2.4)
+script = ExtResource("13_b0wqs")
+lying = true
+seed = 3
+
+[node name="Signpost" type="StaticBody3D" parent="Structures" unique_id=1422377750]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.4, 0, 1.2)
+script = ExtResource("14_s6ova")
+texts = PackedStringArray("Shipwreck Cove", "Lookout", "Village")
+directions = PackedFloat32Array(90, -40, 180)
+
+[node name="FenceSegment" type="StaticBody3D" parent="Structures" unique_id=1412667645]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.6, 0, 2.8)
+script = ExtResource("15_nk0ip")
+
+[node name="FenceSegment2" type="StaticBody3D" parent="Structures" unique_id=958908383]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.8, 0, 2.8)
+script = ExtResource("15_nk0ip")
+style = 1
+
+[node name="FenceSegment3" type="StaticBody3D" parent="Structures" unique_id=2016926211]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 2.8)
+script = ExtResource("15_nk0ip")
+style = 2
+
+[node name="Torch" type="StaticBody3D" parent="Structures" unique_id=330716377]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+script = ExtResource("16_b1r6a")
+
+[node name="LanternPost" type="StaticBody3D" parent="Structures" unique_id=949324474]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4, 0, 0.6)
+script = ExtResource("17_0nxcn")
+
+[node name="Bollard" type="StaticBody3D" parent="Structures" unique_id=1732962182]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 1.6)
+script = ExtResource("18_mcfq4")
+
+[node name="Bollard2" type="StaticBody3D" parent="Structures" unique_id=158721175]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.8, 0, 1.6)
+script = ExtResource("18_mcfq4")
+style = 1
+
+[node name="RopeCoil" type="Node3D" parent="Structures" unique_id=731052724]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 1.8)
+script = ExtResource("19_btawb")
+
+[node name="Anchor" type="StaticBody3D" parent="Structures" unique_id=1479714418]
+transform = Transform3D(0.9659258, 0, -0.25881904, 0, 1, 0, 0.25881904, 0, 0.9659258, 7, 0, 0.8)
+script = ExtResource("20_g0yf4")
+
+[node name="Anchor2" type="StaticBody3D" parent="Structures" unique_id=17806813]
+transform = Transform3D(0.9396926, 0, 0.34202012, 0, 1, 0, -0.34202012, 0, 0.9396926, 9.4, 0, 2)
+script = ExtResource("20_g0yf4")
+size = 1.4
+lying = true
+
+[node name="DecorCannon" type="StaticBody3D" parent="Structures" unique_id=1706589032]
+transform = Transform3D(-0.9396926, 0, 0.3420202, 0, 1, 0, -0.3420202, 0, -0.9396926, 12.6, 0, 1.4)
+script = ExtResource("21_ky6ig")
+
+[node name="Bell" type="StaticBody3D" parent="Structures" unique_id=2023423264]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 0, 0.8)
+script = ExtResource("22_b8kyb")
+
+[node name="PhysicsCrate0" type="RigidBody3D" parent="Structures" unique_id=1328330067]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.6, 0.02, 1)
+mass = 3.0
+script = ExtResource("23_2kmhd")
+seed = 5
+
+[node name="PhysicsCrate1" type="RigidBody3D" parent="Structures" unique_id=108623878]
+transform = Transform3D(0.9781476, 0, 0.2079117, 0, 1, 0, -0.2079117, 0, 0.9781476, 19.6, 0.02, 0.9)
+mass = 3.0
+script = ExtResource("23_2kmhd")
+seed = 6
+
+[node name="PhysicsCrate2" type="RigidBody3D" parent="Structures" unique_id=387504164]
+transform = Transform3D(0.9135454, 0, 0.40673664, 0, 1, 0, -0.40673664, 0, 0.9135454, 18.6, 0.95, 1)
+mass = 3.0
+script = ExtResource("23_2kmhd")
+seed = 7
+
+[node name="PhysicsCrateBreakable" type="RigidBody3D" parent="Structures" unique_id=1405142429]
+transform = Transform3D(0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254, 19.6, 0.95, 0.9)
+mass = 3.0
+script = ExtResource("23_2kmhd")
+size = Vector3(0.7, 0.7, 0.7)
+breakable = true
+
+[node name="PatchyForScale" type="Node3D" parent="Structures" unique_id=1079241966]
+transform = Transform3D(0.9659258, 0, 0.25881904, 0, 1, 0, -0.25881904, 0, 0.9659258, -11.6, 0, 2.6)
+script = ExtResource("6_4ljw0")
+
+[node name="Treasure" type="Node3D" parent="." unique_id=501833098]
+
+[node name="Label" type="Label3D" parent="Treasure" unique_id=913855176]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23, 2, 7)
+pixel_size = 0.006
+billboard = 1
+modulate = Color(1, 0.93, 0.7, 1)
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "TREASURE"
+font_size = 84
+outline_size = 16
+
+[node name="ParrotCageModel" type="Node3D" parent="Treasure" unique_id=1338695412]
+transform = Transform3D(-0.9659258, 0, 0.25881913, 0, 1, 0, -0.25881913, 0, -0.9659258, -9, 0, 7)
+script = ExtResource("24_kms68")
+
+[node name="ParrotCageModel2" type="Node3D" parent="Treasure" unique_id=1749636931]
+transform = Transform3D(-0.9396926, 0, -0.34202015, 0, 1, 0, 0.34202015, 0, -0.9396926, -7.3, 0, 7.3)
+script = ExtResource("24_kms68")
+metal = 1
+door_open = 1.0
+
+[node name="TreasureChestModel" type="Node3D" parent="Treasure" unique_id=1406407036]
+transform = Transform3D(-0.99619466, 0, 0.08715588, 0, 1, 0, -0.08715588, 0, -0.99619466, -5.1, 0, 7)
+script = ExtResource("25_trtii")
+
+[node name="TreasureChestModel2" type="Node3D" parent="Treasure" unique_id=1810182140]
+transform = Transform3D(-0.9961947, 0, -0.08715581, 0, 1, 0, 0.08715581, 0, -0.9961947, -3.3, 0, 7.1)
+script = ExtResource("25_trtii")
+open_amount = 0.75
+
+[node name="TreasureChestModel3" type="Node3D" parent="Treasure" unique_id=320952605]
+transform = Transform3D(-0.9848077, 0, 0.1736483, 0, 1, 0, -0.1736483, 0, -0.9848077, -1.4, 0, 6.9)
+script = ExtResource("25_trtii")
+variant = 1
+open_amount = 1.0
+
+[node name="TreasureDisplay" type="Node3D" parent="Treasure" unique_id=587892067]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6, 0, 7.3)
+script = ExtResource("26_uqb1c")
+kind = 2
+
+[node name="Coin0" type="Node3D" parent="Treasure" unique_id=1934191926]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, 0, 6.9)
+script = ExtResource("26_uqb1c")
+
+[node name="Gem0" type="Node3D" parent="Treasure" unique_id=1779647923]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.6, 0, 7.9)
+script = ExtResource("26_uqb1c")
+kind = 1
+
+[node name="Coin1" type="Node3D" parent="Treasure" unique_id=1001791249]
+transform = Transform3D(0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254, 3, 0, 6.9)
+script = ExtResource("26_uqb1c")
+
+[node name="Gem1" type="Node3D" parent="Treasure" unique_id=1470105469]
+transform = Transform3D(0.9396926, 0, 0.34202012, 0, 1, 0, -0.34202012, 0, 0.9396926, 3.4, 0, 7.9)
+script = ExtResource("26_uqb1c")
+kind = 1
+gem_color = Color(0.30980393, 0.7647059, 1, 1)
+
+[node name="Coin2" type="Node3D" parent="Treasure" unique_id=1314146584]
+transform = Transform3D(0.49999997, 0, 0.86602545, 0, 1, 0, -0.86602545, 0, 0.49999997, 3.8, 0, 6.9)
+script = ExtResource("26_uqb1c")
+
+[node name="Gem2" type="Node3D" parent="Treasure" unique_id=496167718]
+transform = Transform3D(0.76604444, 0, 0.6427876, 0, 1, 0, -0.6427876, 0, 0.76604444, 4.2, 0, 7.9)
+script = ExtResource("26_uqb1c")
+kind = 1
+gem_color = Color(0.30980393, 0.8784314, 0.5411765, 1)
+
+[node name="Coin3" type="Node3D" parent="Treasure" unique_id=1940968977]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 4.6, 0, 6.9)
+script = ExtResource("26_uqb1c")
+
+[node name="Gem3" type="Node3D" parent="Treasure" unique_id=797016434]
+transform = Transform3D(0.49999997, 0, 0.86602545, 0, 1, 0, -0.86602545, 0, 0.49999997, 5, 0, 7.9)
+script = ExtResource("26_uqb1c")
+kind = 1
+gem_color = Color(0.70980394, 0.4862745, 1, 1)
+
+[node name="Coin4" type="Node3D" parent="Treasure" unique_id=686069619]
+transform = Transform3D(-0.50000006, 0, 0.8660254, 0, 1, 0, -0.8660254, 0, -0.50000006, 5.4, 0, 6.9)
+script = ExtResource("26_uqb1c")
+
+[node name="Gem4" type="Node3D" parent="Treasure" unique_id=855261600]
+transform = Transform3D(0.17364822, 0, 0.9848077, 0, 1, 0, -0.9848077, 0, 0.17364822, 5.8, 0, 7.9)
+script = ExtResource("26_uqb1c")
+kind = 1
+gem_color = Color(1, 0.8784314, 0.30980393, 1)
+
+[node name="PatchyForScale" type="Node3D" parent="Treasure" unique_id=866292850]
+transform = Transform3D(0.90630776, 0, -0.42261827, 0, 1, 0, 0.42261827, 0, 0.90630776, 7.6, 0, 7.2)
+script = ExtResource("6_4ljw0")
+
+[node name="ShipwreckBeach" type="Node3D" parent="." unique_id=630441503]
+
+[node name="Label" type="Label3D" parent="ShipwreckBeach" unique_id=410964012]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23, 3, 16)
+pixel_size = 0.006
+billboard = 1
+modulate = Color(1, 0.93, 0.7, 1)
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "SHIPWRECK BEACH"
+font_size = 84
+outline_size = 16
+
+[node name="HullSection" type="StaticBody3D" parent="ShipwreckBeach" unique_id=1197381009]
+transform = Transform3D(0.9396926, 0, 0.34202012, 0, 1, 0, -0.34202012, 0, 0.9396926, -15.5, 0, 16.5)
+script = ExtResource("27_ou210")
+
+[node name="ShipDebris" type="StaticBody3D" parent="ShipwreckBeach" unique_id=8493392]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.5, 0, 14.2)
+script = ExtResource("28_uc3rh")
+
+[node name="BrokenMast" type="StaticBody3D" parent="ShipwreckBeach" unique_id=1534194559]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 0, 20.2)
+script = ExtResource("29_bsjo5")
+tilt_direction = 70.0
+
+[node name="BowPiece" type="StaticBody3D" parent="ShipwreckBeach" unique_id=866941884]
+transform = Transform3D(-0.8660254, 0, 0.50000006, 0, 1, 0, -0.50000006, 0, -0.8660254, -3.8, 0, 19.6)
+script = ExtResource("30_sohy7")
+
+[node name="PalmTree" type="StaticBody3D" parent="ShipwreckBeach" unique_id=2019043617]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, 12.6)
+script = ExtResource("4_cd46u")
+height = 8.0
+lean_degrees = 24.0
+lean_direction = 150.0
+frond_length = 3.6
+seed = 7
+
+[node name="PalmTree2" type="StaticBody3D" parent="ShipwreckBeach" unique_id=1115811012]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.5, 0, 12.8)
+script = ExtResource("4_cd46u")
+lean_degrees = 10.0
+lean_direction = -120.0
+seed = 8
+
+[node name="Dock" type="StaticBody3D" parent="ShipwreckBeach" unique_id=940051245]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 6.5, 0.16, 21.5)
+script = ExtResource("31_chain")
+length = 12.0
+
+[node name="DockTorch" type="StaticBody3D" parent="ShipwreckBeach" unique_id=1951755442]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.8, 0, 21)
+script = ExtResource("16_b1r6a")
+
+[node name="DockTorch2" type="StaticBody3D" parent="ShipwreckBeach" unique_id=1704390293]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.2, 0, 21)
+script = ExtResource("16_b1r6a")
+
+[node name="BeachCrate" type="StaticBody3D" parent="ShipwreckBeach" unique_id=572484678]
+transform = Transform3D(0.90630776, 0, 0.42261827, 0, 1, 0, -0.42261827, 0, 0.90630776, 3.2, 0, 19)
+script = ExtResource("12_0v4r8")
+
+[node name="BeachBarrel" type="StaticBody3D" parent="ShipwreckBeach" unique_id=1600328214]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.3, 0, 18.4)
+script = ExtResource("13_b0wqs")
+
+[node name="StylizedRock" type="StaticBody3D" parent="ShipwreckBeach" unique_id=225285017]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.5, 0, 17.5)
+script = ExtResource("5_whgxn")
+preset = 0
+size = Vector3(2.2, 1.4, 1.9)
+seed = 41
+
+[node name="StylizedRock2" type="StaticBody3D" parent="ShipwreckBeach" unique_id=1687140472]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.9, 0, 18.8)
+script = ExtResource("5_whgxn")
+preset = 0
+size = Vector3(1, 0.7, 0.9)
+seed = 42
+
+[node name="StylizedRock3" type="StaticBody3D" parent="ShipwreckBeach" unique_id=274720973]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, -3, 28)
+script = ExtResource("5_whgxn")
+preset = 2
+size = Vector3(3, 7, 2.6)
+seed = 43
+
+[node name="RopeBridge" type="StaticBody3D" parent="ShipwreckBeach" unique_id=789287791]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 3, 15)
+script = ExtResource("32_yofdw")
+end_point = Vector3(0, 0, 9)
+
+[node name="PatchyForScale" type="Node3D" parent="ShipwreckBeach" unique_id=395227407]
+transform = Transform3D(-0.9396926, 0, 0.3420202, 0, 1, 0, -0.3420202, 0, -0.9396926, 6.2, 0.16, 23.5)
+script = ExtResource("6_4ljw0")
+
+[node name="PatchyForScale2" type="Node3D" parent="ShipwreckBeach" unique_id=893149223]
+transform = Transform3D(0.8660254, 0, -0.5, 0, 1, 0, 0.5, 0, 0.8660254, -7.2, 0, 16.6)
+script = ExtResource("6_4ljw0")
