@@ -27,6 +27,10 @@ func _ready() -> void:
 	if not Engine.is_editor_hint():
 		body_entered.connect(_on_body_entered)
 		Events.checkpoint_reached.connect(_on_any_checkpoint)
+		# A loaded save shows its active flag already raised.
+		if GameManager.checkpoint_id == _id():
+			_active = true
+			_flag.position.y = 2.2
 
 
 func _build() -> void:
@@ -58,8 +62,12 @@ func _on_body_entered(body: Node3D) -> void:
 	if not body is Player or _active:
 		return
 	var xform := Transform3D(Basis(Vector3.UP, deg_to_rad(respawn_yaw)), global_position + Vector3.UP * 0.1)
-	GameManager.set_checkpoint(checkpoint_id if checkpoint_id != &"" else StringName(name), xform)
+	GameManager.set_checkpoint(_id(), xform)
 	_raise()
+
+
+func _id() -> StringName:
+	return checkpoint_id if checkpoint_id != &"" else StringName(name)
 
 
 func _raise() -> void:
@@ -72,7 +80,6 @@ func _raise() -> void:
 
 func _on_any_checkpoint(id: StringName) -> void:
 	# Lower this flag when another checkpoint becomes active.
-	var mine := checkpoint_id if checkpoint_id != &"" else StringName(name)
-	if id != mine and _active:
+	if id != _id() and _active:
 		_active = false
 		create_tween().tween_property(_flag, "position:y", 0.7, 0.4)

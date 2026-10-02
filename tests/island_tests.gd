@@ -1,0 +1,319 @@
+extends PatchyTestHarness
+## Headless suite for Castaway Cay: the opening, the main routes, the dark-cave
+## refusal, the parrot log bridge, the chained chest and the crab burrow.
+## Loads the real island scene for every test.
+##   godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn [filter]
+
+const ISLAND_PATH := "res://world/islands/castaway_cay/castaway_cay.tscn"
+
+var island: Node3D
+var _island_scene: PackedScene
+
+
+func suite_name() -> String:
+	return "PATCHY ISLAND TESTS"
+
+
+func _setup() -> void:
+	if _island_scene == null:
+		_island_scene = load(ISLAND_PATH)
+	WorldState.reset()
+	ParrotManager.reset()
+	InventoryManager.reset()
+	GameManager.reset()
+	if not _current.begins_with("test_opening_sequence"):
+		WorldState.mark_completed(&"castaway_intro_seen")
+	_arena = Node3D.new()
+	_arena.name = "Arena"
+	add_child(_arena)
+	island = _island_scene.instantiate()
+	_arena.add_child(island)
+	player = island.get_node("Player") as Player
+	rig = island.get_node("CameraRig") as CameraRig
+	s = player.settings
+	player.input.virtual_mode = true
+	player.input.virtual_reset()
+	_jumps = 0
+	player.jumped.connect(func(_k: StringName) -> void: _jumps += 1)
+	await frames(6)
+
+
+func _teardown() -> void:
+	player.input.virtual_reset()
+	_arena.queue_free()
+	_arena = null
+	island = null
+
+
+## Teleports Patchy facing `face` and turns the camera behind him so forward
+## input means "toward `face`".
+func place(pos: Vector3, face: Vector3) -> void:
+	player.teleport(pos, face.normalized())
+	await frames(2)
+	rig.snap_behind_target()
+	await frames(4)
+
+
+func node(path: String) -> Node:
+	return island.get_node(path)
+
+
+## Route tests measure movement, not combat: crabs stay home.
+func clear_enemies() -> void:
+	for c in island.find_children("*", "Crab", true, false):
+		c.queue_free()
+	await frames(1)
+
+
+# --- Tests ------------------------------------------------------------------------
+
+func test_island_contents() -> void:
+	var cages := 0
+	var crabs := 0
+	for n in island.find_children("*", "ParrotCage", true, false):
+		cages += 1
+	for n in island.find_children("*", "Crab", true, false):
+		crabs += 1
+	check("four parrot cages", cages == 4, "cages=%d" % cages)
+	check("crabs placed", crabs >= 8, "crabs=%d" % crabs)
+	await frames(2)
+	check("parrot total registered", ParrotManager.get_island_total(&"castaway_cay") == 4, "total=%d" % ParrotManager.get_island_total(&"castaway_cay"))
+	check("treasure total registered", InventoryManager.get_island_treasure_total(&"castaway_cay") >= 7, "total=%d" % InventoryManager.get_island_treasure_total(&"castaway_cay"))
+	check("island discovered without intro", GameManager.is_island_discovered(&"castaway_cay"), "")
+
+
+func test_everything_rests_on_something() -> void:
+	# Every pickup, cage and checkpoint must have solid ground below it and
+	# must not be buried in level geometry.
+	var bad: Array[String] = []
+	var space := player.get_world_3d().direct_space_state
+	var items: Array[Node3D] = []
+	for n in island.find_children("*", "Collectible", true, false):
+		items.append(n)
+	for n in island.find_children("*", "ParrotCage", true, false):
+		items.append(n)
+	for n in island.find_children("*", "Checkpoint", true, false):
+		items.append(n)
+	for it in items:
+		var p := it.global_position
+		# Coin trails may arc over gaps on purpose; everything else needs ground.
+		var in_trail := it.get_parent() is CoinTrail
+		var q := PhysicsRayQueryParameters3D.create(p + Vector3.UP * 0.2, p + Vector3.DOWN * 9.0, Layers.WORLD)
+		var hit := space.intersect_ray(q)
+		if not in_trail and (hit.is_empty() or hit.position.y < 0.5):
+			bad.append("%s floats over water/void at %v" % [it.name, p])
+			continue
+		var shape := SphereShape3D.new()
+		shape.radius = 0.25
+		var sq := PhysicsShapeQueryParameters3D.new()
+		sq.shape = shape
+		sq.transform = Transform3D(Basis.IDENTITY, p + Vector3.UP * 0.35)
+		sq.collision_mask = Layers.WORLD
+		if not space.intersect_shape(sq, 1).is_empty():
+			bad.append("%s is buried at %v" % [it.name, p])
+	check("all pickups sit on reachable ground", bad.is_empty(), "; ".join(bad.slice(0, 4)))
+
+
+func test_opening_sequence() -> void:
+	var seq := node("OpeningSequence") as OpeningSequence
+	check("intro holds Patchy down", player.state_id == &"locked", "state=%s" % player.state_id)
+	var done := await wait_until(func() -> bool: return not seq.is_pending(), 900)
+	check("intro finishes within 15 s", done >= 0, "frames=%d" % done)
+	await frames(4)
+	check("control returns", player.state_id != &"locked", "state=%s" % player.state_id)
+	check("gameplay camera is live", rig.get_camera().current, "")
+	check("intro is remembered", WorldState.is_completed(&"castaway_intro_seen"), "")
+	check("island announced after intro", GameManager.is_island_discovered(&"castaway_cay"), "")
+	var thieves := 0
+	for c in island.find_children("*", "Crab", true, false):
+		var crab := c as Crab
+		if crab.state in [Crab.State.FLEE, Crab.State.STEAL, Crab.State.BURROWED, Crab.State.NOTICE]:
+			thieves += 1
+	check("crabs run off with gold", thieves >= 2, "thieves=%d" % thieves)
+
+
+func test_cove_jump_to_meadow() -> void:
+	await clear_enemies()
+	await place(Vector3(0, 1.3, 32.5), Vector3.FORWARD)
+	move(Vector2(0, -1))
+	await wait_until(func() -> bool: return player.global_position.z < 28.6, 120)
+	press(&"jump")
+	await frames(24)
+	release(&"jump")
+	await frames(60)
+	move(Vector2.ZERO)
+	await frames(10)
+	check("jumps from the beach onto the meadow", player.is_on_floor() and player.global_position.y > 2.9, "y=%.2f z=%.2f" % [player.global_position.y, player.global_position.z])
+
+
+func test_ledge_grab_up_the_ridge() -> void:
+	await clear_enemies()
+	await place(Vector3(-4, 3.1, 9.5), Vector3.FORWARD)
+	move(Vector2(0, -1))
+	await wait_until(func() -> bool: return player.global_position.z < 5.0, 120)
+	press(&"jump")
+	var grabbed := await wait_until(func() -> bool: return player.state_id == &"ledge", 90)
+	release(&"jump")
+	check("catches the 4 m ridge ledge", grabbed >= 0, "state=%s y=%.2f" % [player.state_id, player.global_position.y])
+	var up := await wait_until(func() -> bool: return player.state_id == &"ground" and player.global_position.y > 6.9, 90)
+	check("climbs onto the ridge", up >= 0, "y=%.2f state=%s" % [player.global_position.y, player.state_id])
+
+
+func test_dark_cave_refusal() -> void:
+	await clear_enemies()
+	await place(Vector3(19.0, 7.1, -34.5), Vector3.LEFT)
+	move(Vector2(0, -1))
+	var deepest := 99.0
+	var locked := -1
+	for i in 240:
+		await frames(1)
+		deepest = minf(deepest, player.global_position.x)
+		if player.state_id == &"locked" and locked < 0:
+			locked = i
+			move(Vector2.ZERO)
+	check("refuses to enter the dark cave", locked >= 0, "x=%.2f" % player.global_position.x)
+	check("never goes deep", deepest > 13.0, "deepest x=%.2f" % deepest)
+	var free := await wait_until(func() -> bool: return player.state_id != &"locked", 240)
+	check("backs out and regains control", free >= 0 and player.global_position.x > 14.4, "x=%.2f state=%s" % [player.global_position.x, player.state_id])
+
+
+func test_log_bridge_needs_six_parrots() -> void:
+	var task := node("Gameplay/Headland/LogBridgeTask") as ParrotTask
+	var log_body := node("Gameplay/Headland/FallenLog") as Node3D
+	var spot := node("Gameplay/Headland/LogBridgeSpot") as Node3D
+	ParrotManager.debug_add(4)
+	task.interact(player)
+	await frames(30)
+	check("four parrots are not enough", not WorldState.is_completed(&"castaway_log_bridge"), "")
+	ParrotManager.debug_add(2)
+	await place(Vector3(12.5, 7.1, -16.5), Vector3.FORWARD)
+	task.interact(player)
+	var done := await wait_until(func() -> bool: return WorldState.is_completed(&"castaway_log_bridge"), 900)
+	check("six parrots lay the bridge", done >= 0, "frames=%d" % done)
+	check("log rests at the gorge", log_body.global_position.distance_to(spot.global_position) < 0.05, "d=%.2f" % log_body.global_position.distance_to(spot.global_position))
+	await frames(20)
+	await place(Vector3(17.6, 7.1, -22), Vector3.RIGHT)
+	move(Vector2(0, -1))
+	await wait_until(func() -> bool: return player.global_position.x > 38.0 or player.global_position.y < 5.0, 300)
+	move(Vector2.ZERO)
+	await frames(20)
+	check("walks the log to the headland", player.global_position.x > 37.0 and player.global_position.y > 7.0, "pos=%v" % player.global_position)
+
+
+func test_headland_unreachable_without_bridge() -> void:
+	await clear_enemies()
+	# The best long jump off the ridge's edge must fall short of the headland.
+	await place(Vector3(16.2, 7.1, -22), Vector3.RIGHT)
+	move(Vector2(0, -1))
+	await wait_until(func() -> bool: return player.global_position.x > 18.2, 120)
+	press(&"crouch")
+	await frames(2)
+	tap(&"jump")
+	await frames(1)
+	release(&"crouch")
+	check("long jump off the ridge", player.jump_kind == &"long", String(player.jump_kind))
+	await wait_until(func() -> bool: return player.state_id != &"air", 300)
+	move(Vector2.ZERO)
+	await frames(10)
+	check("long jump falls short of the headland", player.global_position.y < 7.0 and player.global_position.x < 35.0, "pos=%v" % player.global_position)
+
+
+func test_shipwreck_climb() -> void:
+	await clear_enemies()
+	await place(Vector3(39.6, 1.3, 38), Vector3.RIGHT)
+	move(Vector2(0, -1))
+	await wait_until(func() -> bool: return player.global_position.x > 47.4, 180)
+	press(&"jump")
+	await frames(20)
+	release(&"jump")
+	await wait_until(func() -> bool: return player.is_on_floor() and player.global_position.y > 6.0, 120)
+	check("onto the cabin roof", player.global_position.y > 6.0, "pos=%v state=%s" % [player.global_position, player.state_id])
+	await wait_until(func() -> bool: return player.global_position.x > 52.4, 90)
+	press(&"jump")
+	await frames(20)
+	release(&"jump")
+	await wait_until(func() -> bool: return player.state_id == &"ground" and player.global_position.y > 7.9, 120)
+	move(Vector2.ZERO)
+	await frames(30)
+	check("up into the crow's nest", player.global_position.y > 7.9, "pos=%v state=%s" % [player.global_position, player.state_id])
+	check("parrot #1 freed on arrival", ParrotManager.is_rescued(&"castaway_parrot_wreck") or player.interaction.current is ParrotCage, "")
+
+
+func test_long_jump_to_the_stack() -> void:
+	await clear_enemies()
+	var nest := Vector3(55.5, 8.1, 38)
+	var target := Vector3(61.4, 6.2, 48.6)
+	var d := Player.flat(target - nest).normalized()
+	var n := Vector3(d.z, 0, -d.x)
+	await place(nest - d * 1.2 + n * 1.0, d)
+	move(Vector2(0, -1))
+	await wait_until(func() -> bool: return (player.global_position - nest).dot(d) > 0.75, 60)
+	press(&"crouch")
+	await frames(2)
+	tap(&"jump")
+	await frames(1)
+	release(&"crouch")
+	check("long jump from the nest", player.jump_kind == &"long", "%s speed=%.1f" % [player.jump_kind, hspeed()])
+	await wait_until(func() -> bool: return player.state_id != &"air", 240)
+	move(Vector2.ZERO)
+	await frames(10)
+	check("lands on the sea stack", player.is_on_floor() and player.global_position.y > 6.0, "pos=%v state=%s" % [player.global_position, player.state_id])
+
+
+func test_chained_chest_puzzle() -> void:
+	await clear_enemies()
+	var chest := node("Gameplay/Headland/HeadlandChest") as TreasureChest
+	check("chest starts chained", chest.is_locked(), "")
+	for k in 3:
+		var post := node("Gameplay/Headland/PoundPost%d" % k) as PoundPost
+		await place(post.global_position + Vector3.UP * 3.0, Vector3.FORWARD)
+		await frames(2)
+		press(&"ground_pound")
+		await frames(2)
+		release(&"ground_pound")
+		await wait_until(func() -> bool: return post.down, 90)
+		check("post %d pounded down" % k, post.down, "state=%s y=%.2f" % [player.state_id, player.global_position.y])
+		await frames(30)
+	check("chains fall away", not chest.is_locked(), "")
+	await place(chest.global_position + Vector3(0, 0.1, 2.2), Vector3.FORWARD)
+	await frames(10)
+	chest.interact(player)
+	var opened := await wait_until(func() -> bool: return WorldState.is_completed(&"castaway_headland_chest"), 240)
+	check("chest opens", opened >= 0, "")
+	await frames(30)
+	check("crown collected", InventoryManager.has_treasure(&"castaway_headland_chest_prize"), "gold=%d" % InventoryManager.gold_value)
+
+
+func test_crab_burrow_returns_stolen_gold() -> void:
+	var burrow := node("Gameplay/CoveBurrow") as CrabBurrow
+	burrow.stash(3)
+	await place(burrow.global_position + Vector3(0, 3.0, 0), Vector3.FORWARD)
+	press(&"ground_pound")
+	await frames(2)
+	release(&"ground_pound")
+	await wait_until(func() -> bool: return burrow.stash_value == 0, 120)
+	check("pounding the burrow digs up the stash", burrow.stash_value == 0, "stash=%d" % burrow.stash_value)
+	await frames(150)
+	check("stolen coins come back", InventoryManager.gold_value >= 3, "gold=%d" % InventoryManager.gold_value)
+
+
+func test_shellby_talks() -> void:
+	var npc := node("Gameplay/OldShellby") as NPC
+	await place(npc.global_position + Vector3(0, 0.1, -1.6), Vector3.BACK)
+	await frames(6)
+	check("prompt offered near Shellby", player.interaction.current == npc, "current=%s" % player.interaction.current)
+	tap(&"interact")
+	var done := await wait_until(func() -> bool: return WorldState.is_completed(&"castaway_met_shellby"), 900)
+	check("conversation completes", done >= 0, "")
+	await frames(4)
+	check("control returns after talking", player.state_id != &"locked", "state=%s" % player.state_id)
+
+
+func test_checkpoint_respawn() -> void:
+	var cp := node("Gameplay/CpRidge") as Checkpoint
+	await place(cp.global_position + Vector3(0, 0.1, 1.0), Vector3.FORWARD)
+	await frames(10)
+	check("touching the flag sets the checkpoint", GameManager.checkpoint_id == &"cp_ridge", "id=%s" % GameManager.checkpoint_id)
+	player.health.die()
+	await frames(90)
+	check("fainting returns to the flag", player.global_position.distance_to(cp.global_position) < 1.5, "pos=%v" % player.global_position)

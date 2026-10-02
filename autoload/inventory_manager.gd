@@ -16,6 +16,8 @@ var equipped_attachment: StringName = &"hook"
 var _ship_parts: Array[StringName] = []
 var _maps: Dictionary = {}           # map_id -> {"solved": bool}
 var max_health: int = 4
+## Unique treasures per island, registered by islands as they load.
+var _island_treasure_totals: Dictionary = {}
 
 
 func _ready() -> void:
@@ -51,6 +53,14 @@ func count_treasures(kind: StringName = &"", island_id: StringName = &"") -> int
 			continue
 		n += 1
 	return n
+
+
+func register_island_treasure_total(island_id: StringName, total: int) -> void:
+	_island_treasure_totals[island_id] = total
+
+
+func get_island_treasure_total(island_id: StringName) -> int:
+	return int(_island_treasure_totals.get(island_id, 0))
 
 
 ## Gold can be lost on a fall if a design ever wants it (spec §97); keep it

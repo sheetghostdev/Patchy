@@ -52,8 +52,12 @@ func get_island_total(island_id: StringName) -> int:
 
 ## Debug helpers (spec §140).
 func debug_add(count: int) -> void:
-	for i in count:
-		rescue(StringName("debug_parrot_%d" % (get_total() + i + 1000)), &"debug")
+	var added := 0
+	var k := 0
+	while added < count:
+		if rescue(StringName("debug_parrot_%d" % k), &"debug"):
+			added += 1
+		k += 1
 
 
 func debug_remove(count: int) -> void:

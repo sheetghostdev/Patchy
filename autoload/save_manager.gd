@@ -5,11 +5,45 @@ extends Node
 
 signal saved(slot: int)
 signal loaded(slot: int)
+## Emitted when an autosave is about to be written (HUD shows a quiet icon).
+signal autosaving
 
 const SAVE_VERSION := 1
 const SLOT_COUNT := 3
+## Several progress events often land together (cage + stinger + treasure);
+## they coalesce into one write.
+const AUTOSAVE_DELAY := 0.8
 
 var current_slot: int = 0
+## Only a real play session (title screen -> New Game / Continue) autosaves;
+## labs, tests and the photo tool never touch the player's slots.
+var autosave_enabled := false
+var _autosave_queued := false
+
+
+func _ready() -> void:
+	Events.checkpoint_reached.connect(func(_id: StringName) -> void: request_autosave())
+	Events.parrot_rescued.connect(func(_id: StringName, _t: int) -> void: request_autosave())
+	Events.ship_part_recovered.connect(func(_id: StringName) -> void: request_autosave())
+	Events.treasure_map_found.connect(func(_id: StringName) -> void: request_autosave())
+	Events.world_task_completed.connect(func(_id: StringName) -> void: request_autosave())
+	Events.attachment_unlocked.connect(func(_id: StringName) -> void: request_autosave())
+	Events.boss_defeated.connect(func(_id: StringName) -> void: request_autosave())
+	Events.island_discovered.connect(func(_id: StringName, _n: String) -> void: request_autosave())
+	Events.treasure_collected.connect(func(id: StringName, _k: StringName, _v: int) -> void:
+		if id != &"":
+			request_autosave())
+
+
+func request_autosave() -> void:
+	if not autosave_enabled or _autosave_queued:
+		return
+	_autosave_queued = true
+	await get_tree().create_timer(AUTOSAVE_DELAY, true).timeout
+	_autosave_queued = false
+	if autosave_enabled:
+		autosaving.emit()
+		save_game(current_slot)
 
 
 func get_slot_path(slot: int) -> String:
@@ -70,6 +104,7 @@ func load_game(slot: int = current_slot) -> bool:
 
 func new_game(slot: int = 0) -> void:
 	current_slot = slot
+	delete_slot(slot)
 	WorldState.reset()
 	ParrotManager.reset()
 	InventoryManager.reset()

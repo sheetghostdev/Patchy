@@ -33,6 +33,9 @@ enum State { PATROL, NOTICE, CHASE, WINDUP, LUNGE, RECOVER, FLIPPED, SLIDING, ST
 @export var burrow: Node3D
 ## Optional: stays defeated across visits when set.
 @export var persistent_id: StringName = &""
+## Waits motionless (ignoring Patchy) until a script wakes it: cutscene
+## actors like the opening's coin thieves.
+@export var dormant := false
 
 const GRAVITY := 30.0
 
@@ -48,6 +51,9 @@ var _steal_target: Collectible = null
 var _alert: Label3D
 var _hit_player := false
 var _spin := 0.0
+var _scripted_grab: Collectible = null
+## A scripted thief (opening sequence) ignores Patchy until the loot is home.
+var _scripted_run := false
 
 @onready var model: CrabModel = $CrabModel
 @onready var attack_area: Area3D = $CrabModel/AttackArea
@@ -79,13 +85,25 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	_t += delta
 	var player := GameManager.player as Player
+	if dormant:
+		_halt(delta)
+		if not is_on_floor():
+			velocity.y -= GRAVITY * delta
+		move_and_slide()
+		_animate(delta)
+		return
 	match state:
 		State.PATROL:
 			_update_patrol(delta, player)
 		State.NOTICE:
 			_halt(delta)
 			_look_at_player(player, delta)
-			if _t > 0.45:
+			if _scripted_grab != null and _t > 0.7:
+				_steal_target = _scripted_grab
+				_scripted_grab = null
+				_scripted_run = true
+				_enter(State.STEAL)
+			elif _scripted_grab == null and _t > 0.45:
 				_enter(State.CHASE)
 		State.CHASE:
 			_update_chase(delta, player)
@@ -183,7 +201,7 @@ func _update_patrol(delta: float, player: Player) -> void:
 
 
 func _update_chase(delta: float, player: Player) -> void:
-	if player == null or player.global_position.distance_to(global_position) > lose_radius or player.health.is_respawning():
+	if player == null or player.global_position.distance_to(global_position) > lose_radius or player.health.is_respawning() or player.state_id == &"locked":
 		_enter(State.PATROL)
 		return
 	_look_at_player(player, delta)
@@ -207,7 +225,8 @@ func _update_steal(delta: float, player: Player) -> void:
 		_steal_target = null
 		_enter(State.PATROL)
 		return
-	if player != null and _can_see(player, 3.0):
+	if player != null and not _scripted_run and _can_see(player, 1.8):
+		_steal_target = null
 		_enter(State.NOTICE)
 		return
 	var to := Player.flat(_steal_target.global_position - global_position)
@@ -253,6 +272,22 @@ func _update_slide(delta: float) -> void:
 		_defeat(hv.normalized())
 
 
+# --- Scripted moments (opening sequence) ---------------------------------------------
+
+## Starts already dragging `loot` toward the burrow.
+func start_with_loot(loot: Collectible) -> void:
+	dormant = false
+	_grab(loot)
+	_enter(State.FLEE)
+
+
+## Freezes with a "!", grabs `extra`, then scurries off with it (spec §73).
+func notice_then_grab(extra: Collectible) -> void:
+	dormant = false
+	_scripted_grab = extra
+	_enter(State.NOTICE)
+
+
 # --- Helpers -------------------------------------------------------------------------
 
 func _move(dir: Vector3, speed: float, delta: float) -> void:
@@ -275,7 +310,8 @@ func _look_at_player(player: Player, delta: float) -> void:
 
 
 func _can_see(player: Player, radius: float) -> bool:
-	if player.health.is_respawning():
+	# Nobody attacks during cutscenes, dialogue or celebrations.
+	if player.health.is_respawning() or player.state_id == &"locked":
 		return false
 	var d := player.global_position.distance_to(global_position)
 	if d > radius or absf(player.global_position.y - global_position.y) > 3.0:
@@ -335,6 +371,7 @@ func _burrow_in() -> void:
 	VFX.dust(self, global_position, 8, 0.4, Color(0.98, 0.9, 0.7, 0.9), 1.5)
 	visible = false
 	collision_layer = 0
+	_scripted_run = false
 	_enter(State.BURROWED)
 
 

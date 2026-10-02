@@ -155,9 +155,17 @@ func _exit_tree() -> void:
 
 
 func _find_camera_rig() -> void:
+	# Prefer the rig that follows us; never a rig from a scene being freed.
+	var fallback: Node3D = null
 	for n in get_tree().get_nodes_in_group(&"camera_rig"):
-		camera_rig = n
-		return
+		if n.is_queued_for_deletion():
+			continue
+		if n.get(&"target") == self:
+			camera_rig = n
+			return
+		if fallback == null:
+			fallback = n
+	camera_rig = fallback
 
 
 ## Re-derive everything that depends on settings (call after live tuning).

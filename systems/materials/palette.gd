@@ -22,13 +22,13 @@ const BROW := Color("4a2a1c")
 const BEARD := Color("6b3a22")
 
 # Castaway Cay
-const GRASS := Color("78cb45")
+const GRASS := Color("6cbd45")
 const GRASS_DARK := Color("4f9c34")
 const DIRT := Color("b9804b")
 const DIRT_DARK := Color("86573a")
 const SAND := Color("f3dfa6")
 const SAND_DARK := Color("d9bb7c")
-const ROCK := Color("b9a68f")
+const ROCK := Color("bda48a")
 const ROCK_DARK := Color("85725f")
 const WOOD := Color("b97a40")
 const WOOD_DARK := Color("7c4b2a")
@@ -73,6 +73,10 @@ const TERRAIN := {
 	&"rock": [Color("cdbca3"), ROCK, ROCK_DARK],
 	&"cliff": [GRASS, ROCK, ROCK_DARK],
 	&"wood": [WOOD, WOOD_DARK, Color("5e3820")],
+	&"wood_dark": [WOOD_DARK, Color("5e3820"), Color("472a17")],
+	&"thatch": [Color("e8c66e"), Color("cfa94f"), Color("a8843a")],
+	&"roof_red": [Color("d9483b"), Color("b8372d"), Color("8f2a22")],
+	&"roof_blue": [Color("3f8fd9"), Color("2f72b3"), Color("24578a")],
 	&"stone": [STONE, STONE_DARK, Color("6f685f")],
 	&"dirt": [DIRT, DIRT_DARK, Color("6a4430")],
 	&"metal": [METAL, Color("6c7682"), Color("4d5560")],

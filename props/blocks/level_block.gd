@@ -13,6 +13,7 @@ enum Shape { BOX, RAMP, STAIRS, CYLINDER }
 const FOOTSTEP := {
 	"grass": &"grass", "cliff": &"grass", "dirt": &"grass", "sand": &"sand",
 	"wood": &"wood", "rock": &"stone", "stone": &"stone", "metal": &"stone",
+	"wood_dark": &"wood", "thatch": &"wood", "roof_red": &"wood", "roof_blue": &"wood",
 }
 
 @export var shape := Shape.BOX:
@@ -23,7 +24,7 @@ const FOOTSTEP := {
 	set(v):
 		size = v.max(Vector3.ONE * 0.05)
 		_queue_rebuild()
-@export_enum("grass", "sand", "rock", "cliff", "wood", "stone", "dirt", "metal", "lab", "lab_orange", "lab_teal", "lab_purple", "lab_pink", "lab_blue") var surface: String = "lab":
+@export_enum("grass", "sand", "rock", "cliff", "wood", "wood_dark", "thatch", "roof_red", "roof_blue", "stone", "dirt", "metal", "lab", "lab_orange", "lab_teal", "lab_purple", "lab_pink", "lab_blue") var surface: String = "lab":
 	set(v):
 		surface = v
 		_queue_rebuild()

@@ -86,7 +86,7 @@ func _apply() -> void:
 	env.fog_sky_affect = 0.0
 	env.fog_aerial_perspective = 0.55
 	env.adjustment_enabled = true
-	env.adjustment_saturation = 1.12
+	env.adjustment_saturation = 1.06
 	env.adjustment_contrast = 1.04
 
 	var sun_rot := Vector3(-52.0, -38.0, 0.0)

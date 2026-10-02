@@ -5,6 +5,7 @@ extends Node
 ##       out=/tmp/shot.png frames=40 [size=1280x720] [player=x,y,z] [yaw=deg] \
 ##       [cam=x,y,z look=x,y,z] [move=x,y] [press=jump@10-20,dive@30]
 ##       [snaps=f1,f2,...] [follow=dx,dy,dz (camera offset that tracks Patchy)]
+##       [flags=castaway_intro_seen,... (WorldState completions set before loading)]
 ## Multiple free-camera shots: cams="x,y,z>lx,ly,lz;x,y,z>lx,ly,lz" with out=/tmp/shot_%d.png
 
 var _args := {}
@@ -21,6 +22,8 @@ func _ready() -> void:
 		size = Vector2i(int(p[0]), int(p[1]))
 	get_window().size = size
 	Settings.auto_camera = _args.get("autocam", "1") == "1"
+	for f in String(_args.get("flags", "")).split(",", false):
+		WorldState.mark_completed(StringName(f))
 	var scene_path: String = _args.get("scene", "res://tests/scenes/movement_test.tscn")
 	var scene: Node = load(scene_path).instantiate()
 	add_child(scene)

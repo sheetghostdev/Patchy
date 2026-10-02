@@ -1,0 +1,41 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://world/environment/sky_environment.gd" id="1_env"]
+[ext_resource type="Script" path="res://world/terrain/plateau.gd" id="2_plat"]
+[ext_resource type="Script" path="res://characters/patchy/patchy_model.gd" id="3_model"]
+
+[node name="TerrainViewer" type="Node3D"]
+
+[node name="SkyEnvironment" type="Node3D" parent="."]
+script = ExtResource("1_env")
+
+[node name="Beach" type="StaticBody3D" parent="."]
+script = ExtResource("2_plat")
+outline = PackedVector2Array(-20, -14, -4, -18, 14, -16, 22, -4, 18, 12, 2, 18, -16, 12, -22, 0)
+height = 1.0
+depth = 6.0
+surface = "sand"
+shore = true
+shore_width = 10.0
+shore_drop = 3.5
+
+[node name="Meadow" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -4)
+script = ExtResource("2_plat")
+outline = PackedVector2Array(-12, -8, 0, -11, 10, -7, 12, 3, 4, 8, -8, 6, -13, -1)
+height = 3.5
+depth = 4.0
+surface = "cliff"
+
+[node name="Hill" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -8)
+script = ExtResource("2_plat")
+outline = PackedVector2Array(-5, -4, 1, -6, 6, -3, 5, 3, -1, 4, -6, 1)
+height = 8.0
+depth = 6.0
+surface = "cliff"
+noise_seed = 3
+
+[node name="Patchy" type="Node3D" parent="."]
+transform = Transform3D(0.7, 0, 0.7, 0, 1, 0, -0.7, 0, 0.7, 3, 1, 10)
+script = ExtResource("3_model")

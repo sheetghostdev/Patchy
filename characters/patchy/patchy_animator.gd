@@ -391,6 +391,31 @@ func _base_pose(st: StringName, speed: float) -> Dictionary:
 			p[&"hip_r"] = Vector3(legs - 5, 0, 0)
 			p[&"knee_l"] = Vector3(-35, 0, 0)
 			p[&"knee_r"] = Vector3(-15, 0, 0)
+		&"knocked_out":
+			_spin_driven = true
+			p[&"spin"] = Vector3(90, 0, 0)
+			p[&"body_y"] = -0.56
+			p[&"sh_l"] = Vector3(20, 0, -85)
+			p[&"sh_r"] = Vector3(10, 0, 80)
+			p[&"hip_l"] = Vector3(5, 0, -18)
+			p[&"hip_r"] = Vector3(8, 0, 22)
+			p[&"head"] = Vector3(-10, 25, 0)
+		&"wake_up":
+			# 0-0.35 sit up, 0.35-0.6 shake head, 0.6-1 hop to his feet.
+			var prog := clampf(t / 2.0, 0.0, 1.0)
+			_spin_driven = true
+			var sit := smoothstep(0.0, 0.35, prog)
+			var stand := smoothstep(0.6, 0.9, prog)
+			p[&"spin"] = Vector3(lerpf(lerpf(90.0, 8.0, sit), 0.0, stand), 0, 0)
+			p[&"body_y"] = lerpf(lerpf(-0.56, -0.4, sit), 0.0, stand)
+			p[&"hip_l"] = Vector3(lerpf(85.0 * sit, 0.0, stand), 0, -10)
+			p[&"hip_r"] = Vector3(lerpf(85.0 * sit, 0.0, stand), 0, 10)
+			p[&"knee_l"] = Vector3(lerpf(-20.0 * sit, 0.0, stand), 0, 0)
+			p[&"knee_r"] = Vector3(lerpf(-20.0 * sit, 0.0, stand), 0, 0)
+			var shake := sin(t * 30.0) * 28.0 * smoothstep(0.35, 0.42, prog) * (1.0 - smoothstep(0.55, 0.62, prog))
+			p[&"head"] = Vector3(0, shake, 0)
+			p[&"sh_l"] = Vector3(lerpf(-20.0, 0.0, stand), 0, lerpf(-40.0, -7.0, stand))
+			p[&"sh_r"] = Vector3(lerpf(-20.0, 10.0, stand), 0, lerpf(40.0, 9.0, stand))
 		&"cheer":
 			var hop := absf(sin(t * 9.0))
 			p[&"body_y"] = hop * 0.12
@@ -719,6 +744,15 @@ func _update_face(st: StringName, delta: float) -> void:
 		&"idle":
 			if _idle_action == &"sleepy":
 				eye_open = 0.35
+		&"knocked_out":
+			eye_open = 0.08
+			brow = -12.0
+			mouth = Vector3(1.0, 1.6, 1.0)
+		&"wake_up":
+			var prog := player.state_time / 2.0
+			eye_open = 0.1 if prog < 0.2 else (0.6 if prog < 0.55 else 1.0)
+			eye_scale = 1.0 if prog < 0.6 else 1.15
+			brow = -10.0 if prog < 0.6 else 18.0
 		&"cheer":
 			eye_open = 0.45
 			brow = -6.0

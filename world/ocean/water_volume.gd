@@ -50,8 +50,8 @@ func _rebuild() -> void:
 			add_child(_surface, false, Node.INTERNAL_MODE_FRONT)
 		var pm := PlaneMesh.new()
 		pm.size = Vector2(size.x, size.z)
-		pm.subdivide_width = int(size.x)
-		pm.subdivide_depth = int(size.z)
+		pm.subdivide_width = mini(int(size.x), 48)
+		pm.subdivide_depth = mini(int(size.z), 48)
 		_surface.mesh = pm
 		_surface.material_override = MaterialLibrary.water_simple()
 	elif _surface != null:

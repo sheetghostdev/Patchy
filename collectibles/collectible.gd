@@ -119,7 +119,8 @@ func _physics_process(delta: float) -> void:
 			global_position = next
 		return
 	var p := GameManager.player
-	if p != null and magnet_radius > 0.0:
+	# No vacuuming up loot while knocked out, talking or in a cutscene.
+	if p != null and magnet_radius > 0.0 and p.get(&"state_id") != &"locked":
 		var chest := p.global_position + Vector3.UP * 0.8
 		var d := global_position.distance_to(chest)
 		if d < magnet_radius or _magnet_t > 0.0:
