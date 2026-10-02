@@ -219,6 +219,10 @@ tools/photo/shoot.sh scene=res://world/islands/castaway_cay/castaway_cay.tscn \
 
 # Regenerate the original sound effects and music:
 python3 tools/audio/generate_audio.py
+
+# CPU cost of a level (logic + physics, headless). Castaway Cay: about 2 ms
+# per frame and a 1.6 s load:
+godot --headless --path . --fixed-fps 60 res://tools/perf_probe.tscn -- scene=res://world/hub/captains_cabin.tscn
 ```
 
 ## Tests
@@ -230,7 +234,7 @@ An optional argument after `--` filters test names.
 godot --headless --path . --fixed-fps 60 res://tests/run_movement_tests.tscn   # 53 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_camera_tests.tscn     # 21 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_gameplay_tests.tscn   # 53 checks
-godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 77 checks
+godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 87 checks
 godot --headless --path . --fixed-fps 60 res://ui/tests/ui_flow_test.tscn      # 76 checks
 godot --headless --path . --fixed-fps 60 res://props/tests/prop_tests.tscn     # 70 checks
 godot --headless --path . --fixed-fps 60 res://world/ocean/tests/ocean_swim_check.tscn
