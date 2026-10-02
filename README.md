@@ -101,7 +101,8 @@ npcs/               Parrots; islanders (NPC base, FavorNPC quest givers, Lookout
                     and their models (turtle, monkey, otter)
 collectibles/       Coins, gems, treasure kinds, coin trails
 world/              Terrain (Plateau); ocean (stylized Ocean, underwater effect,
-                    sea regions, open-sea current); islands (Castaway Cay and
+                    sea regions, open-sea current); sea/ (bell buoy, floating
+                    barrels, dolphins); islands (Castaway Cay and
                     Driftwood Key, IslandInfo, IslandZone); hub (captain's
                     cabin); vehicles (TinyBoat); objects (cages, parrot tasks,
                     chests, dig spots, braziers, gates, targets, cracked rock,
@@ -265,7 +266,7 @@ An optional argument after `--` filters test names.
 godot --headless --path . --fixed-fps 60 res://tests/run_movement_tests.tscn   # 53 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_camera_tests.tscn     # 21 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_gameplay_tests.tscn   # 64 checks
-godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 126 checks
+godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 130 checks
 godot --headless --path . --fixed-fps 60 res://ui/tests/ui_flow_test.tscn      # 84 checks
 godot --headless --path . --fixed-fps 60 res://props/tests/prop_tests.tscn     # 70 checks
 godot --headless --path . --fixed-fps 60 res://world/ocean/tests/ocean_swim_check.tscn
@@ -298,6 +299,8 @@ What each suite covers:
     Gull Rock, the three-parrot lift, Shellby's chart and its X), Tok's
     parrot tips and Pip's clam;
   - sailing to Driftwood Key and the open-sea current;
+  - the crossing: ramming a barrel for coins, the dolphin escort and
+    hopping out at Gull Bar;
   - the attachment chain: lantern, braziers, shovel, the treasure map's spot,
     grapple, pillar, cannon, cracked rock and targets;
   - a full King Claw fight, including the hand-off to his theme and back;
@@ -326,6 +329,12 @@ gold.
 
 **Driftwood Key** is a small islet one short sail away, with parrot 5 on a
 driftwood tower, parrot 6 in a guarded crab pen, and the Storm Lantern.
+
+**The crossing** between them is never empty water (spec §117). A bell
+buoy clangs midway to steer by, and floating barrels burst into coins
+when rammed. A coin trail rides the swell, and a pod of dolphins races
+the boat, leaping in turn. Gull Bar, a sandbar islet just off the route,
+hides a crate and a gem.
 
 More on Castaway Cay:
 

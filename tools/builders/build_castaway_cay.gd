@@ -75,6 +75,7 @@ func build() -> void:
 	_hints()
 	_barnacle_betty()
 	_islanders()
+	_crossing()
 
 	var player := b.instance(PLAYER, null, Vector3(0, 1.25, 33), 0.0, "Player")
 	var rig := b.instance(RIG, null, Vector3(0, 3, 40), 0.0, "CameraRig")
@@ -996,6 +997,45 @@ func _islanders() -> void:
 	otter.rotation.y = Player.yaw_of(c + Vector3(12, 1.3, -24) - pip.position)
 	b.add(otter, pip, "OtterModel")
 	pip.model = otter
+
+
+## The strait between the dock and Driftwood Key (spec §117: no long
+## stretches of nothing): a bell buoy to steer by, flotsam to ram for coins,
+## a coin trail on the water, a pod of dolphins that races the boat, and
+## Gull Bar, a sandbar islet just off the route with its own little prize.
+func _crossing() -> void:
+	var g := b.group("Crossing", gameplay)
+	var buoy := BellBuoy.new()
+	buoy.position = Vector3(-84, 0, 92)
+	b.add(buoy, g, "BellBuoy")
+	var k := 0
+	for p: Vector3 in [Vector3(-62.5, 0, 87.5), Vector3(-70, 0, 86), Vector3(-93, 0, 101.5), Vector3(-100, 0, 100)]:
+		k += 1
+		var barrel := FloatingBarrel.new()
+		barrel.barrel_id = StringName("crossing_barrel_%d" % k)
+		barrel.position = p
+		b.add(barrel, g, "FloatingBarrel")
+	coin_trail(Vector3(-74, 1.0, 91), Vector3(-80, 1.0, 93.7), 5, 0.0, CoinTrail.TrailShape.LINE)
+	var pod := DolphinPod.new()
+	pod.position = Vector3(-80, 0, 100)
+	b.add(pod, g, "DolphinPod")
+	# Gull Bar: a sandbar with a palm, a crate of coins and a gem.
+	var bar := Vector2(-96, 66)
+	plateau(terrain, "GullBar", [bar + Vector2(-6, -2), bar + Vector2(-2, -4.5), bar + Vector2(4, -3.5), bar + Vector2(6.5, 0.5),
+		bar + Vector2(2, 3.5), bar + Vector2(-4.5, 2.5)], 0.9, 4.0, "sand", {"shore": true, "shore_width": 6.0, "shore_drop": 2.6, "seed": 51})
+	palm(g, Vector3(bar.x - 2.0, 0.9, bar.y - 0.8), 6.5, 18.0, 30.0, 131)
+	crate_prop(g, Vector3(bar.x + 2.2, 0.9, bar.y + 0.6), "gull_bar_crate", 5, 20.0)
+	gem(Vector3(bar.x + 3.6, 1.5, bar.y - 1.6), "gull_bar_gem", Color("ff9f43"))
+	var dock := Marker3D.new()
+	dock.position = Vector3(bar.x + 9.0, 0, bar.y + 4.0)
+	b.add(dock, g, "GullBarMooring")
+	var region := SeaRegion.new()
+	region.region_name = "Gull Bar"
+	region.radius = 13.0
+	region.position = Vector3(bar.x, 0, bar.y)
+	region.boat_dock = dock
+	region.arrival = dock
+	b.add(region, g, "SeaRegionGullBar")
 
 
 # --- Tutorial hints -----------------------------------------------------------------

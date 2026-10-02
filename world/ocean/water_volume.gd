@@ -76,6 +76,21 @@ func get_surface_height(at: Vector3) -> float:
 	return base + wave_height * sin(t + at.x * 0.35) * cos(t * 0.8 + at.z * 0.3)
 
 
+## Water surface height at `pos` for anything floating there (boats, buoys,
+## barrels): the first water volume found around the point, else sea level.
+static func surface_at(world: World3D, pos: Vector3, fallback: float = 0.0) -> float:
+	var q := PhysicsPointQueryParameters3D.new()
+	q.position = pos + Vector3.UP * 0.6
+	q.collide_with_areas = true
+	q.collide_with_bodies = false
+	q.collision_mask = Layers.WATER
+	for hit in world.direct_space_state.intersect_point(q, 4):
+		var w := hit.collider as WaterVolume
+		if w != null:
+			return w.get_surface_height(pos)
+	return fallback
+
+
 func get_bottom_height() -> float:
 	return global_position.y - size.y
 

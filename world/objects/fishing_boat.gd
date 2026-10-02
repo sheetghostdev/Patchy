@@ -222,13 +222,4 @@ func _process(delta: float) -> void:
 
 
 func _surface_height() -> float:
-	var q := PhysicsPointQueryParameters3D.new()
-	q.position = global_position + Vector3.UP * 0.6
-	q.collide_with_areas = true
-	q.collide_with_bodies = false
-	q.collision_mask = Layers.WATER
-	for hit in get_world_3d().direct_space_state.intersect_point(q, 4):
-		var w := hit.collider as WaterVolume
-		if w != null:
-			return w.get_surface_height(global_position)
-	return 0.0
+	return WaterVolume.surface_at(get_world_3d(), global_position)

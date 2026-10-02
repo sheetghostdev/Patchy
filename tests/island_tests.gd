@@ -517,6 +517,49 @@ func test_board_and_sail_to_driftwood_key() -> void:
 	check("boat remembered where it was left", WorldState.get_flag(&"tiny_boat", "pos") != null, "")
 
 
+## Steers the boat at `target` at full throttle until `done` holds.
+func sail_until(boat: TinyBoat, target: Vector3, done: Callable, max_frames: int) -> int:
+	for i in max_frames:
+		if done.call():
+			move(Vector2.ZERO)
+			return i
+		move(stick_toward(Player.flat(target - boat.global_position)))
+		await frames(1)
+	move(Vector2.ZERO)
+	return -1
+
+
+func test_the_crossing_has_things_to_find() -> void:
+	await clear_enemies()
+	var boat := await board_boat()
+	# Flotsam: ram a barrel and its coins fly into Patchy's pouch.
+	var barrel: FloatingBarrel = null
+	for n in island.find_children("*", "FloatingBarrel", true, false):
+		if barrel == null or n.global_position.distance_to(boat.global_position) < barrel.global_position.distance_to(boat.global_position):
+			barrel = n
+	var aim := barrel.global_position
+	boat.global_position = aim + Vector3(14, 0, 0)
+	await frames(4)
+	var gold := InventoryManager.gold_value
+	var hit := await sail_until(boat, aim, func() -> bool: return not is_instance_valid(barrel), 300)
+	await frames(60)
+	check("ramming a floating barrel bursts it", hit >= 0, "")
+	check("its coins fly to Patchy", InventoryManager.gold_value >= gold + 4, "gold %d -> %d" % [gold, InventoryManager.gold_value])
+	# Dolphins race the boat as it passes their patch of sea.
+	var pod := node("Gameplay/Crossing/DolphinPod") as DolphinPod
+	boat.global_position = pod.global_position + Vector3(22, 0, -2)
+	await frames(4)
+	var escort := await sail_until(boat, pod.global_position + Vector3(-30, 0, 4), func() -> bool: return pod.is_escorting(), 400)
+	check("a pod of dolphins escorts the boat", escort >= 0, "")
+	# Gull Bar is a little islet you can step out onto.
+	var bar := node("Gameplay/Crossing/SeaRegionGullBar") as SeaRegion
+	boat.global_position = bar.global_position + Vector3(9, 0, 3)
+	await frames(4)
+	check("Patchy can hop out at Gull Bar", boat.can_disembark(), "")
+	move(Vector2.ZERO)
+	await frames(10)
+
+
 func test_cannot_hop_out_in_open_sea() -> void:
 	var boat := await board_boat()
 	boat.global_position = Vector3(-90, 0, 115)
