@@ -66,7 +66,7 @@ Debug keys:
 | Wall kick | Jump while sliding down a wall. You can't kick the same wall twice in a row. |
 | Hook swing | Jump at a glowing ring with the hook equipped. Pump with the stick; jump to release. |
 | Swimming | Surface paddle or dive under. |
-| Boat | Board Patchy's dinghy with E and steer with the stick. Jump hops out near shore. |
+| Boat | Board Patchy's dinghy with E and steer with the stick. Jump hops out near shore. Once an island is discovered, the pause-menu sea chart offers "Sail to ..." fast travel. |
 
 ### Hand attachments
 
@@ -234,7 +234,7 @@ An optional argument after `--` filters test names.
 godot --headless --path . --fixed-fps 60 res://tests/run_movement_tests.tscn   # 53 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_camera_tests.tscn     # 21 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_gameplay_tests.tscn   # 53 checks
-godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 87 checks
+godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 94 checks
 godot --headless --path . --fixed-fps 60 res://ui/tests/ui_flow_test.tscn      # 76 checks
 godot --headless --path . --fixed-fps 60 res://props/tests/prop_tests.tscn     # 70 checks
 godot --headless --path . --fixed-fps 60 res://world/ocean/tests/ocean_swim_check.tscn

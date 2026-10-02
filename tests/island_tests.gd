@@ -662,3 +662,25 @@ func test_tutorial_hint_waits_for_control_and_shows_once() -> void:
 	await frames(30)
 	check("and only once", shown[0] == 1 and WorldState.is_completed(&"hint_jump"), "shown=%d" % shown[0])
 	Events.hud_message.disconnect(count)
+
+
+func test_sea_chart_fast_travel() -> void:
+	await clear_enemies()
+	await place(Vector3(-48, 3.1, 12), Vector3.FORWARD)
+	check("can't sail to an undiscovered island", not GameManager.can_sail_to(&"driftwood_key"), "")
+	GameManager.discover_island(&"driftwood_key", "Driftwood Key")
+	GameManager.current_island = &"castaway_cay"
+	check("discovered islands are a voyage away", GameManager.can_sail_to(&"driftwood_key"), "")
+	GameManager.sail_to(&"driftwood_key")
+	await frames(90)
+	var arrival := node("Gameplay/DriftwoodArrival") as Node3D
+	var boat := node("Structures/Dock/TinyBoat") as Node3D
+	var dock := node("Gameplay/DriftwoodKey/BoatLanding") as Node3D
+	check("arrives at Driftwood Key", player.global_position.distance_to(arrival.global_position) < 1.5, "pos=%v" % player.global_position)
+	check("the boat comes too", Player.flat(boat.global_position - dock.global_position).length() < 1.0, "boat=%v" % boat.global_position)
+	check("current island updated", GameManager.current_island == &"driftwood_key", String(GameManager.current_island))
+	await frames(30)
+	check("stands on the jetty, not in the sea", player.state_id == &"ground", "state=%s" % player.state_id)
+	GameManager.sail_to(&"castaway_cay")
+	await frames(90)
+	check("and back home to the dock", player.global_position.distance_to((node("Gameplay/SpawnDock") as Node3D).global_position) < 1.5, "pos=%v" % player.global_position)

@@ -86,6 +86,48 @@ func get_island_scene(island_id: StringName) -> String:
 	return ISLAND_SCENES.get(island_id, ISLAND_SCENES[FIRST_ISLAND])
 
 
+## Fast travel by the sea chart (spec §83): sail to a discovered island.
+## Islands sharing this scene: a fade, then Patchy (and his boat) arrive at
+## the destination's dock. Other islands: a scene change to their "dock"
+## spawn point.
+func can_sail_to(island_id: StringName) -> bool:
+	if not is_island_discovered(island_id) or island_id == current_island:
+		return false
+	var p := player as Player
+	if p == null or not p.state_id in [&"ground", &"swim", &"boat"]:
+		return false
+	return SeaRegion.find(get_tree(), island_id) != null or ISLAND_SCENES.has(island_id)
+
+
+func sail_to(island_id: StringName) -> void:
+	if not can_sail_to(island_id) or SceneTransition.is_busy():
+		return
+	var region := SeaRegion.find(get_tree(), island_id)
+	if region == null:
+		SceneTransition.change_scene(get_island_scene(island_id), &"dock")
+		return
+	var p := player as Player
+	await SceneTransition.fade_out(0.45)
+	if not is_instance_valid(p):
+		return
+	if p.state_id == &"boat":
+		p.change_state(&"ground")
+	var boat := get_tree().get_first_node_in_group(&"boat") as Node3D
+	if boat != null and region.boat_dock != null:
+		boat.global_position = region.boat_dock.global_position
+		boat.set(&"_yaw", Player.yaw_of(-region.boat_dock.global_basis.z))
+		boat.rotation = Vector3(0, float(boat.get(&"_yaw")), 0)
+		boat.set(&"_speed", 0.0)
+		if boat.has_method(&"_save"):
+			boat.call(&"_save")
+	var at := region.arrival if region.arrival != null else region.boat_dock
+	p.teleport(at.global_position, -at.global_basis.z)
+	current_island = island_id
+	set_checkpoint(StringName(String(island_id) + "_arrival"), at.global_transform, true)
+	AudioManager.play(&"sail_flap", p.global_position)
+	await SceneTransition.fade_in(0.5)
+
+
 ## Title screen -> New Game: wipe progression and wash ashore.
 func start_new_game(slot: int = 0) -> void:
 	SaveManager.new_game(slot)

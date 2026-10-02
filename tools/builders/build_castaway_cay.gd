@@ -216,15 +216,23 @@ func _sea_regions() -> void:
 	b.add(sea, null, "OpenSea")
 	var home := SeaRegion.new()
 	home.region_name = "Castaway Cay"
+	home.island_id = ISLAND
 	home.radius = 108.0
 	home.position = Vector3(0, 0, -5)
 	home.boat_dock = structures.get_node("Dock/BoatMooring")
+	home.arrival = gameplay.get_node("SpawnDock")
 	b.add(home, gameplay, "SeaRegionCastaway")
 	var islet := SeaRegion.new()
 	islet.region_name = "Driftwood Key"
+	islet.island_id = ISLET
 	islet.radius = 42.0
 	islet.position = DRIFTWOOD
 	islet.boat_dock = gameplay.get_node("DriftwoodKey/BoatLanding")
+	var islet_arrival := Marker3D.new()
+	islet_arrival.position = DRIFTWOOD + Vector3(12.0, 1.3, -24.0)
+	islet_arrival.rotation_degrees.y = 200.0
+	b.add(islet_arrival, gameplay, "DriftwoodArrival")
+	islet.arrival = islet_arrival
 	b.add(islet, gameplay, "SeaRegionDriftwood")
 	var zone := IslandZone.new()
 	zone.island_id = ISLAND
