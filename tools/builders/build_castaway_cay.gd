@@ -68,6 +68,7 @@ func build() -> void:
 	_checkpoints()
 	_driftwood_key()
 	_sea_regions()
+	_decorate()
 
 	var player := b.instance(PLAYER, null, Vector3(0, 1.25, 33), 0.0, "Player")
 	var rig := b.instance(RIG, null, Vector3(0, 3, 40), 0.0, "CameraRig")
@@ -240,7 +241,7 @@ func _cove() -> void:
 	burrow.position = Vector3(34, 1.2, 28)
 	b.add(burrow, gameplay, "CoveBurrow")
 	# The coin arc that teaches the first jump onto the meadow.
-	coin_trail(Vector3(0, 1.2, 31), Vector3(0, 3.0, 24), 6, 2.2)
+	coin_trail(Vector3(-2.5, 1.2, 30.0), Vector3(-2.5, 3.0, 24), 6, 2.2)
 	heart(Vector3(-8, 3.6, 18))
 
 
@@ -258,7 +259,21 @@ func _shipwreck() -> void:
 	cage(Vector3(55.5, 8.05, 39.2), "castaway_parrot_wreck", ParrotModel.Plumage.SCARLET)
 	gem(Vector3(55.5, 10.6, 38), "castaway_gem_masthead", Palette.GEM_BLUE)
 	# The bow half lies further down the beach.
-	blk(g, Vector3(62, 1.2, 36), Vector3(5.0, 2.2, 6.0), "wood_dark", Vector3(0, 70, 0), LevelBlock.Shape.RAMP, "Bow")
+	var bow := BowPiece.new()
+	bow.length = 5.0
+	bow.height = 2.6
+	bow.damage_seed = 4
+	bow.position = Vector3(60.5, 1.2, 36.5)
+	bow.rotation_degrees.y = -100.0
+	b.add(bow, g, "Bow")
+	var hull := HullSection.new()
+	hull.length = 9.5
+	hull.height = 3.4
+	hull.lean_degrees = 18.0
+	hull.damage_seed = 7
+	hull.position = Vector3(44.0, 1.2, 34.4)
+	hull.rotation_degrees.y = 180.0
+	b.add(hull, g, "HullSection")
 	for p: Vector3 in [Vector3(40.5, 1.2, 32.5), Vector3(42, 1.2, 31.6), Vector3(58.5, 1.2, 41.5)]:
 		blk(g, p, Vector3(1.2, 1.2, 1.2), "wood", Vector3(0, 25, 0), LevelBlock.Shape.BOX, "Crate")
 	# Broken mast lying on the sand: a balance beam.
@@ -306,16 +321,12 @@ func _outpost() -> void:
 	var model := TurtleModel.new()
 	b.add(model, npc, "TurtleModel")
 	npc.model = model
-	var sign := Label3D.new()
-	sign.text = "CASTAWAY OUTPOST"
-	sign.font_size = 64
-	sign.pixel_size = 0.008
-	sign.outline_size = 14
-	sign.modulate = Palette.GOLD
-	sign.outline_modulate = Color(0.25, 0.12, 0.05)
-	sign.position = Vector3(-48, 6.6, 28.6)
+	var sign := Signpost.new()
+	sign.texts = PackedStringArray(["Castaway Outpost", "Dock", "Ridge", "Shipwreck"])
+	sign.directions = PackedFloat32Array([90.0, 180.0, 0.0, -90.0])
+	sign.post_height = 2.6
+	sign.position = Vector3(-48, 3.0, 28.6)
 	b.add(sign, g, "OutpostSign")
-	blk(g, Vector3(-48, 3.0, 28.6), Vector3(0.3, 3.2, 0.3), "wood", Vector3.ZERO, LevelBlock.Shape.CYLINDER, "SignPost")
 
 
 func _hut(parent: Node, pos: Vector3, yaw: float, roof_color: Color) -> void:
@@ -342,14 +353,20 @@ func _hut(parent: Node, pos: Vector3, yaw: float, roof_color: Color) -> void:
 func _dock() -> void:
 	var g := b.group("Dock", structures)
 	var x := -52.0
-	# Planks out over the water with a broken gap to jump.
-	blk(g, Vector3(x, 1.0, 64), Vector3(3.2, 0.35, 14), "wood", Vector3.ZERO, LevelBlock.Shape.BOX, "DockA")
-	blk(g, Vector3(x, 1.0, 79), Vector3(3.2, 0.35, 10), "wood", Vector3.ZERO, LevelBlock.Shape.BOX, "DockB")
-	for z in range(58, 86, 4):
-		if z == 72:
-			continue
-		for side: float in [-1.5, 1.5]:
-			blk(g, Vector3(x + side, -6.0, float(z)), Vector3(0.4, 7.2, 0.4), "wood", Vector3.ZERO, LevelBlock.Shape.CYLINDER, "Post")
+	# Planks out over the water with a broken gap to jump (3 m).
+	for d: Array in [["DockA", 57.0, 14.0, false], ["DockB", 74.0, 10.0, true]]:
+		var dock := Dock.new()
+		dock.length = d[2]
+		dock.width = 3.2
+		dock.post_depth = 9.0
+		dock.water_line = -1.2
+		dock.position = Vector3(x, 1.35, d[1])
+		dock.rotation_degrees.y = 180.0
+		b.add(dock, g, d[0])
+	var lamp := LanternPost.new()
+	lamp.position = Vector3(x - 2.2, 1.2, 55.5)
+	lamp.rotation_degrees.y = 90.0
+	b.add(lamp, g, "DockLamp")
 	coin_trail(Vector3(x, 1.35, 60), Vector3(x, 1.35, 69), 5, 0.0, CoinTrail.TrailShape.LINE)
 	coin_trail(Vector3(x, 1.35, 70.4), Vector3(x, 1.35, 74.6), 4, 1.6)
 	var goblet := gem(Vector3(x, 2.2, 83), "castaway_goblet_dock", Palette.GOLD, "goblet")
@@ -746,6 +763,160 @@ func _driftwood_key() -> void:
 	m.position = c + Vector3(10, 1.1, -16)
 	b.add(m, gameplay, "TeleportDriftwood")
 	m.add_to_group(&"debug_teleport", true)
+	# Dressing: palms, a jetty at the landing, bushes and rocks.
+	var n := b.group("DriftwoodNature")
+	var k := 100
+	for d: Array in [[Vector3(-14, 1.0, -12), 7.0, 16.0, 220.0], [Vector3(20, 1.0, -6), 6.5, 22.0, -60.0], [Vector3(0, 2.8, 2), 8.0, 6.0, 0.0],
+			[Vector3(-6, 1.0, 15), 6.0, 20.0, 170.0], [Vector3(14, 1.0, 12), 7.5, 18.0, -140.0]]:
+		k += 3
+		palm(n, c + d[0], d[1], d[2], d[3], k)
+	var jetty := Dock.new()
+	jetty.length = 7.0
+	jetty.width = 2.4
+	jetty.post_depth = 6.0
+	jetty.water_line = -1.0
+	jetty.position = c + Vector3(13.0, 1.1, -22.0)
+	jetty.rotation_degrees.y = 20.0
+	b.add(jetty, n, "Jetty")
+	rock(n, c + Vector3(-20, 1.0, 2), Vector3(2.0, 1.4, 1.8), StylizedRock.Preset.SAND_ROCK, 61)
+	rock(n, c + Vector3(22, 1.0, 6), Vector3(1.6, 1.1, 1.4), StylizedRock.Preset.MOSSY, 67)
+	var grass_only: Array[StringName] = [&"grass"]
+	scatter(n, c + Vector3(3, 20, -3), Vector2(30, 30), PropScatter.Kind.GRASS, 0.5, grass_only, 13, 900)
+	scatter(n, c + Vector3(3, 20, -3), Vector2(30, 30), PropScatter.Kind.FLOWERS, 0.05, grass_only, 17, 100)
+	crate_prop(n, c + Vector3(16, 1.0, -14), "driftwood_crate_1", 3, 15.0)
+
+
+# --- Dressing (props kit) -----------------------------------------------------------
+
+const COIN_SCENE := "res://collectibles/coin.tscn"
+const HEART_SCENE := "res://collectibles/heart.tscn"
+
+
+func palm(parent: Node, pos: Vector3, height: float, lean: float, lean_dir: float, seed: int) -> PalmTree:
+	var t := PalmTree.new()
+	t.height = height
+	t.lean_degrees = lean
+	t.lean_direction = lean_dir
+	t.seed = seed
+	t.coconut_count = seed % 4
+	t.position = pos
+	b.add(t, parent, "Palm")
+	return t
+
+
+func rock(parent: Node, pos: Vector3, size: Vector3, preset: StylizedRock.Preset, seed: int, yaw: float = 0.0) -> StylizedRock:
+	var r := StylizedRock.new()
+	r.preset = preset
+	r.size = size
+	r.seed = seed
+	r.position = pos
+	r.rotation_degrees.y = yaw
+	b.add(r, parent, "Rock")
+	return r
+
+
+func crate_prop(parent: Node, pos: Vector3, id: String, coins: int = 3, yaw: float = 0.0) -> Crate:
+	var c := Crate.new()
+	c.persistent_id = StringName(id)
+	c.contents = load(COIN_SCENE)
+	c.contents_count = coins
+	c.position = pos
+	c.rotation_degrees.y = yaw
+	b.add(c, parent, "Crate")
+	return c
+
+
+func barrel_prop(parent: Node, pos: Vector3, id: String, coins: int = 2, lying: bool = false) -> Barrel:
+	var c := Barrel.new()
+	c.persistent_id = StringName(id)
+	c.contents = load(COIN_SCENE)
+	c.contents_count = coins
+	c.lying = lying
+	c.position = pos
+	b.add(c, parent, "Barrel")
+	return c
+
+
+func scatter(parent: Node, center: Vector3, area: Vector2, kind: PropScatter.Kind, density: float, surfaces: Array[StringName], seed: int, max_count: int = 3000) -> PropScatter:
+	var sc := PropScatter.new()
+	sc.kind = kind
+	sc.area_size = area
+	sc.density = density
+	sc.surface_filter = surfaces
+	sc.seed = seed
+	sc.max_instances = max_count
+	sc.ray_height = 30.0
+	sc.ray_depth = 40.0
+	sc.position = center
+	b.add(sc, parent, "Scatter")
+	return sc
+
+
+func _decorate() -> void:
+	var nature := b.group("Nature")
+	var props := b.group("Props")
+	# Palms: beach rings leaning seaward, a few on the meadow and heights.
+	var k := 0
+	for d: Array in [
+			[Vector3(-10, 1.2, 38.5), 7.5, 18.0, 160.0], [Vector3(8, 1.2, 40.0), 6.5, 22.0, 200.0], [Vector3(17, 1.2, 38.5), 8.5, 14.0, 150.0],
+			[Vector3(-19, 1.2, 39.0), 6.0, 20.0, 190.0], [Vector3(-73, 1.2, 9.0), 7.0, 18.0, 90.0], [Vector3(-70, 1.2, -20.0), 8.0, 12.0, 70.0],
+			[Vector3(-58, 1.2, -44.0), 6.5, 20.0, 40.0], [Vector3(-74, 1.2, 24.0), 7.5, 16.0, 110.0], [Vector3(-63, 1.2, 40.0), 6.0, 24.0, 135.0],
+			[Vector3(-24, 1.2, -60.0), 7.0, 18.0, 0.0], [Vector3(2, 1.2, -66.0), 8.5, 14.0, 10.0], [Vector3(30, 1.2, -62.0), 6.5, 20.0, -20.0],
+			[Vector3(44, 1.2, -57.0), 7.0, 16.0, -40.0], [Vector3(80, 1.2, 12.0), 7.5, 20.0, -90.0], [Vector3(70, 1.2, 27.0), 6.0, 22.0, -130.0],
+			[Vector3(-22, 3.0, 21.0), 8.0, 8.0, 30.0], [Vector3(14, 3.0, 14.0), 7.0, 10.0, -60.0], [Vector3(22, 3.0, -30.0), 7.5, 12.0, -90.0],
+			[Vector3(-38, 7.0, -20.0), 6.5, 10.0, 120.0], [Vector3(6, 7.0, -6.0), 7.0, 8.0, 0.0], [Vector3(44, 7.5, -4.0), 8.0, 14.0, 60.0],
+			[Vector3(66, 7.5, 4.0), 7.0, 18.0, -120.0], [Vector3(-22, 12.4, -40.0), 6.0, 10.0, 150.0]]:
+		k += 1
+		palm(nature, d[0], d[1], d[2], d[3], k * 7)
+	# Rocks: cliff-foot clusters, beach boulders and a few in the shallows.
+	var rk := 0
+	for d: Array in [
+			[Vector3(26, 1.2, 30), Vector3(2.4, 1.6, 2.0), StylizedRock.Preset.SAND_ROCK], [Vector3(27.5, 1.2, 28.2), Vector3(1.2, 0.8, 1.1), StylizedRock.Preset.SAND_ROCK],
+			[Vector3(-38, 1.2, 36.5), Vector3(1.8, 1.2, 1.6), StylizedRock.Preset.CLIFF_ROCK], [Vector3(60, 1.2, 21), Vector3(2.6, 1.8, 2.2), StylizedRock.Preset.CLIFF_ROCK],
+			[Vector3(-62, 1.2, -30), Vector3(2.2, 1.4, 2.0), StylizedRock.Preset.MOSSY], [Vector3(8, 1.2, -60), Vector3(1.6, 1.1, 1.4), StylizedRock.Preset.SAND_ROCK],
+			[Vector3(32, 0.2, 50), Vector3(2.0, 1.6, 1.8), StylizedRock.Preset.DARK_ROCK], [Vector3(-78, 0.2, -30), Vector3(2.4, 1.8, 2.2), StylizedRock.Preset.DARK_ROCK],
+			[Vector3(-30, 3.0, 4.5), Vector3(1.4, 1.0, 1.2), StylizedRock.Preset.MOSSY], [Vector3(-8, 3.0, 22.0), Vector3(1.0, 0.7, 0.9), StylizedRock.Preset.CLIFF_ROCK],
+			[Vector3(-14, 7.0, -18.0), Vector3(1.6, 1.0, 1.4), StylizedRock.Preset.MOSSY], [Vector3(76, 7.5, -10), Vector3(1.8, 1.2, 1.6), StylizedRock.Preset.CLIFF_ROCK],
+			[Vector3(18.5, 7.0, -29.6), Vector3(1.4, 1.2, 1.2), StylizedRock.Preset.DARK_ROCK], [Vector3(84, 1.2, 0), Vector3(2.2, 1.5, 2.0), StylizedRock.Preset.SAND_ROCK]]:
+		rk += 1
+		rock(nature, d[0], d[1], d[2], rk * 11, rk * 37.0)
+	# Grass, flowers, bushes and ferns on every grassy top; pebbles on sand.
+	var grass_only: Array[StringName] = [&"grass"]
+	var sand_only: Array[StringName] = [&"sand"]
+	scatter(nature, Vector3(2, 20, -5), Vector2(190, 160), PropScatter.Kind.GRASS, 0.42, grass_only, 3, 9000)
+	scatter(nature, Vector3(2, 20, -5), Vector2(190, 160), PropScatter.Kind.FLOWERS, 0.035, grass_only, 5, 900)
+	scatter(nature, Vector3(2, 20, -5), Vector2(190, 160), PropScatter.Kind.BUSHES, 0.004, grass_only, 7, 120)
+	scatter(nature, Vector3(-10, 25, -35), Vector2(50, 30), PropScatter.Kind.FERNS, 0.05, grass_only, 9, 200)
+	scatter(nature, Vector3(2, 20, -5), Vector2(190, 160), PropScatter.Kind.PEBBLES, 0.01, sand_only, 11, 600)
+	# Outpost life: breakable crates and barrels (coins inside).
+	crate_prop(props, Vector3(-50.5, 3.0, 9.5), "castaway_crate_outpost_1", 3, 12.0)
+	crate_prop(props, Vector3(-51.6, 3.0, 10.8), "castaway_crate_outpost_2", 2, -20.0)
+	barrel_prop(props, Vector3(-57.5, 3.0, 12.5), "castaway_barrel_outpost_1", 2)
+	barrel_prop(props, Vector3(-44.0, 3.0, 22.5), "castaway_barrel_outpost_2", 3)
+	barrel_prop(props, Vector3(-53.0, 1.35, 59.5), "castaway_barrel_dock", 2, true)
+	crate_prop(props, Vector3(-50.8, 1.35, 66.0), "castaway_crate_dock", 3, 8.0)
+	# Wreck beach: debris, a crate of coins, an anchor.
+	for d: Array in [[Vector3(50, 1.2, 30), 4.0, 3], [Vector3(36, 1.2, 39), 3.0, 5], [Vector3(64, 1.2, 30), 3.5, 9]]:
+		var deb := ShipDebris.new()
+		deb.radius = d[1]
+		deb.seed = d[2]
+		deb.position = d[0]
+		b.add(deb, props, "ShipDebris")
+	crate_prop(props, Vector3(57.0, 1.2, 33.0), "castaway_crate_wreck", 4, 30.0)
+	var anchor := Anchor.new()
+	anchor.position = Vector3(57.5, 1.2, 43.0)
+	anchor.rotation_degrees = Vector3(0, 40, 0)
+	b.add(anchor, props, "Anchor")
+	# Torches flank the dark cave's mouth (outside the darkness).
+	for z: float in [-30.6, -38.4]:
+		var torch := Torch.new()
+		torch.position = Vector3(18.8, 7.0, z)
+		b.add(torch, props, "CaveTorch")
+	# A decorative cannon guards the outpost tower.
+	var gun := DecorCannon.new()
+	gun.position = Vector3(-38.4, 9.4, 2.9)
+	gun.rotation_degrees.y = -90.0
+	b.add(gun, props, "TowerCannon")
 
 
 func _opening(player: Node3D) -> void:

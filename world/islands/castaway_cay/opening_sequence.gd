@@ -25,6 +25,9 @@ var _done := false
 var _cam: Camera3D
 var _flash: ColorRect
 var _debris: Array[Node3D] = []
+var _rain: CPUParticles3D
+var _sky_before := -1
+var _swell_before := -1.0
 
 
 func _ready() -> void:
@@ -74,15 +77,19 @@ func _run() -> void:
 		_cam.global_position = vignette_camera.global_position
 		_cam.look_at(vignette_target.global_position)
 		_cam.make_current()
+		_storm(true)
 		_spawn_debris(vignette_target.global_position)
 		await SceneTransition.fade_in(0.9)
 		var drift := create_tween()
 		drift.tween_property(_cam, "global_position", _cam.global_position + (vignette_target.global_position - _cam.global_position).normalized() * 3.0, 3.2)
 		await get_tree().create_timer(0.9, false).timeout
 		_lightning()
-		await get_tree().create_timer(2.2, false).timeout
+		await get_tree().create_timer(1.3, false).timeout
+		_lightning()
+		await get_tree().create_timer(0.9, false).timeout
 		await SceneTransition.fade_out(0.45)
 		_clear_debris()
+		_storm(false)
 
 	# 2. On the beach: out cold while a crab makes off with a coin.
 	var f := player.facing
@@ -141,6 +148,56 @@ func _coin_near(crab: Crab) -> Collectible:
 	get_tree().current_scene.add_child(c)
 	c.global_position = crab.global_position + Vector3(0.6, 0.4, -0.4)
 	return c
+
+
+## The squall that wrecked the ship: a dark sky, heavy swell and rain for
+## the sea vignette; everything returns to a bright morning afterwards.
+func _storm(on: bool) -> void:
+	var sky := _find(get_tree().current_scene, "SkyEnvironment") as SkyEnvironment
+	var ocean := _find(get_tree().current_scene, "Ocean") as Ocean
+	if on:
+		if sky != null:
+			_sky_before = sky.preset
+			sky.preset = SkyEnvironment.Preset.STORM
+		if ocean != null:
+			_swell_before = ocean.amplitude_scale
+			ocean.amplitude_scale = 2.3
+		_rain = CPUParticles3D.new()
+		var drop := BoxMesh.new()
+		drop.size = Vector3(0.025, 0.7, 0.025)
+		_rain.mesh = drop
+		_rain.material_override = MaterialLibrary.unshaded(Color(0.75, 0.82, 0.95, 0.45))
+		_rain.amount = 700
+		_rain.lifetime = 0.9
+		_rain.emission_shape = CPUParticles3D.EMISSION_SHAPE_BOX
+		_rain.emission_box_extents = Vector3(22, 1, 22)
+		_rain.direction = Vector3(0.2, -1, 0.1)
+		_rain.spread = 3.0
+		_rain.gravity = Vector3.ZERO
+		_rain.initial_velocity_min = 24.0
+		_rain.initial_velocity_max = 28.0
+		_rain.particle_flag_align_y = true
+		_rain.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		_cam.add_child(_rain)
+		_rain.position = Vector3(0, 9, -10)
+		var wind := AudioManager.create_loop(&"wind_loop", _rain, -2.0)
+		if wind != null and wind.stream != null:
+			wind.play()
+	else:
+		if sky != null and _sky_before >= 0:
+			sky.preset = _sky_before as SkyEnvironment.Preset
+		if ocean != null and _swell_before >= 0.0:
+			ocean.amplitude_scale = _swell_before
+		if _rain != null:
+			_rain.queue_free()
+			_rain = null
+
+
+static func _find(root: Node, type_name: String) -> Node:
+	if root == null:
+		return null
+	var found := root.find_children("*", type_name, true, false)
+	return found[0] if not found.is_empty() else null
 
 
 func _lightning() -> void:

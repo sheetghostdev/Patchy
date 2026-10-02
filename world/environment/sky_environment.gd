@@ -5,7 +5,7 @@ extends Node3D
 ## from the sky, gentle aerial fog and filmic tonemapping. Presets match each
 ## island's palette (spec §7, §119-120): keep nights and storms readable.
 
-enum Preset { CASTAWAY_DAY, GOLDEN_HOUR, OVERCAST, CAVE, LAB }
+enum Preset { CASTAWAY_DAY, GOLDEN_HOUR, OVERCAST, CAVE, LAB, STORM }
 
 const SKY_SHADER := preload("res://shaders/sky_stylized.gdshader")
 
@@ -126,6 +126,24 @@ func _apply() -> void:
 		Preset.LAB:
 			env.fog_light_color = Color(0.78, 0.88, 0.98)
 			env.fog_depth_begin = 90.0
+		Preset.STORM:
+			# Night squall at sea (the opening): slate sky, low cloud, dim
+			# cold light, close fog. Still readable: shapes stay lit.
+			sun_rot = Vector3(-35.0, 40.0, 0.0)
+			sun_col = Color(0.62, 0.7, 0.9)
+			energy *= 0.35
+			_sky_mat.set_shader_parameter(&"cloud_coverage", 0.9)
+			_sky_mat.set_shader_parameter(&"zenith_color", Color(0.1, 0.13, 0.22))
+			_sky_mat.set_shader_parameter(&"mid_color", Color(0.2, 0.25, 0.35))
+			_sky_mat.set_shader_parameter(&"horizon_color", Color(0.32, 0.37, 0.46))
+			_sky_mat.set_shader_parameter(&"below_color", Color(0.16, 0.2, 0.27))
+			_sky_mat.set_shader_parameter(&"cloud_light", Color(0.5, 0.55, 0.66))
+			_sky_mat.set_shader_parameter(&"cloud_shade", Color(0.22, 0.26, 0.35))
+			_sky_mat.set_shader_parameter(&"sun_size", 0.0)
+			env.ambient_light_color = Color(0.36, 0.4, 0.55)
+			env.fog_light_color = Color(0.22, 0.26, 0.34)
+			env.fog_depth_begin = 20.0
+			env.fog_depth_end = 260.0
 	world_env.environment = env
 	sun.rotation_degrees = sun_rot
 	sun.light_color = sun_col

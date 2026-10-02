@@ -78,6 +78,13 @@ func _ready() -> void:
 			_velocity = Vector3(randf_range(-2.5, 2.5), randf_range(6.0, 8.0), randf_range(-2.5, 2.5))
 
 
+## Pop out of something (props call this on spawned contents).
+func launch(v: Vector3) -> void:
+	launched = true
+	launch_velocity = v
+	_velocity = v
+
+
 func _has_shape() -> bool:
 	for c in get_children(true):
 		if c is CollisionShape3D:
