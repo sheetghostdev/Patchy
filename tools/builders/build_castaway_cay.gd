@@ -196,10 +196,15 @@ func _terrain() -> void:
 
 
 func _sea() -> void:
-	var water := WaterVolume.new()
-	water.size = Vector3(560, 14, 560)
-	water.wave_height = 0.0
-	b.add(water, null, "Sea")
+	# The stylized ocean: endless LOD surface, waves synced with swimming and
+	# the boat, shallows that show the sand, shoreline foam.
+	var ocean := Ocean.new()
+	ocean.swim_area_size = Vector2(560, 560)
+	ocean.swim_depth = 14.0
+	# Gentler bob for swimming than the drawn waves (readable platforming).
+	ocean.gameplay_wave_scale = 0.6
+	b.add(ocean, null, "Ocean")
+	b.add(UnderwaterEffect.new(), null, "UnderwaterEffect")
 	# Sandy seabed so the water shades consistently.
 	blk(terrain, Vector3(0, -11, 0), Vector3(560, 1, 560), "sand", Vector3.ZERO, LevelBlock.Shape.BOX, "Seabed")
 
