@@ -5,7 +5,7 @@ extends Node
 ##   tools/photo/shoot.sh scene=res://ui/tests/ui_preview.tscn out=/tmp/ui.png frames=80 size=1600x900 state=pause
 ## States: hud (default), hud_pad, dialogue, pause, map, map_all, collection,
 ##   attachments, quests, settings, controls, confirm, debug, debug_world,
-##   title, title_settings.
+##   title, title_settings, treasure_map (map=<id> zoom=<x> turn=<deg>).
 ## Extra args: pad=xbox|ps|nintendo forces gamepad glyphs; hud_scale=1.2
 ## previews the HUD size option (not saved).
 ## Run without the photo tool to click around:
@@ -50,6 +50,13 @@ func _ready() -> void:
 		"pause": ui.open_pause_menu()
 		"map", "collection", "attachments", "quests":
 			ui.open_pause_menu(StringName(state))
+		"treasure_map":
+			ui.open_pause_menu(&"collection")
+			await _frames(2)
+			var viewer := ui.pause_menu.map_viewer
+			viewer.open(StringName(args.get("map", "castaway_map_1")))
+			viewer.view.zoom = float(args.get("zoom", "1.0"))
+			viewer.view.turn = deg_to_rad(float(args.get("turn", "0")))
 		"map_all":
 			var mp := ui.pause_menu.get_page(&"map") as UIMapPage
 			mp.chart.reveal_all = true
@@ -135,7 +142,9 @@ func _seed_progress() -> void:
 	for i in 4:
 		InventoryManager.collect_treasure(StringName("crab_gem_%d" % i), &"gem", 25, &"crabby_coast")
 	InventoryManager.collect_treasure(&"", &"coin", 940)
-	InventoryManager.add_treasure_map(&"castaway_cay_map_1")
+	InventoryManager.add_treasure_map(&"castaway_map_1")
+	InventoryManager.add_treasure_map(&"castaway_map_2")
+	WorldState.mark_completed(&"castaway_x_spot")
 	InventoryManager.add_ship_part(&"castaway_cay_mast")
 	ui.set_island_totals(&"castaway_cay", {"treasure": 12, "maps": 2, "ship_parts": 1})
 	ui.set_island_totals(&"crabby_coast", {"treasure": 20})

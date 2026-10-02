@@ -35,6 +35,7 @@ func _ready() -> void:
 	await _test_pause_cycle()
 	await _test_map_action()
 	await _test_menu_navigation()
+	await _test_treasure_maps()
 	await _test_settings_toggle()
 	await _test_dialogue()
 	await _test_prompt_and_devices()
@@ -150,6 +151,39 @@ func _test_menu_navigation() -> void:
 	await _pad(JOY_BUTTON_B)
 	await _frames(12)
 	check(not ui.pause_menu.is_open, "B from the entry list closes the menu")
+
+
+func _hold(action: StringName, n: int) -> void:
+	Input.action_press(action)
+	await _frames(n)
+	Input.action_release(action)
+	await _frames(2)
+
+
+func _test_treasure_maps() -> void:
+	print("treasure maps")
+	InventoryManager.add_treasure_map(&"castaway_map_1")
+	ui.open_pause_menu(&"collection")
+	await _frames(4)
+	await press(&"ui_accept")
+	var card := focus_owner()
+	check(card is UIFocusCard and card.name == "MapCard_castaway_map_1", "the Treasure page lists the treasure map")
+	await press(&"ui_accept")
+	var viewer := ui.pause_menu.map_viewer
+	check(viewer.is_open and viewer.view.map_id == &"castaway_map_1", "Accept unrolls the map")
+	await _hold(&"tool_next", 20)
+	check(viewer.view.zoom > 1.1, "zoom in on the parchment")
+	await _hold(&"camera_right", 20)
+	check(viewer.view.turn > 0.2, "turn the parchment")
+	await _hold(&"move_right", 20)
+	check(viewer.view.pan.x < -20.0, "slide it around to inspect")
+	await press(&"camera_reset")
+	check(is_equal_approx(viewer.view.zoom, 1.0) and viewer.view.turn == 0.0 and viewer.view.pan == Vector2.ZERO, "reset straightens it out")
+	await press(&"ui_cancel")
+	check(not viewer.is_open and ui.pause_menu.is_open, "Back rolls the map up and stays in the menu")
+	check(focus_owner() == card, "focus returns to the map card")
+	await press(&"pause")
+	await _frames(12)
 
 
 func _pad(button: JoyButton) -> void:

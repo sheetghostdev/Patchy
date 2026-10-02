@@ -17,7 +17,6 @@ extends Node3D
 @export var parts_shelf: Marker3D
 @export var rack: Marker3D
 
-const SHIP_PARTS := [&"compass", &"ships_wheel", &"figurehead", &"cannon_deck", &"sails"]
 const PEDESTALS := 10
 
 var _spinners: Array[Node3D] = []
@@ -108,8 +107,9 @@ func _build_perch() -> void:
 func _build_parts() -> void:
 	if parts_shelf == null:
 		return
-	for i in SHIP_PARTS.size():
-		var id: StringName = SHIP_PARTS[i]
+	var parts := ShipParts.ids()
+	for i in parts.size():
+		var id: StringName = parts[i]
 		var owned := InventoryManager.has_ship_part(id)
 		var holder := Node3D.new()
 		holder.position = Vector3(i * 1.3, 0, 0)
@@ -118,7 +118,7 @@ func _build_parts() -> void:
 		mi.mesh = _part_mesh(id, owned)
 		holder.add_child(mi)
 		if owned:
-			var lab := _label(String(id).capitalize().replace("Ships", "Ship's"), Vector3(0, -0.35, 0.3))
+			var lab := _label(ShipParts.display_name(id).trim_prefix("Ship's "), Vector3(0, -0.35, 0.3))
 			lab.font_size = 28
 			holder.add_child(lab)
 

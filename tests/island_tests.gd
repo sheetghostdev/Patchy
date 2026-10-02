@@ -589,12 +589,22 @@ func test_shovel_digs_up_the_treasure_map_and_its_x() -> void:
 		await frames(45)
 	check("two scoops unearth a treasure map", InventoryManager.has_treasure_map(&"castaway_map_1"), "")
 	var x := node("Gameplay/TreasureMapX") as DigSpot
+	# The map only sketches the place; digging a few steps off says "warmer".
+	var said: Array[String] = []
+	var listen := func(t: String, _d: float) -> void: said.append(t)
+	Events.hud_message.connect(listen)
+	await place(x.global_position + Vector3(0, 0.1, 4.0), Vector3.FORWARD)
+	tap(&"tool_primary")
+	await frames(45)
+	Events.hud_message.disconnect(listen)
+	check("a near miss hints that something is buried close by", said.any(func(t: String) -> bool: return "buried close by" in t) and not WorldState.is_completed(&"castaway_x_spot"), "said=%s" % [said])
 	await place(x.global_position + Vector3(0, 0.1, 1.2), Vector3.FORWARD)
 	for k in 2:
 		tap(&"tool_primary")
 		await frames(45)
 	await frames(120)
-	check("X marks the spot: relic found", InventoryManager.has_treasure(&"castaway_x_spot_prize"), "gold=%d" % InventoryManager.gold_value)
+	check("the spot the map sketches: relic found", InventoryManager.has_treasure(&"castaway_x_spot_prize"), "gold=%d" % InventoryManager.gold_value)
+	check("and the map is marked solved", TreasureMaps.is_solved(&"castaway_map_1") and bool(InventoryManager.get_treasure_maps()[&"castaway_map_1"]["solved"]), "")
 
 
 func test_grapple_zips_to_the_pillar_and_the_cannon() -> void:

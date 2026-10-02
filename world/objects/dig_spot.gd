@@ -2,9 +2,9 @@
 class_name DigSpot
 extends Node3D
 ## Buried treasure (spec §58). A sandy mound that glints now and then, or,
-## for hidden spots, nothing but a faint shimmer until the right treasure map
-## paints a big red X over it. Two scoops of the shovel pop the treasure out.
-## Persistent by spot_id.
+## for hidden spots, nothing but a faint shimmer: the treasure map that leads
+## here only sketches the place (spec §86–87), it never marks the world.
+## Two scoops of the shovel pop the treasure out. Persistent by spot_id.
 
 signal dug_up(spot: DigSpot)
 
@@ -19,17 +19,16 @@ signal dug_up(spot: DigSpot)
 @export var map_id: StringName = &""
 @export var gem_color := Color(0.25, 0.6, 1.0)
 @export_range(1, 5) var digs_required := 2
-## No mound: only a faint shimmer (and the map's X once that map is owned).
+## No mound: only a faint shimmer.
 @export var hidden := false:
 	set(v):
 		hidden = v
 		_rebuild()
-## Treasure map whose X marks this spot.
+## Treasure map whose sketch leads here (marked solved when dug up).
 @export var marked_by_map: StringName = &""
 
 var _visual: Node3D
 var _mound: MeshInstance3D
-var _x_mark: MeshInstance3D
 var _glints: Array[MeshInstance3D] = []
 var _digs := 0
 var _done := false
@@ -46,8 +45,6 @@ func _ready() -> void:
 	if spot_id != &"" and WorldState.is_completed(spot_id):
 		_done = true
 		_show_hole()
-	Events.treasure_map_found.connect(func(_id: StringName) -> void: _update_x())
-	_update_x()
 
 
 func _rebuild() -> void:
@@ -69,14 +66,6 @@ func _rebuild() -> void:
 	_mound = MeshInstance3D.new()
 	_mound.mesh = mb.build(null, MaterialLibrary.toon(Color.WHITE, &"matte"))
 	_visual.add_child(_mound)
-	# Big painted X (only once the matching map is owned).
-	var xb := MeshBuilder.new()
-	for yaw: float in [0.785, -0.785]:
-		xb.box(Vector3(0.24, 0.02, 1.5), Transform3D(Basis.from_euler(Vector3(0, yaw, 0)), Vector3(0, 0.03, 0)), Color("d8342c"))
-	_x_mark = MeshInstance3D.new()
-	_x_mark.mesh = xb.build(null, MaterialLibrary.toon(Color.WHITE, &"matte"))
-	_x_mark.visible = false
-	_visual.add_child(_x_mark)
 	for k in 3:
 		var g := MeshInstance3D.new()
 		var sb := MeshBuilder.new()
@@ -126,6 +115,8 @@ func dig(player: Node3D) -> void:
 	_done = true
 	if spot_id != &"":
 		WorldState.mark_completed(spot_id)
+	if marked_by_map != &"":
+		InventoryManager.mark_map_solved(marked_by_map)
 	AudioManager.play(&"shovel_find", global_position)
 	AudioManager.play_stinger(&"stinger_treasure")
 	VFX.sparkle(get_tree().current_scene, global_position + Vector3.UP * 0.6, Palette.GOLD, 20, 5.0)
@@ -178,13 +169,7 @@ func _show_hole() -> void:
 			hb.sphere(0.09, Transform3D(Basis.IDENTITY, Vector3(cos(a) * 0.55, 0.04, sin(a) * 0.5)), Palette.SAND_DARK, 3, 5)
 		_mound.mesh = hb.build(null, MaterialLibrary.toon(Color.WHITE, &"matte"))
 		_mound.scale = Vector3.ONE
-	if _x_mark != null:
-		_x_mark.visible = false
 	for g in _glints:
 		g.visible = false
 
 
-func _update_x() -> void:
-	if _x_mark == null or _done:
-		return
-	_x_mark.visible = marked_by_map != &"" and InventoryManager.has_treasure_map(marked_by_map)

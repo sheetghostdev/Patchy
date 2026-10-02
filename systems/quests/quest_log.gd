@@ -37,7 +37,7 @@ static func build() -> Array:
 		q.append({"title": "Light the Old Braziers", "description": "Something waits behind the gate in the dark cave.", "done": WorldState.is_completed(&"castaway_cave_gate")})
 	q.append({"title": "Bridge the Gorge", "description": "A big enough flock could lift the fallen log across to the headland.", "done": WorldState.is_completed(&"castaway_log_bridge")})
 	if InventoryManager.has_treasure_map(&"castaway_map_1"):
-		q.append({"title": "X Marks the Spot", "description": "Your treasure map shows an X on the meadow, by the old stump.", "done": WorldState.is_completed(&"castaway_x_spot")})
+		q.append({"title": "X Marks the Spot", "description": "Unroll your treasure map (Pause, Treasure), find the place it sketches, and dig.", "done": WorldState.is_completed(&"castaway_x_spot")})
 	if WorldState.is_completed(&"castaway_log_bridge"):
 		q.append({"title": "Defeat King Claw", "description": "Brock's crab general waits in the ring of rocks on the headland.", "done": WorldState.is_completed(&"king_claw")})
 	# Side quests, once an islander has asked.
@@ -48,7 +48,7 @@ static func build() -> Array:
 				else "Crabs dragged Old Shellby's boat off up the west beach. Follow the drag marks.",
 			"done": WorldState.is_completed(&"castaway_betty_reward")})
 	if InventoryManager.has_treasure_map(&"castaway_map_2"):
-		q.append({"title": "Shellby's Old Chart", "description": "An X on the north beach, by a pile of stones.", "done": WorldState.is_completed(&"castaway_x_north")})
+		q.append({"title": "Shellby's Old Chart", "description": "Shellby's chart sketches a spot somewhere on Castaway Cay. Find it and dig.", "done": WorldState.is_completed(&"castaway_x_north")})
 	if WorldState.is_completed(&"driftwood_met_pip"):
 		q.append({"title": "Pip's Lucky Clam", "description": "A pelican swiped Pip's clam on Driftwood Key. Bop it when it swoops low!",
 			"done": WorldState.is_completed(&"driftwood_pip_reward")})

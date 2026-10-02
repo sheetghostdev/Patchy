@@ -1,12 +1,15 @@
 class_name ShovelAttachment
 extends AttachmentBase
 ## A stout pirate spade on the hook (spec §58).
-## - Secrets: dig spots (sparkling mounds, the X from a treasure map) give
-##   up buried treasure, sometimes a whole treasure map.
+## - Secrets: dig spots (sparkling mounds, the places treasure maps sketch)
+##   give up buried treasure, sometimes a whole treasure map. Dig close to a
+##   hidden one and Patchy can tell it's near, but not exactly where.
 ## - Combat: a scoop under a crab's legs flips it over.
 
 const DIG_TIME := 0.5
 const REACH := 1.5
+## A miss this close to a hidden spot earns a "warmer" hint.
+const WARM_RADIUS := 4.5
 
 var _busy := 0.0
 
@@ -46,11 +49,14 @@ func primary_action() -> void:
 	if player == null or not is_instance_valid(player):
 		return
 	AudioManager.play(StringName("shovel_dig_0%d" % randi_range(1, 3)), front)
-	var spot := _find_spot(front)
+	var spot := _find_spot(front, REACH)
 	if spot != null:
 		spot.dig(player)
 		return
 	VFX.dust(get_tree().current_scene, front, 7, 0.3, _dirt_color(), 1.4, 1.6)
+	var near := _find_spot(front, WARM_RADIUS)
+	if near != null and near.hidden:
+		Events.hud_message.emit("Hmm... something's buried close by.", 1.8)
 	# Scoop whatever stands right in front.
 	for n in get_tree().get_nodes_in_group(&"enemy"):
 		var e := n as Node3D
@@ -58,9 +64,9 @@ func primary_action() -> void:
 			e.call(&"take_hit", {"damage": 0, "kind": &"shovel", "source": player, "position": player.global_position, "direction": player.facing})
 
 
-func _find_spot(front: Vector3) -> DigSpot:
+func _find_spot(front: Vector3, reach: float) -> DigSpot:
 	var best: DigSpot = null
-	var best_d := REACH
+	var best_d := reach
 	for n in get_tree().get_nodes_in_group(&"dig_spot"):
 		var spot := n as DigSpot
 		if spot == null or not spot.can_dig():

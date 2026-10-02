@@ -154,7 +154,7 @@ func _connect_signals() -> void:
 	Events.ship_part_recovered.connect(func(_id: StringName) -> void:
 		toasts.show_toast("Ship part recovered!", 2.6, &"ship_wheel"))
 	Events.treasure_map_found.connect(func(_id: StringName) -> void:
-		toasts.show_toast("Treasure map found!", 2.6, &"treasure_map"))
+		toasts.show_toast("Treasure map found! Read it in Pause > Treasure", 3.2, &"treasure_map"))
 	InventoryManager.gold_changed.connect(func(total: int) -> void:
 		treasure.set_value(total, _gameplay))
 	ParrotManager.flock_changed.connect(func(total: int) -> void:

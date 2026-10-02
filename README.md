@@ -77,7 +77,7 @@ one with right mouse or RT.
 |---|---|---|
 | Pirate Hook | Patchy's own | Swipe; catch golden rings to swing; pull handles. |
 | Storm Lantern | Driftwood Key | Dark caves become explorable; lights braziers; its flash topples crabs. |
-| Pirate Spade | The dark cave | Digs up sparkling mounds and a treasure map's X; scoops crabs over. |
+| Pirate Spade | The dark cave | Digs up sparkling mounds and the spots treasure maps sketch; scoops crabs over. |
 | Grappling Claw | Headland chest | Zips to rings and dark iron points up to 22 m away, even mid-air; yanks crabs. |
 | Hand Cannon | Grapple pillar | Ranged shots ring targets and crumble cracked rock; a mid-air shot gives a cannon hop. |
 
@@ -163,6 +163,11 @@ tools/              Scene builders, photo tool, project setup, audio generator
   rebinding, title screen and debug menu.
   - Gameplay talks to it mostly through `Events` signals.
   - `QuestLog` derives the quest page from progress.
+- **Treasure maps and ship parts** are registries
+  (`systems/treasure/`): `TreasureMaps` holds each map's island, title,
+  riddle, dig spot and sketch (landmark doodles in the island's own x/z
+  coordinates, drawn by `UITreasureMapView`); `ShipParts` names the parts
+  and their islands. The Treasure page counts both per island.
 - **Islanders** (`npcs/npc.gd`): an `NPC` turns to face Patchy and talks
   through the dialogue box. What it says comes from `get_lines()`, and
   `_after_talk()` runs before control returns.
@@ -237,6 +242,9 @@ tools/builders/build.sh movement_lab camera_lab castaway_cay captains_cabin
 tools/photo/shoot.sh scene=res://world/islands/castaway_cay/castaway_cay.tscn \
     flags=castaway_intro_seen out=/tmp/shot_%d.png "cams=0,120,160>0,0,0;30,10,62>50,3,42"
 
+# UI states (pause pages, a treasure map unrolled at zoom 1.5):
+tools/photo/shoot.sh scene=res://ui/tests/ui_preview.tscn size=1600x900 state=treasure_map map=castaway_map_2 zoom=1.5
+
 # The islanders (and Patchy for scale) lined up for a close look:
 tools/photo/shoot.sh scene=res://tests/npc_gallery.tscn hud=0 "cams=-0.6,1.3,3.6>-0.6,0.65,0"
 
@@ -257,8 +265,8 @@ An optional argument after `--` filters test names.
 godot --headless --path . --fixed-fps 60 res://tests/run_movement_tests.tscn   # 53 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_camera_tests.tscn     # 21 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_gameplay_tests.tscn   # 64 checks
-godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 119 checks
-godot --headless --path . --fixed-fps 60 res://ui/tests/ui_flow_test.tscn      # 76 checks
+godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 121 checks
+godot --headless --path . --fixed-fps 60 res://ui/tests/ui_flow_test.tscn      # 84 checks
 godot --headless --path . --fixed-fps 60 res://props/tests/prop_tests.tscn     # 70 checks
 godot --headless --path . --fixed-fps 60 res://world/ocean/tests/ocean_swim_check.tscn
 godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn -- sail
@@ -290,7 +298,7 @@ What each suite covers:
     Gull Rock, the three-parrot lift, Shellby's chart and its X), Tok's
     parrot tips and Pip's clam;
   - sailing to Driftwood Key and the open-sea current;
-  - the attachment chain: lantern, braziers, shovel, treasure map and X,
+  - the attachment chain: lantern, braziers, shovel, the treasure map's spot,
     grapple, pillar, cannon, cracked rock and targets;
   - a full King Claw fight, including the hand-off to his theme and back;
   - a check that no pickup is buried or floating.
@@ -321,8 +329,13 @@ driftwood tower, parrot 6 in a guarded crab pen, and the Storm Lantern.
 More on Castaway Cay:
 
 - **The cave chamber:** lantern, then braziers, then the gate, behind
-  which are the shovel and a treasure map. Its X marks a relic on the
-  meadow.
+  which are the shovel and a treasure map. The map sketches the place
+  where a relic is buried.
+- **Treasure maps** (spec §86–87) are parchment sketches of landmarks (a
+  stump under the ridge, a cairn on the north sand) with a riddle, never
+  a marker in the world. Unroll them under Pause > Treasure to zoom, turn
+  and inspect them. Dig a few steps off and Patchy can tell something is
+  buried close by.
 - **The headland:** across the six-parrot log bridge, the chained chest
   holds the Grappling Claw. Its iron ring on the sea pillar leads to the
   Hand Cannon, which opens a cracked-rock grotto and a two-target vault.
@@ -333,8 +346,7 @@ More on Castaway Cay:
   the west beach, staring at the empty water. Crabs dragged his fishing
   boat up the beach; the drag marks lead to Gull Rock. Climb the crabs'
   plank ramp, grab the ledge to the top, and call three parrots to fly
-  her home. Shellby pays with his old chart, whose X is on the north
-  beach by a cairn.
+  her home. Shellby pays with his old chart: a second treasure map.
 - **Islanders:** Tok, the outpost's lookout monkey, always knows where the
   next locked cage is. On Driftwood Key, Pip the otter wants her lucky
   clam back from the pelican.

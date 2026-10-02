@@ -4,8 +4,9 @@ extends UIPage
 ##   Parrots 4 / 5 · Treasure 27 / 35 · Treasure Maps 1 / 2 · Ship Parts 1 / 1
 ## Totals come from ParrotManager.get_island_total(), UIChartData "totals",
 ## or UI.set_island_totals(); unknown totals show "?" instead of spoiling.
-## Treasure maps and ship parts are matched to an island by id prefix
-## (e.g. "crabby_coast_map_1").
+## Treasure maps and ship parts belong to islands through the TreasureMaps
+## and ShipParts registries. Below the islands, every treasure map Patchy
+## owns: choose one to unroll it (UITreasureMapViewer).
 
 var _gold: Label
 var _parrots: Label
@@ -70,6 +71,7 @@ func refresh() -> void:
 		empty.theme_type_variation = &"SubheaderLabel"
 		empty.add_theme_color_override(&"font_color", UIPalette.INK_SOFT)
 		_list.add_child(empty)
+	_add_maps()
 	if uncharted > 0:
 		var more := Label.new()
 		more.theme_type_variation = &"SmallLabel"
@@ -123,8 +125,75 @@ func _make_card(isl: Dictionary) -> UIFocusCard:
 		parrots_total = int(totals.get("parrots", 0))
 	stats.add_child(_stat(&"parrot", "Parrots", ParrotManager.count_for_island(id), parrots_total))
 	stats.add_child(_stat(&"coin", "Treasure", InventoryManager.count_treasures(&"", id), int(totals.get("treasure", 0))))
-	stats.add_child(_stat(&"treasure_map", "Treasure Maps", _count_prefixed(InventoryManager.get_treasure_maps().keys(), id), int(totals.get("maps", 0))))
-	stats.add_child(_stat(&"ship_wheel", "Ship Parts", _count_prefixed(InventoryManager.get_ship_parts(), id), int(totals.get("ship_parts", 0))))
+	var maps_have := 0
+	for m: Variant in InventoryManager.get_treasure_maps().keys():
+		if TreasureMaps.island_of(StringName(m)) == id or String(m).begins_with(String(id) + "_"):
+			maps_have += 1
+	var parts_have := 0
+	for part in InventoryManager.get_ship_parts():
+		if ShipParts.island_of(part) == id or String(part).begins_with(String(id) + "_"):
+			parts_have += 1
+	stats.add_child(_stat(&"treasure_map", "Treasure Maps", maps_have, int(totals.get("maps", TreasureMaps.for_island(id).size()))))
+	stats.add_child(_stat(&"ship_wheel", "Ship Parts", parts_have, int(totals.get("ship_parts", ShipParts.for_island(id).size()))))
+	return card
+
+
+## The treasure maps Patchy owns, each one a card that unrolls the map.
+func _add_maps() -> void:
+	var owned: Array[StringName] = []
+	for m: Variant in InventoryManager.get_treasure_maps().keys():
+		if TreasureMaps.has_map(StringName(m)):
+			owned.append(StringName(m))
+	if owned.is_empty():
+		return
+	var head := Label.new()
+	head.text = "Treasure Maps"
+	head.theme_type_variation = &"SubheaderLabel"
+	head.add_theme_font_override(&"font", UIStyle.font(&"heavy"))
+	_list.add_child(head)
+	for id in owned:
+		var card := _make_map_card(id)
+		_list.add_child(card)
+		if _first == null:
+			_first = card
+
+
+func _make_map_card(id: StringName) -> UIFocusCard:
+	var m := TreasureMaps.get_map(id)
+	var solved := TreasureMaps.is_solved(id)
+	var card := UIFocusCard.new()
+	card.name = "MapCard_" + String(id)
+	card.activated.connect(func() -> void:
+		var menu := UIRoot.instance.pause_menu if UIRoot.instance != null else null
+		if menu != null:
+			menu.map_viewer.open(id))
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override(&"separation", 18)
+	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	card.add_child(row)
+	var ic := UIIconView.make(&"treasure_map", 60)
+	ic.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	row.add_child(ic)
+	var col := VBoxContainer.new()
+	col.add_theme_constant_override(&"separation", 0)
+	col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	col.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	row.add_child(col)
+	var t := Label.new()
+	t.text = String(m.get("title", id))
+	t.theme_type_variation = &"SubheaderLabel"
+	t.add_theme_font_size_override(&"font_size", 28)
+	col.add_child(t)
+	var sub := Label.new()
+	sub.theme_type_variation = &"SmallLabel"
+	sub.text = (UIChartData.get_island(TreasureMaps.island_of(id)).get("name", "") as String) + ("  ·  Treasure found!" if solved else "  ·  Unroll it and find the spot")
+	if solved:
+		sub.add_theme_color_override(&"font_color", UIPalette.GREEN_DARK)
+	col.add_child(sub)
+	if solved:
+		var ck := UIIconView.make(&"check", 30)
+		ck.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		row.add_child(ck)
 	return card
 
 
@@ -135,15 +204,6 @@ static func island_totals(id: StringName) -> Dictionary:
 	if UIRoot.instance != null:
 		out.merge(UIRoot.instance.get_island_totals(id), true)
 	return out
-
-
-static func _count_prefixed(ids: Array, island: StringName) -> int:
-	var n := 0
-	var prefix := String(island) + "_"
-	for i: Variant in ids:
-		if String(i).begins_with(prefix):
-			n += 1
-	return n
 
 
 func _stat(icon: StringName, caption: String, have: int, total: int) -> Control:

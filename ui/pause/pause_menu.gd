@@ -47,6 +47,8 @@ var _island_label: Label
 var _time_label: Label
 var _hints: UIPromptRow
 var confirm: UIConfirmDialog
+## Unrolls a treasure map over the menu (opened from the Treasure page).
+var map_viewer: UITreasureMapViewer
 
 
 func _ready() -> void:
@@ -163,6 +165,11 @@ func _build() -> void:
 	_hints.add_theme_constant_override(&"separation", 12)
 	hint_row.add_child(_hints)
 
+	map_viewer = UITreasureMapViewer.new()
+	add_child(map_viewer)
+	# The viewer brings its own button hints.
+	map_viewer.opened.connect(func() -> void: hint_row.visible = false)
+	map_viewer.closed.connect(func() -> void: hint_row.visible = true)
 	confirm = UIConfirmDialog.new()
 	add_child(confirm)
 	UIFx.prepare(_side)
@@ -209,6 +216,8 @@ func open(entry: StringName = &"resume") -> void:
 
 
 func close() -> void:
+	if map_viewer != null and map_viewer.is_open:
+		map_viewer.close()
 	if not is_open:
 		return
 	is_open = false

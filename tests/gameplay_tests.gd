@@ -438,7 +438,7 @@ func test_captains_cabin_displays_progress() -> void:
 	check("one spinner per unique treasure", cabin.get(&"_spinners").size() == 2, "spinners=%d" % cabin.get(&"_spinners").size())
 	check("every rescued parrot perches", cabin.perch.get_child_count() == 3, "birds=%d" % cabin.perch.get_child_count())
 	check("attachments on the rack (hook + lantern)", cabin.rack.get_child_count() == 2, "rack=%d" % cabin.rack.get_child_count())
-	check("ship part shelf has all slots", cabin.parts_shelf.get_child_count() == CaptainsCabin.SHIP_PARTS.size(), "")
+	check("ship part shelf has all slots", cabin.parts_shelf.get_child_count() == ShipParts.ids().size(), "")
 	InventoryManager.reset()
 	ParrotManager.reset()
 

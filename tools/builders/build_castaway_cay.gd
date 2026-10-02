@@ -841,7 +841,7 @@ func _barnacle_betty() -> void:
 	])
 	npc.thanks_lines = PackedStringArray([
 		"My Betty! Not a scratch on her! ...Well. New scratches.",
-		"Here, my old fishing chart. Some pirate buried something on the north beach, by a pile of stones. Never did own a shovel.",
+		"Here, my old fishing chart. Some pirate inked an X on the back, years ago. Never did own a shovel.",
 	])
 	npc.after_lines = PackedStringArray([
 		"Betty and me, back on the water. Best fishing's at dawn, while the crabs are still snoring.",
@@ -910,7 +910,7 @@ func _barnacle_betty() -> void:
 	b.add(ramp_marks, g, "RampDragMarks")
 	coin_trail(Vector3(-79.5, 1.6, 2), Vector3(-77.5, 1.6, -8), 4, 0.0, CoinTrail.TrailShape.LINE)
 	coin_trail(Vector3(-54.5, 2.2, -40), Vector3(-59.5, 4.9, -40), 4, 0.0, CoinTrail.TrailShape.LINE)
-	# Shellby's chart: an X on the north beach, by a cairn of stones.
+	# Shellby's chart leads to the north beach, by a cairn of stones.
 	var x_spot := DigSpot.new()
 	x_spot.spot_id = &"castaway_x_north"
 	x_spot.island_id = ISLAND
