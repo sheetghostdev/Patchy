@@ -9,6 +9,8 @@ const BLAST_RADIUS := 1.5
 
 var velocity := Vector3.ZERO
 var shooter: Node3D
+## Enemy shots hurt Patchy in the blast and spare other enemies.
+var hurts_player := false
 var _t := 0.0
 var _mesh: MeshInstance3D
 
@@ -56,6 +58,10 @@ func _burst(at: Vector3) -> void:
 	q.collision_mask = Layers.WORLD | Layers.ENEMY | Layers.PROPS | Layers.INTERACTABLE
 	q.collide_with_areas = true
 	var told := {}
+	if hurts_player:
+		var p := GameManager.player as Player
+		if p != null and p.global_position.distance_to(at) < BLAST_RADIUS + 0.3:
+			p.health.take_damage(1, at)
 	for h in get_world_3d().direct_space_state.intersect_shape(q, 16):
 		var n := h.collider as Node
 		var receiver := n
@@ -64,6 +70,8 @@ func _burst(at: Vector3) -> void:
 				break
 			receiver = receiver.get_parent()
 		if receiver == null or receiver == shooter or told.has(receiver):
+			continue
+		if hurts_player and (receiver.is_in_group(&"enemy") or receiver is Player):
 			continue
 		told[receiver] = true
 		if receiver.has_method(&"on_cannon_hit"):

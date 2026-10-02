@@ -306,6 +306,7 @@ func _shipwreck() -> void:
 	blk(g, Vector3(36, 1.2, 44.5), Vector3(0.9, 0.9, 12), "wood", Vector3(0, -60, 0), LevelBlock.Shape.CYLINDER, "FallenMast")
 	crab(Vector3(46, 1.25, 31), CrabModel.Variant.HERMIT, "castaway_crab_wreck_1")
 	crab(Vector3(58, 1.25, 33), CrabModel.Variant.NORMAL, "castaway_crab_wreck_2")
+	crab(Vector3(38, 1.25, 26), CrabModel.Variant.CANNON, "castaway_crab_wreck_gunner")
 	# A tall rock at the waterline, only reachable by a long jump from the
 	# crow's nest (parrot #4).
 	plateau(terrain, "WreckStack", [Vector2(59, 46), Vector2(62.5, 45.6), Vector2(64, 48.5), Vector2(62, 51.2), Vector2(58.8, 50.4)], 6.2, 14.0, "rock", {"seed": 25, "no_wall_kick": true})
@@ -780,6 +781,7 @@ func _driftwood_key() -> void:
 	crab(pen + Vector3(2.0, 0.05, 1.0), CrabModel.Variant.ARMORED, "driftwood_crab_pen_1")
 	crab(pen + Vector3(-2.0, 0.05, -1.2), CrabModel.Variant.HERMIT, "driftwood_crab_pen_2")
 	crab(c + Vector3(16, 1.05, 4), CrabModel.Variant.NORMAL, "driftwood_crab_beach")
+	crab(c + Vector3(-14, 1.05, -14), CrabModel.Variant.CANNON, "driftwood_crab_gunner")
 	var gull := Pelican.new()
 	gull.persistent_id = &"driftwood_pelican"
 	gull.position = c + Vector3(6, 1.0, -12)

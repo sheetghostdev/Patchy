@@ -12,7 +12,7 @@ extends CharacterBody3D
 
 signal defeated(crab: Crab)
 
-enum State { PATROL, NOTICE, CHASE, WINDUP, LUNGE, RECOVER, FLIPPED, SLIDING, STEAL, FLEE, BURROWED, DEFEATED }
+enum State { PATROL, NOTICE, CHASE, WINDUP, LUNGE, RECOVER, FLIPPED, SLIDING, STEAL, FLEE, BURROWED, DEFEATED, AIM }
 
 @export var variant := CrabModel.Variant.NORMAL
 @export var patrol_radius := 4.0
@@ -54,6 +54,10 @@ var _spin := 0.0
 var _scripted_grab: Collectible = null
 ## A scripted thief (opening sequence) ignores Patchy until the loot is home.
 var _scripted_run := false
+## Cannon crabs: lob timer, the marked landing spot and its warning ring.
+var _shot_cool := 1.5
+var _shot_target := Vector3.ZERO
+var _shot_ring: MeshInstance3D
 
 @onready var model: CrabModel = $CrabModel
 @onready var attack_area: Area3D = $CrabModel/AttackArea
@@ -106,7 +110,19 @@ func _physics_process(delta: float) -> void:
 			elif _scripted_grab == null and _t > 0.45:
 				_enter(State.CHASE)
 		State.CHASE:
-			_update_chase(delta, player)
+			_shot_cool -= delta
+			if variant == CrabModel.Variant.CANNON and player != null and _shot_cool <= 0.0:
+				var d := player.global_position.distance_to(global_position)
+				if d > 4.5 and d < 13.0:
+					_begin_aim(player)
+			if state == State.CHASE:
+				_update_chase(delta, player)
+		State.AIM:
+			_halt(delta)
+			_look_at_player(player, delta)
+			if _t >= 0.9:
+				_fire_lob()
+				_enter(State.RECOVER)
 		State.WINDUP:
 			_halt(delta)
 			_look_at_player(player, delta * 0.6)
@@ -155,6 +171,8 @@ func _physics_process(delta: float) -> void:
 
 
 func _enter(s: State) -> void:
+	if state == State.AIM and s != State.AIM and _shot_ring != null:
+		_shot_ring.visible = false
 	state = s
 	_t = 0.0
 	attack_area.monitoring = s == State.LUNGE
@@ -460,6 +478,45 @@ func on_ground_pound(player: Node3D) -> void:
 			_flip()
 		return
 	take_hit({"damage": 2, "kind": &"ground_pound", "source": player, "position": player.global_position, "direction": Player.flat(global_position - player.global_position).normalized()})
+
+
+# --- Cannon crabs ---------------------------------------------------------------------
+
+## Mark where the shot will land (where Patchy stands now) with a red ring.
+func _begin_aim(player: Player) -> void:
+	_shot_target = player.global_position
+	if _shot_ring == null:
+		_shot_ring = MeshInstance3D.new()
+		var tm := TorusMesh.new()
+		tm.inner_radius = 1.05
+		tm.outer_radius = 1.3
+		tm.rings = 28
+		tm.ring_segments = 4
+		_shot_ring.mesh = tm
+		_shot_ring.material_override = MaterialLibrary.unshaded(Color(1.0, 0.3, 0.2, 0.7))
+		_shot_ring.top_level = true
+		add_child(_shot_ring)
+	_shot_ring.global_position = _shot_target + Vector3.UP * 0.06
+	_shot_ring.visible = true
+	AudioManager.play(&"crab_pinch", global_position, -2.0, 0.7)
+	_enter(State.AIM)
+
+
+func _fire_lob() -> void:
+	_shot_cool = 2.4
+	if _shot_ring != null:
+		_shot_ring.visible = false
+	var muzzle := global_position + Vector3.UP * 0.8
+	var flight := 1.0
+	var ball := Cannonball.new()
+	ball.shooter = self
+	ball.hurts_player = true
+	# Ballistic arc that lands on the mark after `flight` seconds.
+	ball.velocity = (_shot_target - muzzle) / flight + Vector3.UP * 0.5 * Cannonball.GRAVITY * flight
+	get_tree().current_scene.add_child(ball)
+	ball.global_position = muzzle
+	AudioManager.play(&"cannon_fire", muzzle, -4.0, 1.3)
+	VFX.dust(get_tree().current_scene, muzzle, 5, 0.25, Color(0.9, 0.9, 0.9, 0.7), 0.5, 0.6)
 
 
 func _flip() -> void:

@@ -487,3 +487,24 @@ func test_croc_flank_and_pound() -> void:
 	tap(&"attack")
 	await frames(30)
 	check("staggered grunt goes down", c.state == CrocGrunt.State.DEFEATED, "hp=%d state=%s" % [c.hp, CrocGrunt.State.keys()[c.state]])
+
+
+func test_cannon_crab_lobs_telegraphed_shots() -> void:
+	var c := spawn_crab(Vector3(0, 0, -9.0), CrabModel.Variant.CANNON)
+	c.sight_radius = 12.0
+	c.lose_radius = 20.0
+	c.chase_speed = 0.0
+	var aimed := await wait_until(func() -> bool: return c.state == Crab.State.AIM, 300)
+	check("cannon crab stops to aim from range", aimed >= 0, "state=%s" % Crab.State.keys()[c.state])
+	var ring := c.get(&"_shot_ring") as Node3D
+	check("the landing spot is marked", ring != null and ring.visible and Player.flat(ring.global_position - player.global_position).length() < 0.5, "")
+	var h0 := player.health.health
+	await frames(150)
+	check("standing on the mark hurts", player.health.health < h0, "health %d -> %d" % [h0, player.health.health])
+	# Next volley: step out of the ring and it misses.
+	await frames(60)
+	var aimed2 := await wait_until(func() -> bool: return c.state == Crab.State.AIM, 300)
+	var h1 := player.health.health
+	player.teleport(player.global_position + Vector3(3.5, 0.0, 0.0), Vector3.FORWARD)
+	await frames(150)
+	check("stepping out of the ring dodges", aimed2 >= 0 and player.health.health == h1, "health %d -> %d" % [h1, player.health.health])

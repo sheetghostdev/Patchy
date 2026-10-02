@@ -5,7 +5,7 @@ extends Node3D
 ## stalks, six scuttling legs and one comically oversized claw. Pivots are
 ## exposed for CrabAnimator-style posing by the Crab script.
 
-enum Variant { NORMAL, ARMORED, HERMIT }
+enum Variant { NORMAL, ARMORED, HERMIT, CANNON }
 
 @export var variant := Variant.NORMAL:
 	set(v):
@@ -60,6 +60,11 @@ func _build() -> void:
 			gl.ellipsoid(Vector3(0.44, 0.16, 0.35), Transform3D(Basis.IDENTITY, Vector3(0, 0.1, 0)), Palette.METAL, 8, 14)
 			for k in 3:
 				gl.sphere(0.045, Transform3D(Basis.IDENTITY, Vector3(-0.18 + k * 0.18, 0.25, 0.0)), Palette.BRASS, 4, 6)
+		elif variant == Variant.CANNON:
+			# A stubby deck cannon strapped to its back, muzzle up and forward.
+			gl.cylinder(0.12, 0.1, 0.42, Transform3D(Basis.from_euler(Vector3(-1.0, 0, 0)), Vector3(0, 0.3, -0.02)), Color("3a3f4a"), 12)
+			gl.torus(0.09, 0.14, Transform3D(Basis.from_euler(Vector3(-1.0, 0, 0)), Vector3(0, 0.42, -0.18)), Palette.BRASS, 12, 5)
+			gl.box(Vector3(0.36, 0.06, 0.12), Transform3D(Basis.IDENTITY, Vector3(0, 0.17, 0.05)), Palette.WOOD_DARK)
 		elif variant == Variant.HERMIT:
 			gl.cylinder(0.05, 0.3, 0.42, Transform3D(Basis.from_euler(Vector3(-0.5, 0, 0)), Vector3(0, 0.25, 0.12)), Color("e8d2b0"), 14)
 			gl.torus(0.1, 0.24, Transform3D(Basis.from_euler(Vector3(-0.5, 0, 0)), Vector3(0, 0.18, 0.1)), Color("d4a373"), 14, 6)
