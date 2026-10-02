@@ -265,7 +265,7 @@ An optional argument after `--` filters test names.
 godot --headless --path . --fixed-fps 60 res://tests/run_movement_tests.tscn   # 53 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_camera_tests.tscn     # 21 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_gameplay_tests.tscn   # 64 checks
-godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 121 checks
+godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 126 checks
 godot --headless --path . --fixed-fps 60 res://ui/tests/ui_flow_test.tscn      # 84 checks
 godot --headless --path . --fixed-fps 60 res://props/tests/prop_tests.tscn     # 70 checks
 godot --headless --path . --fixed-fps 60 res://world/ocean/tests/ocean_swim_check.tscn
@@ -301,6 +301,7 @@ What each suite covers:
   - the attachment chain: lantern, braziers, shovel, the treasure map's spot,
     grapple, pillar, cannon, cracked rock and targets;
   - a full King Claw fight, including the hand-off to his theme and back;
+  - recovered ship parts appearing on the wreck, and the helm's sea chart;
   - a check that no pickup is buried or floating.
 
 ## Content
@@ -350,6 +351,10 @@ More on Castaway Cay:
 - **Islanders:** Tok, the outpost's lookout monkey, always knows where the
   next locked cage is. On Driftwood Key, Pip the otter wants her lucky
   clam back from the pelican.
+- **The wreck comes back together** (spec §79): each recovered ship part
+  appears on deck. The compass sits in its binnacle on the quarterdeck,
+  and once the Ship's Wheel is back at the helm, Patchy can take it to
+  open the sea chart and sail for any known dock.
 - **The Captain's Cabin:** inside the wreck, the hub shows your gold,
   treasures, parrots, ship parts and attachments.
 - Weather: every few minutes a tropical shower greys the sky, rains for

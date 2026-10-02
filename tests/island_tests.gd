@@ -335,6 +335,30 @@ func test_shellby_talks() -> void:
 	check("control returns after talking", player.state_id != &"locked", "state=%s" % player.state_id)
 
 
+func test_wreck_shows_recovered_parts() -> void:
+	await clear_enemies()
+	var resto := node("Structures/Shipwreck/Restoration") as ShipRestoration
+	var wheel := resto.helm.get_child(0) as Node3D
+	var compass := resto.binnacle.get_child(0) as Node3D
+	check("the wreck starts bare", not wheel.visible and not compass.visible, "")
+	InventoryManager.add_ship_part(&"compass")
+	await frames(2)
+	check("the recovered compass appears in its binnacle", compass.visible and not wheel.visible, "")
+	InventoryManager.add_ship_part(&"ships_wheel")
+	await frames(2)
+	check("and the wheel at the helm", wheel.visible, "")
+	await place(resto.helm.global_position + Vector3(-1.3, 0.1, 0), Vector3.RIGHT)
+	await frames(6)
+	check("Patchy can take the helm", player.interaction.current != null and "helm" in player.interaction.current.get_prompt(), "current=%s" % player.interaction.current)
+	tap(&"interact")
+	await frames(6)
+	var ui := get_node_or_null(^"/root/UI")
+	check("the helm opens the sea chart", ui != null and ui.pause_menu.is_open and ui.pause_menu.current_page() == &"map", "")
+	if ui != null:
+		ui.close_pause_menu()
+	await frames(6)
+
+
 func test_barnacle_betty_side_quest() -> void:
 	await clear_enemies()
 	var shellby := node("Gameplay/OldShellby") as FavorNPC

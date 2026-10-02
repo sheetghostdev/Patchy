@@ -282,6 +282,19 @@ func _shipwreck() -> void:
 	door_spawn.set_meta(&"spawn_id", &"cabin_door")
 	b.add(door_spawn, gameplay, "SpawnCabinDoor")
 	door_spawn.add_to_group(&"spawn_point", true)
+	# Recovered ship parts go back on deck (spec §79): the wheel at the helm
+	# on the quarterdeck (off the climbing line), the compass in front of it.
+	var resto := ShipRestoration.new()
+	b.add(resto, g, "Restoration")
+	var helm := Marker3D.new()
+	helm.position = Vector3(51.6, 6.25, 35.8)
+	helm.rotation_degrees.y = -90.0
+	b.add(helm, resto, "Helm")
+	var binnacle := Marker3D.new()
+	binnacle.position = Vector3(52.8, 6.25, 35.8)
+	b.add(binnacle, resto, "Binnacle")
+	resto.helm = helm
+	resto.binnacle = binnacle
 	blk(g, Vector3(55.5, 1.2, 38), Vector3(0.9, 8.6, 0.9), "wood", Vector3.ZERO, LevelBlock.Shape.CYLINDER, "Mast")
 	blk(g, Vector3(55.5, 7.6, 38), Vector3(3.4, 0.45, 3.4), "wood", Vector3.ZERO, LevelBlock.Shape.CYLINDER, "CrowsNest")
 	cage(Vector3(55.5, 8.05, 39.2), "castaway_parrot_wreck", ParrotModel.Plumage.SCARLET)
