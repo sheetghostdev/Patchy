@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://world/ocean/tests/ocean_wave_check.gd" id="1_check"]
+
+[node name="OceanWaveCheck" type="Node"]
+script = ExtResource("1_check")
