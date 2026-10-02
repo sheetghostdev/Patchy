@@ -254,6 +254,20 @@ func _shipwreck() -> void:
 		blk(g, Vector3(44, 1.2, 38 + side * 2.68), Vector3(0.35, 3.7, 10.0), "wood_dark", Vector3(0, -90, 0), LevelBlock.Shape.RAMP, "HullSide")
 	blk(g, Vector3(51.25, 1.2, 38), Vector3(4.5, 4.8, 5.7), "wood_dark", Vector3.ZERO, LevelBlock.Shape.BOX, "Cabin")
 	blk(g, Vector3(51.25, 6.0, 38), Vector3(4.9, 0.25, 6.1), "wood", Vector3.ZERO, LevelBlock.Shape.BOX, "CabinRoof")
+	# The captain's cabin door: the hub where treasure, parrots and ship parts
+	# are on display.
+	var cabin_door := SceneDoor.new()
+	cabin_door.target_scene = "res://world/hub/captains_cabin.tscn"
+	cabin_door.spawn_id = &"door"
+	cabin_door.label = "Captain's cabin"
+	cabin_door.position = Vector3(51.25, 1.2, 40.95)
+	b.add(cabin_door, g, "CabinDoor")
+	var door_spawn := Marker3D.new()
+	door_spawn.position = Vector3(51.25, 1.3, 42.6)
+	door_spawn.rotation_degrees.y = 180.0
+	door_spawn.set_meta(&"spawn_id", &"cabin_door")
+	b.add(door_spawn, gameplay, "SpawnCabinDoor")
+	door_spawn.add_to_group(&"spawn_point", true)
 	blk(g, Vector3(55.5, 1.2, 38), Vector3(0.9, 8.6, 0.9), "wood", Vector3.ZERO, LevelBlock.Shape.CYLINDER, "Mast")
 	blk(g, Vector3(55.5, 7.6, 38), Vector3(3.4, 0.45, 3.4), "wood", Vector3.ZERO, LevelBlock.Shape.CYLINDER, "CrowsNest")
 	cage(Vector3(55.5, 8.05, 39.2), "castaway_parrot_wreck", ParrotModel.Plumage.SCARLET)

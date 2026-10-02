@@ -1,0 +1,213 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://world/islands/island_info.gd" id="1_yrnk5"]
+[ext_resource type="Script" path="res://world/environment/sky_environment.gd" id="2_1mpjt"]
+[ext_resource type="Script" path="res://props/blocks/level_block.gd" id="3_evsq8"]
+[ext_resource type="Script" path="res://world/hub/captains_cabin.gd" id="4_3dl25"]
+[ext_resource type="Script" path="res://world/objects/scene_door.gd" id="5_c2tf1"]
+[ext_resource type="Script" path="res://systems/camera/camera_zone.gd" id="6_skg2e"]
+[ext_resource type="PackedScene" path="res://characters/patchy/player.tscn" id="7_mbnkp"]
+[ext_resource type="Script" path="res://characters/patchy/player.gd" id="8_odbt8"]
+[ext_resource type="Resource" path="res://resources/settings/patchy_movement.tres" id="9_xcvph"]
+[ext_resource type="PackedScene" path="res://systems/camera/camera_rig.tscn" id="10_qufvp"]
+[ext_resource type="Script" path="res://systems/camera/camera_rig.gd" id="11_mmllj"]
+[ext_resource type="Resource" path="res://resources/settings/camera_default.tres" id="12_mu30v"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_34icb"]
+size = Vector3(13, 4, 9)
+
+[node name="CaptainsCabin" type="Node3D" unique_id=130848773]
+
+[node name="IslandInfo" type="Node" parent="." unique_id=257778145]
+script = ExtResource("1_yrnk5")
+island_id = &"captains_cabin"
+display_name = "Captain's Cabin"
+music = &"cave_explore"
+announce = false
+
+[node name="SkyEnvironment" type="Node3D" parent="." unique_id=2762594]
+script = ExtResource("2_1mpjt")
+preset = 6
+
+[node name="Room" type="Node3D" parent="." unique_id=2085140543]
+
+[node name="Floor" type="StaticBody3D" parent="Room" unique_id=1110299291]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 0)
+script = ExtResource("3_evsq8")
+size = Vector3(13, 0.4, 9)
+surface = "wood"
+
+[node name="Ceiling" type="StaticBody3D" parent="Room" unique_id=426104586]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.4, 0)
+script = ExtResource("3_evsq8")
+size = Vector3(13.6, 0.4, 9.6)
+surface = "wood_dark"
+
+[node name="WallBack" type="StaticBody3D" parent="Room" unique_id=2127835105]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, -4.75)
+script = ExtResource("3_evsq8")
+size = Vector3(13.6, 4.2, 0.5)
+surface = "wood_dark"
+
+[node name="WallLeft" type="StaticBody3D" parent="Room" unique_id=274532534]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.75, -0.4, 0)
+script = ExtResource("3_evsq8")
+size = Vector3(0.5, 4.2, 9)
+surface = "wood_dark"
+
+[node name="WallRight" type="StaticBody3D" parent="Room" unique_id=576664455]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.75, -0.4, 0)
+script = ExtResource("3_evsq8")
+size = Vector3(0.5, 4.2, 9)
+surface = "wood_dark"
+
+[node name="WallFrontL" type="StaticBody3D" parent="Room" unique_id=429879672]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.84, -0.4, 4.75)
+script = ExtResource("3_evsq8")
+size = Vector3(5.92, 4.2, 0.5)
+surface = "wood_dark"
+
+[node name="WallFrontR" type="StaticBody3D" parent="Room" unique_id=232698413]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.84, -0.4, 4.75)
+script = ExtResource("3_evsq8")
+size = Vector3(5.92, 4.2, 0.5)
+surface = "wood_dark"
+
+[node name="WallFrontTop" type="StaticBody3D" parent="Room" unique_id=1091341378]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.45, 4.75)
+script = ExtResource("3_evsq8")
+size = Vector3(1.8, 1.35, 0.5)
+surface = "wood_dark"
+
+[node name="Beam" type="StaticBody3D" parent="Room" unique_id=539724079]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 3, 0)
+script = ExtResource("3_evsq8")
+size = Vector3(0.35, 0.4, 9)
+surface = "wood"
+
+[node name="Beam2" type="StaticBody3D" parent="Room" unique_id=1144312905]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 3, 0)
+script = ExtResource("3_evsq8")
+size = Vector3(0.35, 0.4, 9)
+surface = "wood"
+
+[node name="Beam3" type="StaticBody3D" parent="Room" unique_id=1333848313]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 3, 0)
+script = ExtResource("3_evsq8")
+size = Vector3(0.35, 0.4, 9)
+surface = "wood"
+
+[node name="Beam4" type="StaticBody3D" parent="Room" unique_id=470990298]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 3, 0)
+script = ExtResource("3_evsq8")
+size = Vector3(0.35, 0.4, 9)
+surface = "wood"
+
+[node name="WindowLight" type="OmniLight3D" parent="Room" unique_id=1030154893]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, -2.2)
+light_color = Color(0.8, 0.9, 1, 1)
+light_energy = 0.9
+light_specular = 0.0
+omni_range = 9.0
+
+[node name="Lamp" type="OmniLight3D" parent="Room" unique_id=655651782]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.6, 1.9, 1.2)
+light_color = Color(1, 0.84, 0.64, 1)
+light_energy = 0.9
+light_specular = 0.0
+omni_range = 7.5
+
+[node name="Lamp2" type="OmniLight3D" parent="Room" unique_id=970063555]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6, 1.9, 1.2)
+light_color = Color(1, 0.84, 0.64, 1)
+light_energy = 0.9
+light_specular = 0.0
+omni_range = 7.5
+
+[node name="Lamp3" type="OmniLight3D" parent="Room" unique_id=934483826]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.9, 2)
+light_color = Color(1, 0.84, 0.64, 1)
+light_energy = 0.9
+light_specular = 0.0
+omni_range = 7.5
+
+[node name="ChartTable" type="StaticBody3D" parent="Room" unique_id=905240037]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
+script = ExtResource("3_evsq8")
+size = Vector3(2.6, 0.9, 1.6)
+surface = "wood"
+
+[node name="Chart" type="StaticBody3D" parent="Room" unique_id=363964519]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, -0.5)
+script = ExtResource("3_evsq8")
+size = Vector3(2.3, 0.05, 1.3)
+surface = "sand"
+
+[node name="PerchBar" type="StaticBody3D" parent="Room" unique_id=271921855]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.1, 2.15, -4.25)
+script = ExtResource("3_evsq8")
+size = Vector3(5.2, 0.12, 0.12)
+surface = "wood"
+
+[node name="Shelf" type="StaticBody3D" parent="Room" unique_id=990554156]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.3, 1.25, 0)
+script = ExtResource("3_evsq8")
+size = Vector3(0.6, 0.1, 7)
+surface = "wood"
+
+[node name="Displays" type="Node3D" parent="." unique_id=2128982480 node_paths=PackedStringArray("pile_spot", "pedestal_row", "perch", "parts_shelf", "rack")]
+script = ExtResource("4_3dl25")
+pile_spot = NodePath("PileSpot")
+pedestal_row = NodePath("Pedestals")
+perch = NodePath("Perch")
+parts_shelf = NodePath("PartsShelf")
+rack = NodePath("AttachmentRack")
+
+[node name="PileSpot" type="Marker3D" parent="Displays" unique_id=1806054924]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.6, 0, -3.2)
+
+[node name="Pedestals" type="Marker3D" parent="Displays" unique_id=2095952865]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.6, 0, 3)
+
+[node name="Perch" type="Marker3D" parent="Displays" unique_id=807962290]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 2.2, -4.2)
+
+[node name="PartsShelf" type="Marker3D" parent="Displays" unique_id=1572956031]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 6.2, 1.3, -2.6)
+
+[node name="AttachmentRack" type="Marker3D" parent="Displays" unique_id=1895232948]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -6.3, 2, -2)
+
+[node name="DeckDoor" type="Area3D" parent="." unique_id=722406614]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 4.55)
+script = ExtResource("5_c2tf1")
+target_scene = "res://world/islands/castaway_cay/castaway_cay.tscn"
+spawn_id = &"cabin_door"
+label = "Go on deck"
+
+[node name="SpawnDoor" type="Marker3D" parent="." unique_id=1379982409 groups=["spawn_point"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 3.2)
+metadata/spawn_id = &"door"
+
+[node name="CabinCameraZone" type="Area3D" parent="." unique_id=1780010534]
+script = ExtResource("6_skg2e")
+distance_scale = 0.62
+pitch_offset = -10.0
+blend_time = 0.05
+
+[node name="Shape" type="CollisionShape3D" parent="CabinCameraZone" unique_id=973020145]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
+shape = SubResource("BoxShape3D_34icb")
+
+[node name="Player" type="CharacterBody3D" parent="." unique_id=1103040548 groups=["player"] instance=ExtResource("7_mbnkp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 3.2)
+collision_layer = 2
+collision_mask = 1033
+script = ExtResource("8_odbt8")
+settings = ExtResource("9_xcvph")
+
+[node name="CameraRig" type="Node3D" parent="." unique_id=1290302556 node_paths=PackedStringArray("target") instance=ExtResource("10_qufvp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 6)
+script = ExtResource("11_mmllj")
+settings = ExtResource("12_mu30v")
+target = NodePath("../Player")

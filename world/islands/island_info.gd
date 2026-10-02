@@ -15,6 +15,8 @@ extends Node
 @export var extra_treasures := 0
 ## Smaller islands that live in this scene (each has an IslandZone).
 @export var sub_islands: Array[StringName] = []
+## Show the discovery banner (off for interiors like the captain's cabin).
+@export var announce := true
 
 
 func _ready() -> void:
@@ -27,7 +29,10 @@ func _ready() -> void:
 	var seq := _pending_sequence()
 	if seq != null:
 		await seq.finished
-	GameManager.discover_island(island_id, display_name)
+	if announce:
+		GameManager.discover_island(island_id, display_name)
+	else:
+		GameManager.current_island = island_id
 	if music != &"":
 		AudioManager.play_music(music)
 

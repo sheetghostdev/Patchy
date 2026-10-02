@@ -7,6 +7,7 @@ extends Node
 const ISLAND_SCENES := {
 	&"castaway_cay": "res://world/islands/castaway_cay/castaway_cay.tscn",
 	&"driftwood_key": "res://world/islands/castaway_cay/castaway_cay.tscn",
+	&"captains_cabin": "res://world/hub/captains_cabin.tscn",
 }
 const FIRST_ISLAND := &"castaway_cay"
 

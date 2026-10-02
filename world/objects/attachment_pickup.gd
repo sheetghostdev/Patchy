@@ -48,6 +48,7 @@ func _ready() -> void:
 			_:
 				model.position = Vector3(0, 0.2, 0)
 	var light := OmniLight3D.new()
+	light.light_specular = 0.0  # no cel glint discs on nearby walls
 	light.light_color = data.color if data != null else Color.WHITE
 	light.light_energy = 1.2
 	light.omni_range = 3.5

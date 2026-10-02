@@ -81,6 +81,7 @@ func _build() -> void:
 	PropKit.mesh_instance(lantern, lp.build(), "LanternMesh")
 	if lit:
 		light = OmniLight3D.new()
+		light.light_specular = 0.0  # no cel glint discs on nearby walls
 		light.light_color = light_color
 		light.light_energy = light_energy
 		light.omni_range = light_range

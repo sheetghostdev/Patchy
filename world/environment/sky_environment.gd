@@ -5,7 +5,7 @@ extends Node3D
 ## from the sky, gentle aerial fog and filmic tonemapping. Presets match each
 ## island's palette (spec §7, §119-120): keep nights and storms readable.
 
-enum Preset { CASTAWAY_DAY, GOLDEN_HOUR, OVERCAST, CAVE, LAB, STORM }
+enum Preset { CASTAWAY_DAY, GOLDEN_HOUR, OVERCAST, CAVE, LAB, STORM, INTERIOR }
 
 const SKY_SHADER := preload("res://shaders/sky_stylized.gdshader")
 
@@ -126,6 +126,16 @@ func _apply() -> void:
 		Preset.LAB:
 			env.fog_light_color = Color(0.78, 0.88, 0.98)
 			env.fog_depth_begin = 90.0
+		Preset.INTERIOR:
+			# Lamplit wooden rooms: warm fill, no sun, no sky.
+			energy *= 0.0
+			env.background_mode = Environment.BG_COLOR
+			env.background_color = Color(0.1, 0.07, 0.05)
+			env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
+			env.ambient_light_color = Color(0.66, 0.6, 0.56)
+			env.ambient_light_energy = 0.7
+			env.adjustment_saturation = 0.92
+			env.fog_enabled = false
 		Preset.STORM:
 			# Night squall at sea (the opening): slate sky, low cloud, dim
 			# cold light, close fog. Still readable: shapes stay lit.

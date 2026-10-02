@@ -81,6 +81,7 @@ func _build() -> void:
 		flame.position = Vector3.UP * (pole_top + 0.2)
 		PropKit.add_generated(self, flame, "Flame")
 		light = OmniLight3D.new()
+		light.light_specular = 0.0  # no cel glint discs on nearby walls
 		light.light_color = light_color
 		light.light_energy = light_energy
 		light.omni_range = light_range

@@ -412,3 +412,32 @@ func test_pelican_steals_and_coughs_up_coins() -> void:
 			await frames(8)
 	check("stolen coins can be picked back up", InventoryManager.gold_value >= 10, "gold=%d" % InventoryManager.gold_value)
 	InventoryManager.reset()
+
+
+# --- Captain's cabin hub ------------------------------------------------------------
+
+func test_captains_cabin_displays_progress() -> void:
+	InventoryManager.reset()
+	ParrotManager.reset()
+	InventoryManager.collect_treasure(&"", &"coin", 40)
+	InventoryManager.collect_treasure(&"t_gem", &"gem", 5, &"", Palette.GEM_BLUE)
+	InventoryManager.collect_treasure(&"t_crown", &"crown", 25)
+	ParrotManager.rescue(&"p1")
+	ParrotManager.rescue(&"p2")
+	ParrotManager.rescue(&"p3")
+	InventoryManager.unlock_attachment(&"lantern")
+	InventoryManager.add_ship_part(&"compass")
+	var cabin := CaptainsCabin.new()
+	for n in ["pile_spot", "pedestal_row", "perch", "parts_shelf", "rack"]:
+		var m := Marker3D.new()
+		cabin.add_child(m)
+		cabin.set(n, m)
+	_arena.add_child(cabin)
+	await frames(4)
+	check("gold pile shown", cabin.pile_spot.find_children("*", "TreasureDisplay", true, false).size() == 1, "")
+	check("one spinner per unique treasure", cabin.get(&"_spinners").size() == 2, "spinners=%d" % cabin.get(&"_spinners").size())
+	check("every rescued parrot perches", cabin.perch.get_child_count() == 3, "birds=%d" % cabin.perch.get_child_count())
+	check("attachments on the rack (hook + lantern)", cabin.rack.get_child_count() == 2, "rack=%d" % cabin.rack.get_child_count())
+	check("ship part shelf has all slots", cabin.parts_shelf.get_child_count() == CaptainsCabin.SHIP_PARTS.size(), "")
+	InventoryManager.reset()
+	ParrotManager.reset()

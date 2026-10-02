@@ -32,5 +32,7 @@ void light() {
 
 	vec3 h = normalize(LIGHT + VIEW);
 	float spec = smoothstep(spec_size - 0.012, spec_size + 0.012, dot(NORMAL, h));
-	SPECULAR_LIGHT += LIGHT_COLOR * spec * spec_strength * lit / PI;
+	// Lights' own specular amount scales the highlight (default 0.5 -> x1), so
+	// close-up lamps can turn off the cel glint that would draw a disc on walls.
+	SPECULAR_LIGHT += LIGHT_COLOR * spec * spec_strength * lit * SPECULAR_AMOUNT * 2.0 / PI;
 }

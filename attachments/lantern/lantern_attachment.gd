@@ -33,6 +33,7 @@ func _ready() -> void:
 	add_mesh(metal, &"metal")
 	add_mesh(glow, &"emissive")
 	_light = OmniLight3D.new()
+	_light.light_specular = 0.0  # no cel glint discs on nearby walls
 	_light.light_color = Color(1.0, 0.82, 0.5)
 	_light.light_energy = BASE_ENERGY
 	_light.omni_range = 7.5

@@ -48,6 +48,7 @@ func _ready() -> void:
 	fm.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	_fire.add_child(fm)
 	_light = OmniLight3D.new()
+	_light.light_specular = 0.0  # no cel glint discs on nearby walls
 	_light.light_color = Color(1.0, 0.65, 0.3)
 	_light.light_energy = 2.0
 	_light.omni_range = 7.0

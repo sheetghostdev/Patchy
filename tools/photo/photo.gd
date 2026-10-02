@@ -24,6 +24,8 @@ func _ready() -> void:
 	Settings.auto_camera = _args.get("autocam", "1") == "1"
 	for f in String(_args.get("flags", "")).split(",", false):
 		WorldState.mark_completed(StringName(f))
+	if _args.get("progress", "") == "demo":
+		_demo_progress()
 	var scene_path: String = _args.get("scene", "res://tests/scenes/movement_test.tscn")
 	var scene: Node = load(scene_path).instantiate()
 	add_child(scene)
@@ -94,6 +96,22 @@ func _ready() -> void:
 			await RenderingServer.frame_post_draw
 			_save(get_viewport().get_texture().get_image(), k)
 	get_tree().quit()
+
+
+## Mid-game progress for hub / UI shots: gold, treasures, parrots, tools.
+func _demo_progress() -> void:
+	InventoryManager.collect_treasure(&"", &"coin", 140)
+	var picks := [[&"demo_gem_1", &"gem", Palette.GEM_BLUE], [&"demo_gem_2", &"gem", Palette.GEM_RED], [&"demo_gem_3", &"gem", Color("3ddc97")],
+			[&"demo_goblet", &"goblet", Palette.GOLD], [&"demo_crown", &"crown", Palette.GOLD], [&"demo_relic", &"relic", Palette.GOLD],
+			[&"demo_pearl", &"pearl", Color.WHITE]]
+	for p: Array in picks:
+		InventoryManager.collect_treasure(p[0], p[1], 5, &"castaway_cay", p[2])
+	for id in ["castaway_parrot_wreck", "castaway_parrot_stack", "castaway_parrot_outpost", "castaway_parrot_summit", "driftwood_parrot_tower"]:
+		ParrotManager.rescue(StringName(id), &"castaway_cay")
+	for id: StringName in [&"grapple", &"shovel", &"lantern", &"cannon"]:
+		InventoryManager.unlock_attachment(id)
+	InventoryManager.add_ship_part(&"compass")
+	InventoryManager.add_ship_part(&"ships_wheel")
 
 
 func _save(img: Image, index: int) -> void:

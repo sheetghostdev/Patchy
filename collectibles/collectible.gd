@@ -160,7 +160,7 @@ func collect(player: Player) -> void:
 		player.health.heal(1)
 		AudioManager.play(&"heart_pickup", global_position)
 	else:
-		InventoryManager.collect_treasure(treasure_id, StringName(kind), get_value(), island_id)
+		InventoryManager.collect_treasure(treasure_id, StringName(kind), get_value(), island_id, gem_color)
 		_play_pickup_sound()
 	collected.emit(self)
 	var col := Palette.GOLD if kind in ["coin", "goblet", "crown"] else gem_color

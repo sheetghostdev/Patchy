@@ -28,11 +28,11 @@ func _ready() -> void:
 
 ## Unique treasures (gems, chests, relics) pass an id so they never respawn.
 ## Loose coins pass an empty id and are only counted by value.
-func collect_treasure(treasure_id: StringName, kind: StringName, value: int, island_id: StringName = &"") -> bool:
+func collect_treasure(treasure_id: StringName, kind: StringName, value: int, island_id: StringName = &"", color: Color = Color.WHITE) -> bool:
 	if treasure_id != &"":
 		if _treasures.has(treasure_id):
 			return false
-		_treasures[treasure_id] = {"kind": String(kind), "value": value, "island": String(island_id)}
+		_treasures[treasure_id] = {"kind": String(kind), "value": value, "island": String(island_id), "color": color.to_html(false)}
 	gold_value += value
 	gold_changed.emit(gold_value)
 	Events.treasure_collected.emit(treasure_id, kind, value)
@@ -41,6 +41,16 @@ func collect_treasure(treasure_id: StringName, kind: StringName, value: int, isl
 
 func has_treasure(treasure_id: StringName) -> bool:
 	return _treasures.has(treasure_id)
+
+
+## Unique treasures as [{id, kind, value, island, color}], in pickup order.
+func get_treasures() -> Array[Dictionary]:
+	var out: Array[Dictionary] = []
+	for id in _treasures:
+		var t: Dictionary = (_treasures[id] as Dictionary).duplicate()
+		t["id"] = String(id)
+		out.append(t)
+	return out
 
 
 func count_treasures(kind: StringName = &"", island_id: StringName = &"") -> int:

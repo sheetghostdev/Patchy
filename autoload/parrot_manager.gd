@@ -24,6 +24,13 @@ func is_rescued(parrot_id: StringName) -> bool:
 	return _rescued.has(parrot_id)
 
 
+func get_rescued_ids() -> Array[StringName]:
+	var out: Array[StringName] = []
+	for id in _rescued:
+		out.append(id)
+	return out
+
+
 func get_total() -> int:
 	return _rescued.size()
 

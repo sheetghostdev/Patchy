@@ -40,6 +40,7 @@ func _ready() -> void:
 	mi.mesh = mesh
 	_visual.add_child(mi)
 	var light := OmniLight3D.new()
+	light.light_specular = 0.0  # no cel glint discs on nearby walls
 	light.light_color = Color(1.0, 0.85, 0.5)
 	light.light_energy = 1.4
 	light.omni_range = 4.0
