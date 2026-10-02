@@ -1,6 +1,7 @@
 extends Node
-## UI preview harness: the movement lab + the UI root, then stages one UI
-## state for screenshots. Pick it with a user arg:
+## UI preview harness: instances the movement lab + ui_root.tscn (or uses the
+## "UI" autoload when it is registered), then stages one UI state for
+## screenshots. Pick it with a user arg:
 ##   tools/photo/shoot.sh scene=res://ui/tests/ui_preview.tscn out=/tmp/ui.png frames=80 size=1600x900 state=pause
 ## States: hud (default), hud_pad, dialogue, pause, map, map_all, collection,
 ##   attachments, quests, settings, controls, confirm, debug, debug_world,
@@ -10,9 +11,10 @@ extends Node
 ## Run without the photo tool to click around:
 ##   godot --path . res://ui/tests/ui_preview.tscn -- state=hud
 
-const LAB := "res://tests/scenes/movement_test.tscn"
-const UI_SCENE := "res://ui/ui_root.tscn"
 const TITLE := "res://ui/title/title_screen.tscn"
+
+@onready var lab: Node = $MovementLab
+@onready var local_ui: UIRoot = $UI
 
 var ui: UIRoot
 var args := {}
@@ -30,14 +32,13 @@ func _ready() -> void:
 		UIPrefs.hud_scale = float(args["hud_scale"])
 		ui.hud.apply_hud_scale(UIPrefs.hud_scale)
 	if state.begins_with("title"):
+		lab.queue_free()
 		var title: Node = load(TITLE).instantiate()
 		add_child(title)
 		if state == "title_settings":
 			await _frames(30)
 			title.call(&"_open_settings")
 		return
-	var lab: Node = load(LAB).instantiate()
-	add_child(lab)
 	_add_teleport_markers(lab)
 	await _frames(4)
 	_seed_progress()
@@ -57,6 +58,7 @@ func _ready() -> void:
 			ui.open_pause_menu(&"settings")
 			await _frames(2)
 			var sp := ui.pause_menu.get_page(&"settings") as UISettingsPanel
+			sp.show_tab(StringName(args.get("tab", "camera")))
 			sp.focus_first_row()
 		"controls":
 			ui.open_pause_menu(&"settings")
@@ -86,13 +88,14 @@ func _frames(n: int) -> void:
 		await get_tree().process_frame
 
 
+## Prefer the registered "UI" autoload; otherwise use the instanced copy.
 func _ensure_ui() -> void:
 	var existing := get_node_or_null(^"/root/UI")
-	if existing is UIRoot:
+	if existing is UIRoot and existing != local_ui:
 		ui = existing
+		local_ui.queue_free()
 		return
-	ui = load(UI_SCENE).instantiate()
-	add_child(ui)
+	ui = local_ui
 
 
 func _apply_pad_arg() -> void:
@@ -102,14 +105,14 @@ func _apply_pad_arg() -> void:
 		"nintendo": InputGlyphs.set_gamepad(true, InputGlyphs.PadStyle.NINTENDO)
 
 
-func _add_teleport_markers(lab: Node) -> void:
+func _add_teleport_markers(parent: Node) -> void:
 	var spots := {"TP Spawn": Vector3(0, 0.1, 0), "TP Hook Pit": Vector3(0, 0.1, -66),
 		"TP Pool": Vector3(30, 0.1, -20), "TP Wall Kicks": Vector3(-30, 0.1, -20)}
 	for n: String in spots:
 		var m := Marker3D.new()
 		m.name = n
 		m.add_to_group(&"debug_teleport")
-		lab.add_child(m)
+		parent.add_child(m)
 		m.global_position = spots[n]
 
 

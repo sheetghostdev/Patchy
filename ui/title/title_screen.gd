@@ -29,6 +29,8 @@ func _ready() -> void:
 	get_tree().paused = false
 	Engine.time_scale = 1.0
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	if UIRoot.instance == null:
+		InputBindings.load_and_apply()
 	_build()
 	_intro()
 	if title_music != &"":

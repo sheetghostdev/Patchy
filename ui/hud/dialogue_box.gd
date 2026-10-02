@@ -28,6 +28,7 @@ var _chars := 0.0
 var _pause := 0.0
 var _total := 0
 var _hold := 0.0
+var _hold_armed := false
 var _grace := 0.0
 var _blip := 0
 
@@ -165,6 +166,7 @@ func start(who: String, lines: Array) -> void:
 	speaker = who
 	_active = true
 	_hold = 0.0
+	_hold_armed = false
 	_grace = 0.2
 	_name_label.text = who
 	_plate.visible = who != ""
@@ -246,6 +248,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	if _is_advance(event):
 		get_viewport().set_input_as_handled()
 		if _grace <= 0.0:
+			# Only a press made inside the dialogue may become a skip-hold, so
+			# the button that started the conversation can't skip it.
+			_hold_armed = true
 			advance()
 
 
@@ -289,12 +294,13 @@ func _process(delta: float) -> void:
 	for a in ADVANCE_ACTIONS:
 		if Input.is_action_pressed(a):
 			holding = true
-	if holding and _grace <= 0.0:
+	if holding and _hold_armed:
 		_hold += delta
 		if _hold >= hold_to_skip_time:
 			skip_all()
 	else:
 		_hold = 0.0
+		_hold_armed = false
 	_ring.queue_redraw()
 
 

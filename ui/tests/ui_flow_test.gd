@@ -17,6 +17,7 @@ func _ready() -> void:
 	# autoload would) and the lab is the current scene, so scene changes
 	# replace the lab but keep this test node and the UI alive.
 	var existing := get_node_or_null(^"/root/UI")
+	print("UI root: ", "autoload /root/UI" if existing is UIRoot else "instanced by the test")
 	if existing is UIRoot:
 		ui = existing
 	else:
@@ -137,6 +138,31 @@ func _test_menu_navigation() -> void:
 	await press(&"pause")
 	await _frames(12)
 	check(not ui.pause_menu.is_open, "Pause closes the menu from anywhere")
+	# Controller: Start opens, A confirms, B backs out.
+	check(InputGlyphs.find_event(&"ui_accept", true) != null and InputGlyphs.find_event(&"ui_cancel", true) != null,
+		"ui_accept / ui_cancel have gamepad buttons")
+	await _pad(JOY_BUTTON_START)
+	check(ui.pause_menu.is_open, "Start opens the pause menu")
+	await press(&"ui_down")
+	await _pad(JOY_BUTTON_A)
+	var f2 := focus_owner()
+	check(ui.pause_menu.current_page() == &"map" and f2 is UIMenuEntry, "A on Map keeps the chart (no focusables) open")
+	await _pad(JOY_BUTTON_B)
+	await _frames(12)
+	check(not ui.pause_menu.is_open, "B from the entry list closes the menu")
+
+
+func _pad(button: JoyButton) -> void:
+	var ev := InputEventJoypadButton.new()
+	ev.button_index = button
+	ev.pressed = true
+	Input.parse_input_event(ev)
+	await _frames(2)
+	var up := InputEventJoypadButton.new()
+	up.button_index = button
+	up.pressed = false
+	Input.parse_input_event(up)
+	await _frames(2)
 
 
 func _test_settings_toggle() -> void:
@@ -188,10 +214,32 @@ func _test_dialogue() -> void:
 	check(_events.has("dialogue_finished"), "Events.dialogue_finished emitted")
 	await _frames(6)
 	check(bool(p.get(&"input").get(&"enabled")), "player input restored after dialogue")
+	# Holding the button that started a conversation must not skip it...
+	_action(&"interact", true)
+	ui.show_dialogue("Tester", ["Held-over press.", "Still here."])
+	await _frames(80)
+	check(ui.is_dialogue_active(), "a press held from before the dialogue doesn't skip it")
+	_action(&"interact", false)
+	await _frames(4)
+	# ...but a fresh press held inside the dialogue skips the rest.
+	_action(&"interact", true)
+	await _frames(70)
+	_action(&"interact", false)
+	await _frames(4)
+	check(not ui.is_dialogue_active(), "holding a fresh press skips the conversation")
+
+
+func _action(action: StringName, pressed: bool) -> void:
+	var ev := InputEventAction.new()
+	ev.action = action
+	ev.pressed = pressed
+	Input.parse_input_event(ev)
 
 
 func _test_prompt_and_devices() -> void:
 	print("prompt + device glyphs")
+	await _key(KEY_W, true)
+	await _key(KEY_W, false)
 	Events.interaction_prompt_changed.emit("{interact} Pull", true)
 	await _frames(3)
 	check(ui.hud.prompt.get_current() == "{interact} Pull", "prompt shown")

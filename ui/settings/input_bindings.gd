@@ -41,7 +41,28 @@ static func notifier() -> InputBindings:
 	return _notifier
 
 
+## Godot's built-in ui_accept / ui_cancel have no gamepad buttons, so menus
+## could be navigated but not confirmed with a controller. Add south (A) and
+## east (B) face buttons unless the project already binds pad buttons there.
+static func ensure_ui_pad_events() -> void:
+	_ensure_pad_button(&"ui_accept", JOY_BUTTON_A)
+	_ensure_pad_button(&"ui_cancel", JOY_BUTTON_B)
+
+
+static func _ensure_pad_button(action: StringName, button: JoyButton) -> void:
+	if not InputMap.has_action(action):
+		return
+	for e in InputMap.action_get_events(action):
+		if e is InputEventJoypadButton:
+			return
+	var ev := InputEventJoypadButton.new()
+	ev.button_index = button
+	ev.device = -1
+	InputMap.action_add_event(action, ev)
+
+
 static func load_and_apply() -> void:
+	ensure_ui_pad_events()
 	var cfg := ConfigFile.new()
 	if cfg.load(PATH) != OK or not cfg.has_section(SECTION):
 		return
@@ -73,6 +94,7 @@ static func set_binding(actions: Array, pad: bool, event: InputEvent) -> void:
 
 static func reset_all() -> void:
 	InputMap.load_from_project_settings()
+	ensure_ui_pad_events()
 	if FileAccess.file_exists(PATH):
 		DirAccess.remove_absolute(ProjectSettings.globalize_path(PATH))
 	notifier().bindings_changed.emit()
