@@ -6,6 +6,8 @@ extends Node
 const MANIFEST_PATH := "res://audio/audio_manifest.json"
 const POOL_3D := 28
 const POOL_2D := 10
+## Seconds the combat layer stays up after the last threat report.
+const THREAT_HOLD := 4.0
 
 var _sfx: Dictionary = {}       # name -> {stream, bus, volume_db, loop}
 var _groups: Dictionary = {}    # name -> Array[name]
@@ -22,6 +24,9 @@ var _music_current: AudioStreamPlayer
 var _music_name: StringName = &""
 var _music_layers: Array[StringName] = []
 var _music_tween: Tween
+var _layer_tweens: Dictionary = {}   # layer -> Tween
+var _threat_t := 0.0
+var _combat_on := false
 
 
 func _ready() -> void:
@@ -48,6 +53,17 @@ func _ready() -> void:
 		m.bus = &"Music"
 		add_child(m)
 	_music_current = _music_a
+
+
+func _process(delta: float) -> void:
+	if not get_tree().paused:
+		_threat_t = maxf(_threat_t - delta, 0.0)
+	var want := _threat_t > 0.0
+	if want != _combat_on:
+		_combat_on = want
+		for layer in _music_layers:
+			if String(layer).contains("combat"):
+				set_music_layer(layer, want, 0.6 if want else 2.5)
 
 
 func _ensure_buses() -> void:
@@ -191,6 +207,7 @@ func play_music(track: StringName, fade: float = 1.5) -> void:
 	incoming.play()
 	_music_current = incoming
 	_music_name = track
+	_combat_on = false          # a new track's layers start silent
 	if _music_tween:
 		_music_tween.kill()
 	_music_tween = create_tween().set_parallel(true)
@@ -202,6 +219,7 @@ func play_music(track: StringName, fade: float = 1.5) -> void:
 
 func stop_music(fade: float = 1.0) -> void:
 	_music_name = &""
+	_music_layers.clear()
 	if _music_tween:
 		_music_tween.kill()
 	_music_tween = create_tween()
@@ -236,16 +254,47 @@ func _build_music_stream(track: StringName) -> AudioStream:
 	return sync
 
 
+## The music track currently playing (or fading in), or &"" for none.
+func get_music() -> StringName:
+	return _music_name
+
+
 ## Plays a short music cue (fanfare) over the current music, ducking it.
 func play_stinger(track: StringName, duck_db: float = -9.0) -> void:
+	var stream := _start_stinger(track)
+	if stream == null:
+		return
+	if _music_current != null and _music_current.playing:
+		var hold := maxf(stream.get_length() - 0.5, 0.2)
+		var tw := create_tween()
+		tw.tween_property(_music_current, "volume_db", duck_db, 0.2)
+		tw.tween_interval(hold)
+		tw.tween_property(_music_current, "volume_db", 0.0, 0.8)
+
+
+## Ends the current music on a fanfare (a boss beaten): the track fades out
+## under the stinger and `next` fades in once it has rung out, unless other
+## music has started by then.
+func play_finale(stinger: StringName, next: StringName = &"", fade_out: float = 0.5) -> void:
+	stop_music(fade_out)
+	var stream := _start_stinger(stinger)
+	if next == &"":
+		return
+	var wait := stream.get_length() + 0.2 if stream != null else fade_out
+	get_tree().create_timer(wait).timeout.connect(func() -> void:
+		if _music_name == &"":
+			play_music(next, 2.5))
+
+
+func _start_stinger(track: StringName) -> AudioStream:
 	if not _music_defs.has(String(track)):
 		if not _warned.has(track):
 			_warned[track] = true
 			push_warning("AudioManager: unknown stinger '%s'" % track)
-		return
+		return null
 	var path := String((_music_defs[String(track)] as Dictionary).get("file", ""))
 	if not ResourceLoader.exists(path):
-		return
+		return null
 	var stream: AudioStream = load(path)
 	var p := AudioStreamPlayer.new()
 	p.stream = stream
@@ -253,12 +302,20 @@ func play_stinger(track: StringName, duck_db: float = -9.0) -> void:
 	add_child(p)
 	p.play()
 	p.finished.connect(p.queue_free)
-	if _music_current != null and _music_current.playing:
-		var hold := maxf(stream.get_length() - 0.5, 0.2)
-		var tw := create_tween()
-		tw.tween_property(_music_current, "volume_db", duck_db, 0.2)
-		tw.tween_interval(hold)
-		tw.tween_property(_music_current, "volume_db", 0.0, 0.8)
+	return stream
+
+
+## Enemies call this every tick while they are actively fighting Patchy: the
+## current track's combat layer fades in and stays up until things have been
+## calm for THREAT_HOLD seconds (spec §123).
+func report_threat() -> void:
+	_threat_t = THREAT_HOLD
+
+
+## True while enemies are fighting Patchy (and the combat layer, if the
+## current track has one, is up).
+func is_combat_music() -> bool:
+	return _combat_on
 
 
 ## Fade a named layer (e.g. "castaway_combat_layer") in or out.
@@ -269,7 +326,11 @@ func set_music_layer(layer: StringName, enabled: bool, fade: float = 1.0) -> voi
 	var sync := _music_current.stream as AudioStreamSynchronized
 	if sync == null:
 		return
+	var old: Tween = _layer_tweens.get(layer)
+	if old != null and old.is_valid():
+		old.kill()
 	var from := sync.get_sync_stream_volume(idx + 1)
 	var to := 0.0 if enabled else -60.0
 	var tw := create_tween()
 	tw.tween_method(func(v: float) -> void: sync.set_sync_stream_volume(idx + 1, v), from, to, fade)
+	_layer_tweens[layer] = tw

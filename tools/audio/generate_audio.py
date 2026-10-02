@@ -1945,8 +1945,9 @@ def checkpoint(rng):
 # =============================================================================
 # 5. Music
 # =============================================================================
-# All cues are in G major.  Chord table: (bass root MIDI, chord pitch classes,
-# ukulele voicing on strings 4-3-2-1 of a re-entrant G4-C4-E4-A4 uke).
+# All cues are in G major (the boss fight in its relative E minor).  Chord
+# table: (bass root MIDI, chord pitch classes, ukulele voicing on strings
+# 4-3-2-1 of a re-entrant G4-C4-E4-A4 uke).
 CHORDS = {
     "G": (43, (7, 11, 2), (67, 62, 67, 71)),
     "C": (48, (0, 4, 7), (67, 60, 64, 72)),
@@ -1962,6 +1963,8 @@ CHORDS = {
     "Cmaj7": (48, (0, 4, 7, 11), (67, 60, 64, 71)),
     "Am7": (45, (9, 0, 4, 7), (67, 60, 64, 69)),
     "Dsus": (50, (2, 7, 9), (69, 62, 67, 69)),
+    # the boss cue's dominant (E harmonic minor)
+    "B7": (47, (11, 3, 6, 9), (69, 63, 66, 71)),
 }
 SCALE = (0, 2, 4, 6, 7, 9, 11)                      # G major pitch classes
 HOOK = "G5:0:2 D5:2:1 G5:3:2 A5:5:1 B5:6:2"         # the main motif
@@ -2400,6 +2403,118 @@ def compose_title(song: Song, rng) -> Mixer:
     return mx
 
 
+# ---- boss_claw ------------------------------------------------------------------------
+BOSS_SONG = Song(126, 24)                     # 21000 samples/beat -> 45.71 s
+BOSS_CHORDS = ("Em Em C D Em Em C|D B7 "      # A: the hook, in E minor
+               "Em Em C D Em Em C|D B7 "      # A2: same tune, full band
+               "C C D D Am Am B7 B7").split()  # B: the claw riff, half time
+HOOK_MINOR = "E5:0:2 B4:2:1 E5:3:2 F#5:5:1 G5:6:2"   # the hook, a diatonic third down
+BOSS_LEAD = [
+    HOOK_MINOR, "F#5:0:1 E5:1:1 D#5:2:1 E5:3:5", "E5:0:2 C5:2:1 E5:3:2 F#5:5:1 G5:6:2",
+    "A5:0:2 F#5:2:1 D5:3:2 E5:5:1 F#5:6:2", "G5:0:2 E5:2:1 G5:3:2 A5:5:1 B5:6:2",
+    "C6:0:1 B5:1:1 A5:2:1 G5:3:2 F#5:5:1 E5:6:2", "E5:0:2 G5:2:1 F#5:3:1 E5:4:2 D5:6:2",
+    "D#5:0:2 F#5:2:1 A5:3:2 B5:5:3",
+]
+BOSS_RIFF = [                                 # B: low brass, answered by claw clacks
+    "C4:0:3 B3:3:1 C4:4:2 E4:6:2", "G4:0:6 F#4:6:1 E4:7:1",
+    "D4:0:3 C#4:3:1 D4:4:2 F#4:6:2", "A4:0:6 G4:6:1 F#4:7:1",
+    "E4:0:3 D4:3:1 C4:4:2 A3:6:2", "C4:0:2 E4:2:2 A4:4:4",
+    "B4:0:2 A4:2:1 G4:3:2 F#4:5:1 D#4:6:2", "F#4:0:1 G4:1:1 F#4:2:1 D#4:3:1 B3:4:4",
+]
+BOSS_ARP = (0, 2, 1, 2, 0, 2, 1, 3, 0, 2, 1, 2, 3, 2, 1, 2)    # 16th marimba motor
+
+
+def _boss_section(b: int) -> str:
+    return ("A", "A2", "B")[b // 8]
+
+
+def compose_boss(song: Song, rng) -> Mixer:
+    """King Claw's fight: the hook turned minor over a galloping drive bass,
+    tresillo brass stabs and a tom groove; a half-time B section where low
+    brass plays the claw riff under pads, tolling bells and clacking claves."""
+    ch = BOSS_CHORDS
+    mx = Mixer(song.length, loop=True)
+    for name, g, p, s in (("lead", 0.5, 0.1, 0.2), ("pan", 0.3, -0.3, 0.25), ("stabs", 0.3, 0.3, 0.2),
+                          ("riff", 0.4, -0.1, 0.18), ("padL", 0.2, -0.7, 0.35), ("padR", 0.2, 0.7, 0.35),
+                          ("bass", 0.32, 0.0, 0.03), ("marimba", 0.14, 0.5, 0.2), ("kick", 0.5, 0.0, 0.02),
+                          ("clap", 0.9, 0.1, 0.15), ("toms", 0.42, -0.15, 0.12), ("tamb", 0.22, 0.5, 0.1),
+                          ("conga", 0.28, -0.25, 0.12), ("shaker", 0.18, 0.55, 0.1), ("clave", 0.32, 0.4, 0.2),
+                          ("crash", 0.24, -0.4, 0.25), ("bell", 0.3, 0.2, 0.4)):
+        mx.track(name, g, p, s)
+    acc = lambda m, d, v: accordion(m, d, v, rng, vib=0.6, bright=1.1)  # noqa: E731
+    lead = bars_to_notes(BOSS_LEAD) + bars_to_notes(BOSS_LEAD, 8)
+    play(mx, "lead", song, lead, acc, rng, vel=0.95)
+    play(mx, "pan", song, [(b, d, harmony_below(ch, b, m)) for b, d, m in lead if b >= 32], steelpan, rng,
+         legato=1.0, vel=0.5)
+    riff = bars_to_notes(BOSS_RIFF, 16)
+    play(mx, "riff", song, riff, lambda m, d, v: brass(m, d, v, bright=0.8), rng, legato=0.95)
+    play(mx, "lead", song, riff, acc, rng, vel=0.4, transpose=12)
+    play(mx, "marimba", song, arpeggio(ch, range(8, 16), lo=64, hi=88, pattern=BOSS_ARP, step=0.25),
+         lambda m, d, v: marimba(m, 0.5, v, rng), rng, vel=0.6, accent=0.8)
+    for b in range(song.bars):
+        o, sec = b * 4, _boss_section(b)
+        if sec == "B":
+            if b % 2 == 0:                                   # pads hold each two-bar chord
+                for m in close_voicing(ch[b], 55):
+                    for side in ("padL", "padR"):
+                        mx.add(side, song.b2s(o) + hum(rng, 6), pad_voice(m, song.sec(8.0), rng, 0.9, cutoff=1600))
+            for q in range(4):                               # half-time bass: root + ghost octave
+                r = CHORDS[ch[b]][0]
+                mx.add("bass", song.b2s(o + q), drive_bass(r, song.sec(0.9), 1.0 if q % 2 == 0 else 0.8))
+                mx.add("bass", song.b2s(o + q + 0.5), drive_bass(r + 12, song.sec(0.4), 0.45))
+        else:
+            for e in (0, 3, 6):                              # 3-3-2 brass stabs
+                for m in close_voicing(chord_at(ch, b, e), 55):
+                    mx.add("stabs", song.b2s(o + e / 2) + hum(rng, 3),
+                           brass(m, song.sec(0.3), 0.8 if sec == "A2" else 0.65))
+            for q in range(4):                               # galloping drive bass
+                r = CHORDS[chord_at(ch, b, q * 2)][0]
+                for off, octave, ln, v in ((0.0, 0, 0.42, 1.0), (0.5, 0, 0.2, 0.7), (0.75, 12, 0.2, 0.8)):
+                    mx.add("bass", song.b2s(o + q + off), drive_bass(r + octave, song.sec(ln), v))
+    for b in (16, 20):
+        mx.add("bell", song.b2s(b * 4), bell(mtof(64), 3.0, 0.8))
+    kit = Kit(rng)
+    for b in range(song.bars):
+        o, sec = b * 4, _boss_section(b)
+        fill = b % 8 == 7
+        if sec == "B":
+            kit.hit(mx, "kick", song, o, "kick_hard", 1.0, jitter=0)
+            kit.hit(mx, "kick", song, o + 2.5, "kick_hard", 0.75, jitter=0)
+            kit.hit(mx, "clap", song, o + 2, "clap", 0.95)
+            for s, name, v in ((0, "tom_lo", 0.9), (6, "tom_lo", 0.6), (8, "tom_mid", 0.5), (10, "tom_lo", 0.7)):
+                kit.hit(mx, "toms", song, o + s / 4, name, v)
+            for e in range(8):
+                kit.hit(mx, "tamb", song, o + e / 2, "tamb", 0.55 if e % 2 else 0.3)
+            for p in (1.5, 3.5):                             # claw clacks
+                kit.hit(mx, "clave", song, o + p, "clave", 0.7)
+                kit.hit(mx, "clave", song, o + p + 0.25, "block_hi", 0.45)
+        else:
+            for q in range(4):
+                kit.hit(mx, "kick", song, o + q, "kick_hard", 0.95 if q % 2 == 0 else 0.75, jitter=0)
+            for q in (1, 3):
+                kit.hit(mx, "clap", song, o + q, "clap", 0.75)
+            for s, name, v in ((0, "tom_lo", 0.7), (3, "tom_mid", 0.5), (6, "tom_lo", 0.6), (10, "tom_mid", 0.5),
+                               (12, "tom_lo", 0.65), (14, "tom_hi", 0.5)):
+                if not (fill and s >= 12):
+                    kit.hit(mx, "toms", song, o + s / 4, name, v)
+            for e in range(8):
+                kit.hit(mx, "tamb", song, o + e / 2, "tamb", 0.6 if e % 2 else 0.35)
+            if sec == "A2":
+                for s, name, v in ((4, "conga_slap", 0.55), (6, "conga_mute", 0.3), (10, "conga_mute", 0.3),
+                                   (12, "conga_open", 0.7), (14, "conga_open_hi", 0.6)):
+                    if not (fill and s >= 12):
+                        kit.hit(mx, "conga", song, o + s / 4, name, v)
+                for s in range(16):
+                    kit.hit(mx, "shaker", song, o + s / 4, "shaker", SHAKER_16[s % 4])
+        if b % 8 == 0:
+            kit.hit(mx, "crash", song, o, "crash", 0.8, jitter=0)
+        if fill:
+            for k, (s, name) in enumerate(((12, "tom_hi"), (13, "tom_hi"), (14, "tom_mid"), (15, "tom_lo"))):
+                kit.hit(mx, "toms", song, o + s / 4, name, 0.65 + 0.1 * k)
+            kit.hit(mx, "crash", song, o + 2.8, "swell", 0.55, jitter=0)
+    return mx
+
+
 # ---- stingers (one-shots) ---------------------------------------------------------------
 def _strum_now(mx, track, t, sym, rng, vel=1.0, ring=1.5):
     for k, m in enumerate(CHORDS[sym][2]):
@@ -2477,6 +2592,29 @@ def compose_stinger_treasure(rng) -> Mixer:
     return mx
 
 
+def compose_stinger_victory(rng) -> Mixer:
+    """Boss beaten: a building tom roll, the hook back in G major on brass,
+    a big landing chord, cymbal and sparkle."""
+    mx = _stinger_mixer(3.5)
+    for k in range(8):
+        mx.add("perc", ns(0.055 * k), perc_tom(rng, 131.0 if k % 2 else 165.0, 0.45 + 0.06 * k), 0.7)
+    motif = ((0.46, 0.22, 79), (0.68, 0.11, 74), (0.79, 0.22, 79), (1.01, 0.11, 81), (1.12, 0.22, 83), (1.34, 1.4, 86))
+    for t, d, m in motif:
+        mx.add("brass", ns(t), brass(m, d, 1.0))
+        mx.add("lead", ns(t), accordion(m, d, 0.65, rng))
+        mx.add("pan", ns(t), steelpan(m - 12, d, 0.5))
+    land = 1.34
+    for m in (55, 59, 62, 67, 71):
+        mx.add("brass", ns(land), brass(m, 1.3, 0.75, bright=0.6), 0.5)
+    _strum_now(mx, "uke", land, "G", rng, 1.0, 1.6)
+    mx.add("bass", ns(land), pizz_bass(43, 1.5, 1.0, rng))
+    mx.add("perc", ns(land), thump(0.8, 140, 98, 0.03, 0.3), 0.9)
+    mx.add("perc", ns(land), perc_cymbal(rng, 2.0), 0.45)
+    for k, m in enumerate((91, 95, 98, 103)):
+        mx.add("fx", ns(1.6 + 0.06 * k), chime(mtof(m), 0.9, tau=0.4), 0.8)
+    return mx
+
+
 def _trim_tail(x: np.ndarray, max_len: float, floor_db: float = -60.0, fade_s: float = 0.4) -> np.ndarray:
     """Cut a one-shot's reverb tail (below floor_db or at max_len) with a smooth fade."""
     env = np.max(np.abs(x), axis=1)
@@ -2509,8 +2647,8 @@ def _level_rms(x: np.ndarray, target: float) -> np.ndarray:
     return soft_limit(x * (target / (rms(x) + 1e-12)))
 
 
-MUSIC_NAMES = ("castaway_explore", "castaway_combat_layer", "cave_explore", "title_theme",
-               "stinger_discovery", "stinger_parrot", "stinger_treasure")
+MUSIC_NAMES = ("castaway_explore", "castaway_combat_layer", "cave_explore", "title_theme", "boss_claw",
+               "stinger_discovery", "stinger_parrot", "stinger_treasure", "stinger_victory")
 
 
 def render_music(only: str | None = None) -> dict:
@@ -2537,9 +2675,13 @@ def render_music(only: str | None = None) -> dict:
     if "title_theme" in want:
         x = bus_compress(compose_title(TITLE_SONG, rng_for("title_theme")).render(ir), True)
         out["title_theme"] = (_level_rms(x, ref * db2a(1.0)), dict(bpm=TITLE_SONG.bpm, bars=TITLE_SONG.bars, loop=True))
+    if "boss_claw" in want:
+        x = bus_compress(compose_boss(BOSS_SONG, rng_for("boss_claw")).render(ir), True)
+        out["boss_claw"] = (_level_rms(x, ref * db2a(1.0)), dict(bpm=BOSS_SONG.bpm, bars=BOSS_SONG.bars, loop=True))
     for name, fn, length in (("stinger_discovery", compose_stinger_discovery, 3.0),
                              ("stinger_parrot", compose_stinger_parrot, 2.0),
-                             ("stinger_treasure", compose_stinger_treasure, 2.5)):
+                             ("stinger_treasure", compose_stinger_treasure, 2.5),
+                             ("stinger_victory", compose_stinger_victory, 3.5)):
         if name in want:
             x = _trim_tail(bus_compress(fn(rng_for(name)).render(ir), False, -8.0, 2.0), length)
             x = nz(x, db2a(-1.0))

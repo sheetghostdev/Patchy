@@ -169,6 +169,15 @@ tools/              Scene builders, photo tool, project setup, audio generator
   - Smaller islands in the same scene use `IslandZone`.
   - `SeaRegion` circles define swimmable water. Beyond them, `OpenSea`
     pushes swimmers back, so the boat is needed.
+- **Audio** (`AudioManager`, driven by `audio/audio_manifest.json`): pooled
+  SFX, cross-faded music and stingers.
+  - A track's layers (`layer_of` in the manifest) play sample-locked to
+    it. Enemies call `report_threat()` while they fight Patchy, which fades
+    the combat layer in. It drops after four calm seconds.
+  - Bosses swap in their own theme and end on a fanfare (`play_finale`),
+    then the island's music returns.
+  - Every sound and cue is synthesized by `tools/audio/generate_audio.py`,
+    which is seeded, so reruns give identical files.
 
 ### Collision layers
 
@@ -233,8 +242,8 @@ An optional argument after `--` filters test names.
 ```bash
 godot --headless --path . --fixed-fps 60 res://tests/run_movement_tests.tscn   # 53 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_camera_tests.tscn     # 21 checks
-godot --headless --path . --fixed-fps 60 res://tests/run_gameplay_tests.tscn   # 61 checks
-godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 96 checks
+godot --headless --path . --fixed-fps 60 res://tests/run_gameplay_tests.tscn   # 64 checks
+godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 100 checks
 godot --headless --path . --fixed-fps 60 res://ui/tests/ui_flow_test.tscn      # 76 checks
 godot --headless --path . --fixed-fps 60 res://props/tests/prop_tests.tscn     # 70 checks
 godot --headless --path . --fixed-fps 60 res://world/ocean/tests/ocean_swim_check.tscn
@@ -255,6 +264,7 @@ What each suite covers:
   - treasure persistence, interaction prompts, cages and parrot tasks;
   - every attachment's combat use, the grapple zip into a swing and the
     cannon hop;
+  - the combat music layer coming in and dropping out;
   - the cabin hub's displays.
 - **Island**: Castaway Cay end to end:
   - the opening sequence;
@@ -265,7 +275,7 @@ What each suite covers:
   - sailing to Driftwood Key and the open-sea current;
   - the attachment chain: lantern, braziers, shovel, treasure map and X,
     grapple, pillar, cannon, cracked rock and targets;
-  - a full King Claw fight;
+  - a full King Claw fight, including the hand-off to his theme and back;
   - a check that no pickup is buried or floating.
 
 ## Content
@@ -300,6 +310,7 @@ More on Castaway Cay:
   Hand Cannon, which opens a cracked-rock grotto and a two-target vault.
 - **King Claw** waits in a ring of spires on the headland. Pound his
   stuck claw, stomp his belly three times, and he leaves the Ship's Wheel.
+  His fight has its own theme: the island's hook turned minor.
 - **The Captain's Cabin:** inside the wreck, the hub shows your gold,
   treasures, parrots, ship parts and attachments.
 - Weather: every few minutes a tropical shower greys the sky, rains for

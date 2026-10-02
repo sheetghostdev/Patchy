@@ -9,6 +9,8 @@ extends Node3D
 ## off for good.
 
 enum State { CIRCLE, SPOT, DIVE, SKIM, CLIMB, DAZED, GONE }
+## States in which the pelican is attacking (the combat music layer plays).
+const THREAT_STATES: Array[State] = [State.SPOT, State.DIVE, State.SKIM]
 
 @export var circle_radius := 8.0
 @export var altitude := 9.0
@@ -112,6 +114,8 @@ func _build() -> void:
 func _physics_process(delta: float) -> void:
 	_t += delta
 	var p := GameManager.player as Player
+	if state in THREAT_STATES:
+		AudioManager.report_threat()
 	match state:
 		State.CIRCLE:
 			_cool = maxf(_cool - delta, 0.0)

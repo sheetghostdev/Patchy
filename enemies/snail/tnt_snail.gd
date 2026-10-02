@@ -119,6 +119,7 @@ func _physics_process(delta: float) -> void:
 			if p != null and p.state_id != &"locked" and p.global_position.distance_to(global_position) < fuse_radius:
 				_light_fuse()
 		State.FUSE:
+			AudioManager.report_threat()
 			_crawl(p, delta)
 			_fuse_t -= delta
 			_spark.visible = true

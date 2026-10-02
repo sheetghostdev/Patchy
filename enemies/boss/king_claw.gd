@@ -27,7 +27,9 @@ const CRAB_SCENE := "res://enemies/crab/crab.tscn"
 @export_range(4.0, 40.0, 0.5) var arena_radius := 10.0
 ## Stakes that rise to close the arena while the fight is on.
 @export var arena_gate: Gate
-@export var music_layer: StringName = &"castaway_combat_layer"
+## The fight's own theme; the island's music returns afterwards.
+@export var boss_music: StringName = &"boss_claw"
+@export var victory_stinger: StringName = &"stinger_victory"
 
 var state := State.DORMANT
 var hits := 0
@@ -48,6 +50,7 @@ var _body_shape: CollisionShape3D
 ## the king).
 var _claw_target: Area3D
 var _claw_shape: CollisionShape3D
+var _music_before: StringName = &""
 
 
 func _ready() -> void:
@@ -121,7 +124,9 @@ func begin_fight() -> void:
 	fight_started.emit()
 	if arena_gate != null:
 		arena_gate.close()
-	AudioManager.set_music_layer(music_layer, true)
+	if AudioManager.get_music() != boss_music:
+		_music_before = AudioManager.get_music()
+	AudioManager.play_music(boss_music, 0.6)
 	AudioManager.play(&"explosion", global_position, -4.0, 0.5)
 	Events.camera_impulse.emit(0.7)
 	Events.hud_message.emit("KING CLAW", 2.5)
@@ -141,7 +146,10 @@ func reset_fight() -> void:
 	_target_ring.visible = false
 	velocity = Vector3.ZERO
 	global_position = arena_center
-	AudioManager.set_music_layer(music_layer, false)
+	if _music_before != &"":
+		AudioManager.play_music(_music_before, 2.0)
+	else:
+		AudioManager.stop_music(1.5)
 	if arena_gate != null:
 		arena_gate.open()
 	var tw := create_tween()
@@ -393,8 +401,7 @@ func _defeat() -> void:
 	remove_from_group(&"enemy")
 	WorldState.mark_completed(boss_id)
 	Events.boss_defeated.emit(boss_id)
-	AudioManager.set_music_layer(music_layer, false)
-	AudioManager.play_stinger(&"stinger_treasure")
+	AudioManager.play_finale(victory_stinger, _music_before)
 	Events.hud_message.emit("King Claw retreats!", 3.0)
 	var scene := get_tree().current_scene
 	for i in 16:

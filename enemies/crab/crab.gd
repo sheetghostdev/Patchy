@@ -13,6 +13,8 @@ extends CharacterBody3D
 signal defeated(crab: Crab)
 
 enum State { PATROL, NOTICE, CHASE, WINDUP, LUNGE, RECOVER, FLIPPED, SLIDING, STEAL, FLEE, BURROWED, DEFEATED, AIM }
+## States in which the crab is fighting Patchy (the combat music layer plays).
+const THREAT_STATES: Array[State] = [State.CHASE, State.AIM, State.WINDUP, State.LUNGE, State.RECOVER]
 
 @export var variant := CrabModel.Variant.NORMAL
 @export var patrol_radius := 4.0
@@ -96,6 +98,8 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 		_animate(delta)
 		return
+	if state in THREAT_STATES and not _scripted_run:
+		AudioManager.report_threat()
 	match state:
 		State.PATROL:
 			_update_patrol(delta, player)

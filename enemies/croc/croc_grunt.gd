@@ -13,6 +13,8 @@ extends CharacterBody3D
 ## Non-lethal and comic. Persistent by persistent_id.
 
 enum State { PATROL, ALERT, MARCH, WINDUP, CHOP, PANT, STAGGER, DEFEATED }
+## States in which the croc is fighting Patchy (the combat music layer plays).
+const THREAT_STATES: Array[State] = [State.ALERT, State.MARCH, State.WINDUP, State.CHOP, State.PANT, State.STAGGER]
 
 const GRAVITY := 30.0
 
@@ -144,6 +146,8 @@ func _build() -> void:
 func _physics_process(delta: float) -> void:
 	_t += delta
 	var p := GameManager.player as Player
+	if state in THREAT_STATES:
+		AudioManager.report_threat()
 	match state:
 		State.PATROL:
 			if p != null and _can_see(p):

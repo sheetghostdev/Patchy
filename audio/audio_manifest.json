@@ -725,6 +725,15 @@
       "time_signature": "4/4",
       "samples": 1134000
     },
+    "boss_claw": {
+      "file": "res://audio/music/boss_claw.ogg",
+      "duration": 45.7143,
+      "loop": true,
+      "bpm": 126,
+      "bars": 24,
+      "time_signature": "4/4",
+      "samples": 2016000
+    },
     "stinger_discovery": {
       "file": "res://audio/music/stinger_discovery.ogg",
       "duration": 3.0,
@@ -751,6 +760,15 @@
       "bars": 1.17,
       "time_signature": "4/4",
       "samples": 110250
+    },
+    "stinger_victory": {
+      "file": "res://audio/music/stinger_victory.ogg",
+      "duration": 3.5,
+      "loop": false,
+      "bpm": 112,
+      "bars": 1.63,
+      "time_signature": "4/4",
+      "samples": 154350
     }
   },
   "groups": {

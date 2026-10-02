@@ -489,6 +489,18 @@ func test_croc_flank_and_pound() -> void:
 	check("staggered grunt goes down", c.state == CrocGrunt.State.DEFEATED, "hp=%d state=%s" % [c.hp, CrocGrunt.State.keys()[c.state]])
 
 
+func test_combat_music_layer_follows_the_fight() -> void:
+	await wait_until(func() -> bool: return not AudioManager.is_combat_music(), 300)
+	var crab := spawn_crab(Vector3(0, 0, -3.0))
+	var on := await wait_until(func() -> bool: return AudioManager.is_combat_music(), 120)
+	check("a crab picking a fight brings in the combat layer", on >= 0, "state=%s" % Crab.State.keys()[crab.state])
+	crab.queue_free()
+	await frames(int(AudioManager.THREAT_HOLD * 60.0) - 30)
+	check("the layer holds a moment after the fight", AudioManager.is_combat_music(), "")
+	var off := await wait_until(func() -> bool: return not AudioManager.is_combat_music(), 90)
+	check("and drops once things are calm", off >= 0, "")
+
+
 func test_cannon_crab_lobs_telegraphed_shots() -> void:
 	var c := spawn_crab(Vector3(0, 0, -9.0), CrabModel.Variant.CANNON)
 	c.sight_radius = 12.0

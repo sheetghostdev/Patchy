@@ -558,6 +558,7 @@ func test_king_claw_fight() -> void:
 	var woke := await wait_until(func() -> bool: return boss.state != KingClaw.State.DORMANT, 120)
 	move(Vector2.ZERO)
 	check("King Claw rises when Patchy steps in", woke >= 0, "state=%s" % KingClaw.State.keys()[boss.state])
+	check("his theme takes over the music", AudioManager.get_music() == &"boss_claw", String(AudioManager.get_music()))
 	var topples := 0
 	var last_state := boss.state
 	for i in 3600:
@@ -579,7 +580,9 @@ func test_king_claw_fight() -> void:
 				await place(player.global_position + Vector3(3.5, 0.1, 0), Vector3.FORWARD)
 	check("pounding the stuck claw topples him (x3)", topples >= 3, "topples=%d hits=%d" % [topples, boss.hits])
 	check("three belly hits defeat King Claw", WorldState.is_completed(&"king_claw"), "hits=%d state=%s" % [boss.hits, KingClaw.State.keys()[boss.state] if is_instance_valid(boss) else "freed"])
-	await frames(30)
+	check("a victory fanfare ends the boss theme", AudioManager.get_music() == &"", String(AudioManager.get_music()))
+	var calm := await wait_until(func() -> bool: return AudioManager.get_music() == &"castaway_explore", 400)
+	check("the island's music returns after the fanfare", calm >= 0, String(AudioManager.get_music()))
 	var wheel: Node3D = null
 	for n in find_children("*", "ShipPartPickup", true, false):
 		wheel = n
@@ -600,6 +603,7 @@ func test_leaving_the_arena_resets_king_claw() -> void:
 	await place(arena.global_position + Vector3(-22.0, 0.2, 14.0), Vector3.FORWARD)
 	var reset := await wait_until(func() -> bool: return boss.state == KingClaw.State.DORMANT, 200)
 	check("walking away puts King Claw back to sleep", reset >= 0 and boss.hits == 0, "state=%s" % KingClaw.State.keys()[boss.state])
+	check("and the island's music comes back", AudioManager.get_music() == &"castaway_explore", String(AudioManager.get_music()))
 
 
 # --- Save / continue ------------------------------------------------------------------
