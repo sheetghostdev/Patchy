@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="AttachmentData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://attachments/attachment_data.gd" id="1_data"]
+[ext_resource type="PackedScene" path="res://attachments/hook/hook_attachment.tscn" id="2_scene"]
+
+[resource]
+script = ExtResource("1_data")
+id = &"hook"
+display_name = "Pirate Hook"
+description = "Patchy's trusty hook. Swipe at foes, catch rings to swing, grab handles and slide down ropes."
+scene = ExtResource("2_scene")
+abilities = PackedStringArray("Swipe", "Ring swing", "Pull handles")
+color = Color(0.81, 0.85, 0.89, 1)

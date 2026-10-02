@@ -391,6 +391,39 @@ func _base_pose(st: StringName, speed: float) -> Dictionary:
 			p[&"hip_r"] = Vector3(legs - 5, 0, 0)
 			p[&"knee_l"] = Vector3(-35, 0, 0)
 			p[&"knee_r"] = Vector3(-15, 0, 0)
+		&"cheer":
+			var hop := absf(sin(t * 9.0))
+			p[&"body_y"] = hop * 0.12
+			p[&"sh_l"] = Vector3(165, 0, -38)
+			p[&"sh_r"] = Vector3(165, 0, 38)
+			p[&"el_l"] = Vector3(10, 0, 0)
+			p[&"el_r"] = Vector3(10, 0, 0)
+			p[&"head"] = Vector3(14, 0, 0)
+			p[&"knee_l"] = Vector3(-30 * hop, 0, 0)
+			p[&"knee_r"] = Vector3(-30 * hop, 0, 0)
+		&"scared":
+			p[&"lean"] = Vector3(8, 0, 0)
+			p[&"torso"] = Vector3(10, 0, 0)
+			p[&"sh_l"] = Vector3(70, 30, -20)
+			p[&"sh_r"] = Vector3(70, -30, 20)
+			p[&"el_l"] = Vector3(110, 0, 0)
+			p[&"el_r"] = Vector3(110, 0, 0)
+			p[&"knee_l"] = Vector3(-25, 0, 0)
+			p[&"knee_r"] = Vector3(-25, 0, 0)
+			p[&"body_y"] = -0.06 + sin(Time.get_ticks_msec() * 0.06) * 0.008
+		&"tiptoe_back":
+			var step := sin(t * 7.0)
+			p[&"lean"] = Vector3(6, 0, 0)
+			p[&"sh_l"] = Vector3(60, 25, -25)
+			p[&"sh_r"] = Vector3(60, -25, 25)
+			p[&"el_l"] = Vector3(100, 0, 0)
+			p[&"el_r"] = Vector3(100, 0, 0)
+			p[&"hip_l"] = Vector3(-18 * step, 0, 0)
+			p[&"hip_r"] = Vector3(18 * step, 0, 0)
+			p[&"knee_l"] = Vector3(-25 * maxf(step, 0.0), 0, 0)
+			p[&"knee_r"] = Vector3(-25 * maxf(-step, 0.0), 0, 0)
+			p[&"ank_l"] = Vector3(-20, 0, 0)
+			p[&"ank_r"] = Vector3(-20, 0, 0)
 		&"hurt", &"bonk":
 			p[&"lean"] = Vector3(14, 0, 0)
 			p[&"torso"] = Vector3(18, 0, 0)
@@ -686,6 +719,16 @@ func _update_face(st: StringName, delta: float) -> void:
 		&"idle":
 			if _idle_action == &"sleepy":
 				eye_open = 0.35
+		&"cheer":
+			eye_open = 0.45
+			brow = -6.0
+			brow_y = 0.015
+			mouth = Vector3(1.6, 1.6, 1.0)
+		&"scared", &"tiptoe_back":
+			eye_scale = 1.3
+			brow = -22.0
+			brow_y = 0.025
+			mouth = Vector3(0.6, 1.2, 1.0)
 	if _blink > 0.0:
 		eye_open = minf(eye_open, 0.1)
 	for e: Node3D in [m.eye_l, m.eye_r]:

@@ -59,6 +59,7 @@ const STATE_SCRIPTS := {
 @onready var health: PlayerHealth = $Health
 @onready var combat: PlayerCombat = $Combat
 @onready var interaction: PlayerInteraction = $Interaction
+@onready var attachments: AttachmentManager = $Attachments
 @onready var visual: Node3D = $Visual
 @onready var facing_node: Node3D = $Facing
 @onready var hook_sensor: Area3D = $HookSensor
@@ -175,6 +176,7 @@ func _physics_process(delta: float) -> void:
 	facing_node.basis = Basis(Vector3.UP, yaw_of(facing))
 	combat.update(delta)
 	interaction.update(delta)
+	attachments.update(delta)
 	if global_position.y < settings.kill_height:
 		health.fall_out()
 

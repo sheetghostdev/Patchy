@@ -236,6 +236,31 @@ func _build_music_stream(track: StringName) -> AudioStream:
 	return sync
 
 
+## Plays a short music cue (fanfare) over the current music, ducking it.
+func play_stinger(track: StringName, duck_db: float = -9.0) -> void:
+	if not _music_defs.has(String(track)):
+		if not _warned.has(track):
+			_warned[track] = true
+			push_warning("AudioManager: unknown stinger '%s'" % track)
+		return
+	var path := String((_music_defs[String(track)] as Dictionary).get("file", ""))
+	if not ResourceLoader.exists(path):
+		return
+	var stream: AudioStream = load(path)
+	var p := AudioStreamPlayer.new()
+	p.stream = stream
+	p.bus = &"Music"
+	add_child(p)
+	p.play()
+	p.finished.connect(p.queue_free)
+	if _music_current != null and _music_current.playing:
+		var hold := maxf(stream.get_length() - 0.5, 0.2)
+		var tw := create_tween()
+		tw.tween_property(_music_current, "volume_db", duck_db, 0.2)
+		tw.tween_interval(hold)
+		tw.tween_property(_music_current, "volume_db", 0.0, 0.8)
+
+
 ## Fade a named layer (e.g. "castaway_combat_layer") in or out.
 func set_music_layer(layer: StringName, enabled: bool, fade: float = 1.0) -> void:
 	var idx := _music_layers.find(layer)

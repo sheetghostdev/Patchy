@@ -60,6 +60,12 @@ func update(delta: float) -> void:
 		_check_stomp()
 
 
+## Start a swipe if one is allowed right now (used by attachments).
+func request_swipe() -> void:
+	if swipe_timer < 0.0 and _swipe_cooldown <= 0.0 and _p.state.can_attack():
+		_start_swipe()
+
+
 func _start_swipe() -> void:
 	var s := _p.settings
 	swipe_timer = 0.0
@@ -196,6 +202,8 @@ func try_hook_latch() -> bool:
 			best_score = score
 			best = area
 	if best == null:
+		return false
+	if not _p.attachments.ensure_hook_for_rings():
 		return false
 	for a: StringName in [&"tool_primary", &"interact"]:
 		_p.input.consume(a)

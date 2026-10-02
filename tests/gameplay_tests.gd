@@ -141,3 +141,90 @@ func test_armored_crab_flip_and_kick() -> void:
 	check("kick sends shell sliding", armored.state == Crab.State.SLIDING, "state=%d" % armored.state)
 	var hit := await wait_until(func() -> bool: return victim_down[0], 120)
 	check("sliding shell knocks out another crab", hit >= 0, "")
+
+
+func test_parrot_cage_rescue() -> void:
+	ParrotManager.reset()
+	var cage := ParrotCage.new()
+	cage.parrot_id = &"test_parrot_01"
+	cage.island_id = &"test"
+	cage.position = Vector3(0, 0, -2.2)
+	_arena.add_child(cage)
+	await frames(5)
+	var focused := player.interaction.current
+	check("cage is focused with an Open prompt", focused == cage and cage.get_prompt().contains("Open"), cage.get_prompt())
+	tap(&"interact")
+	await frames(5)
+	check("parrot rescued", ParrotManager.is_rescued(&"test_parrot_01") and ParrotManager.get_total() == 1, "total=%d" % ParrotManager.get_total())
+	check("Patchy celebrates briefly", player.anim_state == &"cheer", String(player.anim_state))
+	await frames(70)
+	check("control returns after the cheer", player.state_id == &"ground", String(player.state_id))
+
+
+func test_parrot_task_moves_log() -> void:
+	ParrotManager.reset()
+	WorldState.reset()
+	var log_body := block(Vector3(0, 0, -3), Vector3(6, 0.8, 0.8))
+	var dest := Marker3D.new()
+	dest.position = Vector3(0, 2, -10)
+	dest.rotation.y = PI * 0.5
+	_arena.add_child(dest)
+	var task := ParrotTask.new()
+	task.task_id = &"test_log_bridge"
+	task.required_parrots = 3
+	task.carried = log_body
+	task.destination = dest
+	task.position = Vector3(0, 0, -2)
+	_arena.add_child(task)
+	await frames(5)
+	var shown := [0, 0, false]
+	Events.parrot_requirement_shown.connect(func(req: int, have: int, vis: bool) -> void:
+		shown[0] = req
+		shown[1] = have
+		shown[2] = vis)
+	await frames(3)
+	tap(&"interact")
+	await frames(3)
+	check("too few parrots: nothing happens", not WorldState.is_completed(&"test_log_bridge"), "")
+	ParrotManager.debug_add(3)
+	player.interaction.clear()
+	await frames(3)
+	check("requirement indicator shown", shown[0] == 3 and shown[2], "req=%d have=%d vis=%s" % shown)
+	tap(&"interact")
+	var done := await wait_until(func() -> bool: return WorldState.is_completed(&"test_log_bridge"), 600)
+	check("flock carries the log into place", done >= 0, "frames=%d" % done)
+	check("log ends at destination", log_body.global_position.distance_to(dest.global_position) < 0.05, "%s" % log_body.global_position)
+	check("parrots are not consumed", ParrotManager.get_total() == 3, "total=%d" % ParrotManager.get_total())
+
+
+func test_checkpoint_and_respawn() -> void:
+	var cp := Checkpoint.new()
+	cp.checkpoint_id = &"test_cp"
+	cp.position = Vector3(0, 0, -3)
+	_arena.add_child(cp)
+	await frames(3)
+	move(Vector2(0, -1))
+	await frames(30)
+	move(Vector2.ZERO)
+	check("checkpoint activates", GameManager.checkpoint_id == &"test_cp", String(GameManager.checkpoint_id))
+	player.health.refill()
+	player.health.health = 1
+	player.health.die()
+	await frames(150)
+	check("respawns at checkpoint with full hearts", player.global_position.distance_to(cp.global_position) < 1.0 and player.health.health == player.health.max_health, "pos=%s hp=%d" % [player.global_position, player.health.health])
+
+
+func test_dark_cave_refusal() -> void:
+	InventoryManager.equipped_attachment = &"hook"
+	var dz := DarknessZone.new()
+	dz.size = Vector3(6, 4, 10)
+	dz.position = Vector3(0, 2, -8)
+	_arena.add_child(dz)
+	await frames(3)
+	move(Vector2(0, -1))
+	var refused := await wait_until(func() -> bool: return player.anim_state == &"scared", 120)
+	check("Patchy refuses to enter darkness", refused >= 0, String(player.anim_state))
+	var z_at_refusal := player.global_position.z
+	move(Vector2.ZERO)
+	await frames(160)
+	check("he backs out on his own", player.global_position.z > z_at_refusal + 1.0 and player.state_id == &"ground", "dz=%.2f state=%s" % [player.global_position.z - z_at_refusal, player.state_id])
