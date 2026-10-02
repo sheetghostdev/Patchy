@@ -41,8 +41,6 @@ func build() -> void:
 	info.island_id = ISLAND
 	info.display_name = "Castaway Cay"
 	info.music = &"castaway_explore"
-	# The chest's crown is spawned when it opens.
-	info.extra_treasures = 1
 	info.sub_islands = [ISLET]
 	b.add(info, null, "IslandInfo")
 	var env := SkyEnvironment.new()
@@ -78,6 +76,7 @@ func build() -> void:
 	_crossing()
 	_brock_cameo()
 	_grotto_mischief()
+	_sunken_reef()
 
 	var player := b.instance(PLAYER, null, Vector3(0, 1.25, 33), 0.0, "Player")
 	var rig := b.instance(RIG, null, Vector3(0, 3, 40), 0.0, "CameraRig")
@@ -1078,6 +1077,85 @@ func _brock_cameo() -> void:
 func _grotto_mischief() -> void:
 	var c := crab(Vector3(-25.5, 1.25, 36.5), CrabModel.Variant.NORMAL, "castaway_crab_grotto")
 	c.patrol_radius = 3.5
+
+
+## The Sunken Sloop (spec §114: dense underwater areas). Off the cove a
+## little ship lies on the seabed among coral, kelp and fish. A chest sits
+## in its lee, and a trail of coins leads down from the shallows.
+func _sunken_reef() -> void:
+	var g := b.group("SunkenReef", gameplay)
+	var c := Vector3(14, -10.5, 74)
+	var hull := HullSection.new()
+	hull.length = 7.0
+	hull.height = 2.8
+	hull.beam = 1.8
+	hull.lean_degrees = 28.0
+	hull.damage = 0.7
+	hull.damage_seed = 11
+	hull.sink = 0.5
+	hull.position = c
+	hull.rotation_degrees.y = 25.0
+	b.add(hull, g, "SunkenHull")
+	var bow := BowPiece.new()
+	bow.length = 4.0
+	bow.height = 2.4
+	bow.damage_seed = 9
+	bow.sink = 0.45
+	bow.position = c + Vector3(6.0, 0, -3.0)
+	bow.rotation_degrees = Vector3(0, -65, 12)
+	b.add(bow, g, "SunkenBow")
+	var mast := BrokenMast.new()
+	mast.height = 6.5
+	mast.tilt_degrees = 48.0
+	mast.tilt_direction = 120.0
+	mast.tatter = 0.8
+	mast.seed = 7
+	mast.position = c + Vector3(-3.0, 0, 3.0)
+	b.add(mast, g, "SunkenMast")
+	var chest := TreasureChest.new()
+	chest.chest_id = &"castaway_sunken_chest"
+	chest.island_id = ISLAND
+	chest.contents = "goblet"
+	chest.coins = 8
+	chest.position = c + Vector3(1.6, 0, 2.2)
+	chest.rotation_degrees.y = 200.0
+	b.add(chest, g, "SunkenChest")
+	var k := 0
+	for d: Array in [[Vector3(-5, 0, -3), 1.2], [Vector3(4, 0, 4.5), 1.0], [Vector3(-1.5, 0, -5.5), 0.8], [Vector3(8.5, 0, 2), 1.1],
+			[Vector3(-7, 0, 4), 0.9], [Vector3(2.5, 0, -8), 1.3], [Vector3(-9, 0, -2), 0.7], [Vector3(10, 0, -6), 0.9]]:
+		k += 1
+		var cc := CoralCluster.new()
+		cc.seed = 20 + k
+		cc.size = d[1]
+		cc.position = c + d[0]
+		b.add(cc, g, "Coral")
+	for d: Array in [[Vector3(-6, 0, 7), 7, 5.5], [Vector3(7, 0, 8), 6, 6.5], [Vector3(-10, 0, -7), 9, 7.5]]:
+		k += 1
+		var kelp := KelpBed.new()
+		kelp.seed = k
+		kelp.count = d[1]
+		kelp.height = d[2]
+		kelp.position = c + d[0]
+		b.add(kelp, g, "Kelp")
+	var school := FishSchool.new()
+	school.position = c + Vector3(-1, 3.0, 0)
+	b.add(school, g, "FishSchoolYellow")
+	var school2 := FishSchool.new()
+	school2.count = 10
+	school2.radius = 1.8
+	school2.body_color = Color("ff8a3d")
+	school2.stripe_color = Color("fff6e0")
+	school2.position = c + Vector3(6, 2.0, 5)
+	b.add(school2, g, "FishSchoolOrange")
+	gem(c + Vector3(-5, 1.25, -3), "castaway_gem_reef", Color("ff5fa2"))
+	coin_trail(Vector3(9, -2.0, 59), Vector3(12.5, -8.6, 68.5), 7, 0.0, CoinTrail.TrailShape.LINE)
+	coin_trail(c + Vector3(-4, 1.6, -8), Vector3.ZERO, 8, 0.0, CoinTrail.TrailShape.RING)
+	var hint := TutorialHint.new()
+	hint.hint_id = &"hint_swim_down"
+	hint.text = "Swim down with {dive}, back up with {jump}. Something glints below..."
+	hint.size = Vector3(18, 6, 12)
+	hint.position = Vector3(12, -1.0, 62)
+	b.add(hint, g, "HintSwimDown")
 
 
 # --- Tutorial hints -----------------------------------------------------------------

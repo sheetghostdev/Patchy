@@ -24,6 +24,9 @@ func physics_update(delta: float) -> void:
 	p.set_horizontal_velocity(hv)
 	if p.is_on_floor():
 		p.apply_floor_gravity()
+	elif p.is_deep_water():
+		# Held in the water (a chest opened or a chat while swimming).
+		p.velocity.y = move_toward(p.velocity.y, 0.0, 20.0 * delta)
 	else:
 		p.velocity.y = maxf(p.velocity.y - s.get_fall_gravity() * delta, -s.terminal_velocity)
 	p.move()

@@ -32,6 +32,8 @@ func _ready() -> void:
 	_build()
 	if Engine.is_editor_hint():
 		return
+	if chest_id != &"":
+		add_to_group(&"treasure_source")
 	add_to_group(&"look_at_target")
 	if chest_id != &"" and WorldState.is_completed(chest_id):
 		_open = true
@@ -43,6 +45,11 @@ func _ready() -> void:
 		if post != null:
 			post.pounded.connect(func(_p: PoundPost) -> void: _update_lock(true))
 	_update_lock(false)
+
+
+## For IslandInfo's treasure totals (the prize inside).
+func get_treasure_island() -> StringName:
+	return island_id
 
 
 func is_locked() -> bool:

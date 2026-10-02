@@ -117,7 +117,9 @@ func test_everything_rests_on_something() -> void:
 		var in_trail := it.get_parent() is CoinTrail
 		var q := PhysicsRayQueryParameters3D.create(p + Vector3.UP * 0.2, p + Vector3.DOWN * 9.0, Layers.WORLD)
 		var hit := space.intersect_ray(q)
-		if not in_trail and (hit.is_empty() or hit.position.y < 0.5):
+		# Underwater pickups sit over the seabed; the rest must be on land.
+		var underwater := p.y < -1.0 and not hit.is_empty()
+		if not in_trail and not underwater and (hit.is_empty() or hit.position.y < 0.5):
 			bad.append("%s floats over water/void at %v" % [it.name, p])
 			continue
 		var shape := SphereShape3D.new()
@@ -357,6 +359,27 @@ func test_wreck_shows_recovered_parts() -> void:
 	if ui != null:
 		ui.close_pause_menu()
 	await frames(6)
+
+
+func test_dive_to_the_sunken_sloop() -> void:
+	await clear_enemies()
+	var chest := node("Gameplay/SunkenReef/SunkenChest") as TreasureChest
+	# Drop into the sea above the wreck and dive.
+	await place(chest.global_position + Vector3(0, 10.4, 2.6), Vector3.FORWARD)
+	await wait_until(func() -> bool: return player.state_id == &"swim", 120)
+	press(&"dive")
+	var down := await wait_until(func() -> bool: return player.global_position.y < chest.global_position.y + 1.6, 600)
+	release(&"dive")
+	check("Patchy dives down to the wreck", down >= 0, "y=%.1f" % player.global_position.y)
+	await frames(10)
+	var near := await wait_until(func() -> bool: return player.interaction.current == chest, 60)
+	check("the sunken chest can be opened underwater", near >= 0, "current=%s" % player.interaction.current)
+	tap(&"interact")
+	var opened := await wait_until(func() -> bool: return WorldState.is_completed(&"castaway_sunken_chest"), 300)
+	await frames(60)
+	check("it opens and Patchy grabs the goblet", opened >= 0 and InventoryManager.has_treasure(&"castaway_sunken_chest_prize"), "")
+	check("and Patchy is still swimming afterwards, not sinking", player.state_id == &"swim" and player.global_position.y > chest.global_position.y - 0.5,
+		"state=%s y=%.1f" % [player.state_id, player.global_position.y])
 
 
 func test_crab_bumps_tnt_snail_and_the_rock_goes_too() -> void:

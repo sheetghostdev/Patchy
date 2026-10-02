@@ -8,7 +8,9 @@ var underwater := false
 
 func enter(_previous: StringName, msg: Dictionary) -> void:
 	var entry: float = msg.get("entry_speed", 0.0)
-	underwater = entry > 16.0
+	# A hard plunge goes under; so does resuming well below the surface
+	# (after a chest or a chat underwater).
+	underwater = entry > 16.0 or p.water_depth > s.swim_enter_depth + 1.0
 	p.velocity.y *= 0.25
 	p.set_horizontal_velocity(Player.flat(p.velocity) * 0.6)
 	p.reset_air_abilities()

@@ -808,4 +808,4 @@ func set_locked(locked: bool, msg: Dictionary = {}) -> void:
 	if locked:
 		change_state(&"locked", msg)
 	elif state_id == &"locked":
-		change_state(&"ground")
+		change_state(&"swim" if is_deep_water() else &"ground")

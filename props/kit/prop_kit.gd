@@ -44,7 +44,7 @@ static func jitter(c: Color, rng: RandomNumberGenerator, amount: float = 0.06) -
 ## Shared swaying, double-sided foliage material. Profiles tune the motion:
 ## &"palm" (slow, big fronds), &"leaves" (bushes, ferns), &"grass" (quick,
 ## small), &"cloth" (sails: flutter), &"bob" (bridge planks: vertical bob),
-## &"still" (double-sided, no motion).
+## &"still" (double-sided, no motion), &"kelp" (slow, deep underwater sway).
 static func foliage_material(profile: StringName = &"leaves") -> ShaderMaterial:
 	var key := "foliage_%s" % profile
 	if _materials.has(key):
@@ -63,6 +63,8 @@ static func foliage_material(profile: StringName = &"leaves") -> ShaderMaterial:
 			p = {&"sway_strength": 0.0, &"flutter_strength": 0.0, &"bob_strength": 0.03, &"bob_speed": 1.4, &"weight_power": 1.0, &"backface_darken": 0.0}
 		&"still":
 			p = {&"sway_strength": 0.0, &"flutter_strength": 0.0}
+		&"kelp":
+			p = {&"sway_strength": 0.45, &"sway_speed": 0.55, &"flutter_strength": 0.04, &"flutter_speed": 1.6, &"weight_power": 1.25}
 		_:
 			p = {&"sway_strength": 0.05, &"sway_speed": 1.2, &"flutter_strength": 0.012, &"flutter_speed": 4.0, &"weight_power": 1.5}
 	m.set_shader_parameter(&"rim_strength", 0.14)

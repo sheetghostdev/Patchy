@@ -102,12 +102,12 @@ npcs/               Parrots; islanders (NPC base, FavorNPC quest givers, Lookout
 collectibles/       Coins, gems, treasure kinds, coin trails
 world/              Terrain (Plateau); ocean (stylized Ocean, underwater effect,
                     sea regions, open-sea current); sea/ (bell buoy, floating
-                    barrels, dolphins); islands (Castaway Cay and
+                    barrels, dolphins, fish schools); islands (Castaway Cay and
                     Driftwood Key, IslandInfo, IslandZone); hub (captain's
                     cabin); vehicles (TinyBoat); objects (cages, parrot tasks,
                     chests, dig spots, braziers, gates, targets, cracked rock,
                     doors, Shellby's fishing boat, drag marks...)
-props/              Art kit: palms, rocks, foliage scatter, crates and barrels,
+props/              Art kit: palms, rocks, foliage scatter, coral, kelp, crates and barrels,
                     docks, rope bridges, wreck pieces, signs, torches; plus
                     level blocks
 ui/                 HUD, dialogue, pause menu (map, treasure, attachments, quests,
@@ -266,7 +266,7 @@ An optional argument after `--` filters test names.
 godot --headless --path . --fixed-fps 60 res://tests/run_movement_tests.tscn   # 53 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_camera_tests.tscn     # 21 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_gameplay_tests.tscn   # 64 checks
-godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 139 checks
+godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 143 checks
 godot --headless --path . --fixed-fps 60 res://ui/tests/ui_flow_test.tscn      # 84 checks
 godot --headless --path . --fixed-fps 60 res://props/tests/prop_tests.tscn     # 70 checks
 godot --headless --path . --fixed-fps 60 res://world/ocean/tests/ocean_swim_check.tscn
@@ -307,6 +307,7 @@ What each suite covers:
   - recovered ship parts appearing on the wreck, and the helm's sea chart;
   - Brock's cameo after King Claw;
   - a crab lighting a TNT snail that blows open the grotto;
+  - diving to the Sunken Sloop and opening its chest underwater;
   - a check that no pickup is buried or floating.
 
 ## Content
@@ -331,6 +332,12 @@ gold.
 
 **Driftwood Key** is a small islet one short sail away, with parrot 5 on a
 driftwood tower, parrot 6 in a guarded crab pen, and the Storm Lantern.
+
+**The Sunken Sloop** (spec §114) lies on the seabed off the cove: a broken
+hull, its bow and a tattered mast among coral, kelp and schools of reef
+fish. A trail of coins leads down from the shallows to a chest in its
+lee. Dive with the dive or crouch button and rise with jump; chests and
+chats work underwater too.
 
 **The crossing** between them is never empty water (spec §117). A bell
 buoy clangs midway to steer by, and floating barrels burst into coins
