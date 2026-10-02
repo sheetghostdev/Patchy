@@ -2615,6 +2615,29 @@ def compose_stinger_victory(rng) -> Mixer:
     return mx
 
 
+def compose_stinger_brock(rng) -> Mixer:
+    """Brock's entrance: a pompous, slightly-too-much fanfare in G minor.
+    Three timpani booms, a dotted brass fanfare doubled by a tuba, a trill,
+    a big minor chord and a cheeky slide-whistle tail."""
+    mx = _stinger_mixer(3.4)
+    for k, t in enumerate((0.0, 0.2, 0.4)):
+        mx.add("perc", ns(t), perc_tom(rng, 82.0, 0.75 + 0.1 * k), 1.0)
+        mx.add("bass", ns(t), pizz_bass(31, 0.25, 0.9, rng))
+    motif = ((0.62, 0.16, 67), (0.86, 0.08, 67), (0.95, 0.32, 70), (1.27, 0.16, 74), (1.51, 0.08, 72), (1.6, 0.3, 74))
+    for t, d, m in motif:
+        mx.add("brass", ns(t), brass(m, d, 1.0, bright=0.8))
+        mx.add("brass", ns(t), brass(m - 24, d, 0.9, bright=0.4), 0.8)
+    for k in range(6):                                  # the trill
+        mx.add("lead", ns(1.92 + 0.045 * k), accordion(78 if k % 2 else 79, 0.05, 0.7, rng))
+    land = 2.2
+    for m in (43, 55, 58, 62, 67, 70):
+        mx.add("brass", ns(land), brass(m, 0.9, 0.75, bright=0.55), 0.55)
+    mx.add("perc", ns(land), perc_cymbal(rng, 1.6), 0.5)
+    mx.add("perc", ns(land), perc_tom(rng, 70.0, 1.0), 0.9)
+    mx.add("fx", ns(2.75), _chirp(0.45, [(0, 1500), (0.45, 380)], index=0.2), 0.6)
+    return mx
+
+
 def _trim_tail(x: np.ndarray, max_len: float, floor_db: float = -60.0, fade_s: float = 0.4) -> np.ndarray:
     """Cut a one-shot's reverb tail (below floor_db or at max_len) with a smooth fade."""
     env = np.max(np.abs(x), axis=1)
@@ -2648,7 +2671,7 @@ def _level_rms(x: np.ndarray, target: float) -> np.ndarray:
 
 
 MUSIC_NAMES = ("castaway_explore", "castaway_combat_layer", "cave_explore", "title_theme", "boss_claw",
-               "stinger_discovery", "stinger_parrot", "stinger_treasure", "stinger_victory")
+               "stinger_discovery", "stinger_parrot", "stinger_treasure", "stinger_victory", "stinger_brock")
 
 
 def render_music(only: str | None = None) -> dict:
@@ -2681,7 +2704,8 @@ def render_music(only: str | None = None) -> dict:
     for name, fn, length in (("stinger_discovery", compose_stinger_discovery, 3.0),
                              ("stinger_parrot", compose_stinger_parrot, 2.0),
                              ("stinger_treasure", compose_stinger_treasure, 2.5),
-                             ("stinger_victory", compose_stinger_victory, 3.5)):
+                             ("stinger_victory", compose_stinger_victory, 3.5),
+                             ("stinger_brock", compose_stinger_brock, 3.4)):
         if name in want:
             x = _trim_tail(bus_compress(fn(rng_for(name)).render(ir), False, -8.0, 2.0), length)
             x = nz(x, db2a(-1.0))

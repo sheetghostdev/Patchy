@@ -76,6 +76,7 @@ func build() -> void:
 	_barnacle_betty()
 	_islanders()
 	_crossing()
+	_brock_cameo()
 
 	var player := b.instance(PLAYER, null, Vector3(0, 1.25, 33), 0.0, "Player")
 	var rig := b.instance(RIG, null, Vector3(0, 3, 40), 0.0, "CameraRig")
@@ -1036,6 +1037,37 @@ func _crossing() -> void:
 	region.boat_dock = dock
 	region.arrival = dock
 	b.add(region, g, "SeaRegionGullBar")
+
+
+## Brock the Croc's first appearance (spec §100): after King Claw falls,
+## his royal barge rows in under the headland's north cliff.
+func _brock_cameo() -> void:
+	var g := b.group("BrockCameo", gameplay)
+	var cameo := BrockCameo.new()
+	cameo.lines = PackedStringArray([
+		"AHEM! AHEM!! Who has been bullying my crab king?",
+		"...You? A soggy castaway with a hook for a hand? Ha!",
+		"Behold BROCK THE CROC! Admiral of the Archipelago! Baron of Bananas! Keeper of Everyone Else's Treasure! Twice voted Handsomest Reptile!",
+		"Keep your silly little wheel. The rest of your ship is scattered across MY islands, guarded by MY crabs. Good luck!",
+		"Row, crabs! ROW! Toodle-oo!",
+	])
+	b.add(cameo, g, "BrockCameo")
+	var marks := {}
+	for d: Array in [["Lookout", Vector3(50, 7.5, -49.5), Vector3(0, 0, -1)], ["Hold", Vector3(50, 0, -74), Vector3(0, 0, 1)],
+			["EnterFrom", Vector3(82, 0, -100), Vector3(-32, 0, 26)], ["ExitTo", Vector3(8, 0, -110), Vector3(-42, 0, -36)]]:
+		var m := Marker3D.new()
+		m.position = d[1]
+		m.rotation.y = Player.yaw_of(d[2])
+		b.add(m, g, d[0])
+		marks[d[0]] = m
+	cameo.lookout = marks["Lookout"]
+	cameo.hold = marks["Hold"]
+	cameo.enter_from = marks["EnterFrom"]
+	cameo.exit_to = marks["ExitTo"]
+	var barge := RoyalBarge.new()
+	barge.position = (marks["EnterFrom"] as Marker3D).position
+	b.add(barge, g, "RoyalBarge")
+	cameo.barge = barge
 
 
 # --- Tutorial hints -----------------------------------------------------------------

@@ -40,6 +40,8 @@ static func build() -> Array:
 		q.append({"title": "X Marks the Spot", "description": "Unroll your treasure map (Pause, Treasure), find the place it sketches, and dig.", "done": WorldState.is_completed(&"castaway_x_spot")})
 	if WorldState.is_completed(&"castaway_log_bridge"):
 		q.append({"title": "Defeat King Claw", "description": "Brock's crab general waits in the ring of rocks on the headland.", "done": WorldState.is_completed(&"king_claw")})
+	if WorldState.is_completed(&"brock_cameo_seen"):
+		q.append({"title": "Brock the Croc", "description": "The self-styled Admiral of the Archipelago has scattered the rest of your ship across his islands. The adventure continues...", "done": false})
 	# Side quests, once an islander has asked.
 	var lifted := WorldState.is_completed(&"castaway_betty_lift")
 	if WorldState.is_completed(&"castaway_betty_quest") or lifted:

@@ -98,7 +98,7 @@ resources/          Data resources (AttachmentData .tres, movement and camera se
 enemies/            Crabs (normal, armored, hermit, cannon), TNT snail, pelican, croc grunt,
                     King Claw boss plus arena
 npcs/               Parrots; islanders (NPC base, FavorNPC quest givers, LookoutNPC)
-                    and their models (turtle, monkey, otter)
+                    and their models (turtle, monkey, otter, Brock the Croc)
 collectibles/       Coins, gems, treasure kinds, coin trails
 world/              Terrain (Plateau); ocean (stylized Ocean, underwater effect,
                     sea regions, open-sea current); sea/ (bell buoy, floating
@@ -266,7 +266,7 @@ An optional argument after `--` filters test names.
 godot --headless --path . --fixed-fps 60 res://tests/run_movement_tests.tscn   # 53 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_camera_tests.tscn     # 21 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_gameplay_tests.tscn   # 64 checks
-godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 130 checks
+godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 136 checks
 godot --headless --path . --fixed-fps 60 res://ui/tests/ui_flow_test.tscn      # 84 checks
 godot --headless --path . --fixed-fps 60 res://props/tests/prop_tests.tscn     # 70 checks
 godot --headless --path . --fixed-fps 60 res://world/ocean/tests/ocean_swim_check.tscn
@@ -305,6 +305,7 @@ What each suite covers:
     grapple, pillar, cannon, cracked rock and targets;
   - a full King Claw fight, including the hand-off to his theme and back;
   - recovered ship parts appearing on the wreck, and the helm's sea chart;
+  - Brock's cameo after King Claw;
   - a check that no pickup is buried or floating.
 
 ## Content
@@ -352,6 +353,12 @@ More on Castaway Cay:
 - **King Claw** waits in a ring of spires on the headland. Pound his
   stuck claw, stomp his belly three times, and he leaves the Ship's Wheel.
   His fight has its own theme: the island's hook turned minor.
+- **Brock the Croc** (spec §100) rows in under the headland on his royal
+  barge once King Claw falls and the Ship's Wheel is Patchy's. The
+  Admiral of the Archipelago, Baron of Bananas and Keeper of Everyone
+  Else's Treasure gloats that the rest of the ship is scattered across
+  "his" islands, then is rowed off by two put-upon crabs: the adventure
+  continues.
 - **Side quest, the Barnacle Betty:** Old Shellby stands on his jetty on
   the west beach, staring at the empty water. Crabs dragged his fishing
   boat up the beach; the drag marks lead to Gull Rock. Climb the crabs'

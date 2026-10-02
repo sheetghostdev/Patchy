@@ -17,13 +17,14 @@ extends Node3D
 		half_width = v
 		_build()
 @export var hull_color := Color("2f8f9d")
+@export var band_color := Color("f3ead2")
+@export var barnacles := true
 @export var boat_name := "BARNACLE BETTY"
 @export var flag_until: StringName = &""
 
 const KEEL_Y := -0.5
 const GUNWALE_Y := 0.55
 const INSIDE := Color("c08a55")
-const BAND := Color("f3ead2")
 
 var _visual: Node3D
 var _flag: Node3D
@@ -74,7 +75,7 @@ func _build() -> void:
 		lab.font_size = 30
 		lab.pixel_size = 0.005
 		lab.outline_size = 6
-		lab.modulate = BAND
+		lab.modulate = band_color
 		lab.outline_modulate = hull_color.darkened(0.5)
 		lab.position = Vector3(0, 0.12, length * 0.5 + 0.035)
 		_visual.add_child(lab)
@@ -121,7 +122,7 @@ func _hull_mesh() -> ArrayMesh:
 	for i in last.size() - 1:
 		mb.triangle(center, last[i], last[i + 1], hull_color.darkened(0.12), true)
 	mb.triangle(last[0], last[last.size() - 1], center, hull_color.darkened(0.12), true)
-	# Gunwale rails and a cream band just below them.
+	# Gunwale rails and a band just below them.
 	for side: int in [0, 10]:
 		var rail := PackedVector3Array()
 		var radii := PackedFloat32Array()
@@ -137,11 +138,11 @@ func _hull_mesh() -> ArrayMesh:
 			var a := r0[cols[0]].lerp(r0[cols[1]], 0.55)
 			var b := r1[cols[0]].lerp(r1[cols[1]], 0.55)
 			var o := Vector3(signf(a.x) * 0.012, 0, 0)
-			mb.box(Vector3(0.02, 0.1, a.distance_to(b) + 0.02), Transform3D(Basis.looking_at((b - a).normalized(), Vector3.UP), (a + b) * 0.5 + o), BAND)
+			mb.box(Vector3(0.02, 0.1, a.distance_to(b) + 0.02), Transform3D(Basis.looking_at((b - a).normalized(), Vector3.UP), (a + b) * 0.5 + o), band_color)
 	# Barnacles crusting the lower hull.
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 7
-	for k in 46:
+	for k in (46 if barnacles else 0):
 		var j := rng.randi_range(1, outer.size() - 2)
 		var i := rng.randi_range(2, 4) if rng.randf() < 0.5 else rng.randi_range(6, 8)
 		var p: Vector3 = (outer[j] as PackedVector3Array)[i]

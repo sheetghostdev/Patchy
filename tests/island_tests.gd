@@ -359,6 +359,36 @@ func test_wreck_shows_recovered_parts() -> void:
 	await frames(6)
 
 
+func test_brock_rows_in_after_king_claw() -> void:
+	await clear_enemies()
+	var boss := node("Enemies/KingClaw")
+	if boss != null:
+		boss.queue_free()
+	var cameo := node("Gameplay/BrockCameo/BrockCameo") as BrockCameo
+	await place(Vector3(49, 7.6, -51.0), Vector3.FORWARD)
+	await frames(60)
+	check("Brock waits until King Claw is beaten", not cameo.is_running(), "")
+	WorldState.mark_completed(&"king_claw")
+	InventoryManager.add_ship_part(&"ships_wheel")
+	var started := await wait_until(func() -> bool: return cameo.is_running(), 120)
+	check("then his royal barge rows in", started >= 0, "")
+	var ui := get_node_or_null(^"/root/UI")
+	var talked := false
+	for i in 2400:
+		await frames(1)
+		if not cameo.is_running():
+			break
+		if ui != null and ui.call(&"is_dialogue_active"):
+			talked = true
+			if i % 20 == 10:
+				ui.get(&"hud").get(&"dialogue").call(&"advance")
+	check("Brock has his say", talked, "")
+	check("the scene ends with Patchy back in control", not cameo.is_running() and player.state_id != &"locked" and rig.get_camera().current,
+		"state=%s" % player.state_id)
+	check("it plays once", WorldState.is_completed(&"brock_cameo_seen") and not cameo.barge.visible, "")
+	check("and the adventure continues in the quest log", QuestLog.build().any(func(q: Dictionary) -> bool: return q.title == "Brock the Croc"), "")
+
+
 func test_barnacle_betty_side_quest() -> void:
 	await clear_enemies()
 	var shellby := node("Gameplay/OldShellby") as FavorNPC
@@ -541,7 +571,8 @@ func test_the_crossing_has_things_to_find() -> void:
 	boat.global_position = aim + Vector3(14, 0, 0)
 	await frames(4)
 	var gold := InventoryManager.gold_value
-	var hit := await sail_until(boat, aim, func() -> bool: return not is_instance_valid(barrel), 300)
+	var barrel_id := barrel.get_instance_id()
+	var hit := await sail_until(boat, aim, func() -> bool: return not is_instance_id_valid(barrel_id), 300)
 	await frames(60)
 	check("ramming a floating barrel bursts it", hit >= 0, "")
 	check("its coins fly to Patchy", InventoryManager.gold_value >= gold + 4, "gold %d -> %d" % [gold, InventoryManager.gold_value])

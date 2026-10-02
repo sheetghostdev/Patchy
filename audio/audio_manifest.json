@@ -769,6 +769,15 @@
       "bars": 1.63,
       "time_signature": "4/4",
       "samples": 154350
+    },
+    "stinger_brock": {
+      "file": "res://audio/music/stinger_brock.ogg",
+      "duration": 3.4,
+      "loop": false,
+      "bpm": 112,
+      "bars": 1.59,
+      "time_signature": "4/4",
+      "samples": 149940
     }
   },
   "groups": {
