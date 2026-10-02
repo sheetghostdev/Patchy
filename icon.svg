@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3fd0e0"/>
+      <stop offset="1" stop-color="#1679a8"/>
+    </linearGradient>
+  </defs>
+  <rect x="4" y="4" width="120" height="120" rx="26" fill="url(#sea)"/>
+  <!-- hat -->
+  <path d="M18 54 Q64 18 110 54 Q96 46 64 48 Q32 46 18 54 Z" fill="#2b2140"/>
+  <path d="M34 50 Q64 10 94 50 Z" fill="#3a2d57"/>
+  <circle cx="64" cy="38" r="6" fill="#ffd34d"/>
+  <!-- face -->
+  <ellipse cx="64" cy="76" rx="30" ry="26" fill="#f2b98c"/>
+  <ellipse cx="53" cy="72" rx="7" ry="9" fill="#ffffff"/>
+  <ellipse cx="75" cy="72" rx="7" ry="9" fill="#ffffff"/>
+  <circle cx="55" cy="74" r="3.6" fill="#1d1a24"/>
+  <circle cx="73" cy="74" r="3.6" fill="#1d1a24"/>
+  <path d="M44 61 L60 64" stroke="#3b2418" stroke-width="5" stroke-linecap="round"/>
+  <path d="M84 61 L68 64" stroke="#3b2418" stroke-width="5" stroke-linecap="round"/>
+  <path d="M52 88 Q64 96 76 88" stroke="#7a3b2a" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <!-- hook -->
+  <path d="M100 118 L100 98 Q100 84 112 84 Q122 84 122 94" stroke="#c9d3dc" stroke-width="7" fill="none" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://systems/camera/camera_rig.gd" id="1_rig"]
+[ext_resource type="Resource" path="res://resources/settings/camera_default.tres" id="2_set"]
+
+[node name="CameraRig" type="Node3D"]
+script = ExtResource("1_rig")
+settings = ExtResource("2_set")
+
+[node name="PivotYaw" type="Node3D" parent="."]
+
+[node name="PivotPitch" type="Node3D" parent="PivotYaw"]
+
+[node name="Arm" type="Node3D" parent="PivotYaw/PivotPitch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6.6)
+
+[node name="Camera3D" type="Camera3D" parent="PivotYaw/PivotPitch/Arm"]
+current = true
+fov = 58.0
+near = 0.05
+far = 3000.0

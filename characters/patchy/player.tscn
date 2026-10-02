@@ -1,0 +1,119 @@
+[gd_scene load_steps=15 format=3]
+
+[ext_resource type="Script" path="res://characters/patchy/player.gd" id="1_player"]
+[ext_resource type="Resource" path="res://resources/settings/patchy_movement.tres" id="2_settings"]
+[ext_resource type="Script" path="res://characters/patchy/player_input.gd" id="3_input"]
+[ext_resource type="Script" path="res://characters/patchy/player_health.gd" id="4_health"]
+[ext_resource type="Script" path="res://characters/patchy/player_combat.gd" id="5_combat"]
+
+[sub_resource type="CapsuleShape3D" id="Capsule_body"]
+radius = 0.35
+height = 1.5
+
+[sub_resource type="SphereShape3D" id="Sphere_swipe"]
+radius = 0.95
+
+[sub_resource type="SphereShape3D" id="Sphere_body"]
+radius = 0.8
+
+[sub_resource type="CylinderShape3D" id="Cyl_stomp"]
+height = 0.35
+radius = 0.45
+
+[sub_resource type="SphereShape3D" id="Sphere_hook"]
+radius = 5.4
+
+[sub_resource type="Gradient" id="Gradient_shadow"]
+offsets = PackedFloat32Array(0, 0.6, 1)
+colors = PackedColorArray(0.04, 0.05, 0.14, 0.62, 0.04, 0.05, 0.14, 0.4, 0.04, 0.05, 0.14, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture_shadow"]
+gradient = SubResource("Gradient_shadow")
+width = 64
+height = 64
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_placeholder"]
+radius = 0.35
+height = 1.5
+
+[sub_resource type="StandardMaterial3D" id="Mat_placeholder"]
+albedo_color = Color(0.95, 0.55, 0.25, 1)
+
+[node name="Player" type="CharacterBody3D" groups=["player"]]
+collision_layer = 2
+collision_mask = 1033
+script = ExtResource("1_player")
+settings = ExtResource("2_settings")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+shape = SubResource("Capsule_body")
+
+[node name="Input" type="Node" parent="."]
+script = ExtResource("3_input")
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("4_health")
+
+[node name="Combat" type="Node" parent="." node_paths=PackedStringArray("swipe_box", "body_box", "stomp_box")]
+script = ExtResource("5_combat")
+swipe_box = NodePath("../Facing/SwipeHitbox")
+body_box = NodePath("../BodyHitbox")
+stomp_box = NodePath("../StompSensor")
+
+[node name="Facing" type="Node3D" parent="."]
+
+[node name="SwipeHitbox" type="Area3D" parent="Facing"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, -0.75)
+collision_layer = 2048
+collision_mask = 1052
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Facing/SwipeHitbox"]
+shape = SubResource("Sphere_swipe")
+
+[node name="BodyHitbox" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+collision_layer = 2048
+collision_mask = 1052
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BodyHitbox"]
+shape = SubResource("Sphere_body")
+
+[node name="StompSensor" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0)
+collision_layer = 2048
+collision_mask = 1052
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StompSensor"]
+shape = SubResource("Cyl_stomp")
+
+[node name="HookSensor" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+collision_layer = 0
+collision_mask = 128
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HookSensor"]
+shape = SubResource("Sphere_hook")
+
+[node name="Visual" type="Node3D" parent="."]
+
+[node name="Placeholder" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+layers = 2
+mesh = SubResource("CapsuleMesh_placeholder")
+surface_material_override/0 = SubResource("Mat_placeholder")
+
+[node name="BlobShadow" type="Decal" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.4, 0)
+size = Vector3(0.95, 7.6, 0.95)
+texture_albedo = SubResource("GradientTexture_shadow")
+upper_fade = 0.05
+lower_fade = 0.6
+cull_mask = 1048573

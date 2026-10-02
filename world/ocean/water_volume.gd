@@ -1,0 +1,73 @@
+@tool
+class_name WaterVolume
+extends Area3D
+## Swimmable water (layer Water). The surface is the top of the box shape,
+## optionally bobbing with a gentle wave so floating feels alive. Gameplay
+## only needs get_surface_height(); visuals are separate meshes.
+
+@export var size := Vector3(10.0, 4.0, 10.0):
+	set(v):
+		size = v
+		_rebuild()
+## Visual-only wave amplitude applied to the gameplay surface (m).
+@export_range(0.0, 1.0, 0.01) var wave_height := 0.06
+@export_range(0.0, 5.0, 0.05) var wave_speed := 1.2
+## Create a simple translucent surface mesh (test scenes, pools).
+@export var show_surface := true:
+	set(v):
+		show_surface = v
+		_rebuild()
+
+var _shape: CollisionShape3D
+var _surface: MeshInstance3D
+
+
+func _ready() -> void:
+	collision_layer = Layers.WATER
+	collision_mask = 0
+	monitorable = true
+	monitoring = false
+	add_to_group(&"water")
+	_rebuild()
+
+
+func _rebuild() -> void:
+	if not is_inside_tree():
+		return
+	if _shape == null:
+		_shape = CollisionShape3D.new()
+		_shape.name = "Shape"
+		add_child(_shape, false, Node.INTERNAL_MODE_FRONT)
+	var box := BoxShape3D.new()
+	box.size = size
+	_shape.shape = box
+	_shape.position = Vector3(0.0, -size.y * 0.5, 0.0)
+	if show_surface:
+		if _surface == null:
+			_surface = MeshInstance3D.new()
+			_surface.name = "Surface"
+			_surface.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+			add_child(_surface, false, Node.INTERNAL_MODE_FRONT)
+		var pm := PlaneMesh.new()
+		pm.size = Vector2(size.x, size.z)
+		pm.subdivide_width = int(size.x)
+		pm.subdivide_depth = int(size.z)
+		_surface.mesh = pm
+		_surface.material_override = MaterialLibrary.water_simple()
+	elif _surface != null:
+		_surface.queue_free()
+		_surface = null
+
+
+## World-space height of the water surface above `at` (the volume's origin
+## marks the surface; the box extends downward).
+func get_surface_height(at: Vector3) -> float:
+	var base := global_position.y
+	if wave_height <= 0.0:
+		return base
+	var t := Time.get_ticks_msec() * 0.001 * wave_speed
+	return base + wave_height * sin(t + at.x * 0.35) * cos(t * 0.8 + at.z * 0.3)
+
+
+func get_bottom_height() -> float:
+	return global_position.y - size.y
