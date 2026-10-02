@@ -73,6 +73,8 @@ func build() -> void:
 	_sea_regions()
 	_decorate()
 	_hints()
+	_barnacle_betty()
+	_islanders()
 
 	var player := b.instance(PLAYER, null, Vector3(0, 1.25, 33), 0.0, "Player")
 	var rig := b.instance(RIG, null, Vector3(0, 3, 40), 0.0, "CameraRig")
@@ -331,23 +333,6 @@ func _outpost() -> void:
 	crab(Vector3(-36, 3.05, 8), CrabModel.Variant.ARMORED, "castaway_crab_outpost_2")
 	gem(Vector3(-46, 9.2, 18), "castaway_gem_roof", Palette.GEM_RED)
 	heart(Vector3(-56, 3.6, 10))
-	# Old Shellby, the turtle fisherman.
-	var npc := NPC.new()
-	npc.display_name = "Old Shellby"
-	npc.lines = PackedStringArray([
-		"Well, shiver my shell! You washed up with half the sea's driftwood.",
-		"Brock the Croc's crabs have been hauling gold up and down this beach all morning. Yours, I take it?",
-		"Free the parrots he's caged. They never forget a friend. Folks say a big enough flock can lift a whole tree.",
-		"If you're heading out, that little boat at the dock floats... mostly.",
-	])
-	npc.repeat_lines = PackedStringArray(["Mind the dark cave up on the ridge. Even I don't go in there without a light."])
-	npc.talked_flag = &"castaway_met_shellby"
-	npc.position = Vector3(-50, 3.0, 26)
-	npc.rotation_degrees.y = 160.0
-	b.add(npc, gameplay, "OldShellby")
-	var model := TurtleModel.new()
-	b.add(model, npc, "TurtleModel")
-	npc.model = model
 	var sign := Signpost.new()
 	sign.texts = PackedStringArray(["Castaway Outpost", "Dock", "Ridge", "Shipwreck"])
 	sign.directions = PackedFloat32Array([90.0, 180.0, 0.0, -90.0])
@@ -714,7 +699,7 @@ func _checkpoints() -> void:
 		cp.position = d[1]
 		cp.respawn_yaw = d[2]
 		b.add(cp, gameplay, String(d[0]).capitalize().replace(" ", ""))
-	for spot: Array in [["Cove", Vector3(0, 1.3, 33)], ["Wreck", Vector3(40, 1.3, 30)], ["Outpost", Vector3(-48, 3.1, 12)],
+	for spot: Array in [["Cove", Vector3(0, 1.3, 33)], ["Wreck", Vector3(40, 1.3, 30)], ["Outpost", Vector3(-48, 3.1, 12)], ["GullRock", Vector3(-63.5, 5.5, -40)],
 			["Ridge", Vector3(-24, 7.1, -4)], ["Summit", Vector3(-10, 12.5, -32)], ["Headland", Vector3(55, 7.6, -14)], ["Dock", Vector3(-52, 1.4, 62)]]:
 		var m := Marker3D.new()
 		m.position = spot[1]
@@ -821,6 +806,185 @@ func _driftwood_key() -> void:
 	crate_prop(n, c + Vector3(16, 1.0, -14), "driftwood_crate_1", 3, 15.0)
 
 
+# --- Side quest and islanders -------------------------------------------------------
+
+## The side quest (spec §103): Brock's crabs stole Old Shellby's fishing boat,
+## the Barnacle Betty, and hauled her up Gull Rock on the north-west beach.
+## Follow the drag marks up the beach and the crabs' plank ramp, grab the
+## ledge to the top, and call three parrots to fly her home to Shellby's
+## jetty. Shellby pays with his old chart, whose X is on the north beach.
+func _barnacle_betty() -> void:
+	var g := b.group("BarnacleBetty", gameplay)
+	# Shellby's jetty on the west beach, and the empty water beside it.
+	var jetty := Dock.new()
+	jetty.length = 12.0
+	jetty.width = 2.6
+	jetty.post_depth = 7.0
+	jetty.water_line = -1.2
+	jetty.position = Vector3(-79.5, 1.35, 18.0)
+	jetty.rotation_degrees.y = 90.0
+	b.add(jetty, structures, "ShellbyJetty")
+	var mooring := Marker3D.new()
+	mooring.position = Vector3(-88.5, 0.0, 15.4)
+	mooring.rotation_degrees.y = 90.0
+	b.add(mooring, g, "BettyMooring")
+	var npc := FavorNPC.new()
+	npc.display_name = "Old Shellby"
+	npc.lines = PackedStringArray([
+		"Well, shiver my shell! You washed up with half the sea's driftwood.",
+		"Brock's crabs nicked my boat right off her mooring last night. The Barnacle Betty! Dragged her off up the beach, see?",
+		"Follow those marks and bring my Betty home, and there's something in it for you.",
+	])
+	npc.waiting_lines = PackedStringArray([
+		"Those drag marks lead north up the beach. Crabs can't have hauled her far... can they?",
+		"If she's stuck somewhere high, a few parrot friends could lift her. Three should do it.",
+	])
+	npc.thanks_lines = PackedStringArray([
+		"My Betty! Not a scratch on her! ...Well. New scratches.",
+		"Here, my old fishing chart. Some pirate buried something on the north beach, by a pile of stones. Never did own a shovel.",
+	])
+	npc.after_lines = PackedStringArray([
+		"Betty and me, back on the water. Best fishing's at dawn, while the crabs are still snoring.",
+		"Your own little boat at the dock floats too... mostly.",
+	])
+	npc.talked_flag = &"castaway_met_shellby"
+	npc.quest_flag = &"castaway_betty_quest"
+	npc.done_flag = &"castaway_betty_lift"
+	npc.reward_flag = &"castaway_betty_reward"
+	npc.reward_kind = "map"
+	npc.reward_id = &"castaway_map_2"
+	npc.reward_message = "Got Shellby's fishing chart!"
+	npc.position = Vector3(-84.5, 1.35, 18.4)
+	b.add(npc, gameplay, "OldShellby")
+	var model := TurtleModel.new()
+	model.rotation.y = Player.yaw_of(mooring.position - npc.position)
+	b.add(model, npc, "TurtleModel")
+	npc.model = model
+	# Gull Rock: a sea cliff with a lower ledge on its landward side.
+	plateau(terrain, "GullRock", [Vector2(-80, -34), Vector2(-81, -41), Vector2(-77, -46.5), Vector2(-70.5, -47),
+		Vector2(-66.5, -43), Vector2(-66, -36.5), Vector2(-69.5, -32), Vector2(-75.5, -31)], 9.4, 11.0, "cliff", {"seed": 31})
+	# Its east face is square where the ramp's top edge meets it (no lip).
+	plateau(terrain, "GullLedge", [Vector2(-67.5, -44.5), Vector2(-61.2, -44), Vector2(-61, -41.6), Vector2(-61, -38.4),
+		Vector2(-62, -35.5), Vector2(-67.5, -35)], 5.4, 6.0, "cliff", {"seed": 33})
+	# The crabs' plank ramp up to the ledge, a crate they used as a step and
+	# the planks that gave way under the boat on the last stretch.
+	blk(structures, Vector3(-57.0, 1.2, -40.0), Vector3(2.6, 4.2, 8.0), "wood", Vector3(0, 90, 0), LevelBlock.Shape.RAMP, "CrabRamp")
+	blk(structures, Vector3(-65.4, 5.4, -42.6), Vector3(1.4, 1.4, 1.4), "wood", Vector3(0, 14, 0), LevelBlock.Shape.BOX, "CrabCrate")
+	blk(structures, Vector3(-63.3, 5.4, -37.6), Vector3(0.08, 4.4, 0.45), "wood_dark", Vector3(0, 0, 41), LevelBlock.Shape.BOX, "LeaningPlank")
+	blk(structures, Vector3(-62.4, 5.4, -42.0), Vector3(0.45, 0.08, 1.9), "wood_dark", Vector3(0, 63, 0), LevelBlock.Shape.BOX, "FallenPlank")
+	blk(structures, Vector3(-63.6, 5.4, -39.2), Vector3(0.45, 0.08, 1.4), "wood_dark", Vector3(0, -24, 0), LevelBlock.Shape.BOX, "SnappedPlank")
+	# The Betty, wedged on top and flying Brock's flag, with her guards.
+	var betty := FishingBoat.new()
+	betty.flag_until = &"castaway_betty_lift"
+	betty.position = Vector3(-74.0, 9.85, -39.5)
+	betty.rotation_degrees = Vector3(0, 18, -7)
+	b.add(betty, g, "BarnacleBetty")
+	var task := ParrotTask.new()
+	task.task_id = &"castaway_betty_lift"
+	task.required_parrots = 3
+	task.carried = betty
+	task.destination = mooring
+	task.lift_height = 9.0
+	task.carry_time = 6.5
+	task.position = Vector3(-70.2, 9.4, -38.2)
+	b.add(task, g, "BettyTask")
+	crab(Vector3(-76.5, 9.45, -43.5), CrabModel.Variant.NORMAL, "castaway_crab_gull_1")
+	crab(Vector3(-71.5, 9.45, -34.5), CrabModel.Variant.HERMIT, "castaway_crab_gull_2")
+	gem(Vector3(-79.0, 10.0, -40.0), "castaway_gem_gull", Color("5fe08a"))
+	palm(g, Vector3(-77.5, 9.4, -35.0), 6.0, 16.0, 200.0, 97)
+	rock(g, Vector3(-71.0, 9.4, -44.5), Vector3(1.4, 0.9, 1.2), StylizedRock.Preset.MOSSY, 89, 30.0)
+	barrel_prop(g, Vector3(-69.0, 9.4, -42.0), "castaway_barrel_gull", 3)
+	# The trail: from the empty mooring up the beach, the ramp and the ledge.
+	var marks := DragMarks.new()
+	marks.points = PackedVector3Array([Vector3(-82.5, 1.2, 14.5), Vector3(-80.5, 1.2, 6), Vector3(-78.5, 1.2, -4),
+		Vector3(-76.5, 1.2, -12), Vector3(-73, 1.2, -18), Vector3(-68.5, 1.2, -25), Vector3(-64, 1.2, -32),
+		Vector3(-58.5, 1.2, -37.5), Vector3(-53, 1.2, -40)])
+	marks.seed = 3
+	b.add(marks, g, "DragMarks")
+	var ramp_marks := DragMarks.new()
+	ramp_marks.points = PackedVector3Array([Vector3(-53, 1.2, -40), Vector3(-61, 5.4, -40), Vector3(-65.4, 5.4, -40.4)])
+	ramp_marks.footprints = false
+	ramp_marks.groove_color = Color("6e4a2c")
+	ramp_marks.berm_color = Color("c9a46c")
+	ramp_marks.seed = 5
+	b.add(ramp_marks, g, "RampDragMarks")
+	coin_trail(Vector3(-79.5, 1.6, 2), Vector3(-77.5, 1.6, -8), 4, 0.0, CoinTrail.TrailShape.LINE)
+	coin_trail(Vector3(-54.5, 2.2, -40), Vector3(-59.5, 4.9, -40), 4, 0.0, CoinTrail.TrailShape.LINE)
+	# Shellby's chart: an X on the north beach, by a cairn of stones.
+	var x_spot := DigSpot.new()
+	x_spot.spot_id = &"castaway_x_north"
+	x_spot.island_id = ISLAND
+	x_spot.contents = "goblet"
+	x_spot.gem_color = Palette.GEM_BLUE
+	x_spot.coins = 10
+	x_spot.hidden = true
+	x_spot.marked_by_map = &"castaway_map_2"
+	x_spot.position = Vector3(-11.0, 1.2, -64.5)
+	b.add(x_spot, g, "NorthBeachX")
+	var cairn := b.group("Cairn", g)
+	rock(cairn, Vector3(-9.2, 1.2, -63.4), Vector3(1.3, 0.8, 1.2), StylizedRock.Preset.SAND_ROCK, 71, 20.0)
+	rock(cairn, Vector3(-9.2, 1.85, -63.4), Vector3(0.9, 0.6, 0.85), StylizedRock.Preset.SAND_ROCK, 73, 70.0)
+	rock(cairn, Vector3(-9.2, 2.3, -63.4), Vector3(0.55, 0.45, 0.5), StylizedRock.Preset.SAND_ROCK, 79, 140.0)
+
+
+## Two more islanders (spec §101): Tok, the outpost lookout, who points out
+## cages still locked; and Pip, a young otter on Driftwood Key whose lucky
+## clam the pelican stole.
+func _islanders() -> void:
+	blk(structures, Vector3(-50.5, 3.0, 25.5), Vector3(1.1, 0.9, 1.1), "wood", Vector3(0, 12, 0), LevelBlock.Shape.BOX, "TokCrate")
+	var tok := LookoutNPC.new()
+	tok.display_name = "Tok"
+	tok.lines = PackedStringArray([
+		"Ahoy down there! Tok's the name, lookout's the game.",
+		"Nothing gets past this spyglass. Not crabs, not clouds, and definitely not caged parrots.",
+	])
+	tok.repeat_lines = PackedStringArray(["Tok's spyglass sees all!", "Hold still, I'm looking...",
+		"Ooh, a cloud shaped like a banana. Anyway!"])
+	tok.cage_hints = PackedStringArray([
+		"castaway_parrot_outpost|Look up! The crabs locked a parrot on our own watchtower. Climb the crates by the blue hut.",
+		"castaway_parrot_wreck|I hear squawking from your shipwreck's crow's nest. Up the stern deck and keep climbing!",
+		"castaway_parrot_summit|There's a cage on the hill summit. Take the terraces, or kick your way up the chimney.",
+		"castaway_parrot_stack|A cage sits on the sea stack off the wreck. Only a mighty long jump gets you there.",
+		"driftwood_parrot_tower|Southwest, over the water: Driftwood Key! A cage tops a tower of lashed rafts.",
+		"driftwood_parrot_pen|More on Driftwood Key: the crabs keep one in a pen up on the knoll. Guarded, mind you.",
+	])
+	tok.all_free_lines = PackedStringArray(["Not a single cage left! The sky's full of your friends."])
+	tok.talked_flag = &"castaway_met_tok"
+	tok.position = Vector3(-50.5, 3.9, 25.5)
+	b.add(tok, gameplay, "Tok")
+	var monkey := MonkeyModel.new()
+	monkey.rotation.y = Player.yaw_of(Vector3(-44, 3.0, 33) - tok.position)
+	b.add(monkey, tok, "MonkeyModel")
+	tok.model = monkey
+	var c := DRIFTWOOD
+	var pip := FavorNPC.new()
+	pip.display_name = "Pip"
+	pip.lines = PackedStringArray([
+		"Whoa, a real pirate! With a real hook!",
+		"That greedy pelican swiped my lucky clam right out of my paws!",
+		"Bop it when it swoops down low. It'll cough everything up, I bet!",
+	])
+	pip.waiting_lines = PackedStringArray(["Bop that pelican when it swoops low! My clam's in its pouch somewhere!"])
+	pip.thanks_lines = PackedStringArray([
+		"You chased off the pelican! And it coughed up my clam!",
+		"...Huh, there's a pearl in it. You keep it, pirate. Pirates love pearls!",
+	])
+	pip.after_lines = PackedStringArray(["When I grow up I'm getting a hook too. Or at least a very pointy spoon."])
+	pip.quest_flag = &"driftwood_met_pip"
+	pip.done_flag = &"driftwood_pelican"
+	pip.reward_flag = &"driftwood_pip_reward"
+	pip.reward_kind = "pearl"
+	pip.reward_id = &"driftwood_pip_pearl"
+	pip.reward_island = ISLET
+	pip.reward_color = Color("ffd9e8")
+	pip.position = c + Vector3(8.5, 1.0, -19.0)
+	b.add(pip, gameplay, "Pip")
+	var otter := OtterModel.new()
+	otter.rotation.y = Player.yaw_of(c + Vector3(12, 1.3, -24) - pip.position)
+	b.add(otter, pip, "OtterModel")
+	pip.model = otter
+
+
 # --- Tutorial hints -----------------------------------------------------------------
 
 func _hints() -> void:
@@ -919,7 +1083,7 @@ func _decorate() -> void:
 	for d: Array in [
 			[Vector3(-10, 1.2, 38.5), 7.5, 18.0, 160.0], [Vector3(8, 1.2, 40.0), 6.5, 22.0, 200.0], [Vector3(17, 1.2, 38.5), 8.5, 14.0, 150.0],
 			[Vector3(-19, 1.2, 39.0), 6.0, 20.0, 190.0], [Vector3(-73, 1.2, 9.0), 7.0, 18.0, 90.0], [Vector3(-70, 1.2, -20.0), 8.0, 12.0, 70.0],
-			[Vector3(-58, 1.2, -44.0), 6.5, 20.0, 40.0], [Vector3(-74, 1.2, 24.0), 7.5, 16.0, 110.0], [Vector3(-63, 1.2, 40.0), 6.0, 24.0, 135.0],
+			[Vector3(-55, 1.2, -46.5), 6.5, 20.0, 40.0], [Vector3(-74, 1.2, 24.0), 7.5, 16.0, 110.0], [Vector3(-63, 1.2, 40.0), 6.0, 24.0, 135.0],
 			[Vector3(-24, 1.2, -60.0), 7.0, 18.0, 0.0], [Vector3(2, 1.2, -66.0), 8.5, 14.0, 10.0], [Vector3(30, 1.2, -62.0), 6.5, 20.0, -20.0],
 			[Vector3(44, 1.2, -57.0), 7.0, 16.0, -40.0], [Vector3(80, 1.2, 12.0), 7.5, 20.0, -90.0], [Vector3(70, 1.2, 27.0), 6.0, 22.0, -130.0],
 			[Vector3(-22, 3.0, 21.0), 8.0, 8.0, 30.0], [Vector3(14, 3.0, 14.0), 7.0, 10.0, -60.0], [Vector3(22, 3.0, -30.0), 7.5, 12.0, -90.0],

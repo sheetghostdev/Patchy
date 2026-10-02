@@ -49,6 +49,12 @@ func _register_totals() -> void:
 			if id == &"":
 				id = island_id
 			treasures[id] = int(treasures.get(id, 0)) + 1
+		elif n.is_in_group(&"treasure_source") and n.has_method(&"get_treasure_island"):
+			# Unique treasure that only appears later (dug up, given as a reward).
+			var id: StringName = n.call(&"get_treasure_island")
+			if id == &"":
+				id = island_id
+			treasures[id] = int(treasures.get(id, 0)) + 1
 	for id: StringName in parrots:
 		if id != &"":
 			ParrotManager.register_island_total(id, parrots[id])

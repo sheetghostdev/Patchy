@@ -46,9 +46,21 @@ func interact(player: Node3D) -> void:
 	_talk(player as Player)
 
 
+## The lines for the next conversation. Characters whose talk depends on
+## progress (favors, hints) override this.
+func get_lines() -> PackedStringArray:
+	return lines if _times == 0 or repeat_lines.is_empty() else repeat_lines
+
+
+## Runs after a conversation, before Patchy gets control back: hand out a
+## reward, start a quest. May await.
+func _after_talk(_player: Player) -> void:
+	pass
+
+
 func _talk(player: Player) -> void:
 	_talking = true
-	var use: PackedStringArray = lines if _times == 0 or repeat_lines.is_empty() else repeat_lines
+	var use := get_lines()
 	if player != null:
 		player.set_locked(true, {"anim": &"idle", "face": Player.flat(global_position - player.global_position).normalized()})
 		player.interaction.clear()
@@ -68,6 +80,7 @@ func _talk(player: Player) -> void:
 	_times += 1
 	if talked_flag != &"":
 		WorldState.mark_completed(talked_flag)
+	await _after_talk(player)
 	talked.emit(_times)
 	if player != null and player.state_id == &"locked":
 		player.set_locked(false)

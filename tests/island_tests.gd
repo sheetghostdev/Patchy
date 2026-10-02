@@ -59,6 +59,20 @@ func node(path: String) -> Node:
 	return island.get_node(path)
 
 
+## Talks to `npc` and pages through the dialogue box like a player would.
+## True once the conversation is over and Patchy can move again.
+func converse(npc: NPC) -> bool:
+	npc.interact(player)
+	var ui := get_node_or_null(^"/root/UI")
+	for i in 1500:
+		await frames(1)
+		if not npc.get(&"_talking"):
+			return player.state_id != &"locked"
+		if ui != null and i % 20 == 10 and ui.call(&"is_dialogue_active"):
+			ui.get(&"hud").get(&"dialogue").call(&"advance")
+	return false
+
+
 ## Route tests measure movement, not combat: crabs stay home.
 func clear_enemies() -> void:
 	for type in ["Crab", "TNTSnail", "Pelican", "CrocGrunt"]:
@@ -302,7 +316,7 @@ func test_crab_burrow_returns_stolen_gold() -> void:
 
 func test_shellby_talks() -> void:
 	var npc := node("Gameplay/OldShellby") as NPC
-	await place(npc.global_position + Vector3(0, 0.1, -1.6), Vector3.BACK)
+	await place(npc.global_position + Vector3(1.6, 0.1, 0), Vector3.LEFT)
 	await frames(6)
 	check("prompt offered near Shellby", player.interaction.current == npc, "current=%s" % player.interaction.current)
 	tap(&"interact")
@@ -319,6 +333,86 @@ func test_shellby_talks() -> void:
 	check("conversation completes", done >= 0, "")
 	await frames(4)
 	check("control returns after talking", player.state_id != &"locked", "state=%s" % player.state_id)
+
+
+func test_barnacle_betty_side_quest() -> void:
+	await clear_enemies()
+	var shellby := node("Gameplay/OldShellby") as FavorNPC
+	var betty := node("Gameplay/BarnacleBetty/BarnacleBetty") as Node3D
+	var mooring := node("Gameplay/BarnacleBetty/BettyMooring") as Node3D
+	var task := node("Gameplay/BarnacleBetty/BettyTask") as ParrotTask
+	await place(shellby.global_position + Vector3(1.6, 0.1, 0), Vector3.LEFT)
+	check("Shellby's boat has been stolen", betty.global_position.distance_to(mooring.global_position) > 30.0
+		and "Barnacle Betty" in "".join(shellby.get_lines()), "")
+	check("he asks Patchy to bring her home", await converse(shellby) and WorldState.is_completed(&"castaway_betty_quest"), "")
+	check("the favor goes in the quest log", QuestLog.build().any(func(q: Dictionary) -> bool: return q.title == "The Barnacle Betty" and not q.done), "")
+	# Up Gull Rock: the crabs' plank ramp, then a ledge grab.
+	await place(Vector3(-51.5, 1.3, -40.0), Vector3.LEFT)
+	move(Vector2(0, -1))
+	var on_ledge := await wait_until(func() -> bool: return player.global_position.x < -61.8 and player.global_position.y > 5.2, 300)
+	move(Vector2.ZERO)
+	check("the plank ramp walks up to Gull Rock's ledge", on_ledge >= 0, "pos=%v" % player.global_position)
+	await frames(10)
+	await place(Vector3(-63.6, 5.5, -40.6), Vector3.LEFT)
+	move(Vector2(0, -1))
+	await wait_until(func() -> bool: return player.global_position.x < -65.3, 60)
+	press(&"jump")
+	var grabbed := await wait_until(func() -> bool: return player.state_id == &"ledge", 90)
+	release(&"jump")
+	var up := await wait_until(func() -> bool: return player.state_id == &"ground" and player.global_position.y > 9.3, 120)
+	move(Vector2.ZERO)
+	check("a ledge grab gets Patchy to the top", grabbed >= 0 and up >= 0, "state=%s pos=%v" % [player.state_id, player.global_position])
+	# Three parrots fly her home.
+	ParrotManager.debug_add(2)
+	task.interact(player)
+	await frames(30)
+	check("two parrots can't lift her", not WorldState.is_completed(&"castaway_betty_lift"), "")
+	ParrotManager.debug_add(1)
+	task.interact(player)
+	var home := await wait_until(func() -> bool: return WorldState.is_completed(&"castaway_betty_lift"), 1200)
+	check("three parrots fly the Betty back to her mooring", home >= 0 and betty.global_position.distance_to(mooring.global_position) < 0.1,
+		"d=%.2f" % betty.global_position.distance_to(mooring.global_position))
+	# Shellby pays with his old chart. Its X is on the north beach.
+	await place(shellby.global_position + Vector3(1.6, 0.1, 0), Vector3.LEFT)
+	check("Shellby is overjoyed", "My Betty" in "".join(shellby.get_lines()), "")
+	await converse(shellby)
+	check("and hands over his chart", InventoryManager.has_treasure_map(&"castaway_map_2") and WorldState.is_completed(&"castaway_betty_reward"), "")
+	check("the favor is done", QuestLog.build().any(func(q: Dictionary) -> bool: return q.title == "The Barnacle Betty" and q.done), "")
+	await give(&"shovel")
+	var x := node("Gameplay/BarnacleBetty/NorthBeachX") as DigSpot
+	await place(x.global_position + Vector3(0, 0.1, 1.2), Vector3.FORWARD)
+	for k in 2:
+		tap(&"tool_primary")
+		await frames(45)
+	await frames(120)
+	check("the chart's X hides a goblet", InventoryManager.has_treasure(&"castaway_x_north_prize"), "gold=%d" % InventoryManager.gold_value)
+
+
+func test_tok_points_out_locked_cages() -> void:
+	await clear_enemies()
+	var tok := node("Gameplay/Tok") as LookoutNPC
+	await place(Vector3(tok.global_position.x + 1.5, 3.1, tok.global_position.z), Vector3.LEFT)
+	await frames(6)
+	check("Tok can be talked to from the ground", player.interaction.current == tok, "current=%s" % player.interaction.current)
+	check("he first points at the watchtower", "watchtower" in tok.next_hint(), tok.next_hint())
+	check("the chat works", await converse(tok), "")
+	ParrotManager.rescue(&"castaway_parrot_outpost", &"castaway_cay")
+	check("then at the next cage still locked", "crow's nest" in tok.next_hint(), tok.next_hint())
+	for id: StringName in [&"castaway_parrot_wreck", &"castaway_parrot_summit", &"castaway_parrot_stack", &"driftwood_parrot_tower", &"driftwood_parrot_pen"]:
+		ParrotManager.rescue(id)
+	check("and cheers once every cage is open", tok.next_hint() == "" and "Not a single cage" in "".join(tok.get_lines()), "")
+
+
+func test_pip_wants_her_clam_back() -> void:
+	await clear_enemies()
+	var pip := node("Gameplay/Pip") as FavorNPC
+	await place(pip.global_position + Vector3(0, 0.1, -1.5), Vector3.BACK)
+	check("Pip tells Patchy about the pelican", await converse(pip) and WorldState.is_completed(&"driftwood_met_pip"), "")
+	check("no reward until the pelican is beaten", not WorldState.is_completed(&"driftwood_pip_reward"), "")
+	WorldState.mark_completed(&"driftwood_pelican")
+	await converse(pip)
+	var got := await wait_until(func() -> bool: return InventoryManager.has_treasure(&"driftwood_pip_pearl"), 240)
+	check("her thanks: a pearl that hops into Patchy's hands", got >= 0 and WorldState.is_completed(&"driftwood_pip_reward"), "")
 
 
 func test_checkpoint_respawn() -> void:

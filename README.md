@@ -97,14 +97,15 @@ attachments/        Hand attachments: hook, lantern, shovel, grapple, cannon
 resources/          Data resources (AttachmentData .tres, movement and camera settings)
 enemies/            Crabs (normal, armored, hermit, cannon), TNT snail, pelican, croc grunt,
                     King Claw boss plus arena
-npcs/               Parrots, NPCs (Old Shellby)
+npcs/               Parrots; islanders (NPC base, FavorNPC quest givers, LookoutNPC)
+                    and their models (turtle, monkey, otter)
 collectibles/       Coins, gems, treasure kinds, coin trails
 world/              Terrain (Plateau); ocean (stylized Ocean, underwater effect,
                     sea regions, open-sea current); islands (Castaway Cay and
                     Driftwood Key, IslandInfo, IslandZone); hub (captain's
                     cabin); vehicles (TinyBoat); objects (cages, parrot tasks,
                     chests, dig spots, braziers, gates, targets, cracked rock,
-                    doors...)
+                    doors, Shellby's fishing boat, drag marks...)
 props/              Art kit: palms, rocks, foliage scatter, crates and barrels,
                     docks, rope bridges, wreck pieces, signs, torches; plus
                     level blocks
@@ -162,6 +163,16 @@ tools/              Scene builders, photo tool, project setup, audio generator
   rebinding, title screen and debug menu.
   - Gameplay talks to it mostly through `Events` signals.
   - `QuestLog` derives the quest page from progress.
+- **Islanders** (`npcs/npc.gd`): an `NPC` turns to face Patchy and talks
+  through the dialogue box. What it says comes from `get_lines()`, and
+  `_after_talk()` runs before control returns.
+  - `FavorNPC` asks a favor, nudges while it's open, and pays out (a
+    treasure map, or a unique treasure tossed to Patchy) once a WorldState
+    id is set.
+  - `LookoutNPC` ends every chat with a tip about the first cage on its
+    list that is still locked.
+  - Unique treasure that only appears later (dig spots, rewards) counts
+    toward an island's totals through the `treasure_source` group.
 - **Islands**: a scene with an `IslandInfo` node. It registers parrot and
   treasure totals, places Patchy (saved checkpoint, arrival point or
   default spawn), then announces the island and starts its music after
@@ -226,6 +237,9 @@ tools/builders/build.sh movement_lab camera_lab castaway_cay captains_cabin
 tools/photo/shoot.sh scene=res://world/islands/castaway_cay/castaway_cay.tscn \
     flags=castaway_intro_seen out=/tmp/shot_%d.png "cams=0,120,160>0,0,0;30,10,62>50,3,42"
 
+# The islanders (and Patchy for scale) lined up for a close look:
+tools/photo/shoot.sh scene=res://tests/npc_gallery.tscn hud=0 "cams=-0.6,1.3,3.6>-0.6,0.65,0"
+
 # Regenerate the original sound effects and music:
 python3 tools/audio/generate_audio.py
 
@@ -243,7 +257,7 @@ An optional argument after `--` filters test names.
 godot --headless --path . --fixed-fps 60 res://tests/run_movement_tests.tscn   # 53 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_camera_tests.tscn     # 21 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_gameplay_tests.tscn   # 64 checks
-godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 100 checks
+godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 119 checks
 godot --headless --path . --fixed-fps 60 res://ui/tests/ui_flow_test.tscn      # 76 checks
 godot --headless --path . --fixed-fps 60 res://props/tests/prop_tests.tscn     # 70 checks
 godot --headless --path . --fixed-fps 60 res://world/ocean/tests/ocean_swim_check.tscn
@@ -272,6 +286,9 @@ What each suite covers:
     and the long jump to the sea stack);
   - the dark-cave refusal, the six-parrot log bridge and the chained chest;
   - the crab burrow, Old Shellby's dialogue and checkpoints;
+  - the Barnacle Betty side quest (drag marks, the ramp and ledge grab up
+    Gull Rock, the three-parrot lift, Shellby's chart and its X), Tok's
+    parrot tips and Pip's clam;
   - sailing to Driftwood Key and the open-sea current;
   - the attachment chain: lantern, braziers, shovel, treasure map and X,
     grapple, pillar, cannon, cracked rock and targets;
@@ -289,7 +306,8 @@ gold.
 - **Opening:** wake up on the beach while crabs make off with your gold.
 - **Shipwreck:** climb the stern deck, the cabin and the crow's nest
   (parrot), then long-jump to the sea stack (parrot).
-- **Outpost:** Old Shellby and a crab-guarded watchtower (parrot).
+- **Outpost:** Tok the lookout monkey and a crab-guarded watchtower
+  (parrot).
 - **Ridge and hill:** a ledge-grab ridge, terraces and a wall-kick chimney
   to the summit, with the Ship's Compass and a parrot.
 - **Dark cave:** Patchy refuses to go in without a light.
@@ -311,6 +329,15 @@ More on Castaway Cay:
 - **King Claw** waits in a ring of spires on the headland. Pound his
   stuck claw, stomp his belly three times, and he leaves the Ship's Wheel.
   His fight has its own theme: the island's hook turned minor.
+- **Side quest, the Barnacle Betty:** Old Shellby stands on his jetty on
+  the west beach, staring at the empty water. Crabs dragged his fishing
+  boat up the beach; the drag marks lead to Gull Rock. Climb the crabs'
+  plank ramp, grab the ledge to the top, and call three parrots to fly
+  her home. Shellby pays with his old chart, whose X is on the north
+  beach by a cairn.
+- **Islanders:** Tok, the outpost's lookout monkey, always knows where the
+  next locked cage is. On Driftwood Key, Pip the otter wants her lucky
+  clam back from the pelican.
 - **The Captain's Cabin:** inside the wreck, the hub shows your gold,
   treasures, parrots, ship parts and attachments.
 - Weather: every few minutes a tropical shower greys the sky, rains for

@@ -31,7 +31,7 @@ static func build() -> Array:
 		"done": parrots >= PARROTS_NEEDED})
 	q.append({"title": "Recover the Ship's Compass", "description": "A piece of your ship glints atop the hill.", "done": InventoryManager.has_ship_part(&"compass")})
 	if GameManager.is_island_discovered(&"driftwood_key") or parrots >= 3:
-		q.append({"title": "Sail to Driftwood Key", "description": "Old Shellby says the little boat at the dock floats... mostly.", "done": GameManager.is_island_discovered(&"driftwood_key")})
+		q.append({"title": "Sail to Driftwood Key", "description": "Your little boat waits at the dock. It floats... mostly.", "done": GameManager.is_island_discovered(&"driftwood_key")})
 	q.append({"title": "A Light in the Dark", "description": "The cave on the ridge is too dark to explore. Find a lantern.", "done": InventoryManager.has_attachment(&"lantern")})
 	if InventoryManager.has_attachment(&"lantern"):
 		q.append({"title": "Light the Old Braziers", "description": "Something waits behind the gate in the dark cave.", "done": WorldState.is_completed(&"castaway_cave_gate")})
@@ -40,4 +40,16 @@ static func build() -> Array:
 		q.append({"title": "X Marks the Spot", "description": "Your treasure map shows an X on the meadow, by the old stump.", "done": WorldState.is_completed(&"castaway_x_spot")})
 	if WorldState.is_completed(&"castaway_log_bridge"):
 		q.append({"title": "Defeat King Claw", "description": "Brock's crab general waits in the ring of rocks on the headland.", "done": WorldState.is_completed(&"king_claw")})
+	# Side quests, once an islander has asked.
+	var lifted := WorldState.is_completed(&"castaway_betty_lift")
+	if WorldState.is_completed(&"castaway_betty_quest") or lifted:
+		q.append({"title": "The Barnacle Betty",
+			"description": "Betty's home! See what Old Shellby has for you." if lifted
+				else "Crabs dragged Old Shellby's boat off up the west beach. Follow the drag marks.",
+			"done": WorldState.is_completed(&"castaway_betty_reward")})
+	if InventoryManager.has_treasure_map(&"castaway_map_2"):
+		q.append({"title": "Shellby's Old Chart", "description": "An X on the north beach, by a pile of stones.", "done": WorldState.is_completed(&"castaway_x_north")})
+	if WorldState.is_completed(&"driftwood_met_pip"):
+		q.append({"title": "Pip's Lucky Clam", "description": "A pelican swiped Pip's clam on Driftwood Key. Bop it when it swoops low!",
+			"done": WorldState.is_completed(&"driftwood_pip_reward")})
 	return q

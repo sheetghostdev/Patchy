@@ -41,6 +41,8 @@ func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
 	add_to_group(&"dig_spot")
+	if contents in ["gem", "pearl", "goblet", "crown", "relic"] and spot_id != &"":
+		add_to_group(&"treasure_source")
 	if spot_id != &"" and WorldState.is_completed(spot_id):
 		_done = true
 		_show_hole()
@@ -101,6 +103,11 @@ func _process(delta: float) -> void:
 		if cam != null:
 			var d := cam.global_position - g.global_position
 			g.rotation = Vector3(0, atan2(d.x, d.z), 0)
+
+
+## For IslandInfo's treasure totals.
+func get_treasure_island() -> StringName:
+	return island_id
 
 
 func can_dig() -> bool:

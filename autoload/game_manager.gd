@@ -31,6 +31,14 @@ func _ready() -> void:
 	add_child(log)
 
 
+## Rebuilds the pause menu's quest page (for progress that isn't announced
+## through an Events signal, like a favor asked by an islander).
+func quest_log_refresh() -> void:
+	var log := get_node_or_null(^"QuestLog") as QuestLog
+	if log != null:
+		log.refresh.call_deferred()
+
+
 func _process(delta: float) -> void:
 	if not get_tree().paused:
 		play_time += delta
