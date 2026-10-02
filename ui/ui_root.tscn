@@ -1,0 +1,35 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://ui/ui_root.gd" id="1_root"]
+[ext_resource type="Theme" path="res://ui/pirate_theme.tres" id="2_theme"]
+[ext_resource type="PackedScene" path="res://ui/hud/hud.tscn" id="3_hud"]
+[ext_resource type="PackedScene" path="res://ui/debug/movement_hud.tscn" id="4_mhud"]
+[ext_resource type="PackedScene" path="res://ui/pause/pause_menu.tscn" id="5_pause"]
+[ext_resource type="PackedScene" path="res://ui/debug/debug_menu.tscn" id="6_debug"]
+
+[node name="UI" type="CanvasLayer"]
+process_mode = 3
+layer = 10
+script = ExtResource("1_root")
+
+[node name="Screen" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("2_theme")
+
+[node name="HUD" parent="Screen" instance=ExtResource("3_hud")]
+layout_mode = 1
+
+[node name="MovementHUD" parent="Screen" instance=ExtResource("4_mhud")]
+layout_mode = 1
+
+[node name="PauseMenu" parent="Screen" instance=ExtResource("5_pause")]
+layout_mode = 1
+
+[node name="DebugMenu" parent="Screen" instance=ExtResource("6_debug")]
+layout_mode = 1
