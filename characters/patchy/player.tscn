@@ -1,10 +1,13 @@
-[gd_scene load_steps=15 format=3]
+[gd_scene load_steps=16 format=3]
 
 [ext_resource type="Script" path="res://characters/patchy/player.gd" id="1_player"]
 [ext_resource type="Resource" path="res://resources/settings/patchy_movement.tres" id="2_settings"]
 [ext_resource type="Script" path="res://characters/patchy/player_input.gd" id="3_input"]
 [ext_resource type="Script" path="res://characters/patchy/player_health.gd" id="4_health"]
 [ext_resource type="Script" path="res://characters/patchy/player_combat.gd" id="5_combat"]
+[ext_resource type="Script" path="res://characters/patchy/patchy_model.gd" id="6_model"]
+[ext_resource type="Script" path="res://characters/patchy/patchy_animator.gd" id="7_anim"]
+[ext_resource type="Script" path="res://characters/patchy/player_feedback.gd" id="8_feedback"]
 
 [sub_resource type="CapsuleShape3D" id="Capsule_body"]
 radius = 0.35
@@ -34,13 +37,6 @@ height = 64
 fill = 1
 fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.5, 0)
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_placeholder"]
-radius = 0.35
-height = 1.5
-
-[sub_resource type="StandardMaterial3D" id="Mat_placeholder"]
-albedo_color = Color(0.95, 0.55, 0.25, 1)
 
 [node name="Player" type="CharacterBody3D" groups=["player"]]
 collision_layer = 2
@@ -104,11 +100,16 @@ shape = SubResource("Sphere_hook")
 
 [node name="Visual" type="Node3D" parent="."]
 
-[node name="Placeholder" type="MeshInstance3D" parent="Visual"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
-layers = 2
-mesh = SubResource("CapsuleMesh_placeholder")
-surface_material_override/0 = SubResource("Mat_placeholder")
+[node name="PatchyModel" type="Node3D" parent="Visual"]
+script = ExtResource("6_model")
+
+[node name="Animator" type="Node" parent="Visual/PatchyModel" node_paths=PackedStringArray("model")]
+script = ExtResource("7_anim")
+model = NodePath("..")
+
+[node name="Feedback" type="Node" parent="." node_paths=PackedStringArray("animator")]
+script = ExtResource("8_feedback")
+animator = NodePath("../Visual/PatchyModel/Animator")
 
 [node name="BlobShadow" type="Decal" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.4, 0)

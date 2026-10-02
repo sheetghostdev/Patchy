@@ -58,7 +58,7 @@ const PARROT_BLUE := Color("2f8fe8")
 const PARROT_YELLOW := Color("ffd23f")
 
 # Test-lab colors: warm, friendly blockout instead of gray boxes (spec §187)
-const LAB_FLOOR := Color("e9dcc0")
+const LAB_FLOOR := Color("d8ccb0")
 const LAB_FLOOR_SIDE := Color("c7b28e")
 const LAB_ORANGE := Color("f29e4c")
 const LAB_TEAL := Color("4bb8a9")

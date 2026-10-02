@@ -1,0 +1,823 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://world/environment/sky_environment.gd" id="1_miemv"]
+[ext_resource type="Script" path="res://props/blocks/level_block.gd" id="2_m23m7"]
+[ext_resource type="Script" path="res://systems/triggers/kill_zone.gd" id="3_jkbft"]
+[ext_resource type="Script" path="res://props/moving_platform.gd" id="4_2yggn"]
+[ext_resource type="Script" path="res://systems/camera/camera_zone.gd" id="5_fd0g1"]
+[ext_resource type="Script" path="res://attachments/hook/hook_point.gd" id="6_n7hxc"]
+[ext_resource type="Script" path="res://world/ocean/water_volume.gd" id="7_75lx1"]
+[ext_resource type="PackedScene" path="res://characters/patchy/player.tscn" id="8_3wuh3"]
+[ext_resource type="Script" path="res://characters/patchy/player.gd" id="9_2qm2p"]
+[ext_resource type="Resource" path="res://resources/settings/patchy_movement.tres" id="10_ylaej"]
+[ext_resource type="PackedScene" path="res://systems/camera/camera_rig.tscn" id="11_nyvut"]
+[ext_resource type="Script" path="res://systems/camera/camera_rig.gd" id="12_ovd0n"]
+[ext_resource type="Resource" path="res://resources/settings/camera_default.tres" id="13_2uovx"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_l4pdd"]
+size = Vector3(4, 0.6, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kme72"]
+size = Vector3(4, 0.6, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6s64d"]
+size = Vector3(10, 0.6, 2.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_aep32"]
+size = Vector3(3.5, 0.6, 3.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_f3mva"]
+size = Vector3(4, 2.4, 14)
+
+[node name="MovementLab" type="Node3D" unique_id=673599021]
+
+[node name="SkyEnvironment" type="Node3D" parent="." unique_id=528012528]
+script = ExtResource("1_miemv")
+preset = 4
+
+[node name="Floor" type="Node3D" parent="." unique_id=662855325]
+
+[node name="MainFloor" type="StaticBody3D" parent="Floor" unique_id=1376818018]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+script = ExtResource("2_m23m7")
+size = Vector3(120, 1, 120)
+
+[node name="PitApproach" type="StaticBody3D" parent="Floor" unique_id=28687403]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -70)
+script = ExtResource("2_m23m7")
+size = Vector3(24, 1, 20)
+
+[node name="PitFarSide" type="StaticBody3D" parent="Floor" unique_id=1380196828]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -106)
+script = ExtResource("2_m23m7")
+size = Vector3(24, 1, 16)
+
+[node name="PitKillZone" type="Area3D" parent="Floor" unique_id=232979132]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -14, -88)
+script = ExtResource("3_jkbft")
+size = Vector3(60, 2, 40)
+
+[node name="Label" type="Label3D" parent="." unique_id=1828175690]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, -3)
+pixel_size = 0.006
+billboard = 1
+modulate = Color(1, 0.86, 0.4, 1)
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "PATCHY MOVEMENT LAB"
+font_size = 110
+outline_size = 16
+
+[node name="GapRow" type="Node3D" parent="." unique_id=1799998769]
+
+[node name="Label" type="Label3D" parent="GapRow" unique_id=1821183735]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 5.2, -8)
+pixel_size = 0.006
+billboard = 1
+modulate = Color(0.6, 1, 0.85, 1)
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "RUNNING JUMP GAPS"
+font_size = 80
+outline_size = 16
+
+[node name="Stairs" type="StaticBody3D" parent="GapRow" unique_id=182714311]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, -6)
+script = ExtResource("2_m23m7")
+shape = 2
+size = Vector3(3, 2, 4)
+surface = "lab_teal"
+
+[node name="Start" type="StaticBody3D" parent="GapRow" unique_id=1100220049]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, -12)
+script = ExtResource("2_m23m7")
+size = Vector3(3, 2, 8)
+surface = "lab_teal"
+
+[node name="Label2" type="Label3D" parent="GapRow" unique_id=124807564]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 3, -17)
+pixel_size = 0.006
+billboard = 1
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "2 m"
+font_size = 90
+outline_size = 16
+
+[node name="Block" type="StaticBody3D" parent="GapRow" unique_id=1084320541]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, -20.5)
+script = ExtResource("2_m23m7")
+size = Vector3(3, 2, 5)
+surface = "lab_teal"
+
+[node name="Label3" type="Label3D" parent="GapRow" unique_id=1685841906]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 3, -24.5)
+pixel_size = 0.006
+billboard = 1
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "3 m"
+font_size = 90
+outline_size = 16
+
+[node name="Block2" type="StaticBody3D" parent="GapRow" unique_id=303615409]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, -28.75)
+script = ExtResource("2_m23m7")
+size = Vector3(3, 2, 5.5)
+surface = "lab_teal"
+
+[node name="Label4" type="Label3D" parent="GapRow" unique_id=342405548]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 3, -33.5)
+pixel_size = 0.006
+billboard = 1
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "4 m"
+font_size = 90
+outline_size = 16
+
+[node name="Block3" type="StaticBody3D" parent="GapRow" unique_id=1738119238]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, -38.5)
+script = ExtResource("2_m23m7")
+size = Vector3(3, 2, 6)
+surface = "lab_teal"
+
+[node name="Label5" type="Label3D" parent="GapRow" unique_id=1536570414]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 3, -44)
+pixel_size = 0.006
+billboard = 1
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "5 m"
+font_size = 90
+outline_size = 16
+
+[node name="Block4" type="StaticBody3D" parent="GapRow" unique_id=1585631756]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, -49.75)
+script = ExtResource("2_m23m7")
+size = Vector3(3, 2, 6.5)
+surface = "lab_teal"
+
+[node name="Label6" type="Label3D" parent="GapRow" unique_id=1354972183]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 3, -56)
+pixel_size = 0.006
+billboard = 1
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "6 m"
+font_size = 90
+outline_size = 16
+
+[node name="Block5" type="StaticBody3D" parent="GapRow" unique_id=1239777326]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, -62.5)
+script = ExtResource("2_m23m7")
+size = Vector3(3, 2, 7)
+surface = "lab_teal"
+
+[node name="LongJumpRow" type="Node3D" parent="." unique_id=1153007866]
+
+[node name="Label" type="Label3D" parent="LongJumpRow" unique_id=866398065]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 5.2, -8)
+pixel_size = 0.006
+billboard = 1
+modulate = Color(1, 0.8, 0.5, 1)
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "LONG JUMP (run + crouch + jump)"
+font_size = 80
+outline_size = 16
+
+[node name="Stairs" type="StaticBody3D" parent="LongJumpRow" unique_id=325248595]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, -6)
+script = ExtResource("2_m23m7")
+shape = 2
+size = Vector3(3, 2, 4)
+surface = "lab_orange"
+
+[node name="Runway" type="StaticBody3D" parent="LongJumpRow" unique_id=1994650509]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, -15)
+script = ExtResource("2_m23m7")
+size = Vector3(3, 2, 14)
+surface = "lab_orange"
+
+[node name="Label2" type="Label3D" parent="LongJumpRow" unique_id=14637235]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 3, -25.5)
+pixel_size = 0.006
+billboard = 1
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "7 m"
+font_size = 90
+outline_size = 16
+
+[node name="Block" type="StaticBody3D" parent="LongJumpRow" unique_id=1986525033]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, -33)
+script = ExtResource("2_m23m7")
+size = Vector3(3, 2, 8)
+surface = "lab_orange"
+
+[node name="Label3" type="Label3D" parent="LongJumpRow" unique_id=844808888]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 3, -41)
+pixel_size = 0.006
+billboard = 1
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "8 m"
+font_size = 90
+outline_size = 16
+
+[node name="Block2" type="StaticBody3D" parent="LongJumpRow" unique_id=692091813]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, -49)
+script = ExtResource("2_m23m7")
+size = Vector3(3, 2, 8)
+surface = "lab_orange"
+
+[node name="Label4" type="Label3D" parent="LongJumpRow" unique_id=1715246171]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 3, -57.5)
+pixel_size = 0.006
+billboard = 1
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "9 m"
+font_size = 90
+outline_size = 16
+
+[node name="Block3" type="StaticBody3D" parent="LongJumpRow" unique_id=473838133]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, -66)
+script = ExtResource("2_m23m7")
+size = Vector3(3, 2, 8)
+surface = "lab_orange"
+
+[node name="Label5" type="Label3D" parent="LongJumpRow" unique_id=1022884797]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 3, -75)
+pixel_size = 0.006
+billboard = 1
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "10 m"
+font_size = 90
+outline_size = 16
+
+[node name="Block4" type="StaticBody3D" parent="LongJumpRow" unique_id=650031467]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, -84)
+script = ExtResource("2_m23m7")
+size = Vector3(3, 2, 8)
+surface = "lab_orange"
+
+[node name="LedgeHeights" type="Node3D" parent="." unique_id=1085460577]
+
+[node name="Label" type="Label3D" parent="LedgeHeights" unique_id=974254712]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 6.5, -12)
+pixel_size = 0.006
+billboard = 1
+modulate = Color(0.85, 0.75, 1, 1)
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "LEDGE HEIGHTS"
+font_size = 80
+outline_size = 16
+
+[node name="Block" type="StaticBody3D" parent="LedgeHeights" unique_id=638452548]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 0, 4)
+script = ExtResource("2_m23m7")
+size = Vector3(4, 0.5, 3.5)
+surface = "lab_purple"
+label = "0.5 m — walk/step"
+
+[node name="Block2" type="StaticBody3D" parent="LedgeHeights" unique_id=2060262389]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 0, -1)
+script = ExtResource("2_m23m7")
+size = Vector3(4, 1, 3.5)
+surface = "lab_purple"
+label = "1.0 m — hop"
+
+[node name="Block3" type="StaticBody3D" parent="LedgeHeights" unique_id=1586480336]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 0, -6)
+script = ExtResource("2_m23m7")
+size = Vector3(4, 1.5, 3.5)
+surface = "lab_purple"
+label = "1.5 m — jump"
+
+[node name="Block4" type="StaticBody3D" parent="LedgeHeights" unique_id=1569355349]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 0, -11)
+script = ExtResource("2_m23m7")
+size = Vector3(4, 2, 3.5)
+surface = "lab_purple"
+label = "2.0 m — jump"
+
+[node name="Block5" type="StaticBody3D" parent="LedgeHeights" unique_id=2098742142]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 0, -16)
+script = ExtResource("2_m23m7")
+size = Vector3(4, 2.5, 3.5)
+surface = "lab_purple"
+label = "2.5 m — full jump"
+
+[node name="Block6" type="StaticBody3D" parent="LedgeHeights" unique_id=569998732]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 0, -21)
+script = ExtResource("2_m23m7")
+size = Vector3(4, 3, 3.5)
+surface = "lab_purple"
+label = "3.0 m — ledge grab"
+
+[node name="Block7" type="StaticBody3D" parent="LedgeHeights" unique_id=1343718773]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 0, -26)
+script = ExtResource("2_m23m7")
+size = Vector3(4, 3.5, 3.5)
+surface = "lab_purple"
+label = "3.5 m — ledge grab"
+
+[node name="Block8" type="StaticBody3D" parent="LedgeHeights" unique_id=268256677]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 0, -31)
+script = ExtResource("2_m23m7")
+size = Vector3(4, 4, 3.5)
+surface = "lab_purple"
+label = "4.0 m — flip / GP jump"
+
+[node name="Block9" type="StaticBody3D" parent="LedgeHeights" unique_id=1934651179]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 0, -36)
+script = ExtResource("2_m23m7")
+size = Vector3(4, 4.5, 3.5)
+surface = "lab_purple"
+label = "4.5 m — wall kick"
+
+[node name="Curbs" type="Node3D" parent="." unique_id=1785446502]
+
+[node name="Label" type="Label3D" parent="Curbs" unique_id=1940640643]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 2.4, 2)
+pixel_size = 0.006
+billboard = 1
+modulate = Color(0.8, 1, 0.7, 1)
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "STEP-UP CURBS"
+font_size = 70
+outline_size = 16
+
+[node name="Block" type="StaticBody3D" parent="Curbs" unique_id=1975875358]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0, 0)
+script = ExtResource("2_m23m7")
+size = Vector3(4, 0.15, 3)
+surface = "lab_blue"
+label = "0.15 m"
+
+[node name="Block2" type="StaticBody3D" parent="Curbs" unique_id=1788306651]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0, -6)
+script = ExtResource("2_m23m7")
+size = Vector3(4, 0.25, 3)
+surface = "lab_blue"
+label = "0.25 m"
+
+[node name="Block3" type="StaticBody3D" parent="Curbs" unique_id=614657915]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0, -12)
+script = ExtResource("2_m23m7")
+size = Vector3(4, 0.35, 3)
+surface = "lab_blue"
+label = "0.35 m"
+
+[node name="Block4" type="StaticBody3D" parent="Curbs" unique_id=1289782080]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0, -18)
+script = ExtResource("2_m23m7")
+size = Vector3(4, 0.45, 3)
+surface = "lab_blue"
+label = "0.45 m"
+
+[node name="RealStairs" type="StaticBody3D" parent="Curbs" unique_id=16725287]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36, 0, -6)
+script = ExtResource("2_m23m7")
+shape = 2
+size = Vector3(4, 2, 6)
+surface = "lab_blue"
+smooth_stair_collision = false
+label = "real steps"
+
+[node name="Block5" type="StaticBody3D" parent="Curbs" unique_id=1420959965]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36, 0, -12)
+script = ExtResource("2_m23m7")
+size = Vector3(4, 2, 6)
+surface = "lab_blue"
+
+[node name="Block6" type="StaticBody3D" parent="Curbs" unique_id=1064072351]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 42, 0, -6)
+script = ExtResource("2_m23m7")
+shape = 2
+size = Vector3(4, 2, 6)
+surface = "lab_blue"
+label = "smooth stairs"
+
+[node name="Block7" type="StaticBody3D" parent="Curbs" unique_id=1215765829]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 42, 0, -12)
+script = ExtResource("2_m23m7")
+size = Vector3(4, 2, 6)
+surface = "lab_blue"
+
+[node name="Slopes" type="Node3D" parent="." unique_id=99415393]
+
+[node name="Label" type="Label3D" parent="Slopes" unique_id=1067411818]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 7, 4)
+pixel_size = 0.006
+billboard = 1
+modulate = Color(1, 0.75, 0.85, 1)
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "SLOPES (slide > 38°)"
+font_size = 80
+outline_size = 16
+
+[node name="Block" type="StaticBody3D" parent="Slopes" unique_id=1281240108]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, 0)
+script = ExtResource("2_m23m7")
+shape = 1
+size = Vector3(6, 2.1435935, 8)
+surface = "lab_pink"
+label = "15°"
+
+[node name="Block2" type="StaticBody3D" parent="Slopes" unique_id=695981867]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, -6)
+script = ExtResource("2_m23m7")
+size = Vector3(6, 2.1435935, 4)
+surface = "lab_pink"
+
+[node name="Block3" type="StaticBody3D" parent="Slopes" unique_id=441626510]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, -16)
+script = ExtResource("2_m23m7")
+shape = 1
+size = Vector3(6, 3.7304614, 8)
+surface = "lab_pink"
+label = "25°"
+
+[node name="Block4" type="StaticBody3D" parent="Slopes" unique_id=7010479]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, -22)
+script = ExtResource("2_m23m7")
+size = Vector3(6, 3.7304614, 4)
+surface = "lab_pink"
+
+[node name="Block5" type="StaticBody3D" parent="Slopes" unique_id=1714299660]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, -32)
+script = ExtResource("2_m23m7")
+shape = 1
+size = Vector3(6, 5.6016603, 8)
+surface = "lab_pink"
+label = "35°"
+
+[node name="Block6" type="StaticBody3D" parent="Slopes" unique_id=767254382]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, -38)
+script = ExtResource("2_m23m7")
+size = Vector3(6, 5.6016603, 4)
+surface = "lab_pink"
+
+[node name="Block7" type="StaticBody3D" parent="Slopes" unique_id=1355285912]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, -48)
+script = ExtResource("2_m23m7")
+shape = 1
+size = Vector3(6, 7.2032323, 8)
+surface = "lab_pink"
+label = "42°"
+
+[node name="Block8" type="StaticBody3D" parent="Slopes" unique_id=137453774]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, -54)
+script = ExtResource("2_m23m7")
+size = Vector3(6, 7.2032323, 4)
+surface = "lab_pink"
+
+[node name="Block9" type="StaticBody3D" parent="Slopes" unique_id=596273322]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, -64)
+script = ExtResource("2_m23m7")
+shape = 1
+size = Vector3(6, 10.239533, 8)
+surface = "lab_pink"
+label = "52°"
+
+[node name="Block10" type="StaticBody3D" parent="Slopes" unique_id=1402357037]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 0, -70)
+script = ExtResource("2_m23m7")
+size = Vector3(6, 10.239533, 4)
+surface = "lab_pink"
+
+[node name="Tower" type="StaticBody3D" parent="Slopes" unique_id=2055245640]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 0, -60)
+script = ExtResource("2_m23m7")
+size = Vector3(8, 14, 8)
+surface = "lab_pink"
+label = "slide tower 14 m"
+
+[node name="TowerStairs" type="StaticBody3D" parent="Slopes" unique_id=938168542]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -50, 0, -74)
+script = ExtResource("2_m23m7")
+shape = 2
+size = Vector3(4, 14, 20)
+surface = "lab_pink"
+
+[node name="Chute" type="StaticBody3D" parent="Slopes" unique_id=984562494]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 0, -40)
+script = ExtResource("2_m23m7")
+shape = 1
+size = Vector3(6, 14, 32)
+surface = "sand"
+label = "slide chute"
+slide_surface = true
+
+[node name="MovingPlatforms" type="Node3D" parent="." unique_id=1731195954]
+
+[node name="Label" type="Label3D" parent="MovingPlatforms" unique_id=1042136574]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 6, 26)
+pixel_size = 0.006
+billboard = 1
+modulate = Color(0.7, 0.9, 1, 1)
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "MOVING PLATFORMS"
+font_size = 80
+outline_size = 16
+
+[node name="Mover" type="AnimatableBody3D" parent="MovingPlatforms" unique_id=2124840144]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 1.6, 22)
+script = ExtResource("4_2yggn")
+waypoints = PackedVector3Array(0, 0, 0, 10, 0, 0)
+
+[node name="Visual" type="StaticBody3D" parent="MovingPlatforms/Mover" unique_id=751728352]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, 0)
+collision_layer = 0
+script = ExtResource("2_m23m7")
+size = Vector3(4, 0.6, 4)
+surface = "lab_orange"
+
+[node name="Shape" type="CollisionShape3D" parent="MovingPlatforms/Mover" unique_id=2093352880]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, 0)
+shape = SubResource("BoxShape3D_l4pdd")
+
+[node name="Elevator" type="AnimatableBody3D" parent="MovingPlatforms" unique_id=84004947]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16, 0.4, 30)
+script = ExtResource("4_2yggn")
+waypoints = PackedVector3Array(0, 0, 0, 0, 6, 0)
+speed = 2.5
+wait_time = 1.2
+
+[node name="Visual" type="StaticBody3D" parent="MovingPlatforms/Elevator" unique_id=1030999175]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, 0)
+collision_layer = 0
+script = ExtResource("2_m23m7")
+size = Vector3(4, 0.6, 4)
+surface = "lab_orange"
+
+[node name="Shape" type="CollisionShape3D" parent="MovingPlatforms/Elevator" unique_id=291652364]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, 0)
+shape = SubResource("BoxShape3D_kme72")
+
+[node name="Block" type="StaticBody3D" parent="MovingPlatforms" unique_id=820569239]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16, 0, 36.5)
+script = ExtResource("2_m23m7")
+size = Vector3(6, 6.4, 5)
+surface = "lab_blue"
+label = "6.4 m"
+
+[node name="Spinner" type="AnimatableBody3D" parent="MovingPlatforms" unique_id=178732067]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 1.2, 36)
+script = ExtResource("4_2yggn")
+mode = 2
+waypoints = PackedVector3Array(0, 0, 0, 6, 0, 0)
+rotate_speed = 35.0
+
+[node name="Visual" type="StaticBody3D" parent="MovingPlatforms/Spinner" unique_id=1804158752]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, 0)
+collision_layer = 0
+script = ExtResource("2_m23m7")
+size = Vector3(10, 0.6, 2.5)
+surface = "lab_orange"
+
+[node name="Shape" type="CollisionShape3D" parent="MovingPlatforms/Spinner" unique_id=592798384]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, 0)
+shape = SubResource("BoxShape3D_6s64d")
+
+[node name="Loop" type="AnimatableBody3D" parent="MovingPlatforms" unique_id=1397689588]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -42, 2.2, 22)
+script = ExtResource("4_2yggn")
+mode = 1
+waypoints = PackedVector3Array(0, 0, 0, 0, 0, 10, -8, 2, 10, -8, 2, 0)
+speed = 3.5
+wait_time = 0.3
+
+[node name="Visual" type="StaticBody3D" parent="MovingPlatforms/Loop" unique_id=1045713783]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, 0)
+collision_layer = 0
+script = ExtResource("2_m23m7")
+size = Vector3(3.5, 0.6, 3.5)
+surface = "lab_orange"
+
+[node name="Shape" type="CollisionShape3D" parent="MovingPlatforms/Loop" unique_id=348841975]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3, 0)
+shape = SubResource("BoxShape3D_aep32")
+
+[node name="WallKicks" type="Node3D" parent="." unique_id=1798677209]
+
+[node name="Label" type="Label3D" parent="WallKicks" unique_id=158190204]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 13.5, 24)
+pixel_size = 0.006
+billboard = 1
+modulate = Color(1, 0.9, 0.6, 1)
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "WALL KICK CHIMNEY (3.4 m)"
+font_size = 80
+outline_size = 16
+
+[node name="Block" type="StaticBody3D" parent="WallKicks" unique_id=1015584605]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.2, 0, 24)
+script = ExtResource("2_m23m7")
+size = Vector3(1, 12, 8)
+surface = "lab_purple"
+
+[node name="Block2" type="StaticBody3D" parent="WallKicks" unique_id=1192980466]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8, 0, 24)
+script = ExtResource("2_m23m7")
+size = Vector3(1, 12, 8)
+surface = "lab_purple"
+
+[node name="Block3" type="StaticBody3D" parent="WallKicks" unique_id=1139728344]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 12, 24)
+script = ExtResource("2_m23m7")
+size = Vector3(6, 0.5, 8)
+surface = "lab_purple"
+label = "top 12.5 m"
+
+[node name="Label2" type="Label3D" parent="WallKicks" unique_id=2057778445]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 13.5, 24)
+pixel_size = 0.006
+billboard = 1
+modulate = Color(1, 0.7, 0.6, 1)
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "SINGLE WALL: one kick only"
+font_size = 70
+outline_size = 16
+
+[node name="Block4" type="StaticBody3D" parent="WallKicks" unique_id=1146921890]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 26)
+script = ExtResource("2_m23m7")
+size = Vector3(8, 12, 1)
+surface = "lab_purple"
+
+[node name="LowCeilings" type="Node3D" parent="." unique_id=624195932]
+
+[node name="Label" type="Label3D" parent="LowCeilings" unique_id=884955740]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 5, 22)
+pixel_size = 0.006
+billboard = 1
+modulate = Color(0.8, 0.9, 1, 1)
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "LOW CEILING TUNNEL (2.3 m)"
+font_size = 70
+outline_size = 16
+
+[node name="Block" type="StaticBody3D" parent="LowCeilings" unique_id=709086336]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, 0, 30)
+script = ExtResource("2_m23m7")
+size = Vector3(1, 2.3, 14)
+surface = "lab_blue"
+
+[node name="Block2" type="StaticBody3D" parent="LowCeilings" unique_id=32610654]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.5, 0, 30)
+script = ExtResource("2_m23m7")
+size = Vector3(1, 2.3, 14)
+surface = "lab_blue"
+
+[node name="Block3" type="StaticBody3D" parent="LowCeilings" unique_id=1286460273]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 2.3, 30)
+script = ExtResource("2_m23m7")
+size = Vector3(6, 0.6, 14)
+surface = "lab_blue"
+
+[node name="TunnelCameraZone" type="Area3D" parent="LowCeilings" unique_id=971369390]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 1.2, 30)
+script = ExtResource("5_fd0g1")
+distance_scale = 0.62
+pitch_offset = 6.0
+
+[node name="Shape" type="CollisionShape3D" parent="LowCeilings/TunnelCameraZone" unique_id=950025484]
+shape = SubResource("BoxShape3D_f3mva")
+
+[node name="Block4" type="StaticBody3D" parent="LowCeilings" unique_id=951207831]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26, 2.6, 16)
+script = ExtResource("2_m23m7")
+size = Vector3(3, 0.6, 3)
+surface = "lab_blue"
+label = "overhang 2.6 m"
+
+[node name="HookPit" type="Node3D" parent="." unique_id=646833461]
+
+[node name="Label" type="Label3D" parent="HookPit" unique_id=1873158383]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, -78)
+pixel_size = 0.006
+billboard = 1
+modulate = Color(1, 0.86, 0.4, 1)
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "HOOK RINGS — jump, then tool_primary / interact"
+font_size = 70
+outline_size = 16
+
+[node name="Label2" type="Label3D" parent="HookPit" unique_id=1698125752]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -88)
+pixel_size = 0.006
+billboard = 1
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "16 m pit"
+font_size = 90
+outline_size = 16
+
+[node name="HookRing1" type="Area3D" parent="HookPit" unique_id=1070377706]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.6, -83)
+script = ExtResource("6_n7hxc")
+hang_length = 1.5
+
+[node name="HookRing2" type="Area3D" parent="HookPit" unique_id=715870146]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.6, -88)
+script = ExtResource("6_n7hxc")
+hang_length = 1.5
+
+[node name="HookRing3" type="Area3D" parent="HookPit" unique_id=1980984758]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.6, -93)
+script = ExtResource("6_n7hxc")
+hang_length = 1.5
+
+[node name="Pool" type="Node3D" parent="." unique_id=1479349151]
+
+[node name="Label" type="Label3D" parent="Pool" unique_id=815025988]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44, 6, 34)
+pixel_size = 0.006
+billboard = 1
+modulate = Color(0.6, 0.95, 1, 1)
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "WATER (2.6 m deep)"
+font_size = 80
+outline_size = 16
+
+[node name="Block" type="StaticBody3D" parent="Pool" unique_id=908013431]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44, 0, 26)
+script = ExtResource("2_m23m7")
+size = Vector3(18, 3, 2)
+surface = "stone"
+
+[node name="Block2" type="StaticBody3D" parent="Pool" unique_id=59259628]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44, 0, 42)
+script = ExtResource("2_m23m7")
+size = Vector3(18, 3, 2)
+surface = "stone"
+
+[node name="Block3" type="StaticBody3D" parent="Pool" unique_id=1138027573]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36, 0, 34)
+script = ExtResource("2_m23m7")
+size = Vector3(2, 3, 14)
+surface = "stone"
+
+[node name="Block4" type="StaticBody3D" parent="Pool" unique_id=1428450252]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 52, 0, 34)
+script = ExtResource("2_m23m7")
+size = Vector3(2, 3, 14)
+surface = "stone"
+
+[node name="Steps" type="StaticBody3D" parent="Pool" unique_id=1720708445]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 33, 0, 34)
+script = ExtResource("2_m23m7")
+shape = 2
+size = Vector3(4, 3, 4)
+surface = "stone"
+
+[node name="Shallows" type="StaticBody3D" parent="Pool" unique_id=1727890775]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 47.5, 0, 37.5)
+script = ExtResource("2_m23m7")
+shape = 1
+size = Vector3(5, 2.1, 7)
+surface = "sand"
+label = "shallow"
+
+[node name="Water" type="Area3D" parent="Pool" unique_id=2097879798]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44, 2.6, 34)
+script = ExtResource("7_75lx1")
+size = Vector3(14, 2.6, 14)
+
+[node name="DiveChallenge" type="Node3D" parent="." unique_id=127394153]
+
+[node name="Label" type="Label3D" parent="DiveChallenge" unique_id=692103700]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, 8.5, -12)
+pixel_size = 0.006
+billboard = 1
+modulate = Color(1, 0.8, 0.95, 1)
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "JUMP + DIVE: 10 m"
+font_size = 80
+outline_size = 16
+
+[node name="Block" type="StaticBody3D" parent="DiveChallenge" unique_id=2034436567]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, 0, -6)
+script = ExtResource("2_m23m7")
+size = Vector3(5, 4, 10)
+surface = "lab_teal"
+label = "4 m"
+
+[node name="Stairs" type="StaticBody3D" parent="DiveChallenge" unique_id=642429125]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -40, 0, 2)
+script = ExtResource("2_m23m7")
+shape = 2
+size = Vector3(3, 4, 6)
+surface = "lab_teal"
+
+[node name="Block2" type="StaticBody3D" parent="DiveChallenge" unique_id=790278105]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40, 0, -24)
+script = ExtResource("2_m23m7")
+size = Vector3(5, 2.5, 6)
+surface = "lab_teal"
+label = "2.5 m"
+
+[node name="Player" type="CharacterBody3D" parent="." unique_id=168199752 groups=["player"] instance=ExtResource("8_3wuh3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0)
+collision_layer = 2
+collision_mask = 1033
+script = ExtResource("9_2qm2p")
+settings = ExtResource("10_ylaej")
+
+[node name="CameraRig" type="Node3D" parent="." unique_id=466938993 node_paths=PackedStringArray("target") instance=ExtResource("11_nyvut")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 6)
+script = ExtResource("12_ovd0n")
+settings = ExtResource("13_2uovx")
+target = NodePath("../Player")

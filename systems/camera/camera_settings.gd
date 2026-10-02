@@ -6,7 +6,7 @@ extends Resource
 ## roughly "time to close ~63% of the gap").
 
 @export_group("Framing")
-@export_range(1.0, 20.0, 0.1) var distance: float = 6.6
+@export_range(1.0, 20.0, 0.1) var distance: float = 5.9
 @export_range(0.3, 5.0, 0.05) var min_distance: float = 0.9
 ## Height above Patchy's feet the camera looks at (upper torso).
 @export_range(0.0, 3.0, 0.05) var target_height: float = 1.35

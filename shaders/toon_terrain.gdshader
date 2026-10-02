@@ -18,6 +18,10 @@ uniform float noise_scale = 0.45;
 uniform float noise_strength : hint_range(0.0, 0.5) = 0.07;
 uniform float stripe_strength : hint_range(0.0, 0.5) = 0.05;
 uniform float roughness : hint_range(0.0, 1.0) = 0.9;
+// Optional measuring grid on walkable tops (movement lab): 1 m lines and
+// stronger 5 m lines.
+uniform float grid_strength : hint_range(0.0, 1.0) = 0.0;
+uniform float grid_size = 1.0;
 // World height of this block's top surface, set per instance.
 instance uniform float top_y = 0.0;
 
@@ -59,6 +63,14 @@ void fragment() {
 	side *= 1.0 - stripe_strength * step(0.5, fract(world_pos.y * 1.3 + sn * 0.6));
 
 	vec3 top = top_color.rgb * (1.0 + (n - 0.5) * 2.0 * noise_strength);
+	if (grid_strength > 0.0) {
+		vec2 gp = world_pos.xz / grid_size;
+		vec2 g1 = abs(fract(gp - 0.5) - 0.5) / max(fwidth(gp), vec2(0.0001));
+		vec2 g5 = abs(fract(gp / 5.0 - 0.5) - 0.5) / max(fwidth(gp / 5.0), vec2(0.0001));
+		float l1 = 1.0 - min(min(g1.x, g1.y), 1.0);
+		float l5 = 1.0 - min(min(g5.x, g5.y) * 0.6, 1.0);
+		top *= 1.0 - grid_strength * max(l1 * 0.35, l5 * 0.7);
+	}
 	vec3 col = mix(side, top, max(is_top, lip * (1.0 - is_top) * 0.95));
 	ALBEDO = col;
 	ROUGHNESS = roughness;

@@ -412,7 +412,7 @@ func _apply_shake(delta: float) -> void:
 func _update_zone_blend(delta: float) -> void:
 	var best: Node = null
 	for z in _zones:
-		if is_instance_valid(z) and (best == null or int(z.get(&"priority")) > int(best.get(&"priority"))):
+		if is_instance_valid(z) and (best == null or int(z.get(&"zone_priority")) > int(best.get(&"zone_priority"))):
 			best = z
 	if best != null:
 		var params: Dictionary = best.call(&"get_params")

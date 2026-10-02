@@ -4,7 +4,7 @@ extends Area3D
 ## pull in for tight interiors, widen for spectacle, hint a viewing angle.
 ## Values blend smoothly; the highest priority overlapping zone wins.
 
-@export var priority := 0
+@export var zone_priority := 0
 @export_range(0.3, 3.0, 0.05) var distance_scale := 1.0
 ## Added to the default pitch (degrees; negative looks further down).
 @export_range(-45.0, 45.0, 0.5) var pitch_offset := 0.0

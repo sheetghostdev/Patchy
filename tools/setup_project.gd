@@ -9,7 +9,7 @@ const CAM_DZ := 0.15
 const TRIGGER_DZ := 0.35
 
 
-func _init() -> void:
+func _initialize() -> void:
 	_define_inputs()
 	var err := ProjectSettings.save()
 	print("project.godot saved: ", error_string(err))

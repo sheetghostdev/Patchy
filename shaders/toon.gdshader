@@ -15,10 +15,16 @@ uniform float emission_energy : hint_range(0.0, 16.0) = 0.0;
 // Brief white flash (hits, invulnerability blink).
 uniform float flash : hint_range(0.0, 1.0) = 0.0;
 
+// Vertex colors are authored in sRGB (Palette); convert to linear.
+vec3 srgb_to_linear(vec3 c) {
+	return mix(c / 12.92, pow((c + 0.055) / 1.055, vec3(2.4)), step(0.04045, c));
+}
+
 void fragment() {
 	vec4 c = albedo * texture(albedo_texture, UV);
 	if (use_vertex_color) {
-		c *= COLOR;
+		c.rgb *= srgb_to_linear(COLOR.rgb);
+		c.a *= COLOR.a;
 	}
 	ALBEDO = mix(c.rgb, vec3(1.0), flash);
 	ROUGHNESS = roughness;

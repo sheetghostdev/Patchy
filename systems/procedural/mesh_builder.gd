@@ -241,6 +241,40 @@ func _flip_range(from: int, to: int) -> void:
 		_i[k + 2] = tmp
 
 
+## Smooth surface through a grid of points (`rows` of equal-length
+## PackedVector3Arrays). `front` is called with a point and returns the
+## direction its front face should look toward (e.g. UP for a brim top).
+func grid(rows: Array, color: Color, front: Callable, closed_u: bool = false, xform: Transform3D = Transform3D.IDENTITY) -> MeshBuilder:
+	var nr := rows.size()
+	var nc := (rows[0] as PackedVector3Array).size()
+	var nb := xform.basis.inverse().transposed()
+	var base := _v.size()
+	for j in nr:
+		for i in nc:
+			var p: Vector3 = rows[j][i]
+			var iu0 := (i - 1 + nc) % nc if closed_u else maxi(i - 1, 0)
+			var iu1 := (i + 1) % nc if closed_u else mini(i + 1, nc - 1)
+			var du: Vector3 = rows[j][iu1] - rows[j][iu0]
+			var dv: Vector3 = rows[mini(j + 1, nr - 1)][i] - rows[maxi(j - 1, 0)][i]
+			var n := du.cross(dv).normalized()
+			if n.dot(front.call(p)) < 0.0:
+				n = -n
+			_v.append(xform * p)
+			_n.append((nb * n).normalized())
+			_c.append(color)
+			_uv.append(Vector2(float(i) / maxi(nc - 1, 1), float(j) / maxi(nr - 1, 1)))
+	var cols := nc if closed_u else nc - 1
+	for j in nr - 1:
+		for i in cols:
+			var i1 := (i + 1) % nc
+			var a := base + j * nc + i
+			var b := base + j * nc + i1
+			var c := base + (j + 1) * nc + i1
+			var d := base + (j + 1) * nc + i
+			_quad(a, b, c, d, _n[a] + _n[c])
+	return self
+
+
 ## Raw triangle with explicit positions (flat), e.g. leaves and sails.
 func triangle(a: Vector3, b: Vector3, c: Vector3, color: Color, double_sided: bool = false) -> MeshBuilder:
 	var n := (c - a).cross(b - a).normalized()
