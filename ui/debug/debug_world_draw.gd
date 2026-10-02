@@ -77,22 +77,23 @@ func _process(_delta: float) -> void:
 
 
 func _draw_vectors(p: Node3D) -> bool:
-	var origin := p.get_global_transform_interpolated().origin + Vector3.UP * 0.12
+	var feet := p.get_global_transform_interpolated().origin + Vector3.UP * 0.05
+	var chest := feet + Vector3.UP * 1.0
 	var vel: Vector3 = p.get(&"velocity") if p.get(&"velocity") != null else Vector3.ZERO
 	var hv := Vector3(vel.x, 0.0, vel.z)
-	var k := 0.25
-	_arrow(origin, origin + vel * k, Color(1.0, 0.9, 0.2))
-	_arrow(origin, origin + hv * k, Color(0.3, 0.9, 1.0))
-	var top := origin + Vector3.UP * 1.9
-	_arrow(top, top + Vector3.UP * vel.y * k, Color(1.0, 0.35, 0.9))
+	var k := 0.3
+	_arrow(chest, chest + vel * k, Color(1.0, 0.9, 0.2), true)          # velocity
+	_arrow(feet, feet + hv * k, Color(0.3, 0.9, 1.0), true)             # horizontal
+	var head := feet + Vector3.UP * 1.9
+	_arrow(head, head + Vector3.UP * vel.y * k, Color(1.0, 0.35, 0.9), true)  # vertical
 	var facing: Variant = p.get(&"facing")
 	if facing is Vector3:
-		_arrow(origin + Vector3.UP * 0.05, origin + Vector3.UP * 0.05 + (facing as Vector3) * 1.2, Color(0.35, 1.0, 0.4))
+		_arrow(chest, chest + (facing as Vector3) * 1.3, Color(0.35, 1.0, 0.4), true)
 	var input: Variant = p.get(&"input")
 	if input is Object and (input as Object).get(&"move_dir") is Vector3:
 		var md: Vector3 = (input as Object).get(&"move_dir")
-		_arrow(origin + Vector3.UP * 0.1, origin + Vector3.UP * 0.1 + md * 1.5, Color(1, 1, 1, 0.9))
-	_ring(origin - Vector3.UP * 0.1, 0.45, Color(1, 1, 1, 0.35), 20)
+		_arrow(feet + Vector3.UP * 0.02, feet + Vector3.UP * 0.02 + md * 1.6, Color(1, 1, 1, 0.95), true)
+	_ring(feet, 0.45, Color(1, 1, 1, 0.45), 20)
 	return true
 
 
@@ -122,15 +123,15 @@ func _draw_anchors(player: Node3D) -> bool:
 			l.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 			l.no_depth_test = true
 			l.fixed_size = true
-			l.pixel_size = 0.0012
-			l.font_size = 26
+			l.pixel_size = 0.0011
+			l.font_size = 22
 			l.outline_size = 8
 			l.render_priority = 11
 			add_child(l)
 			_labels[a] = l
-		l.global_position = pos + Vector3.UP * 1.1
+		l.global_position = pos + Vector3.UP * 1.0
 		l.modulate = col
-		l.text = "%s\n%s" % [a.name, ("%.1f m" % d) if player != null else ""]
+		l.text = ("%s  %.1f m" % [a.name, d]) if player != null else String(a.name)
 		drew = true
 	for k: Node in _labels.keys():
 		if not seen.has(k):
@@ -148,19 +149,25 @@ func _line(a: Vector3, b: Vector3, c: Color) -> void:
 	_im.surface_add_vertex(b)
 
 
-func _arrow(a: Vector3, b: Vector3, c: Color) -> void:
+func _arrow(a: Vector3, b: Vector3, c: Color, thick: bool = false) -> void:
 	var d := b - a
 	if d.length() < 0.02:
 		return
-	_line(a, b, c)
 	var dir := d.normalized()
 	var side := dir.cross(Vector3.UP)
 	if side.length() < 0.1:
 		side = dir.cross(Vector3.RIGHT)
 	side = side.normalized()
-	var head := minf(0.25, d.length() * 0.35)
-	_line(b, b - dir * head + side * head * 0.5, c)
-	_line(b, b - dir * head - side * head * 0.5, c)
+	var up := side.cross(dir).normalized()
+	var head := minf(0.3, d.length() * 0.35)
+	# Lines are 1 px; a few offset copies read as a thicker stroke.
+	var offsets: Array[Vector3] = [Vector3.ZERO]
+	if thick:
+		offsets.append_array([side * 0.012, -side * 0.012, up * 0.012, -up * 0.012])
+	for o in offsets:
+		_line(a + o, b + o, c)
+		_line(b + o, b - dir * head + side * head * 0.5 + o, c)
+		_line(b + o, b - dir * head - side * head * 0.5 + o, c)
 
 
 func _ring(center: Vector3, r: float, c: Color, seg: int) -> void:

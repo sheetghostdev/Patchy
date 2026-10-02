@@ -28,6 +28,7 @@ var _health_node: Node = null
 var _gameplay := false
 var _menu_open := false
 var _forced_hidden := false
+var _dialogue_active := false
 var _scale := 1.0
 
 
@@ -109,7 +110,10 @@ func _build() -> void:
 	# behind a menu (the HUD groups themselves keep fading in/out).
 	for c: Control in [banner, toasts, subtitles]:
 		c.process_mode = Node.PROCESS_MODE_PAUSABLE
-	dialogue.finished.connect(func() -> void: prompt.suppressed = false)
+	dialogue.line_started.connect(func(i: int) -> void:
+		if i == 0:
+			set_dialogue_active(true))
+	dialogue.finished.connect(func() -> void: set_dialogue_active(false))
 
 
 ## Full-width row anchored `bottom_offset` px above the bottom edge that keeps
@@ -233,13 +237,23 @@ func _set_gameplay_visible(on: bool, instant: bool) -> void:
 	var changed := on != _gameplay
 	_gameplay = on
 	for c: Control in [_top_left, _bottom_right, _bottom_center]:
+		# Prompts/requirements make room for the dialogue box.
+		var want := on and not (c == _bottom_center and _dialogue_active)
 		if instant:
-			c.modulate.a = 1.0 if on else 0.0
-			c.visible = on
-		elif changed:
-			UIFx.fade(c, 1.0 if on else 0.0, 0.25 if on else 0.18)
+			c.modulate.a = 1.0 if want else 0.0
+			c.visible = want
+		elif changed or c == _bottom_center:
+			if want != (c.visible and c.modulate.a > 0.5):
+				UIFx.fade(c, 1.0 if want else 0.0, 0.25 if want else 0.18)
 	if on and changed and not instant:
 		UIFx.pop(hearts, 0.06, 0.3)
+
+
+## Called by the UI root while a conversation is on screen.
+func set_dialogue_active(on: bool) -> void:
+	_dialogue_active = on
+	prompt.suppressed = on
+	_set_gameplay_visible(_gameplay, false)
 
 
 ## Briefly shows the contextual counters (e.g. on arriving at an island).

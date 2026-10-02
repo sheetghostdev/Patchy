@@ -197,11 +197,9 @@ func show_dialogue(speaker: String, lines: Array, lock_player: bool = true) -> v
 		input = player.get(&"input") as Object
 		if input != null:
 			input.set(&"enabled", false)
-	hud.prompt.suppressed = true
 	Events.dialogue_started.emit(speaker)
 	hud.dialogue.start(speaker, lines)
 	await hud.dialogue.finished
-	hud.prompt.suppressed = false
 	Events.dialogue_finished.emit()
 	if input != null and is_instance_valid(input):
 		# Let the closing press pass before gameplay reads input again.

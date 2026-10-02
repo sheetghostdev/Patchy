@@ -199,6 +199,8 @@ func _test_dialogue() -> void:
 	run.call()
 	await _frames(20)
 	check(ui.is_dialogue_active(), "dialogue box active")
+	var bottom := ui.hud.get(&"_bottom_center") as Control
+	check(not bottom.visible or bottom.modulate.a < 0.05, "prompt/requirement row makes room for the dialogue box")
 	check(_events.has("dialogue_started:Tester"), "Events.dialogue_started emitted with speaker")
 	var p := GameManager.player
 	check(p != null and not bool(p.get(&"input").get(&"enabled")), "player input locked during dialogue")
@@ -238,6 +240,9 @@ func _action(action: StringName, pressed: bool) -> void:
 
 func _test_prompt_and_devices() -> void:
 	print("prompt + device glyphs")
+	await _frames(20)
+	var bottom := ui.hud.get(&"_bottom_center") as Control
+	check(bottom.visible and bottom.modulate.a > 0.95, "prompt/requirement row returns after the dialogue")
 	await _key(KEY_W, true)
 	await _key(KEY_W, false)
 	Events.interaction_prompt_changed.emit("{interact} Pull", true)
