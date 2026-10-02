@@ -1,0 +1,1253 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://world/environment/sky_environment.gd" id="1_ld2ad"]
+[ext_resource type="Script" path="res://props/blocks/level_block.gd" id="2_fkc3u"]
+[ext_resource type="Script" path="res://systems/camera/camera_zone.gd" id="3_1p2a6"]
+[ext_resource type="Script" path="res://props/moving_platform.gd" id="4_ri7q4"]
+[ext_resource type="Script" path="res://world/ocean/water_volume.gd" id="5_cvcxh"]
+[ext_resource type="PackedScene" path="res://characters/patchy/player.tscn" id="6_seaed"]
+[ext_resource type="Script" path="res://characters/patchy/player.gd" id="7_u1ubm"]
+[ext_resource type="Resource" path="res://resources/settings/patchy_movement.tres" id="8_ij2uu"]
+[ext_resource type="PackedScene" path="res://systems/camera/camera_rig.tscn" id="9_kbs7e"]
+[ext_resource type="Script" path="res://systems/camera/camera_rig.gd" id="10_liiq2"]
+[ext_resource type="Resource" path="res://resources/settings/camera_default.tres" id="11_pr276"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_t4ey8"]
+size = Vector3(3, 2.2, 14)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_h3jkx"]
+size = Vector3(3, 0.5, 1.2)
+
+[node name="CameraLab" type="Node3D" unique_id=2009396468]
+
+[node name="SkyEnvironment" type="Node3D" parent="." unique_id=1641508206]
+script = ExtResource("1_ld2ad")
+
+[node name="Ground" type="Node3D" parent="." unique_id=153861610]
+
+[node name="Floor" type="StaticBody3D" parent="Ground" unique_id=67474239]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+script = ExtResource("2_fkc3u")
+size = Vector3(140, 1, 140)
+surface = "grass"
+
+[node name="Label" type="Label3D" parent="." unique_id=77852713]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, -4)
+pixel_size = 0.006
+billboard = 1
+modulate = Color(1, 0.86, 0.4, 1)
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "CAMERA LAB"
+font_size = 110
+outline_size = 16
+
+[node name="Corridors" type="Node3D" parent="." unique_id=1189805174]
+
+[node name="Label" type="Label3D" parent="Corridors" unique_id=1084110753]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 5.2, -4)
+pixel_size = 0.006
+billboard = 1
+modulate = Color(0.8, 0.95, 1, 1)
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "NARROW CORRIDOR (1.6 m) + BEND"
+font_size = 70
+outline_size = 16
+
+[node name="Block" type="StaticBody3D" parent="Corridors" unique_id=1208188491]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.15, 0, -14)
+script = ExtResource("2_fkc3u")
+size = Vector3(0.7, 4, 20)
+surface = "stone"
+
+[node name="Block2" type="StaticBody3D" parent="Corridors" unique_id=348560791]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.85, 0, -12.2)
+script = ExtResource("2_fkc3u")
+size = Vector3(0.7, 4, 16.4)
+surface = "stone"
+
+[node name="Block3" type="StaticBody3D" parent="Corridors" unique_id=836573305]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.5, 0, -24.35)
+script = ExtResource("2_fkc3u")
+size = Vector3(9.4, 4, 0.7)
+surface = "stone"
+
+[node name="Block4" type="StaticBody3D" parent="Corridors" unique_id=1107241340]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.4, 0, -20.75)
+script = ExtResource("2_fkc3u")
+size = Vector3(11.2, 4, 0.7)
+surface = "stone"
+
+[node name="Label2" type="Label3D" parent="Corridors" unique_id=27872055]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 5.2, -6)
+pixel_size = 0.006
+billboard = 1
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "PINCH POINTS (1.2 m)"
+font_size = 60
+outline_size = 16
+
+[node name="Block5" type="StaticBody3D" parent="Corridors" unique_id=2053974009]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.8, 0, -8)
+script = ExtResource("2_fkc3u")
+size = Vector3(2.6, 4, 1.2)
+surface = "stone"
+
+[node name="Block6" type="StaticBody3D" parent="Corridors" unique_id=939335759]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.6, 0, -8)
+script = ExtResource("2_fkc3u")
+size = Vector3(2.6, 4, 1.2)
+surface = "stone"
+
+[node name="Block7" type="StaticBody3D" parent="Corridors" unique_id=1609916630]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -33.2, 0, -12)
+script = ExtResource("2_fkc3u")
+size = Vector3(2.6, 4, 1.2)
+surface = "stone"
+
+[node name="Block8" type="StaticBody3D" parent="Corridors" unique_id=63128834]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29, 0, -12)
+script = ExtResource("2_fkc3u")
+size = Vector3(2.6, 4, 1.2)
+surface = "stone"
+
+[node name="Block9" type="StaticBody3D" parent="Corridors" unique_id=2102391928]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.8, 0, -16)
+script = ExtResource("2_fkc3u")
+size = Vector3(2.6, 4, 1.2)
+surface = "stone"
+
+[node name="Block10" type="StaticBody3D" parent="Corridors" unique_id=1881299472]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.6, 0, -16)
+script = ExtResource("2_fkc3u")
+size = Vector3(2.6, 4, 1.2)
+surface = "stone"
+
+[node name="Block11" type="StaticBody3D" parent="Corridors" unique_id=819860455]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -33.2, 0, -20)
+script = ExtResource("2_fkc3u")
+size = Vector3(2.6, 4, 1.2)
+surface = "stone"
+
+[node name="Block12" type="StaticBody3D" parent="Corridors" unique_id=216592307]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29, 0, -20)
+script = ExtResource("2_fkc3u")
+size = Vector3(2.6, 4, 1.2)
+surface = "stone"
+
+[node name="LowCeilings" type="Node3D" parent="." unique_id=1787843140]
+
+[node name="Label" type="Label3D" parent="LowCeilings" unique_id=505395824]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.6, -16)
+pixel_size = 0.006
+billboard = 1
+modulate = Color(1, 0.9, 0.7, 1)
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "LOW CEILING 2.2 m (no camera zone)"
+font_size = 60
+outline_size = 16
+
+[node name="Block" type="StaticBody3D" parent="LowCeilings" unique_id=1017333565]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9, 0, -24)
+script = ExtResource("2_fkc3u")
+size = Vector3(0.8, 2.2, 14)
+surface = "wood"
+
+[node name="Block2" type="StaticBody3D" parent="LowCeilings" unique_id=350152209]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9, 0, -24)
+script = ExtResource("2_fkc3u")
+size = Vector3(0.8, 2.2, 14)
+surface = "wood"
+
+[node name="Block3" type="StaticBody3D" parent="LowCeilings" unique_id=1180032219]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, -24)
+script = ExtResource("2_fkc3u")
+size = Vector3(4.6, 0.5, 14)
+surface = "wood"
+
+[node name="Label2" type="Label3D" parent="LowCeilings" unique_id=994507012]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 4.6, -16)
+pixel_size = 0.006
+billboard = 1
+modulate = Color(1, 0.9, 0.7, 1)
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "LOW CEILING + ZONE"
+font_size = 60
+outline_size = 16
+
+[node name="Block4" type="StaticBody3D" parent="LowCeilings" unique_id=1908057964]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.1, 0, -24)
+script = ExtResource("2_fkc3u")
+size = Vector3(0.8, 2.2, 14)
+surface = "wood"
+
+[node name="Block5" type="StaticBody3D" parent="LowCeilings" unique_id=1812468748]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.9, 0, -24)
+script = ExtResource("2_fkc3u")
+size = Vector3(0.8, 2.2, 14)
+surface = "wood"
+
+[node name="Block6" type="StaticBody3D" parent="LowCeilings" unique_id=586807213]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 2.2, -24)
+script = ExtResource("2_fkc3u")
+size = Vector3(4.6, 0.5, 14)
+surface = "wood"
+
+[node name="TunnelZone" type="Area3D" parent="LowCeilings" unique_id=428566350]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 1.1, -24)
+script = ExtResource("3_1p2a6")
+distance_scale = 0.55
+pitch_offset = 8.0
+
+[node name="Shape" type="CollisionShape3D" parent="LowCeilings/TunnelZone" unique_id=533024198]
+shape = SubResource("BoxShape3D_t4ey8")
+
+[node name="Grove" type="Node3D" parent="." unique_id=1842476776]
+
+[node name="Label" type="Label3D" parent="Grove" unique_id=825255438]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 7.5, -10)
+pixel_size = 0.006
+billboard = 1
+modulate = Color(0.8, 1, 0.8, 1)
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "TREE GROVE (thin obstructions)"
+font_size = 60
+outline_size = 16
+
+[node name="Block" type="StaticBody3D" parent="Grove" unique_id=1363978071]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.893923, 0, -13.455482)
+script = ExtResource("2_fkc3u")
+shape = 3
+size = Vector3(0.7, 5.3945603, 0.7)
+surface = "wood"
+
+[node name="Block2" type="StaticBody3D" parent="Grove" unique_id=2042868349]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.893923, 5.3945603, -13.455482)
+script = ExtResource("2_fkc3u")
+shape = 3
+size = Vector3(3.2, 1.6, 3.2)
+surface = "grass"
+bevel = 0.3
+
+[node name="Block3" type="StaticBody3D" parent="Grove" unique_id=831752150]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.601547, 0, -11.8414955)
+script = ExtResource("2_fkc3u")
+shape = 3
+size = Vector3(0.7, 4.980418, 0.7)
+surface = "wood"
+
+[node name="Block4" type="StaticBody3D" parent="Grove" unique_id=459173623]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.601547, 4.980418, -11.8414955)
+script = ExtResource("2_fkc3u")
+shape = 3
+size = Vector3(3.2, 1.6, 3.2)
+surface = "grass"
+bevel = 0.3
+
+[node name="Block5" type="StaticBody3D" parent="Grove" unique_id=1698857821]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.997253, 0, -22.378994)
+script = ExtResource("2_fkc3u")
+shape = 3
+size = Vector3(0.7, 5.036568, 0.7)
+surface = "wood"
+
+[node name="Block6" type="StaticBody3D" parent="Grove" unique_id=1819484198]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.997253, 5.036568, -22.378994)
+script = ExtResource("2_fkc3u")
+shape = 3
+size = Vector3(3.2, 1.6, 3.2)
+surface = "grass"
+bevel = 0.3
+
+[node name="Block7" type="StaticBody3D" parent="Grove" unique_id=1056623524]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.49513, 0, -23.051073)
+script = ExtResource("2_fkc3u")
+shape = 3
+size = Vector3(0.7, 4.6721606, 0.7)
+surface = "wood"
+
+[node name="Block8" type="StaticBody3D" parent="Grove" unique_id=470182467]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.49513, 4.6721606, -23.051073)
+script = ExtResource("2_fkc3u")
+shape = 3
+size = Vector3(3.2, 1.6, 3.2)
+surface = "grass"
+bevel = 0.3
+
+[node name="Block9" type="StaticBody3D" parent="Grove" unique_id=582862404]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.222155, 0, -12.123274)
+script = ExtResource("2_fkc3u")
+shape = 3
+size = Vector3(0.7, 7.036129, 0.7)
+surface = "wood"
+
+[node name="Block10" type="StaticBody3D" parent="Grove" unique_id=1432030824]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.222155, 7.036129, -12.123274)
+script = ExtResource("2_fkc3u")
+shape = 3
+size = Vector3(3.2, 1.6, 3.2)
+surface = "grass"
+bevel = 0.3
+
+[node name="Block11" type="StaticBody3D" parent="Grove" unique_id=346260460]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.356234, 0, -13.600164)
+script = ExtResource("2_fkc3u")
+shape = 3
+size = Vector3(0.7, 5.2835164, 0.7)
+surface = "wood"
+
+[node name="Block12" type="StaticBody3D" parent="Grove" unique_id=1740422732]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.356234, 5.2835164, -13.600164)
+script = ExtResource("2_fkc3u")
+shape = 3
+size = Vector3(3.2, 1.6, 3.2)
+surface = "grass"
+bevel = 0.3
+
+[node name="Block13" type="StaticBody3D" parent="Grove" unique_id=1364011612]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.276012, 0, -16.064402)
+script = ExtResource("2_fkc3u")
+shape = 3
+size = Vector3(0.7, 7.28345, 0.7)
+surface = "wood"
+
+[node name="Block14" type="StaticBody3D" parent="Grove" unique_id=657119097]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.276012, 7.28345, -16.064402)
+script = ExtResource("2_fkc3u")
+shape = 3
+size = Vector3(3.2, 1.6, 3.2)
+surface = "grass"
+bevel = 0.3
+
+[node name="Block15" type="StaticBody3D" parent="Grove" unique_id=1722175898]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.588251, 0, -13.415428)
+script = ExtResource("2_fkc3u")
+shape = 3
+size = Vector3(0.7, 5.1761813, 0.7)
+surface = "wood"
+
+[node name="Block16" type="StaticBody3D" parent="Grove" unique_id=1317181083]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.588251, 5.1761813, -13.415428)
+script = ExtResource("2_fkc3u")
+shape = 3
+size = Vector3(3.2, 1.6, 3.2)
+surface = "grass"
+bevel = 0.3
+
+[node name="Block17" type="StaticBody3D" parent="Grove" unique_id=1910455931]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.448612, 0, -8.41334)
+script = ExtResource("2_fkc3u")
+shape = 3
+size = Vector3(0.7, 6.450635, 0.7)
+surface = "wood"
+
+[node name="Block18" type="StaticBody3D" parent="Grove" unique_id=902255045]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.448612, 6.450635, -8.41334)
+script = ExtResource("2_fkc3u")
+shape = 3
+size = Vector3(3.2, 1.6, 3.2)
+surface = "grass"
+bevel = 0.3
+
+[node name="Block19" type="StaticBody3D" parent="Grove" unique_id=519709487]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.089445, 0, -16.328484)
+script = ExtResource("2_fkc3u")
+shape = 3
+size = Vector3(0.7, 5.652235, 0.7)
+surface = "wood"
+
+[node name="Block20" type="StaticBody3D" parent="Grove" unique_id=1905714850]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.089445, 5.652235, -16.328484)
+script = ExtResource("2_fkc3u")
+shape = 3
+size = Vector3(3.2, 1.6, 3.2)
+surface = "grass"
+bevel = 0.3
+
+[node name="Block21" type="StaticBody3D" parent="Grove" unique_id=582267115]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.491215, 0, -10.371425)
+script = ExtResource("2_fkc3u")
+shape = 3
+size = Vector3(0.7, 6.2438097, 0.7)
+surface = "wood"
+
+[node name="Block22" type="StaticBody3D" parent="Grove" unique_id=1953638073]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.491215, 6.2438097, -10.371425)
+script = ExtResource("2_fkc3u")
+shape = 3
+size = Vector3(3.2, 1.6, 3.2)
+surface = "grass"
+bevel = 0.3
+
+[node name="Block23" type="StaticBody3D" parent="Grove" unique_id=517675107]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.883717, 0, -11.69624)
+script = ExtResource("2_fkc3u")
+shape = 3
+size = Vector3(0.7, 7.0497255, 0.7)
+surface = "wood"
+
+[node name="Block24" type="StaticBody3D" parent="Grove" unique_id=2140280341]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.883717, 7.0497255, -11.69624)
+script = ExtResource("2_fkc3u")
+shape = 3
+size = Vector3(3.2, 1.6, 3.2)
+surface = "grass"
+bevel = 0.3
+
+[node name="Block25" type="StaticBody3D" parent="Grove" unique_id=135657298]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.089924, 0, -21.417013)
+script = ExtResource("2_fkc3u")
+shape = 3
+size = Vector3(0.7, 5.370699, 0.7)
+surface = "wood"
+
+[node name="Block26" type="StaticBody3D" parent="Grove" unique_id=567987494]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.089924, 5.370699, -21.417013)
+script = ExtResource("2_fkc3u")
+shape = 3
+size = Vector3(3.2, 1.6, 3.2)
+surface = "grass"
+bevel = 0.3
+
+[node name="Block27" type="StaticBody3D" parent="Grove" unique_id=305832378]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.702469, 0, -22.802444)
+script = ExtResource("2_fkc3u")
+shape = 3
+size = Vector3(0.7, 5.828867, 0.7)
+surface = "wood"
+
+[node name="Block28" type="StaticBody3D" parent="Grove" unique_id=1574667755]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.702469, 5.828867, -22.802444)
+script = ExtResource("2_fkc3u")
+shape = 3
+size = Vector3(3.2, 1.6, 3.2)
+surface = "grass"
+bevel = 0.3
+
+[node name="Block29" type="StaticBody3D" parent="Grove" unique_id=501355310]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.828905, 0, -12.530346)
+script = ExtResource("2_fkc3u")
+shape = 3
+size = Vector3(0.7, 6.6938887, 0.7)
+surface = "wood"
+
+[node name="Block30" type="StaticBody3D" parent="Grove" unique_id=237112027]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.828905, 6.6938887, -12.530346)
+script = ExtResource("2_fkc3u")
+shape = 3
+size = Vector3(3.2, 1.6, 3.2)
+surface = "grass"
+bevel = 0.3
+
+[node name="Block31" type="StaticBody3D" parent="Grove" unique_id=781937735]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.598601, 0, -14.943903)
+script = ExtResource("2_fkc3u")
+shape = 3
+size = Vector3(0.7, 5.691656, 0.7)
+surface = "wood"
+
+[node name="Block32" type="StaticBody3D" parent="Grove" unique_id=616780324]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.598601, 5.691656, -14.943903)
+script = ExtResource("2_fkc3u")
+shape = 3
+size = Vector3(3.2, 1.6, 3.2)
+surface = "grass"
+bevel = 0.3
+
+[node name="Block33" type="StaticBody3D" parent="Grove" unique_id=2147200298]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.569607, 0, -22.566198)
+script = ExtResource("2_fkc3u")
+shape = 3
+size = Vector3(0.7, 5.0523634, 0.7)
+surface = "wood"
+
+[node name="Block34" type="StaticBody3D" parent="Grove" unique_id=1521311111]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.569607, 5.0523634, -22.566198)
+script = ExtResource("2_fkc3u")
+shape = 3
+size = Vector3(3.2, 1.6, 3.2)
+surface = "grass"
+bevel = 0.3
+
+[node name="Block35" type="StaticBody3D" parent="Grove" unique_id=1181136637]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.2845955, 0, -12.075464)
+script = ExtResource("2_fkc3u")
+shape = 3
+size = Vector3(0.7, 5.6968813, 0.7)
+surface = "wood"
+
+[node name="Block36" type="StaticBody3D" parent="Grove" unique_id=2107539742]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.2845955, 5.6968813, -12.075464)
+script = ExtResource("2_fkc3u")
+shape = 3
+size = Vector3(3.2, 1.6, 3.2)
+surface = "grass"
+bevel = 0.3
+
+[node name="Cliff" type="Node3D" parent="." unique_id=2067841161]
+
+[node name="Label" type="Label3D" parent="Cliff" unique_id=1966201835]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34, 22, -6)
+pixel_size = 0.006
+billboard = 1
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "VERTICAL CLIFF 20 m"
+font_size = 70
+outline_size = 16
+
+[node name="Block" type="StaticBody3D" parent="Cliff" unique_id=1072062946]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40, 0, -6)
+script = ExtResource("2_fkc3u")
+size = Vector3(8, 20, 30)
+surface = "cliff"
+
+[node name="Block2" type="StaticBody3D" parent="Cliff" unique_id=108968951]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.4, 3, -16)
+script = ExtResource("2_fkc3u")
+size = Vector3(1.4, 0.5, 3)
+surface = "rock"
+
+[node name="Block3" type="StaticBody3D" parent="Cliff" unique_id=312123217]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.4, 7, -10)
+script = ExtResource("2_fkc3u")
+size = Vector3(1.4, 0.5, 3)
+surface = "rock"
+
+[node name="Block4" type="StaticBody3D" parent="Cliff" unique_id=416493080]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.4, 11, -4)
+script = ExtResource("2_fkc3u")
+size = Vector3(1.4, 0.5, 3)
+surface = "rock"
+
+[node name="Block5" type="StaticBody3D" parent="Cliff" unique_id=340660585]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.4, 15, 2)
+script = ExtResource("2_fkc3u")
+size = Vector3(1.4, 0.5, 3)
+surface = "rock"
+
+[node name="Spiral" type="Node3D" parent="." unique_id=377139503]
+
+[node name="Label" type="Label3D" parent="Spiral" unique_id=55368814]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 17, 12)
+pixel_size = 0.006
+billboard = 1
+modulate = Color(1, 0.8, 0.9, 1)
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "SPIRAL RAMP TOWER"
+font_size = 70
+outline_size = 16
+
+[node name="Core" type="StaticBody3D" parent="Spiral" unique_id=1317535707]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0, 18)
+script = ExtResource("2_fkc3u")
+shape = 3
+size = Vector3(3.2, 15, 3.2)
+surface = "stone"
+
+[node name="Step" type="StaticBody3D" parent="Spiral" unique_id=1211395610]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -26.6, 0, 18)
+script = ExtResource("2_fkc3u")
+size = Vector3(3.2, 0.35, 1.6)
+surface = "stone"
+bevel = 0.05
+
+[node name="Step2" type="StaticBody3D" parent="Spiral" unique_id=475932362]
+transform = Transform3D(0.37460664, 0, 0.92718387, 0, 1, 0, -0.92718387, 0, 0.37460664, -26.847574, 0.35, 19.273663)
+script = ExtResource("2_fkc3u")
+size = Vector3(3.2, 0.35, 1.6)
+surface = "stone"
+bevel = 0.05
+
+[node name="Step3" type="StaticBody3D" parent="Spiral" unique_id=926801056]
+transform = Transform3D(0.6946584, 0, 0.7193398, 0, 1, 0, -0.7193398, 0, 0.6946584, -27.554245, 0.7, 20.36184)
+script = ExtResource("2_fkc3u")
+size = Vector3(3.2, 0.35, 1.6)
+surface = "stone"
+bevel = 0.05
+
+[node name="Step4" type="StaticBody3D" parent="Spiral" unique_id=436365129]
+transform = Transform3D(0.9135454, 0, 0.40673664, 0, 1, 0, -0.40673664, 0, 0.9135454, -28.617096, 1.05, 21.106054)
+script = ExtResource("2_fkc3u")
+size = Vector3(3.2, 0.35, 1.6)
+surface = "stone"
+bevel = 0.05
+
+[node name="Step5" type="StaticBody3D" parent="Spiral" unique_id=431941702]
+transform = Transform3D(0.99939084, 0, 0.034899496, 0, 1, 0, -0.034899496, 0, 0.99939084, -29.881342, 1.4, 21.397928)
+script = ExtResource("2_fkc3u")
+size = Vector3(3.2, 0.35, 1.6)
+surface = "stone"
+bevel = 0.05
+
+[node name="Step6" type="StaticBody3D" parent="Spiral" unique_id=1652754797]
+transform = Transform3D(0.9396926, 0, -0.34202012, 0, 1, 0, 0.34202012, 0, 0.9396926, -31.162868, 1.75, 21.194954)
+script = ExtResource("2_fkc3u")
+size = Vector3(3.2, 0.35, 1.6)
+surface = "stone"
+bevel = 0.05
+
+[node name="Step7" type="StaticBody3D" parent="Spiral" unique_id=1877316003]
+transform = Transform3D(0.7431448, 0, -0.6691306, 0, 1, 0, 0.6691306, 0, 0.7431448, -32.275043, 2.1, 20.526691)
+script = ExtResource("2_fkc3u")
+size = Vector3(3.2, 0.35, 1.6)
+surface = "stone"
+bevel = 0.05
+
+[node name="Step8" type="StaticBody3D" parent="Spiral" unique_id=549363674]
+transform = Transform3D(0.43837115, 0, -0.89879405, 0, 1, 0, 0.89879405, 0, 0.43837115, -33.0559, 2.45, 19.490461)
+script = ExtResource("2_fkc3u")
+size = Vector3(3.2, 0.35, 1.6)
+surface = "stone"
+bevel = 0.05
+
+[node name="Step9" type="StaticBody3D" parent="Spiral" unique_id=636300552]
+transform = Transform3D(0.06975651, 0, -0.9975641, 0, 1, 0, 0.9975641, 0, 0.06975651, -33.391716, 2.8, 18.237171)
+script = ExtResource("2_fkc3u")
+size = Vector3(3.2, 0.35, 1.6)
+surface = "stone"
+bevel = 0.05
+
+[node name="Step10" type="StaticBody3D" parent="Spiral" unique_id=2085958642]
+transform = Transform3D(-0.30901703, 0, -0.9510565, 0, 1, 0, 0.9510565, 0, -0.30901703, -33.233593, 3.15, 16.949343)
+script = ExtResource("2_fkc3u")
+size = Vector3(3.2, 0.35, 1.6)
+surface = "stone"
+bevel = 0.05
+
+[node name="Step11" type="StaticBody3D" parent="Spiral" unique_id=2065673858]
+transform = Transform3D(-0.64278764, 0, -0.76604444, 0, 1, 0, 0.76604444, 0, -0.64278764, -32.60455, 3.5, 15.814522)
+script = ExtResource("2_fkc3u")
+size = Vector3(3.2, 0.35, 1.6)
+surface = "stone"
+bevel = 0.05
+
+[node name="Step12" type="StaticBody3D" parent="Spiral" unique_id=1484562068]
+transform = Transform3D(-0.88294756, 0, -0.46947157, 0, 1, 0, 0.46947157, 0, -0.88294756, -31.596203, 3.85, 14.997978)
+script = ExtResource("2_fkc3u")
+size = Vector3(3.2, 0.35, 1.6)
+surface = "stone"
+bevel = 0.05
+
+[node name="Step13" type="StaticBody3D" parent="Spiral" unique_id=1504985321]
+transform = Transform3D(-0.9945219, 0, -0.104528494, 0, 1, 0, 0.104528494, 0, -0.9945219, -30.355396, 4.2, 14.618626)
+script = ExtResource("2_fkc3u")
+size = Vector3(3.2, 0.35, 1.6)
+surface = "stone"
+bevel = 0.05
+
+[node name="Step14" type="StaticBody3D" parent="Spiral" unique_id=1391637535]
+transform = Transform3D(-0.9612617, 0, 0.2756373, 0, 1, 0, -0.2756373, 0, -0.9612617, -29.062834, 4.55, 14.73171)
+script = ExtResource("2_fkc3u")
+size = Vector3(3.2, 0.35, 1.6)
+surface = "stone"
+bevel = 0.05
+
+[node name="Step15" type="StaticBody3D" parent="Spiral" unique_id=1178741878]
+transform = Transform3D(-0.78801084, 0, 0.6156614, 0, 1, 0, -0.6156614, 0, -0.78801084, -27.906752, 4.9, 15.320764)
+script = ExtResource("2_fkc3u")
+size = Vector3(3.2, 0.35, 1.6)
+surface = "stone"
+bevel = 0.05
+
+[node name="Step16" type="StaticBody3D" parent="Spiral" unique_id=326163137]
+transform = Transform3D(-0.4999999, 0, 0.86602545, 0, 1, 0, -0.86602545, 0, -0.4999999, -27.055513, 5.25, 16.3)
+script = ExtResource("2_fkc3u")
+size = Vector3(3.2, 0.35, 1.6)
+surface = "stone"
+bevel = 0.05
+
+[node name="Step17" type="StaticBody3D" parent="Spiral" unique_id=795388284]
+transform = Transform3D(-0.13917325, 0, 0.99026805, 0, 1, 0, -0.99026805, 0, -0.13917325, -26.63309, 5.6, 17.526812)
+script = ExtResource("2_fkc3u")
+size = Vector3(3.2, 0.35, 1.6)
+surface = "stone"
+bevel = 0.05
+
+[node name="Step18" type="StaticBody3D" parent="Spiral" unique_id=872382962]
+transform = Transform3D(0.24192195, 0, 0.9702957, 0, 1, 0, -0.9702957, 0, 0.24192195, -26.700994, 5.95, 18.822535)
+script = ExtResource("2_fkc3u")
+size = Vector3(3.2, 0.35, 1.6)
+surface = "stone"
+bevel = 0.05
+
+[node name="Step19" type="StaticBody3D" parent="Spiral" unique_id=1026430093]
+transform = Transform3D(0.58778507, 0, 0.8090171, 0, 1, 0, -0.8090171, 0, 0.58778507, -27.249342, 6.3, 19.99847)
+script = ExtResource("2_fkc3u")
+size = Vector3(3.2, 0.35, 1.6)
+surface = "stone"
+bevel = 0.05
+
+[node name="Step20" type="StaticBody3D" parent="Spiral" unique_id=1032300086]
+transform = Transform3D(0.8480481, 0, 0.52991927, 0, 1, 0, -0.52991927, 0, 0.8480481, -28.198275, 6.65, 20.883364)
+script = ExtResource("2_fkc3u")
+size = Vector3(3.2, 0.35, 1.6)
+surface = "stone"
+bevel = 0.05
+
+[node name="Step21" type="StaticBody3D" parent="Spiral" unique_id=1689776300]
+transform = Transform3D(0.9848078, 0, 0.17364797, 0, 1, 0, -0.17364797, 0, 0.9848078, -29.409595, 7, 21.348347)
+script = ExtResource("2_fkc3u")
+size = Vector3(3.2, 0.35, 1.6)
+surface = "stone"
+bevel = 0.05
+
+[node name="Step22" type="StaticBody3D" parent="Spiral" unique_id=629312036]
+transform = Transform3D(0.9781476, 0, -0.20791164, 0, 1, 0, 0.20791164, 0, 0.9781476, -30.7069, 7.35, 21.325703)
+script = ExtResource("2_fkc3u")
+size = Vector3(3.2, 0.35, 1.6)
+surface = "stone"
+bevel = 0.05
+
+[node name="Step23" type="StaticBody3D" parent="Spiral" unique_id=512983576]
+transform = Transform3D(0.8290375, 0, -0.559193, 0, 1, 0, 0.559193, 0, 0.8290375, -31.901257, 7.7, 20.818727)
+script = ExtResource("2_fkc3u")
+size = Vector3(3.2, 0.35, 1.6)
+surface = "stone"
+bevel = 0.05
+
+[node name="Step24" type="StaticBody3D" parent="Spiral" unique_id=1167344901]
+transform = Transform3D(0.559193, 0, -0.8290375, 0, 1, 0, 0.8290375, 0, 0.559193, -32.81873, 8.05, 19.901257)
+script = ExtResource("2_fkc3u")
+size = Vector3(3.2, 0.35, 1.6)
+surface = "stone"
+bevel = 0.05
+
+[node name="Step25" type="StaticBody3D" parent="Spiral" unique_id=1359430902]
+transform = Transform3D(0.2079116, 0, -0.9781476, 0, 1, 0, 0.9781476, 0, 0.2079116, -33.325703, 8.4, 18.7069)
+script = ExtResource("2_fkc3u")
+size = Vector3(3.2, 0.35, 1.6)
+surface = "stone"
+bevel = 0.05
+
+[node name="Step26" type="StaticBody3D" parent="Spiral" unique_id=3125527]
+transform = Transform3D(-0.17364848, 0, -0.9848077, 0, 1, 0, 0.9848077, 0, -0.17364848, -33.348347, 8.75, 17.409595)
+script = ExtResource("2_fkc3u")
+size = Vector3(3.2, 0.35, 1.6)
+surface = "stone"
+bevel = 0.05
+
+[node name="Step27" type="StaticBody3D" parent="Spiral" unique_id=758686964]
+transform = Transform3D(-0.52991927, 0, -0.8480481, 0, 1, 0, 0.8480481, 0, -0.52991927, -32.88336, 9.1, 16.198275)
+script = ExtResource("2_fkc3u")
+size = Vector3(3.2, 0.35, 1.6)
+surface = "stone"
+bevel = 0.05
+
+[node name="Step28" type="StaticBody3D" parent="Spiral" unique_id=722114953]
+transform = Transform3D(-0.8090169, 0, -0.5877854, 0, 1, 0, 0.5877854, 0, -0.8090169, -31.99847, 9.45, 15.249342)
+script = ExtResource("2_fkc3u")
+size = Vector3(3.2, 0.35, 1.6)
+surface = "stone"
+bevel = 0.05
+
+[node name="Step29" type="StaticBody3D" parent="Spiral" unique_id=1848545510]
+transform = Transform3D(-0.97029585, 0, -0.24192145, 0, 1, 0, 0.24192145, 0, -0.97029585, -30.822535, 9.8, 14.7009945)
+script = ExtResource("2_fkc3u")
+size = Vector3(3.2, 0.35, 1.6)
+surface = "stone"
+bevel = 0.05
+
+[node name="Step30" type="StaticBody3D" parent="Spiral" unique_id=1767830241]
+transform = Transform3D(-0.99026805, 0, 0.13917328, 0, 1, 0, -0.13917328, 0, -0.99026805, -29.526812, 10.15, 14.633089)
+script = ExtResource("2_fkc3u")
+size = Vector3(3.2, 0.35, 1.6)
+surface = "stone"
+bevel = 0.05
+
+[node name="Step31" type="StaticBody3D" parent="Spiral" unique_id=1635099084]
+transform = Transform3D(-0.86602545, 0, 0.49999994, 0, 1, 0, -0.49999994, 0, -0.86602545, -28.3, 10.5, 15.055513)
+script = ExtResource("2_fkc3u")
+size = Vector3(3.2, 0.35, 1.6)
+surface = "stone"
+bevel = 0.05
+
+[node name="Step32" type="StaticBody3D" parent="Spiral" unique_id=1931638994]
+transform = Transform3D(-0.61566174, 0, 0.78801054, 0, 1, 0, -0.78801054, 0, -0.61566174, -27.320763, 10.85, 15.906751)
+script = ExtResource("2_fkc3u")
+size = Vector3(3.2, 0.35, 1.6)
+surface = "stone"
+bevel = 0.05
+
+[node name="Step33" type="StaticBody3D" parent="Spiral" unique_id=1187641369]
+transform = Transform3D(-0.27563703, 0, 0.9612618, 0, 1, 0, -0.9612618, 0, -0.27563703, -26.73171, 11.2, 17.062834)
+script = ExtResource("2_fkc3u")
+size = Vector3(3.2, 0.35, 1.6)
+surface = "stone"
+bevel = 0.05
+
+[node name="Step34" type="StaticBody3D" parent="Spiral" unique_id=542165249]
+transform = Transform3D(0.10452853, 0, 0.9945219, 0, 1, 0, -0.9945219, 0, 0.10452853, -26.618626, 11.55, 18.355396)
+script = ExtResource("2_fkc3u")
+size = Vector3(3.2, 0.35, 1.6)
+surface = "stone"
+bevel = 0.05
+
+[node name="Step35" type="StaticBody3D" parent="Spiral" unique_id=388837431]
+transform = Transform3D(0.4694714, 0, 0.8829477, 0, 1, 0, -0.8829477, 0, 0.4694714, -26.997978, 11.9, 19.596203)
+script = ExtResource("2_fkc3u")
+size = Vector3(3.2, 0.35, 1.6)
+surface = "stone"
+bevel = 0.05
+
+[node name="Step36" type="StaticBody3D" parent="Spiral" unique_id=608691596]
+transform = Transform3D(0.76604414, 0, 0.642788, 0, 1, 0, -0.642788, 0, 0.76604414, -27.814522, 12.25, 20.604551)
+script = ExtResource("2_fkc3u")
+size = Vector3(3.2, 0.35, 1.6)
+surface = "stone"
+bevel = 0.05
+
+[node name="Step37" type="StaticBody3D" parent="Spiral" unique_id=2133024228]
+transform = Transform3D(0.9510566, 0, 0.3090168, 0, 1, 0, -0.3090168, 0, 0.9510566, -28.949343, 12.6, 21.233593)
+script = ExtResource("2_fkc3u")
+size = Vector3(3.2, 0.35, 1.6)
+surface = "stone"
+bevel = 0.05
+
+[node name="Step38" type="StaticBody3D" parent="Spiral" unique_id=547428669]
+transform = Transform3D(0.9975641, 0, -0.069756426, 0, 1, 0, 0.069756426, 0, 0.9975641, -30.237171, 12.95, 21.391718)
+script = ExtResource("2_fkc3u")
+size = Vector3(3.2, 0.35, 1.6)
+surface = "stone"
+bevel = 0.05
+
+[node name="Step39" type="StaticBody3D" parent="Spiral" unique_id=1396698590]
+transform = Transform3D(0.8987942, 0, -0.43837085, 0, 1, 0, 0.43837085, 0, 0.8987942, -31.490461, 13.3, 21.0559)
+script = ExtResource("2_fkc3u")
+size = Vector3(3.2, 0.35, 1.6)
+surface = "stone"
+bevel = 0.05
+
+[node name="Step40" type="StaticBody3D" parent="Spiral" unique_id=1516246969]
+transform = Transform3D(0.6691303, 0, -0.74314505, 0, 1, 0, 0.74314505, 0, 0.6691303, -32.52669, 13.65, 20.275043)
+script = ExtResource("2_fkc3u")
+size = Vector3(3.2, 0.35, 1.6)
+surface = "stone"
+bevel = 0.05
+
+[node name="Rooms" type="Node3D" parent="." unique_id=41200314]
+
+[node name="Label" type="Label3D" parent="Rooms" unique_id=860071466]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 5.5, 18)
+pixel_size = 0.006
+billboard = 1
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "SMALL ROOMS"
+font_size = 70
+outline_size = 16
+
+[node name="Block" type="StaticBody3D" parent="Rooms" unique_id=70582034]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.6, 0, 22)
+script = ExtResource("2_fkc3u")
+size = Vector3(0.6, 3, 5.8)
+surface = "wood"
+
+[node name="Block2" type="StaticBody3D" parent="Rooms" unique_id=777759109]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.4, 0, 22)
+script = ExtResource("2_fkc3u")
+size = Vector3(0.6, 3, 5.8)
+surface = "wood"
+
+[node name="Block3" type="StaticBody3D" parent="Rooms" unique_id=1269747976]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 0, 24.6)
+script = ExtResource("2_fkc3u")
+size = Vector3(5.8, 3, 0.6)
+surface = "wood"
+
+[node name="Block4" type="StaticBody3D" parent="Rooms" unique_id=963323390]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.75, 0, 19.4)
+script = ExtResource("2_fkc3u")
+size = Vector3(2.3, 3, 0.6)
+surface = "wood"
+
+[node name="Block5" type="StaticBody3D" parent="Rooms" unique_id=2034691190]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.25, 0, 19.4)
+script = ExtResource("2_fkc3u")
+size = Vector3(2.3, 3, 0.6)
+surface = "wood"
+
+[node name="Block6" type="StaticBody3D" parent="Rooms" unique_id=726987064]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.6, 0, 22)
+script = ExtResource("2_fkc3u")
+size = Vector3(0.6, 3, 5.8)
+surface = "wood"
+
+[node name="Block7" type="StaticBody3D" parent="Rooms" unique_id=731548026]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.4, 0, 22)
+script = ExtResource("2_fkc3u")
+size = Vector3(0.6, 3, 5.8)
+surface = "wood"
+
+[node name="Block8" type="StaticBody3D" parent="Rooms" unique_id=544059963]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, 24.6)
+script = ExtResource("2_fkc3u")
+size = Vector3(5.8, 3, 0.6)
+surface = "wood"
+
+[node name="Block9" type="StaticBody3D" parent="Rooms" unique_id=553795879]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.75, 0, 19.4)
+script = ExtResource("2_fkc3u")
+size = Vector3(2.3, 3, 0.6)
+surface = "wood"
+
+[node name="Block10" type="StaticBody3D" parent="Rooms" unique_id=540162105]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.25, 0, 19.4)
+script = ExtResource("2_fkc3u")
+size = Vector3(2.3, 3, 0.6)
+surface = "wood"
+
+[node name="Block11" type="StaticBody3D" parent="Rooms" unique_id=2132146386]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 3, 22)
+script = ExtResource("2_fkc3u")
+size = Vector3(5.8, 0.4, 5.8)
+surface = "wood"
+label = "roofed room"
+
+[node name="Cave" type="Node3D" parent="." unique_id=697916423]
+
+[node name="Label" type="Label3D" parent="Cave" unique_id=854230624]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28, 7, 12)
+pixel_size = 0.006
+billboard = 1
+modulate = Color(0.85, 0.85, 1, 1)
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "WINDING CAVE"
+font_size = 70
+outline_size = 16
+
+[node name="Block" type="StaticBody3D" parent="Cave" unique_id=1019294652]
+transform = Transform3D(-0.8320503, 0, -0.5547002, 0, 1, 0, 0.5547002, 0, -0.8320503, 30.212341, 0, 15.525105)
+script = ExtResource("2_fkc3u")
+size = Vector3(1.6, 4.165656, 8.611102)
+surface = "rock"
+bevel = 0.4
+
+[node name="Block2" type="StaticBody3D" parent="Cave" unique_id=1605880914]
+transform = Transform3D(-0.8320503, 0, -0.5547002, 0, 1, 0, 0.5547002, 0, -0.8320503, 25.787659, 0, 18.474895)
+script = ExtResource("2_fkc3u")
+size = Vector3(1.6, 4.165656, 8.611102)
+surface = "rock"
+bevel = 0.4
+
+[node name="Block3" type="StaticBody3D" parent="Cave" unique_id=2063359024]
+transform = Transform3D(-0.8320503, 0, -0.5547002, 0, 1, 0, 0.5547002, 0, -0.8320503, 28, 3.165656, 17)
+script = ExtResource("2_fkc3u")
+size = Vector3(6.9178085, 1.4, 8.611102)
+surface = "rock"
+bevel = 0.5
+
+[node name="Block4" type="StaticBody3D" parent="Cave" unique_id=1865600516]
+transform = Transform3D(-0.961524, 0, 0.27472097, 0, 1, 0, -0.27472097, 0, -0.961524, 31.827112, 0, 24.307747)
+script = ExtResource("2_fkc3u")
+size = Vector3(1.6, 4.1364594, 8.68011)
+surface = "rock"
+bevel = 0.4
+
+[node name="Block5" type="StaticBody3D" parent="Cave" unique_id=262025289]
+transform = Transform3D(-0.961524, 0, 0.27472097, 0, 1, 0, -0.27472097, 0, -0.961524, 26.172888, 0, 22.692253)
+script = ExtResource("2_fkc3u")
+size = Vector3(1.6, 4.1364594, 8.68011)
+surface = "rock"
+bevel = 0.4
+
+[node name="Block6" type="StaticBody3D" parent="Cave" unique_id=1144880682]
+transform = Transform3D(-0.961524, 0, 0.27472097, 0, 1, 0, -0.27472097, 0, -0.961524, 29, 3.1364594, 23.5)
+script = ExtResource("2_fkc3u")
+size = Vector3(7.4804835, 1.4, 8.68011)
+surface = "rock"
+bevel = 0.5
+
+[node name="Block7" type="StaticBody3D" parent="Cave" unique_id=1116885157]
+transform = Transform3D(-0.76822126, 0, -0.6401844, 0, 1, 0, 0.6401844, 0, -0.76822126, 32.712624, 0, 28.156147)
+script = ExtResource("2_fkc3u")
+size = Vector3(1.6, 4.204547, 9.21025)
+surface = "rock"
+bevel = 0.4
+
+[node name="Block8" type="StaticBody3D" parent="Cave" unique_id=1318982755]
+transform = Transform3D(-0.76822126, 0, -0.6401844, 0, 1, 0, 0.6401844, 0, -0.76822126, 28.287376, 0, 31.843853)
+script = ExtResource("2_fkc3u")
+size = Vector3(1.6, 4.204547, 9.21025)
+surface = "rock"
+bevel = 0.4
+
+[node name="Block9" type="StaticBody3D" parent="Cave" unique_id=192244808]
+transform = Transform3D(-0.76822126, 0, -0.6401844, 0, 1, 0, 0.6401844, 0, -0.76822126, 30.5, 3.2045467, 30)
+script = ExtResource("2_fkc3u")
+size = Vector3(7.3603835, 1.4, 9.21025)
+surface = "rock"
+bevel = 0.5
+
+[node name="Block10" type="StaticBody3D" parent="Cave" unique_id=993598352]
+transform = Transform3D(0.5144958, 0, -0.8574929, 0, 1, 0, 0.8574929, 0, 0.5144958, 34.25038, 0, 29.417303)
+script = ExtResource("2_fkc3u")
+size = Vector3(1.6, 3.7571754, 7.230952)
+surface = "rock"
+bevel = 0.4
+
+[node name="Block11" type="StaticBody3D" parent="Cave" unique_id=94924954]
+transform = Transform3D(0.5144958, 0, -0.8574929, 0, 1, 0, 0.8574929, 0, 0.5144958, 36.74962, 0, 33.582695)
+script = ExtResource("2_fkc3u")
+size = Vector3(1.6, 3.7571754, 7.230952)
+surface = "rock"
+bevel = 0.4
+
+[node name="Block12" type="StaticBody3D" parent="Cave" unique_id=357955275]
+transform = Transform3D(0.5144958, 0, -0.8574929, 0, 1, 0, 0.8574929, 0, 0.5144958, 35.5, 2.7571754, 31.5)
+script = ExtResource("2_fkc3u")
+size = Vector3(6.4576406, 1.4, 7.230952)
+surface = "rock"
+bevel = 0.5
+
+[node name="Hill" type="Node3D" parent="." unique_id=1929885571]
+
+[node name="Label" type="Label3D" parent="Hill" unique_id=250846894]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -44, 9, -30)
+pixel_size = 0.006
+billboard = 1
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "HILL 25°"
+font_size = 70
+outline_size = 16
+
+[node name="Block" type="StaticBody3D" parent="Hill" unique_id=1588449708]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -44, 0, -21)
+script = ExtResource("2_fkc3u")
+shape = 1
+size = Vector3(10, 3.7304614, 10)
+surface = "grass"
+
+[node name="Block2" type="StaticBody3D" parent="Hill" unique_id=1306656776]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -35, 0, -30)
+script = ExtResource("2_fkc3u")
+shape = 1
+size = Vector3(10, 3.7304614, 10)
+surface = "grass"
+
+[node name="Block3" type="StaticBody3D" parent="Hill" unique_id=1655413489]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -44, 0, -39)
+script = ExtResource("2_fkc3u")
+shape = 1
+size = Vector3(10, 3.7304614, 10)
+surface = "grass"
+
+[node name="Block4" type="StaticBody3D" parent="Hill" unique_id=1327250822]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, -53, 0, -30)
+script = ExtResource("2_fkc3u")
+shape = 1
+size = Vector3(10, 3.7304614, 10)
+surface = "grass"
+
+[node name="Block5" type="StaticBody3D" parent="Hill" unique_id=834768790]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -44, 0, -30)
+script = ExtResource("2_fkc3u")
+size = Vector3(8, 3.7304614, 8)
+surface = "grass"
+label = "summit"
+
+[node name="Tower" type="Node3D" parent="." unique_id=2026172113]
+
+[node name="Label" type="Label3D" parent="Tower" unique_id=1403035325]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 28, 34)
+pixel_size = 0.006
+billboard = 1
+modulate = Color(1, 0.85, 0.6, 1)
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "TALL TOWER 25 m"
+font_size = 80
+outline_size = 16
+
+[node name="Tower" type="StaticBody3D" parent="Tower" unique_id=2085218704]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 40)
+script = ExtResource("2_fkc3u")
+size = Vector3(6, 25, 6)
+surface = "stone"
+
+[node name="Block" type="StaticBody3D" parent="Tower" unique_id=2871726]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.9698484, 2.2, 42.96985)
+script = ExtResource("2_fkc3u")
+size = Vector3(2.4, 0.4, 2.4)
+surface = "wood"
+
+[node name="Block2" type="StaticBody3D" parent="Tower" unique_id=1314466019]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9698484, 5, 42.96985)
+script = ExtResource("2_fkc3u")
+size = Vector3(2.4, 0.4, 2.4)
+surface = "wood"
+
+[node name="Block3" type="StaticBody3D" parent="Tower" unique_id=844331388]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9698484, 7.8, 37.03015)
+script = ExtResource("2_fkc3u")
+size = Vector3(2.4, 0.4, 2.4)
+surface = "wood"
+
+[node name="Block4" type="StaticBody3D" parent="Tower" unique_id=1074507847]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.9698484, 10.6, 37.03015)
+script = ExtResource("2_fkc3u")
+size = Vector3(2.4, 0.4, 2.4)
+surface = "wood"
+
+[node name="Block5" type="StaticBody3D" parent="Tower" unique_id=818503596]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.9698484, 13.4, 42.96985)
+script = ExtResource("2_fkc3u")
+size = Vector3(2.4, 0.4, 2.4)
+surface = "wood"
+
+[node name="Block6" type="StaticBody3D" parent="Tower" unique_id=211576159]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9698484, 16.2, 42.96985)
+script = ExtResource("2_fkc3u")
+size = Vector3(2.4, 0.4, 2.4)
+surface = "wood"
+
+[node name="Block7" type="StaticBody3D" parent="Tower" unique_id=1806567317]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9698484, 19, 37.03015)
+script = ExtResource("2_fkc3u")
+size = Vector3(2.4, 0.4, 2.4)
+surface = "wood"
+
+[node name="Block8" type="StaticBody3D" parent="Tower" unique_id=2045182088]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.9698484, 21.8, 37.03015)
+script = ExtResource("2_fkc3u")
+size = Vector3(2.4, 0.4, 2.4)
+surface = "wood"
+
+[node name="TowerSteps" type="StaticBody3D" parent="Tower" unique_id=2070520022]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 35)
+script = ExtResource("2_fkc3u")
+shape = 2
+size = Vector3(3, 2.2, 4)
+surface = "stone"
+
+[node name="GapMover" type="Node3D" parent="." unique_id=1531671861]
+
+[node name="Label" type="Label3D" parent="GapMover" unique_id=16216823]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 6, 8)
+pixel_size = 0.006
+billboard = 1
+modulate = Color(0.7, 0.9, 1, 1)
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "MOVER THROUGH TIGHT GAP"
+font_size = 60
+outline_size = 16
+
+[node name="Block" type="StaticBody3D" parent="GapMover" unique_id=925763959]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 10)
+script = ExtResource("2_fkc3u")
+size = Vector3(1, 5, 6)
+surface = "stone"
+
+[node name="Block2" type="StaticBody3D" parent="GapMover" unique_id=13593173]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 16.5)
+script = ExtResource("2_fkc3u")
+size = Vector3(1, 5, 6)
+surface = "stone"
+
+[node name="Block3" type="StaticBody3D" parent="GapMover" unique_id=720163773]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 2.6, 13.25)
+script = ExtResource("2_fkc3u")
+size = Vector3(1, 2.4, 1.5)
+surface = "stone"
+
+[node name="Mover" type="AnimatableBody3D" parent="GapMover" unique_id=826709063]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 1, 13.25)
+script = ExtResource("4_ri7q4")
+waypoints = PackedVector3Array(0, 0, 0, 12, 0, 0)
+speed = 2.5
+
+[node name="Visual" type="StaticBody3D" parent="GapMover/Mover" unique_id=2099323762]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+collision_layer = 0
+script = ExtResource("2_fkc3u")
+size = Vector3(3, 0.5, 1.2)
+surface = "lab_orange"
+
+[node name="Shape" type="CollisionShape3D" parent="GapMover/Mover" unique_id=1522527940]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0)
+shape = SubResource("BoxShape3D_h3jkx")
+
+[node name="Pool" type="Node3D" parent="." unique_id=1654242709]
+
+[node name="Label" type="Label3D" parent="Pool" unique_id=1489372777]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44, 6, -36)
+pixel_size = 0.006
+billboard = 1
+modulate = Color(0.6, 0.95, 1, 1)
+outline_modulate = Color(0.12, 0.08, 0.2, 1)
+text = "SWIM / UNDERWATER"
+font_size = 70
+outline_size = 16
+
+[node name="Block" type="StaticBody3D" parent="Pool" unique_id=1665908815]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44, 0, -45)
+script = ExtResource("2_fkc3u")
+size = Vector3(20, 5, 2)
+surface = "stone"
+
+[node name="Block2" type="StaticBody3D" parent="Pool" unique_id=922649404]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44, 0, -27)
+script = ExtResource("2_fkc3u")
+size = Vector3(20, 5, 2)
+surface = "stone"
+
+[node name="Block3" type="StaticBody3D" parent="Pool" unique_id=86573064]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35, 0, -36)
+script = ExtResource("2_fkc3u")
+size = Vector3(2, 5, 16)
+surface = "stone"
+
+[node name="Block4" type="StaticBody3D" parent="Pool" unique_id=764448423]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 53, 0, -36)
+script = ExtResource("2_fkc3u")
+size = Vector3(2, 5, 16)
+surface = "stone"
+
+[node name="Steps" type="StaticBody3D" parent="Pool" unique_id=1240373697]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 31.5, 0, -36)
+script = ExtResource("2_fkc3u")
+shape = 2
+size = Vector3(5, 5, 4)
+surface = "stone"
+
+[node name="Block5" type="StaticBody3D" parent="Pool" unique_id=2043492391]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 46, 0, -34)
+script = ExtResource("2_fkc3u")
+size = Vector3(3, 2.5, 3)
+surface = "rock"
+label = "rock"
+
+[node name="Water" type="Area3D" parent="Pool" unique_id=965624149]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44, 4.6, -36)
+script = ExtResource("5_cvcxh")
+size = Vector3(16, 4.6, 16)
+
+[node name="TeleportSpawn" type="Marker3D" parent="." unique_id=991514862 groups=["debug_teleport"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+
+[node name="TeleportCorridor" type="Marker3D" parent="." unique_id=378845779 groups=["debug_teleport"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0.1, -10)
+
+[node name="TeleportGrove" type="Marker3D" parent="." unique_id=1321815917 groups=["debug_teleport"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 0.1, -14)
+
+[node name="TeleportSpiral" type="Marker3D" parent="." unique_id=1128488339 groups=["debug_teleport"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0.1, 18)
+
+[node name="TeleportCave" type="Marker3D" parent="." unique_id=1858371969 groups=["debug_teleport"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0.1, 22)
+
+[node name="TeleportTower" type="Marker3D" parent="." unique_id=265573889 groups=["debug_teleport"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 40)
+
+[node name="TeleportPool" type="Marker3D" parent="." unique_id=284627535 groups=["debug_teleport"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44, 0.1, -36)
+
+[node name="Player" type="CharacterBody3D" parent="." unique_id=1539634138 groups=["player"] instance=ExtResource("6_seaed")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0)
+collision_layer = 2
+collision_mask = 1033
+script = ExtResource("7_u1ubm")
+settings = ExtResource("8_ij2uu")
+
+[node name="CameraRig" type="Node3D" parent="." unique_id=1276550725 node_paths=PackedStringArray("target") instance=ExtResource("9_kbs7e")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 6)
+script = ExtResource("10_liiq2")
+settings = ExtResource("11_pr276")
+target = NodePath("../Player")

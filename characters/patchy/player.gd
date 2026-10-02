@@ -739,9 +739,10 @@ func check_water_entry() -> bool:
 
 ## Record a respawn point while Patchy stands calmly on solid ground.
 func track_safe_ground(delta: float) -> void:
+	var col: Object = floor_collider if is_instance_valid(floor_collider) else null
 	var stable := is_on_floor() and not floor_is_slide and rad_to_deg(floor_angle) < settings.slide_angle \
-			and floor_collider is StaticBody3D and not (floor_collider is AnimatableBody3D) \
-			and water_depth <= 0.0 and not (floor_collider as Node).is_in_group(&"unsafe_ground")
+			and col is StaticBody3D and not (col is AnimatableBody3D) \
+			and water_depth <= 0.0 and not (col as Node).is_in_group(&"unsafe_ground")
 	if not stable:
 		_safe_timer = 0.0
 		return

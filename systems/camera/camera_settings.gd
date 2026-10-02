@@ -30,7 +30,7 @@ extends Resource
 @export_range(0.0, 0.5, 0.005) var horizontal_follow_time: float = 0.05
 ## While airborne, Patchy may rise this far above the tracked height before
 ## the camera starts to climb (reduces jump bounce; spec §39).
-@export_range(0.0, 5.0, 0.05) var dead_zone_up: float = 1.6
+@export_range(0.0, 5.0, 0.05) var dead_zone_up: float = 2.0
 ## ...and drop this far below before the camera follows down.
 @export_range(0.0, 5.0, 0.05) var dead_zone_down: float = 0.7
 @export_range(0.0, 2.0, 0.01) var grounded_vertical_time: float = 0.14

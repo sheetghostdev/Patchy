@@ -72,7 +72,7 @@ func _impact() -> void:
 	p.landed.emit(s.ground_pound_speed, Player.Land.HEAVY)
 	p.ground_pound_impact.emit(p.global_position)
 	p.combat.ground_pound_impact()
-	var col := p.floor_collider
+	var col: Object = p.floor_collider if is_instance_valid(p.floor_collider) else null
 	if col is Node and (col as Node).is_in_group(&"bounce_surface"):
 		var h: float = (col as Node).get_meta(&"bounce_height", 5.0)
 		p.start_jump(&"bounce", PlayerMovementSettings.velocity_for(h, s.get_jump_gravity()))

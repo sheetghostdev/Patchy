@@ -39,8 +39,11 @@ func _on_body_exited(body: Node3D) -> void:
 
 
 func _rig_for(body: Node3D) -> CameraRig:
-	if body is Player and (body as Player).camera_rig is CameraRig:
-		return (body as Player).camera_rig as CameraRig
+	if not body is Player:
+		return null
+	var rig: Object = (body as Player).camera_rig
+	if is_instance_valid(rig) and rig is CameraRig:
+		return rig as CameraRig
 	return null
 
 

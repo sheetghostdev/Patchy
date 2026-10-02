@@ -172,10 +172,8 @@ func _build_head() -> void:
 		soft.sphere(0.06, xf(Vector3(0.29, 0.21, 0.01)), Palette.SKIN.darkened(0.04), 6, 10)
 		# Short scruffy chin beard.
 		matte.ellipsoid(Vector3(0.16, 0.09, 0.1), xf(Vector3(0, 0.045, -0.18), Vector3(18, 0, 0)), Palette.BEARD, 8, 12)
-		# Hair under the hat and a ribboned ponytail (reads from behind).
+		# Hair under the hat (reads from behind).
 		matte.ellipsoid(Vector3(0.285, 0.21, 0.24), xf(Vector3(0, 0.27, 0.06)), Palette.BEARD, 10, 14)
-		matte.ellipsoid(Vector3(0.05, 0.09, 0.05), xf(Vector3(0, 0.1, 0.29), Vector3(-55, 0, 0)), Palette.BEARD, 6, 10)
-		matte.torus(0.022, 0.05, xf(Vector3(0, 0.15, 0.26), Vector3(-55, 0, 0)), Palette.COAT, 10, 6)
 	)
 	eye_l = _pivot(head, "EyeL", Vector3(-0.1, 0.23, -0.245))
 	eye_r = _pivot(head, "EyeR", Vector3(0.1, 0.23, -0.245))
