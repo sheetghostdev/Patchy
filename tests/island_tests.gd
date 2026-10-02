@@ -306,7 +306,16 @@ func test_shellby_talks() -> void:
 	await frames(6)
 	check("prompt offered near Shellby", player.interaction.current == npc, "current=%s" % player.interaction.current)
 	tap(&"interact")
-	var done := await wait_until(func() -> bool: return WorldState.is_completed(&"castaway_met_shellby"), 900)
+	# Page through the dialogue box like a player would.
+	var ui := get_node_or_null(^"/root/UI")
+	var done := -1
+	for i in 900:
+		await frames(1)
+		if WorldState.is_completed(&"castaway_met_shellby"):
+			done = i
+			break
+		if ui != null and i % 20 == 10 and ui.call(&"is_dialogue_active"):
+			ui.get(&"hud").get(&"dialogue").call(&"advance")
 	check("conversation completes", done >= 0, "")
 	await frames(4)
 	check("control returns after talking", player.state_id != &"locked", "state=%s" % player.state_id)

@@ -25,6 +25,12 @@ var _has_checkpoint := false
 var _discovered_islands: Array[StringName] = []
 
 
+func _ready() -> void:
+	var log := QuestLog.new()
+	log.name = "QuestLog"
+	add_child(log)
+
+
 func _process(delta: float) -> void:
 	if not get_tree().paused:
 		play_time += delta

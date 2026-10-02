@@ -226,6 +226,7 @@ func _on_new_game() -> void:
 			return
 	_busy = true
 	SaveManager.new_game(0)
+	SaveManager.autosave_enabled = true
 	_start(_resolve_start())
 
 
@@ -235,8 +236,10 @@ func _on_continue() -> void:
 		_buttons[&"new"].grab_focus()
 		return
 	_busy = true
-	var scene := UIChartData.scene_for(GameManager.current_island)
-	_start(scene if scene != "" else _resolve_start())
+	SaveManager.autosave_enabled = true
+	# Back to the last checkpoint on the island (or cabin) of the save.
+	GameManager.resume_pending = true
+	_start(GameManager.get_island_scene(GameManager.current_island))
 
 
 func _start(path: String) -> void:

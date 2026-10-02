@@ -55,6 +55,12 @@ func _register_totals() -> void:
 	for id: StringName in treasures:
 		if id != &"":
 			InventoryManager.register_island_treasure_total(id, treasures[id])
+	# The pause menu's collection page shows "found / total" per island.
+	var ui := get_node_or_null(^"/root/UI")
+	if ui != null and ui.has_method(&"set_island_totals"):
+		for id: StringName in parrots.keys() + treasures.keys():
+			if id != &"":
+				ui.call(&"set_island_totals", id, {"treasure": int(treasures.get(id, 0)), "parrots": int(parrots.get(id, 0))})
 
 
 func covers(id: StringName) -> bool:

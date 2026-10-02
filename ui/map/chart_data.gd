@@ -19,33 +19,38 @@ const ISLANDS := [
 		"totals": {},
 	},
 	{
+		"id": &"driftwood_key", "name": "Driftwood Key", "pos": Vector2(0.35, 0.57), "size": 0.035,
+		"motif": &"palm", "seed": 5, "scene": "res://world/islands/castaway_cay/castaway_cay.tscn",
+		"totals": {},
+	},
+	{
 		"id": &"crabby_coast", "name": "Crabby Coast", "pos": Vector2(0.2, 0.76), "size": 0.09,
-		"motif": &"crab", "seed": 11, "scene": "res://world/islands/crabby_coast/crabby_coast.tscn",
+		"motif": &"crab", "seed": 11, "scene": "",
 		"totals": {},
 	},
 	{
 		"id": &"cannonball_cliffs", "name": "Cannonball Cliffs", "pos": Vector2(0.74, 0.33), "size": 0.09,
-		"motif": &"cannon", "seed": 27, "scene": "res://world/islands/cannonball_cliffs/cannonball_cliffs.tscn",
+		"motif": &"cannon", "seed": 27, "scene": "",
 		"totals": {},
 	},
 	{
 		"id": &"lantern_lagoon", "name": "Lantern Lagoon", "pos": Vector2(0.16, 0.42), "size": 0.085,
-		"motif": &"lantern", "seed": 41, "scene": "res://world/islands/lantern_lagoon/lantern_lagoon.tscn",
+		"motif": &"lantern", "seed": 41, "scene": "",
 		"totals": {},
 	},
 	{
 		"id": &"skullcap_mountain", "name": "Skullcap Mountain", "pos": Vector2(0.52, 0.13), "size": 0.09,
-		"motif": &"skull", "seed": 53, "scene": "res://world/islands/skullcap_mountain/skullcap_mountain.tscn",
+		"motif": &"skull", "seed": 53, "scene": "",
 		"totals": {},
 	},
 	{
 		"id": &"turtleback", "name": "Turtleback", "pos": Vector2(0.7, 0.7), "size": 0.075,
-		"motif": &"turtle", "seed": 67, "scene": "res://world/islands/turtleback/turtleback.tscn",
+		"motif": &"turtle", "seed": 67, "scene": "",
 		"totals": {},
 	},
 	{
 		"id": &"shipwreck_shoals", "name": "Shipwreck Shoals", "pos": Vector2(0.45, 0.82), "size": 0.07,
-		"motif": &"wreck", "seed": 79, "scene": "res://world/islands/shipwreck_shoals/shipwreck_shoals.tscn",
+		"motif": &"wreck", "seed": 79, "scene": "",
 		"totals": {},
 	},
 ]

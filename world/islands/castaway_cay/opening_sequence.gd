@@ -34,10 +34,18 @@ func _ready() -> void:
 	add_to_group(&"opening_sequence")
 	if not is_pending():
 		_done = true
-		# Seen it already: the thieves are just cove crabs now.
+		# Seen it already: the thieves are just cove crabs now, scuttling
+		# around their burrow instead of waiting at Patchy's spawn.
+		var k := 0
 		for c: Crab in [crab_dragging, crab_noticing]:
-			if c != null:
-				c.dormant = false
+			if c == null:
+				continue
+			c.dormant = false
+			if c.burrow != null:
+				var spot := c.burrow.global_position + Vector3(-2.5 + k * 5.0, 0.1, -2.0)
+				c.global_position = spot
+				c.home = spot
+			k += 1
 		return
 	# Hold Patchy down before the first rendered frame.
 	if player != null:
