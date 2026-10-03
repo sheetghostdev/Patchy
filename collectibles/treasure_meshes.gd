@@ -42,6 +42,15 @@ static func get_mesh(kind: StringName, color: Color = Palette.GEM_RED) -> ArrayM
 		&"relic":
 			metal.rounded_box(Vector3(0.36, 0.26, 0.12), 0.04, Transform3D.IDENTITY, Color("c98f4a"), 2)
 			glossy.sphere(0.07, Transform3D(Basis.IDENTITY, Vector3(0, 0, -0.07)), Palette.GEM_BLUE, 4, 8)
+		&"teapot":
+			# The Golden Teapot (Teacup Isle): round body, curved spout,
+			# looped handle, a lid with a gem knob.
+			metal.sphere(0.22, Transform3D(Basis.from_scale(Vector3(1.0, 0.82, 1.0)), Vector3.ZERO), gold, 8, 12)
+			metal.cylinder(0.14, 0.17, 0.06, Transform3D(Basis.IDENTITY, Vector3(0, 0.18, 0)), gold.lightened(0.1), 12)
+			metal.cylinder(0.12, 0.12, 0.05, Transform3D(Basis.IDENTITY, Vector3(0, -0.19, 0)), gold.darkened(0.1), 12)
+			metal.tube(PackedVector3Array([Vector3(0.18, -0.03, 0), Vector3(0.3, 0.04, 0), Vector3(0.36, 0.16, 0)]), PackedFloat32Array([0.05, 0.035, 0.025]), gold, 6)
+			metal.torus(0.09, 0.12, Transform3D(Basis.from_euler(Vector3(PI * 0.5, 0, 0)), Vector3(-0.25, 0.02, 0)), gold, 12, 5)
+			glossy.sphere(0.05, Transform3D(Basis.IDENTITY, Vector3(0, 0.24, 0)), Palette.GEM_BLUE, 3, 6)
 		&"heart":
 			var red := Color("ff5470")
 			glossy.sphere(0.14, Transform3D(Basis.IDENTITY, Vector3(-0.1, 0.06, 0)), red, 8, 12)

@@ -24,6 +24,8 @@ Status:
   the dais (`tests/bell_atoll_tests.gd`).
 - Pinwheel Isle is playable: the screw lifts, the nook, the summit and the
   crow's nest (`tests/pinwheel_isle_tests.gd`).
+- Teacup Isle is playable: the spoon, the whirlpool, the grotto's vents and
+  the way out under the handle (`tests/teacup_isle_tests.gd`).
 - Every other island so far is a horizon silhouette (`world/horizon/`)
   placed by `Archipelago` (`world/horizon/archipelago.gd`).
 
@@ -173,16 +175,22 @@ lies.
 
 ## Teacup Isle — "A round island with tea... a whirlpool... in the middle."
 
-- **Horizon:** a round cliff-walled islet with a handle-shaped rock arch
-  on one side. Spray rises from the swirl inside.
-- **Toy:** the whirlpool in the cup. Jump in and it spins Patchy down
-  into a sunken grotto.
+- **Horizon:** a great china teacup of white chalk banded with blue, on a
+  sandy saucer, with a looping handle on one side. The tea turns inside.
+- **Toy:** the whirlpool in the cup (`Whirlpool`). Swim in and the current
+  carries Patchy round and in to the eye, which spins him down the drain
+  into a grotto hollowed out of the cup's foot.
 - **Puzzles:**
-  - Time your jump to the whirlpool's current.
-  - In the grotto, harpoon the sugar-cube boulders out of the vents.
-  - Climb out through the handle arch.
-- **Reward:** the Golden Teapot treasure and a parrot. Its map leads to
-  Crabby Coast.
+  - Climb the sugar-cube steps and walk up the giant spoon leaning on the
+    cup to its rim, then jump into the tea.
+  - In the grotto, three steam vents (`SteamVent`) are plugged with sugar
+    cubes (`SugarPlug`). Yank them out with the grapple (or knock them loose
+    with the cannon) and ride the steam up to the shelves above.
+  - Blast the wall of sugar cubes across the tunnel and walk out under the
+    handle arch.
+  - A gem waits on the crest of the handle, another on a grotto shelf.
+- **Reward:** the Golden Teapot treasure and a parrot. (Later, a map in the
+  teapot's chest will lead to Crabby Coast.)
 
 ## Crabby Coast — "The coast where crabs built a kingdom, and you control the tide."
 
@@ -398,7 +406,8 @@ for review, and the README.
    - The helm and the Conch Shell use the same transition.
 3. **The spare sail** (done), **Hat Rock** and the Spyglass (done),
    **Bell Atoll** and the Shanty Sheet (done), **Pinwheel Isle** and the
-   first Heart Piece (done), then Teacup Isle, then **Crabby Coast**:
+   first Heart Piece (done), **Teacup Isle** and the Golden Teapot (done),
+   then **Crabby Coast**:
    Blast Barrels, the Tide Bell, the Spring Fist and Duke Pinchwick.
 4. Lantern Lagoon, Shipwreck Shoals, Turtleback, then the *Jolly Patch*.
 5. Skullcap Mountain, Cannonball Cliffs, Cinder Isle, Stormpeak, Crocodile

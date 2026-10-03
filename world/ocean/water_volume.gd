@@ -12,6 +12,11 @@ extends Area3D
 ## Visual-only wave amplitude applied to the gameplay surface (m).
 @export_range(0.0, 1.0, 0.01) var wave_height := 0.06
 @export_range(0.0, 5.0, 0.05) var wave_speed := 1.2
+## A cylinder (size.x across) instead of a box: round pools, a teacup.
+@export var round := false:
+	set(v):
+		round = v
+		_rebuild()
 ## Create a simple translucent surface mesh (test scenes, pools).
 @export var show_surface := true:
 	set(v):
@@ -43,9 +48,15 @@ func _rebuild() -> void:
 		_shape = CollisionShape3D.new()
 		_shape.name = "Shape"
 		add_child(_shape, false, Node.INTERNAL_MODE_FRONT)
-	var box := BoxShape3D.new()
-	box.size = size
-	_shape.shape = box
+	if round:
+		var cyl := CylinderShape3D.new()
+		cyl.radius = size.x * 0.5
+		cyl.height = size.y
+		_shape.shape = cyl
+	else:
+		var box := BoxShape3D.new()
+		box.size = size
+		_shape.shape = box
 	_shape.position = Vector3(0.0, -size.y * 0.5, 0.0)
 	if show_surface:
 		if _surface == null:

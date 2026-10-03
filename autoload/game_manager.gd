@@ -10,6 +10,7 @@ const ISLAND_SCENES := {
 	&"hat_rock": "res://world/islands/hat_rock/hat_rock.tscn",
 	&"bell_atoll": "res://world/islands/bell_atoll/bell_atoll.tscn",
 	&"pinwheel_isle": "res://world/islands/pinwheel_isle/pinwheel_isle.tscn",
+	&"teacup_isle": "res://world/islands/teacup_isle/teacup_isle.tscn",
 	&"captains_cabin": "res://world/hub/captains_cabin.tscn",
 }
 const FIRST_ISLAND := &"castaway_cay"

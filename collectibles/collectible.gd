@@ -9,9 +9,9 @@ extends Area3D
 
 signal collected(collectible: Collectible)
 
-const KIND_VALUES := {&"coin": 1, &"pearl": 3, &"gem": 5, &"goblet": 15, &"crown": 25, &"relic": 40, &"heart": 0}
+const KIND_VALUES := {&"coin": 1, &"pearl": 3, &"gem": 5, &"goblet": 15, &"crown": 25, &"relic": 40, &"teapot": 50, &"heart": 0}
 
-@export_enum("coin", "gem", "pearl", "goblet", "crown", "relic", "heart") var kind: String = "coin":
+@export_enum("coin", "gem", "pearl", "goblet", "crown", "relic", "teapot", "heart") var kind: String = "coin":
 	set(v):
 		kind = v
 		_rebuild()
@@ -102,7 +102,7 @@ func _rebuild() -> void:
 	_mesh.mesh = TreasureMeshes.get_mesh(StringName(kind), gem_color)
 	var s := 1.0
 	match kind:
-		"crown", "relic", "goblet":
+		"crown", "relic", "goblet", "teapot":
 			s = 1.35
 		"heart":
 			s = 1.2

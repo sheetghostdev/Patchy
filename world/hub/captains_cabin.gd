@@ -82,7 +82,7 @@ func _build_pedestals() -> void:
 		var color := Color.from_string(String(t.get("color", "ffffff")), Color.WHITE)
 		var shown := MeshInstance3D.new()
 		shown.mesh = TreasureMeshes.get_mesh(StringName(t.get("kind", "gem")), color)
-		shown.scale = Vector3.ONE * (1.3 if String(t.get("kind", "")) in ["crown", "relic", "goblet"] else 1.6)
+		shown.scale = Vector3.ONE * (1.3 if String(t.get("kind", "")) in ["crown", "relic", "goblet", "teapot"] else 1.6)
 		var spinner := Node3D.new()
 		spinner.position = Vector3(0, 0.95, 0)
 		spinner.add_child(shown)

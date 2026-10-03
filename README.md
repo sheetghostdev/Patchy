@@ -255,7 +255,7 @@ and heights for checking any change by feel.
 
 ```bash
 # Regenerate procedural scenes (labs, islands, hub) from code:
-tools/builders/build.sh movement_lab camera_lab castaway_cay captains_cabin hat_rock bell_atoll pinwheel_isle
+tools/builders/build.sh movement_lab camera_lab castaway_cay captains_cabin hat_rock bell_atoll pinwheel_isle teacup_isle
 
 # Render screenshots on a headless machine (xvfb + Vulkan). flags= marks
 # WorldState ids, progress=demo fakes mid-game progress, hud=0 hides the HUD:
@@ -294,10 +294,11 @@ godot --headless --path . --fixed-fps 60 res://tests/run_movement_tests.tscn   #
 godot --headless --path . --fixed-fps 60 res://tests/run_camera_tests.tscn     # 21 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_gameplay_tests.tscn   # 68 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 162 checks
-godot --headless --path . --fixed-fps 60 res://tests/run_voyage_tests.tscn     # 12 checks
+godot --headless --path . --fixed-fps 60 res://tests/run_voyage_tests.tscn     # 14 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_hat_rock_tests.tscn   # 43 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_bell_atoll_tests.tscn # 35 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_pinwheel_isle_tests.tscn # 23 checks
+godot --headless --path . --fixed-fps 60 res://tests/run_teacup_isle_tests.tscn # 20 checks
 godot --headless --path . --fixed-fps 60 res://ui/tests/ui_flow_test.tscn      # 89 checks
 godot --headless --path . --fixed-fps 60 res://props/tests/prop_tests.tscn     # 74 checks
 godot --headless --path . --fixed-fps 60 res://world/ocean/tests/ocean_swim_check.tscn
@@ -324,7 +325,7 @@ What each suite covers:
   - the cabin hub's displays.
 - **Voyage**: real scene changes. Sail from Castaway Cay to Hat Rock with
   Betty's spare sail and home again, arriving at the tiller, and on to
-  Bell Atoll and Pinwheel Isle. The little
+  Bell Atoll, Pinwheel Isle and Teacup Isle. The little
   patched sail is turned back by the current, and islands not built yet
   are wrapped in sea mist.
 - **Hat Rock**: played through on the real island: up the boulders to the
@@ -348,6 +349,11 @@ What each suite covers:
   hopping off onto the gem nook, the summit's parrot, keeping the great
   wheel spinning all the way up to the crow's nest and its Heart Piece, and
   four pieces making a new heart container.
+- **Teacup Isle**: up the sugar-cube steps and the spoon to the rim, the
+  whirlpool carrying Patchy round and down the drain into the grotto, the
+  grapple yanking a sugar plug out of a vent and the steam lifting him to
+  the parrot's shelf, the teapot's shelf and its chest, and the cannon
+  cracking the sugar wall to walk out under the handle.
 - **Island**: Castaway Cay end to end:
   - the opening sequence;
   - key routes (beach to meadow jump, the ledge-grab ridge, the wreck climb
@@ -480,6 +486,17 @@ waits on the summit. The great pole there climbs to a crow's nest under
 the biggest wheel of all, a long ride that needs the wheel kept spinning,
 and in the nest is the first **Heart Piece**. Four make a new heart
 container.
+
+**Teacup Isle**, east of Castaway Cay, is a great china teacup on a sandy
+saucer. Hop up a stack of sugar cubes and walk up the giant silver spoon
+leaning on the cup to its grassy rim. Inside, the tea turns in a
+whirlpool: jump in and the current carries Patchy round and round and down
+the drain, into a grotto hollowed out of the cup's foot. Three steam vents
+there are plugged with sugar cubes. Yank one out with the grapple and the
+steam carries Patchy up to a shelf: one has a parrot, one a gem, and one
+the chest with the **Golden Teapot**. The way out is a tunnel under the
+handle, walled up with sugar cubes, which the cannon cracks. Another gem
+sits on the crest of the handle.
 
 **The crossing** between them is never empty water (spec §117). A bell
 buoy clangs midway to steer by, and floating barrels burst into coins

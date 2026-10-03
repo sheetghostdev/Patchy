@@ -1,0 +1,422 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://world/islands/island_info.gd" id="1_ajls3"]
+[ext_resource type="Script" path="res://world/environment/sky_environment.gd" id="2_m5gtj"]
+[ext_resource type="Script" path="res://world/environment/ambience.gd" id="3_ufd1j"]
+[ext_resource type="Script" path="res://world/environment/weather.gd" id="4_hpbro"]
+[ext_resource type="Script" path="res://world/horizon/horizon_teacup_isle.gd" id="5_7upkv"]
+[ext_resource type="Script" path="res://props/blocks/level_block.gd" id="6_dbpog"]
+[ext_resource type="Script" path="res://props/structures/dock.gd" id="7_x40gr"]
+[ext_resource type="Script" path="res://world/vehicles/tiny_boat.gd" id="8_enxlq"]
+[ext_resource type="Script" path="res://world/ocean/sea_region.gd" id="9_egit7"]
+[ext_resource type="Script" path="res://systems/triggers/checkpoint.gd" id="10_12rg1"]
+[ext_resource type="Script" path="res://world/ocean/water_volume.gd" id="11_q1iys"]
+[ext_resource type="Script" path="res://world/objects/whirlpool.gd" id="12_v70a7"]
+[ext_resource type="Script" path="res://world/objects/steam_vent.gd" id="13_r5q6x"]
+[ext_resource type="Script" path="res://world/objects/sugar_plug.gd" id="14_wb6cx"]
+[ext_resource type="Script" path="res://world/objects/treasure_chest.gd" id="15_hl3du"]
+[ext_resource type="Script" path="res://world/objects/cracked_rock.gd" id="16_u87d6"]
+[ext_resource type="Script" path="res://world/objects/parrot_cage.gd" id="17_nuwb1"]
+[ext_resource type="Script" path="res://systems/tutorial/tutorial_hint.gd" id="18_742yt"]
+[ext_resource type="Script" path="res://collectibles/collectible.gd" id="19_jbbi8"]
+[ext_resource type="Script" path="res://collectibles/coin_trail.gd" id="20_a8ix6"]
+[ext_resource type="PackedScene" path="res://enemies/crab/crab.tscn" id="21_swv61"]
+[ext_resource type="Script" path="res://enemies/crab/crab.gd" id="22_bx723"]
+[ext_resource type="Script" path="res://world/horizon/horizon_castaway.gd" id="23_o3elv"]
+[ext_resource type="Script" path="res://world/horizon/horizon_skullcap.gd" id="24_umkgc"]
+[ext_resource type="Script" path="res://world/horizon/horizon_cinder_isle.gd" id="25_mnn4o"]
+[ext_resource type="Script" path="res://world/horizon/horizon_cannon_cliffs.gd" id="26_52in1"]
+[ext_resource type="Script" path="res://world/horizon/horizon_stormpeak.gd" id="27_ry7t6"]
+[ext_resource type="Script" path="res://world/horizon/horizon_turtleback.gd" id="28_vbeyh"]
+[ext_resource type="Script" path="res://world/horizon/horizon_bell_atoll.gd" id="29_vr06v"]
+[ext_resource type="Script" path="res://world/horizon/horizon_wreck_shoals.gd" id="30_oyird"]
+[ext_resource type="Script" path="res://world/horizon/horizon_crabby_coast.gd" id="31_tff7q"]
+[ext_resource type="Script" path="res://world/horizon/horizon_lantern_lagoon.gd" id="32_bwshd"]
+[ext_resource type="Script" path="res://world/horizon/horizon_pinwheel_isle.gd" id="33_lb28m"]
+[ext_resource type="Script" path="res://world/horizon/horizon_croc_crown.gd" id="34_7ruvg"]
+[ext_resource type="Script" path="res://world/horizon/horizon_hat_rock.gd" id="35_e80gf"]
+[ext_resource type="Script" path="res://world/ocean/ocean.gd" id="36_07a4g"]
+[ext_resource type="Script" path="res://world/ocean/underwater_effect.gd" id="37_kikfv"]
+[ext_resource type="Script" path="res://world/ocean/open_sea.gd" id="38_c5oy2"]
+[ext_resource type="Script" path="res://world/ocean/voyage.gd" id="39_j5vqi"]
+[ext_resource type="PackedScene" path="res://characters/patchy/player.tscn" id="40_7iqp6"]
+[ext_resource type="Script" path="res://characters/patchy/player.gd" id="41_j2yh3"]
+[ext_resource type="Resource" path="res://resources/settings/patchy_movement.tres" id="42_anq2a"]
+[ext_resource type="PackedScene" path="res://systems/camera/camera_rig.tscn" id="43_wuf3t"]
+[ext_resource type="Script" path="res://systems/camera/camera_rig.gd" id="44_nve7m"]
+[ext_resource type="Resource" path="res://resources/settings/camera_default.tres" id="45_s13hy"]
+
+[node name="TeacupIsle" type="Node3D" unique_id=2138856809]
+
+[node name="IslandInfo" type="Node" parent="." unique_id=1696476088]
+script = ExtResource("1_ajls3")
+island_id = &"teacup_isle"
+display_name = "Teacup Isle"
+music = &"castaway_explore"
+
+[node name="SkyEnvironment" type="Node3D" parent="." unique_id=1706335395]
+script = ExtResource("2_m5gtj")
+shadow_distance = 160.0
+
+[node name="Ambience" type="Node3D" parent="." unique_id=1231760380]
+script = ExtResource("3_ufd1j")
+
+[node name="Weather" type="Node3D" parent="." unique_id=216294007]
+script = ExtResource("4_hpbro")
+
+[node name="TeacupIsle" type="Node3D" parent="." unique_id=1516004518]
+transform = Transform3D(0.37432232, 0, 0.92729867, 0, 1, 0, -0.92729867, 0, 0.37432232, 436, 0, 176)
+
+[node name="Terrain" type="Node3D" parent="TeacupIsle" unique_id=281048923]
+
+[node name="Cup" type="Node3D" parent="TeacupIsle/Terrain" unique_id=685729600]
+script = ExtResource("5_7upkv")
+playable = true
+
+[node name="Structures" type="Node3D" parent="TeacupIsle" unique_id=1124733585]
+
+[node name="Shelf1" type="StaticBody3D" parent="TeacupIsle/Structures" unique_id=1365928758]
+transform = Transform3D(-0.8660254, 0, 0.50000006, 0, 1, 0, -0.50000006, 0, -0.8660254, -6.95, 5.8, 12.037752)
+script = ExtResource("6_dbpog")
+size = Vector3(4.2, 0.8, 3.4)
+surface = "stone"
+
+[node name="Shelf2" type="StaticBody3D" parent="TeacupIsle/Structures" unique_id=1469941641]
+transform = Transform3D(0.42261824, 0, 0.9063078, 0, 1, 0, -0.9063078, 0, 0.42261824, -12.597678, 6.4, -5.874394)
+script = ExtResource("6_dbpog")
+size = Vector3(4.2, 0.8, 3.4)
+surface = "stone"
+
+[node name="Shelf3" type="StaticBody3D" parent="TeacupIsle/Structures" unique_id=968768966]
+transform = Transform3D(0.9396926, 0, -0.34202012, 0, 1, 0, 0.34202012, 0, 0.9396926, 4.75408, 5.4, -13.061727)
+script = ExtResource("6_dbpog")
+size = Vector3(4.2, 0.8, 3.4)
+surface = "stone"
+
+[node name="Gameplay" type="Node3D" parent="TeacupIsle" unique_id=1197326124]
+
+[node name="Landing" type="Node3D" parent="TeacupIsle/Gameplay" unique_id=355473868]
+
+[node name="Jetty" type="StaticBody3D" parent="TeacupIsle/Gameplay/Landing" unique_id=1906046990]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -38.944)
+script = ExtResource("7_x40gr")
+length = 10.0
+post_depth = 6.0
+water_line = -0.9
+
+[node name="BoatMooring" type="Marker3D" parent="TeacupIsle/Gameplay/Landing" unique_id=345896619]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 3, 0, -47.244)
+
+[node name="Arrival" type="Marker3D" parent="TeacupIsle/Gameplay/Landing" unique_id=2027808988]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 1.4, -45.744)
+
+[node name="TinyBoat" type="CharacterBody3D" parent="TeacupIsle/Gameplay/Landing" unique_id=992483427]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 3, 0, -47.244)
+script = ExtResource("8_enxlq")
+world_limit = 230.0
+limit_center = Vector3(436, 0, 176)
+home_island = &"teacup_isle"
+
+[node name="SeaRegion" type="Marker3D" parent="TeacupIsle/Gameplay/Landing" unique_id=1756548868 node_paths=PackedStringArray("boat_dock", "arrival")]
+script = ExtResource("9_egit7")
+region_name = "Teacup Isle"
+island_id = &"teacup_isle"
+radius = 85.0
+boat_dock = NodePath("../BoatMooring")
+arrival = NodePath("../Arrival")
+
+[node name="CpSaucer" type="Area3D" parent="TeacupIsle/Gameplay/Landing" unique_id=1492288508]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1, -33.744)
+script = ExtResource("10_12rg1")
+checkpoint_id = &"cp_teacup_saucer"
+
+[node name="Tea" type="Node3D" parent="TeacupIsle/Gameplay" unique_id=1892312599]
+
+[node name="TeaWater" type="Area3D" parent="TeacupIsle/Gameplay/Tea" unique_id=1427173845]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.5, 0)
+script = ExtResource("11_q1iys")
+size = Vector3(41.8, 2.7, 41.8)
+wave_height = 0.05
+round = true
+show_surface = false
+
+[node name="Whirlpool" type="Node3D" parent="TeacupIsle/Gameplay/Tea" unique_id=486974234]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.5, 0)
+script = ExtResource("12_v70a7")
+radius = 20.4
+eye_radius = 2.5
+drop_to = -4.699999999999999
+
+[node name="Grotto" type="Node3D" parent="TeacupIsle/Gameplay" unique_id=1816758798]
+
+[node name="GrottoLight" type="OmniLight3D" parent="TeacupIsle/Gameplay/Grotto" unique_id=1211858784]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.5, 0)
+light_color = Color(1, 0.8862745, 0.65882355, 1)
+light_energy = 1.6
+light_specular = 0.0
+omni_range = 16.0
+
+[node name="GrottoLight2" type="OmniLight3D" parent="TeacupIsle/Gameplay/Grotto" unique_id=1840843247]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 5, 6)
+light_color = Color(0.7490196, 0.90588236, 1, 1)
+light_specular = 0.0
+omni_range = 16.0
+
+[node name="GrottoLight3" type="OmniLight3D" parent="TeacupIsle/Gameplay/Grotto" unique_id=712135492]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 5, -6)
+light_color = Color(0.7490196, 0.90588236, 1, 1)
+light_specular = 0.0
+omni_range = 16.0
+
+[node name="Vent1" type="Area3D" parent="TeacupIsle/Gameplay/Grotto" unique_id=358514829]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.75, 1, 8.2272415)
+script = ExtResource("13_r5q6x")
+height = 6.8
+
+[node name="Plug1" type="StaticBody3D" parent="TeacupIsle/Gameplay/Grotto" unique_id=602525114 node_paths=PackedStringArray("vent")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.75, 1, 8.2272415)
+script = ExtResource("14_wb6cx")
+plug_id = &"teacup_plug_1"
+vent = NodePath("../Vent1")
+
+[node name="Vent2" type="Area3D" parent="TeacupIsle/Gameplay/Grotto" unique_id=768855470]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.609924, 1, -4.0148735)
+script = ExtResource("13_r5q6x")
+height = 7.4
+
+[node name="Plug2" type="StaticBody3D" parent="TeacupIsle/Gameplay/Grotto" unique_id=905947401 node_paths=PackedStringArray("vent")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.609924, 1, -4.0148735)
+script = ExtResource("14_wb6cx")
+plug_id = &"teacup_plug_2"
+vent = NodePath("../Vent2")
+
+[node name="TeapotChest" type="Area3D" parent="TeacupIsle/Gameplay/Grotto" unique_id=1146608940]
+transform = Transform3D(-0.42261833, 0, -0.90630776, 0, 1, 0, 0.90630776, 0, -0.42261833, -12.960201, 7.2, -6.0434413)
+script = ExtResource("15_hl3du")
+chest_id = &"teacup_chest"
+island_id = &"teacup_isle"
+contents = "teapot"
+gold_variant = true
+
+[node name="Vent3" type="Area3D" parent="TeacupIsle/Gameplay/Grotto" unique_id=2005452984]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2491915, 1, -8.92708)
+script = ExtResource("13_r5q6x")
+height = 6.4
+
+[node name="Plug3" type="StaticBody3D" parent="TeacupIsle/Gameplay/Grotto" unique_id=654683933 node_paths=PackedStringArray("vent")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2491915, 1, -8.92708)
+script = ExtResource("14_wb6cx")
+plug_id = &"teacup_plug_3"
+vent = NodePath("../Vent3")
+
+[node name="SugarWall" type="StaticBody3D" parent="TeacupIsle/Gameplay/Grotto" unique_id=156823612]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 15.9, 1, 0)
+script = ExtResource("16_u87d6")
+rock_id = &"teacup_sugar_wall"
+size = Vector3(3.6, 3.5, 1)
+look = "sugar"
+
+[node name="CpGrotto" type="Area3D" parent="TeacupIsle/Gameplay/Grotto" unique_id=510839865]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 1, 4)
+script = ExtResource("10_12rg1")
+checkpoint_id = &"cp_teacup_grotto"
+
+[node name="ParrotCage_teacup_parrot_grotto" type="Area3D" parent="TeacupIsle/Gameplay" unique_id=303516036]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.1499996, 6.6, 12.384162)
+script = ExtResource("17_nuwb1")
+parrot_id = &"teacup_parrot_grotto"
+island_id = &"teacup_isle"
+plumage = 3
+
+[node name="Hints" type="Node3D" parent="TeacupIsle/Gameplay" unique_id=382753546]
+
+[node name="HintTeacupTea" type="Node3D" parent="TeacupIsle/Gameplay/Hints" unique_id=1632022847]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.843458, 17.15, -15.870202)
+script = ExtResource("18_742yt")
+hint_id = &"hint_teacup_tea"
+text = "The tea's swirling round... jump in and see where it goes!"
+
+[node name="HintTeacupPlug" type="Node3D" parent="TeacupIsle/Gameplay/Hints" unique_id=242489456]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+script = ExtResource("18_742yt")
+hint_id = &"hint_teacup_plug"
+text = "{tool_primary} Yank the sugar cubes out of the vents with the grapple"
+size = Vector3(8, 5, 8)
+require_attachment = &"grapple"
+
+[node name="HintTeacupWall" type="Node3D" parent="TeacupIsle/Gameplay/Hints" unique_id=546581643]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.3, 1, 0)
+script = ExtResource("18_742yt")
+hint_id = &"hint_teacup_wall"
+text = "A wall of sugar... the cannon should crack it"
+size = Vector3(5, 4, 5)
+require_attachment = &"cannon"
+
+[node name="Treasure" type="Node3D" parent="TeacupIsle" unique_id=593388194]
+
+[node name="TeacupGemGrotto" type="Area3D" parent="TeacupIsle/Treasure" unique_id=1632715892]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.8908877, 7, -13.437604)
+script = ExtResource("19_jbbi8")
+kind = "gem"
+treasure_id = &"teacup_gem_grotto"
+island_id = &"teacup_isle"
+
+[node name="CoinTrail" type="Node3D" parent="TeacupIsle/Treasure" unique_id=707835642]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 1.9, -2)
+script = ExtResource("20_a8ix6")
+shape = 0
+end_point = Vector3(10, 0, 0)
+arc_height = 0.0
+count = 5
+
+[node name="CoinTrail2" type="Node3D" parent="TeacupIsle/Treasure" unique_id=480771135]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.90755, 7, 2.5783236)
+script = ExtResource("20_a8ix6")
+shape = 0
+end_point = Vector3(14.064093, 11.15, -18.448526)
+arc_height = 0.0
+
+[node name="CoinTrail3" type="Node3D" parent="TeacupIsle/Treasure" unique_id=345730740]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.444864, 1.9, 17)
+script = ExtResource("20_a8ix6")
+shape = 0
+end_point = Vector3(-17.81618, 0, 14.949549)
+arc_height = 0.0
+count = 4
+
+[node name="CoinTrail4" type="Node3D" parent="TeacupIsle/Treasure" unique_id=1256597949]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.628685, 1.9, 31.949549)
+script = ExtResource("20_a8ix6")
+shape = 0
+end_point = Vector3(-17.81618, 0, -14.949549)
+arc_height = 0.0
+count = 4
+
+[node name="CoinTrail5" type="Node3D" parent="TeacupIsle/Treasure" unique_id=81041530]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.628685, 1.9, -31.949549)
+script = ExtResource("20_a8ix6")
+shape = 0
+end_point = Vector3(23.25737, 0, 0)
+arc_height = 0.0
+count = 4
+
+[node name="Heart" type="Area3D" parent="TeacupIsle/Treasure" unique_id=1311270939]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36, 1.6, 6)
+script = ExtResource("19_jbbi8")
+kind = "heart"
+
+[node name="TeacupGemHandle" type="Area3D" parent="TeacupIsle/Treasure" unique_id=1105127721]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 33, 21.8, 0)
+script = ExtResource("19_jbbi8")
+kind = "gem"
+treasure_id = &"teacup_gem_handle"
+island_id = &"teacup_isle"
+gem_color = Color(0.30980393, 0.7647059, 1, 1)
+
+[node name="Enemies" type="Node3D" parent="TeacupIsle" unique_id=1305839849]
+
+[node name="Crab" type="CharacterBody3D" parent="TeacupIsle/Enemies" unique_id=1862419672 groups=["enemy", "stompable"] instance=ExtResource("21_swv61")]
+transform = Transform3D(0.50205046, 0, -0.8648383, 0, 1, 0, 0.8648383, 0, 0.50205046, -20, 1.05, -32)
+collision_layer = 4
+script = ExtResource("22_bx723")
+persistent_id = &"teacup_crab_1"
+
+[node name="Crab2" type="CharacterBody3D" parent="TeacupIsle/Enemies" unique_id=1295816612 groups=["enemy", "stompable"] instance=ExtResource("21_swv61")]
+transform = Transform3D(0.72918946, 0, -0.68431187, 0, 1, 0, 0.68431187, 0, 0.72918946, 31, 1.05, 14)
+collision_layer = 4
+script = ExtResource("22_bx723")
+persistent_id = &"teacup_crab_2"
+
+[node name="Horizon" type="Node3D" parent="." unique_id=967223275]
+
+[node name="Horizon_CastawayCay" type="Node3D" parent="Horizon" unique_id=459430013]
+script = ExtResource("23_o3elv")
+
+[node name="Horizon_SkullcapMountain" type="Node3D" parent="Horizon" unique_id=176764591]
+transform = Transform3D(-0.98476803, 0, 0.17387322, 0, 1, 0, -0.17387322, 0, -0.98476803, 113, 0, -640)
+script = ExtResource("24_umkgc")
+
+[node name="Horizon_CinderIsle" type="Node3D" parent="Horizon" unique_id=1633657908]
+transform = Transform3D(-0.76592153, 0, 0.6429341, 0, 1, 0, -0.6429341, 0, -0.76592153, 643, 0, -766)
+script = ExtResource("25_mnn4o")
+
+[node name="Horizon_CannonballCliffs" type="Node3D" parent="Horizon" unique_id=830836604]
+transform = Transform3D(-0.34146613, 0, 0.9398941, 0, 1, 0, -0.9398941, 0, -0.34146613, 545, 0, -198)
+script = ExtResource("26_52in1")
+
+[node name="Horizon_Stormpeak" type="Node3D" parent="Horizon" unique_id=1329858656]
+transform = Transform3D(0.24189368, 0, 0.97030276, 0, 1, 0, -0.97030276, 0, 0.24189368, 1067, 0, 266)
+script = ExtResource("27_ry7t6")
+
+[node name="Horizon_Turtleback" type="Node3D" parent="Horizon" unique_id=144450360]
+transform = Transform3D(-0.30293006, 0, 1.3155735, 0, 1.35, 0, -1.3155735, 0, -0.30293006, 416, 0, 375)
+script = ExtResource("28_vbeyh")
+
+[node name="Horizon_BellAtoll" type="Node3D" parent="Horizon" unique_id=1961873987]
+transform = Transform3D(1.8794701, 0, 0.6838072, 0, 2, 0, -0.6838072, 0, 1.8794701, 171, 0, 470)
+script = ExtResource("29_vr06v")
+
+[node name="Horizon_ShipwreckShoals" type="Node3D" parent="Horizon" unique_id=1626554002]
+transform = Transform3D(1.2927955, 0, -0.13667336, 0, 1.3, 0, 0.13667336, 0, 1.2927955, -61, 0, 577)
+script = ExtResource("30_oyird")
+
+[node name="Horizon_CrabbyCoast" type="Node3D" parent="Horizon" unique_id=2021750139]
+transform = Transform3D(0.81908506, 0, -0.5736721, 0, 1, 0, 0.5736721, 0, 0.81908506, -367, 0, 524)
+script = ExtResource("31_tff7q")
+
+[node name="Horizon_LanternLagoon" type="Node3D" parent="Horizon" unique_id=1788761087]
+transform = Transform3D(-0.03569147, 0, -0.9993629, 0, 1, 0, 0.9993629, 0, -0.03569147, -560, 0, -20)
+script = ExtResource("32_bwshd")
+
+[node name="Horizon_PinwheelIsle" type="Node3D" parent="Horizon" unique_id=452562695]
+transform = Transform3D(-0.8500187, 0, -1.4722325, 0, 1.7, 0, 1.4722325, 0, -0.8500187, -433, 0, -250)
+script = ExtResource("33_lb28m")
+
+[node name="Horizon_CrocodileCrown" type="Node3D" parent="Horizon" unique_id=1919644257]
+transform = Transform3D(-1.1671394, 0, 0.4475327, 0, 1.25, 0, -0.4475327, 0, -1.1671394, -834, 0, -863)
+script = ExtResource("34_7ruvg")
+
+[node name="Horizon_HatRock" type="Node3D" parent="Horizon" unique_id=2137903217]
+transform = Transform3D(-0.9660966, 0, -0.25818095, 0, 1, 0, 0.25818095, 0, -0.9660966, -124, 0, -464)
+script = ExtResource("35_e80gf")
+
+[node name="Ocean" type="Node3D" parent="." unique_id=1750267020]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 436, 0, 176)
+script = ExtResource("36_07a4g")
+swim_area_size = Vector2(440, 440)
+swim_depth = 14.0
+gameplay_wave_scale = 0.6
+
+[node name="UnderwaterEffect" type="CanvasLayer" parent="." unique_id=684943174]
+layer = -1
+script = ExtResource("37_kikfv")
+
+[node name="Seabed" type="StaticBody3D" parent="." unique_id=1548872249]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 436, -11, 176)
+script = ExtResource("6_dbpog")
+size = Vector3(440, 1, 440)
+surface = "sand"
+
+[node name="OpenSea" type="Node" parent="." unique_id=892942331]
+script = ExtResource("38_c5oy2")
+
+[node name="Voyage" type="Node" parent="." unique_id=169041684]
+script = ExtResource("39_j5vqi")
+home = &"teacup_isle"
+
+[node name="Player" type="CharacterBody3D" parent="." unique_id=1370422798 groups=["player"] instance=ExtResource("40_7iqp6")]
+transform = Transform3D(-0.3743223, 0, -0.92729867, 0, 1, 0, 0.92729867, 0, -0.3743223, 394.50894, 1.5, 159.25133)
+collision_layer = 2
+collision_mask = 1033
+script = ExtResource("41_j2yh3")
+settings = ExtResource("42_anq2a")
+
+[node name="CameraRig" type="Node3D" parent="." unique_id=705635838 node_paths=PackedStringArray("target") instance=ExtResource("43_wuf3t")]
+transform = Transform3D(-0.3743223, 0, -0.92729867, 0, 1, 0, 0.92729867, 0, -0.3743223, 388.01785, 4.5, 156.63107)
+script = ExtResource("44_nve7m")
+settings = ExtResource("45_s13hy")
+target = NodePath("../Player")
+
+[node name="SpawnDock" type="Marker3D" parent="." unique_id=2061688250 groups=["spawn_point"]]
+transform = Transform3D(-0.3743223, 0, -0.92729867, 0, 1, 0, 0.92729867, 0, -0.3743223, 394.50894, 1.5, 159.25133)
+metadata/spawn_id = &"dock"

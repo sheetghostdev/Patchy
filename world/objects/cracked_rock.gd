@@ -11,6 +11,11 @@ signal shattered
 	set(v):
 		size = v
 		_rebuild()
+## What it's made of: cracked rock, or a wall of sugar cubes (Teacup Isle).
+@export_enum("rock", "sugar") var look := "rock":
+	set(v):
+		look = v
+		_rebuild()
 
 var _mesh: MeshInstance3D
 var _col: CollisionShape3D
@@ -37,7 +42,20 @@ func _rebuild() -> void:
 		add_child(_col, false, Node.INTERNAL_MODE_FRONT)
 	var mb := MeshBuilder.new()
 	var rock := Color("bba78c")
-	mb.rounded_box(size, minf(0.35, size.y * 0.2), Transform3D(Basis.IDENTITY, Vector3(0, size.y * 0.5, 0)), rock, 2)
+	if look == "sugar":
+		# Cubes stacked like bricks.
+		var cube := 1.0
+		var rows := maxi(1, int(round(size.y / cube)))
+		var cols := maxi(1, int(round(size.x / cube)))
+		for r in rows:
+			for c in cols + 1:
+				var x := -size.x * 0.5 + (c + (0.5 if r % 2 == 0 else 0.0)) * size.x / cols
+				if x - cube * 0.5 < -size.x * 0.5 - 0.01 or x + cube * 0.5 > size.x * 0.5 + 0.01:
+					continue
+				mb.rounded_box(Vector3(cube * 0.96, cube * 0.96, size.z), 0.1, Transform3D(Basis(Vector3.UP, sin(r * 3.1 + c) * 0.06), Vector3(x, (r + 0.5) * size.y / rows, 0)), HorizonTeacupIsle.SUGAR.darkened(fposmod(r * 0.37 + c * 0.21, 1.0) * 0.06), 1)
+		rock = HorizonTeacupIsle.SUGAR
+	else:
+		mb.rounded_box(size, minf(0.35, size.y * 0.2), Transform3D(Basis.IDENTITY, Vector3(0, size.y * 0.5, 0)), rock, 2)
 	# The tell: a dark zigzag crack on both faces, wide enough to read at range.
 	var pts := [Vector2(-0.05, 0.92), Vector2(0.12, 0.66), Vector2(-0.1, 0.45), Vector2(0.08, 0.22), Vector2(-0.04, 0.05)]
 	for side: float in [-1.0, 1.0]:
@@ -72,7 +90,7 @@ func shatter() -> void:
 	for i in 10:
 		var chunk := MeshInstance3D.new()
 		var cb := MeshBuilder.new()
-		cb.box(Vector3.ONE * randf_range(0.25, 0.55), Transform3D.IDENTITY, Color("bba78c").darkened(randf() * 0.2))
+		cb.box(Vector3.ONE * randf_range(0.25, 0.55), Transform3D.IDENTITY, (HorizonTeacupIsle.SUGAR if look == "sugar" else Color("bba78c")).darkened(randf() * 0.2))
 		chunk.mesh = cb.build(null, MaterialLibrary.toon(Color.WHITE, &"matte"))
 		scene.add_child(chunk)
 		chunk.global_position = global_position + Vector3(randf_range(-0.4, 0.4) * size.x, randf() * size.y, 0)

@@ -11,7 +11,7 @@ signal opened
 @export var chest_id: StringName = &""
 @export var island_id: StringName = &""
 ## Treasure kind inside (crown, goblet, relic, gem) and value (0 = default).
-@export_enum("crown", "goblet", "relic", "gem", "pearl") var contents: String = "crown"
+@export_enum("crown", "goblet", "relic", "gem", "pearl", "teapot") var contents: String = "crown"
 @export var contents_value := 0
 @export var coins := 8
 ## Posts that must be driven down first (empty = unlocked).
