@@ -15,7 +15,7 @@ func enter(_previous: StringName, msg: Dictionary) -> void:
 	p.input.clear_buffers()
 	p.velocity = Vector3.ZERO
 	_board_from = p.global_position
-	_board_t = 0.0
+	_board_t = BOARD_TIME if msg.get("seated", false) else 0.0
 	if vehicle != null:
 		p.add_collision_exception_with(vehicle)
 

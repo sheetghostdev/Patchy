@@ -22,6 +22,7 @@ void fragment() {
 
 var _rect: ColorRect
 var _mat: ShaderMaterial
+var _card: Label
 var _busy := false
 ## Spawn point id requested for the next loaded scene; levels read and clear it.
 var pending_spawn_id: StringName = &""
@@ -39,6 +40,18 @@ func _ready() -> void:
 	_mat.shader = sh
 	_rect.material = _mat
 	add_child(_rect)
+	_card = Label.new()
+	_card.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_card.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_card.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_card.add_theme_font_override(&"font", UIStyle.font(&"heavy"))
+	_card.add_theme_font_size_override(&"font_size", 54)
+	_card.add_theme_color_override(&"font_color", Color("fbf1d8"))
+	_card.add_theme_color_override(&"font_outline_color", Color(0.06, 0.05, 0.12))
+	_card.add_theme_constant_override(&"outline_size", 10)
+	_card.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_card.visible = false
+	add_child(_card)
 	_set_radius(1.5)
 
 
@@ -65,6 +78,36 @@ func fade_in(duration: float = 0.4) -> void:
 	var tw := create_tween()
 	tw.tween_method(_set_radius, 0.0, 1.5, duration).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	await tw.finished
+
+
+## A voyage between islands: the iris closes on the sea, a card names the
+## destination while its scene loads (spec §180: a sailing transition masks
+## the load), then the iris opens on Patchy's boat nosing in.
+func voyage(path: String, destination: String) -> void:
+	if _busy:
+		return
+	_busy = true
+	await fade_out(0.7)
+	_card.text = "Sailing for %s" % destination
+	_card.modulate.a = 0.0
+	_card.visible = true
+	var show := create_tween()
+	show.tween_property(_card, "modulate:a", 1.0, 0.25)
+	pending_spawn_id = &""
+	var err := get_tree().change_scene_to_file(path)
+	if err != OK:
+		push_error("SceneTransition: failed to load %s (%s)" % [path, error_string(err)])
+	else:
+		await get_tree().process_frame
+		await get_tree().process_frame
+		scene_changed.emit(path)
+	await get_tree().create_timer(0.9, true, false, true).timeout
+	var hide := create_tween()
+	hide.tween_property(_card, "modulate:a", 0.0, 0.25)
+	await hide.finished
+	_card.visible = false
+	await fade_in(0.7)
+	_busy = false
 
 
 ## Fade out, swap scenes, let the new level position the player, fade in.

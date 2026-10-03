@@ -42,6 +42,12 @@ static func build() -> Array:
 		q.append({"title": "Defeat King Claw", "description": "Brock's crab general waits in the ring of rocks on the headland.", "done": WorldState.is_completed(&"king_claw")})
 	if WorldState.is_completed(&"brock_cameo_seen"):
 		q.append({"title": "Brock the Croc", "description": "The self-styled Admiral of the Archipelago has scattered the rest of your ship across his islands. The adventure continues...", "done": false})
+		q.append({"title": "Set Sail", "description": "Your little patched sail can't fight the open-sea current. Old Shellby, out on his west jetty, might have a spare.",
+			"done": TinyBoat.has_spare_sail()})
+	if TinyBoat.has_spare_sail():
+		var beyond := GameManager.get_discovered_islands().any(func(id: StringName) -> bool: return id not in [&"castaway_cay", &"driftwood_key", &"captains_cabin"])
+		q.append({"title": "Beyond the Horizon", "description": "Betty's spare sail can carry the little boat to the islands on the horizon. Sail out past the reef with one dead ahead.",
+			"done": beyond})
 	# Side quests, once an islander has asked.
 	var lifted := WorldState.is_completed(&"castaway_betty_lift")
 	if WorldState.is_completed(&"castaway_betty_quest") or lifted:

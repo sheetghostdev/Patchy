@@ -168,6 +168,18 @@ tools/              Scene builders, photo tool, project setup, audio generator
   rebinding, title screen and debug menu.
   - Gameplay talks to it mostly through `Events` signals.
   - `QuestLog` derives the quest page from progress.
+- **The archipelago** (`world/horizon/`, docs/ARCHIPELAGO.md):
+  - `Archipelago` says where every island lies, how it faces, what it takes
+    to sail there (its gate), and how far its waters reach.
+  - Each island is its own scene in its true place, built by a
+    `tools/builders/build_*.gd` on `IslandBuilder` (sky, sea, waters, boat,
+    horizon, spawn).
+  - The others stand on its horizon as `HorizonIsland` silhouettes. Hat
+    Rock's silhouette, with `playable` set, is also its real rock.
+  - `Voyage` (one per island scene) casts off when the boat leaves the
+    island's waters with another island dead ahead. `GameManager.
+    voyage_blocker()` names the gate if it can't, and IslandInfo seats
+    Patchy in the boat off the new shore.
 - **Treasure maps and ship parts** are registries
   (`systems/treasure/`): `TreasureMaps` holds each map's island, title,
   riddle, dig spot and sketch (landmark doodles in the island's own x/z
@@ -240,7 +252,7 @@ and heights for checking any change by feel.
 
 ```bash
 # Regenerate procedural scenes (labs, islands, hub) from code:
-tools/builders/build.sh movement_lab camera_lab castaway_cay captains_cabin
+tools/builders/build.sh movement_lab camera_lab castaway_cay captains_cabin hat_rock
 
 # Render screenshots on a headless machine (xvfb + Vulkan). flags= marks
 # WorldState ids, progress=demo fakes mid-game progress, hud=0 hides the HUD:
@@ -278,7 +290,8 @@ An optional argument after `--` filters test names.
 godot --headless --path . --fixed-fps 60 res://tests/run_movement_tests.tscn   # 53 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_camera_tests.tscn     # 21 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_gameplay_tests.tscn   # 68 checks
-godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 156 checks
+godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 162 checks
+godot --headless --path . --fixed-fps 60 res://tests/run_voyage_tests.tscn     # 8 checks
 godot --headless --path . --fixed-fps 60 res://ui/tests/ui_flow_test.tscn      # 88 checks
 godot --headless --path . --fixed-fps 60 res://props/tests/prop_tests.tscn     # 74 checks
 godot --headless --path . --fixed-fps 60 res://world/ocean/tests/ocean_swim_check.tscn
@@ -303,6 +316,10 @@ What each suite covers:
   - Crackers joining after the first rescue, his warnings and his nose
     for secrets;
   - the cabin hub's displays.
+- **Voyage**: real scene changes. Sail from Castaway Cay to Hat Rock with
+  Betty's spare sail and home again, arriving at the tiller. The little
+  patched sail is turned back by the current, and islands not built yet
+  are wrapped in sea mist.
 - **Island**: Castaway Cay end to end:
   - the opening sequence;
   - key routes (beach to meadow jump, the ledge-grab ridge, the wreck climb
@@ -319,7 +336,8 @@ What each suite covers:
     grapple, pillar, cannon, cracked rock and targets;
   - a full King Claw fight, including the hand-off to his theme and back;
   - recovered ship parts appearing on the wreck, and the helm's sea chart;
-  - Brock's cameo after King Claw;
+  - Brock's cameo after King Claw, and Old Shellby rigging Betty's spare
+    sail;
   - a crab lighting a TNT snail that blows open the grotto;
   - diving to the Sunken Sloop and opening its chest underwater;
   - the sloop's map of Beak Rock: the sketch matches the world, the X lies
@@ -385,6 +403,16 @@ Castaway Cay (spec §194): a stone parrot, a dotted line from its beak and
 an X. It's Beak Rock on Driftwood Key, sailed past on the way to the tower
 parrot, and the crown is buried where the beak points. Dive with the dive or crouch button and rise with jump; chests and
 chats work underwater too.
+
+**Sailing the archipelago.** Once Brock has rowed off, Old Shellby rigs
+Betty's spare sail on the little boat: bigger, red-striped and faster.
+With it, steer out past Castaway Cay's waters with an island dead ahead
+and the voyage begins: "Sailing for Hat Rock...", a short iris card while
+the next island loads, then the boat comes in off the new shore with
+Patchy at the tiller. Each island is its own scene in its true place, so
+the horizon looks right from every shore. **Hat Rock**, the giant tricorne
+north of Castaway Cay, is the first port of call; its climb and Spyglass
+come next.
 
 **The crossing** between them is never empty water (spec §117). A bell
 buoy clangs midway to steer by, and floating barrels burst into coins

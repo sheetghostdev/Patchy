@@ -445,8 +445,9 @@ func test_the_archipelago_on_the_horizon() -> void:
 	var expected := 0
 	var misplaced: Array[String] = []
 	var bare: Array[String] = []
+	var info := island.find_children("*", "IslandInfo", true, false)[0] as IslandInfo
 	for id in Archipelago.ids():
-		if String(Archipelago.get_island(id).get("horizon", "")) == "":
+		if String(Archipelago.get_island(id).get("horizon", "")) == "" or info.covers(id):
 			continue
 		expected += 1
 		var isl := found.get("Horizon_%s" % String(id).to_pascal_case()) as HorizonIsland
@@ -568,6 +569,25 @@ func test_barnacle_betty_side_quest() -> void:
 		await frames(45)
 	await frames(120)
 	check("the chart's X hides a goblet", InventoryManager.has_treasure(&"castaway_x_north_prize"), "gold=%d" % InventoryManager.gold_value)
+
+
+## After Brock rows off, Old Shellby rigs Betty's spare sail on the little
+## boat: the way out to the islands on the horizon (Voyage).
+func test_shellby_rigs_bettys_spare_sail() -> void:
+	await clear_enemies()
+	var shellby := node("Gameplay/OldShellby") as ShellbyNPC
+	var boat := island.find_children("*", "TinyBoat", true, false)[0] as TinyBoat
+	var slow := boat.top_speed()
+	check("no sail before Brock shows his snout", not shellby.sail_pending() and not TinyBoat.has_spare_sail(), "")
+	WorldState.mark_completed(&"brock_cameo_seen")
+	check("the log says to find a bigger sail", QuestLog.build().any(func(q: Dictionary) -> bool: return q.title == "Set Sail" and not q.done), "")
+	await place(shellby.global_position + Vector3(1.6, 0.1, 0), Vector3.LEFT)
+	check("Shellby offers Betty's spare", "spare sail" in "".join(shellby.get_lines()), "")
+	await converse(shellby)
+	check("and rigs it on the boat: bigger, faster", TinyBoat.has_spare_sail() and boat.top_speed() > slow * 1.2, "speed %.1f -> %.1f" % [slow, boat.top_speed()])
+	check("the log moves on to the horizon", QuestLog.build().any(func(q: Dictionary) -> bool: return q.title == "Set Sail" and q.done)
+		and QuestLog.build().any(func(q: Dictionary) -> bool: return q.title == "Beyond the Horizon" and not q.done), "")
+	check("then he's back to his usual self", "spare sail" not in "".join(shellby.get_lines()), "")
 
 
 func test_tok_points_out_locked_cages() -> void:

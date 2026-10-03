@@ -83,6 +83,10 @@ func _place_player(player: Player) -> void:
 		_snap_camera(player)
 		return
 	GameManager.resume_pending = false
+	var voyage := GameManager.voyage_arrival
+	GameManager.voyage_arrival = {}
+	if not voyage.is_empty() and covers(voyage.get("to", &"")) and _arrive_by_boat(player, voyage):
+		return
 	var spawn_id := SceneTransition.pending_spawn_id
 	SceneTransition.pending_spawn_id = &""
 	if spawn_id != &"":
@@ -94,6 +98,35 @@ func _place_player(player: Player) -> void:
 				break
 	# Arriving fresh: falling or fainting returns here until a flag is raised.
 	GameManager.set_checkpoint(StringName(String(island_id) + "_arrival"), player.global_transform, true)
+
+
+## Off the end of a voyage: Patchy's boat comes in toward the island's
+## waters on the course it sailed, already under way, with him at the
+## tiller. A fall or a faint before he lands returns him to the island's
+## arrival point.
+func _arrive_by_boat(player: Player, voyage: Dictionary) -> bool:
+	var to: StringName = voyage.get("to", island_id)
+	var region := SeaRegion.find(get_tree(), to)
+	var boat: TinyBoat = null
+	for b in get_tree().get_nodes_in_group(&"boat"):
+		if b is TinyBoat:
+			boat = b
+			break
+	if region == null or boat == null:
+		return false
+	var from: Vector3 = voyage.get("from", Vector3.ZERO)
+	var dir := Player.flat(region.global_position - from).normalized()
+	if dir == Vector3.ZERO:
+		dir = Vector3.FORWARD
+	var at := region.global_position - dir * (region.radius + 30.0)
+	at.y = 0.0
+	boat.place(at, dir, boat.top_speed() * 0.6)
+	boat.board_now(player)
+	_snap_camera(player)
+	var land := region.arrival if region.arrival != null else region.boat_dock
+	if land != null:
+		GameManager.set_checkpoint(StringName(String(to) + "_arrival"), land.global_transform, true)
+	return true
 
 
 func _snap_camera(player: Player) -> void:

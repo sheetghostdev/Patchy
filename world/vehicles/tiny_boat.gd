@@ -5,7 +5,9 @@ extends CharacterBody3D
 ## (camera-relative, like walking), jump to hop out near any shore. Floats on
 ## the water with a gentle bob, leans into turns and lifts its bow when it
 ## gets going. Remembers where it was left; if Patchy ends up on another
-## island without it, it washes up at that island's dock.
+## island without it, it washes up at that island's dock. Old Shellby's gift
+## of Betty's spare sail (docs/ARCHIPELAGO.md) makes it bigger-sailed and
+## quicker, fit for the open sea (Voyage).
 
 @export var boat_id: StringName = &"tiny_boat"
 @export_range(1.0, 30.0, 0.1) var max_speed := 10.5
@@ -16,8 +18,17 @@ extends CharacterBody3D
 @export_range(0.1, 6.0, 0.05) var turn_rate_fast := 1.25
 ## Hull origin sits this far above the water surface.
 @export_range(-1.0, 1.0, 0.01) var float_offset := 0.0
-## The boat is pushed back beyond this distance from the world origin.
+## The boat is pushed back beyond this distance from `limit_center` (the
+## scene's own island: the open sea between islands is crossed by Voyage).
 @export_range(50.0, 2000.0, 1.0) var world_limit := 330.0
+@export var limit_center := Vector3.ZERO
+## Island scene this boat belongs to: each remembers its own mooring
+## (empty for Castaway Cay, which saved under the plain boat id).
+@export var home_island: StringName = &""
+
+## WorldState id of Betty's spare sail (Old Shellby's gift).
+const SPARE_SAIL := &"boat_spare_sail"
+const SPARE_SAIL_SPEED := 1.3
 
 const LENGTH := 3.8
 const HALF_WIDTH := 0.86
@@ -49,10 +60,10 @@ func _ready() -> void:
 		return
 	add_to_group(&"boat")
 	_yaw = rotation.y
-	var saved: Variant = WorldState.get_flag(boat_id, "pos")
+	var saved: Variant = WorldState.get_flag(_save_id(), "pos")
 	if saved is Array and (saved as Array).size() == 3:
 		global_position = Vector3(saved[0], saved[1], saved[2])
-		_yaw = float(WorldState.get_flag(boat_id, "yaw", _yaw))
+		_yaw = float(WorldState.get_flag(_save_id(), "yaw", _yaw))
 	rotation = Vector3(0, _yaw, 0)
 	_board = Interactable.new()
 	_board.prompt = "{interact} Board"
@@ -81,8 +92,24 @@ func _build() -> void:
 	mi.mesh = _hull_mesh()
 	_visual.add_child(mi)
 	var sail := MeshInstance3D.new()
-	sail.mesh = _sail_mesh()
+	sail.name = "Sail"
+	sail.mesh = _sail_mesh() if Engine.is_editor_hint() or not has_spare_sail() else _spare_sail_mesh()
 	_visual.add_child(sail)
+
+
+static func has_spare_sail() -> bool:
+	return WorldState.is_completed(SPARE_SAIL)
+
+
+## Rigs Betty's spare sail (after Shellby hands it over).
+func refresh_sail() -> void:
+	var sail := _visual.get_node_or_null(^"Sail") as MeshInstance3D
+	if sail != null:
+		sail.mesh = _spare_sail_mesh() if has_spare_sail() else _sail_mesh()
+
+
+func top_speed() -> float:
+	return max_speed * (SPARE_SAIL_SPEED if has_spare_sail() else 1.0)
 
 
 ## Half-width and gunwale height along the hull, s = 0 at the bow, 1 at the stern.
@@ -175,6 +202,37 @@ func _sail_mesh() -> ArrayMesh:
 	return mb.build(null, MaterialLibrary.toon(Color.WHITE, &"soft"))
 
 
+## Betty's spare sail: a taller mast, a big striped mainsail (Shellby's red
+## and cream) with a jib before it, and Patchy's pennant on top.
+func _spare_sail_mesh() -> ArrayMesh:
+	var mb := MeshBuilder.new()
+	var mast_z := -0.75
+	mb.cylinder(0.055, 0.07, 3.5, Transform3D(Basis.IDENTITY, Vector3(0, 1.85, mast_z)), Palette.WOOD_DARK, 8)
+	mb.cylinder(0.04, 0.04, 2.0, Transform3D(Basis.from_euler(Vector3(PI * 0.5, 0, 0)), Vector3(0, 0.8, mast_z + 1.0)), Palette.WOOD_DARK, 6)
+	# Mainsail: four vertical strips from the mast aft to the boom.
+	var strips := 4
+	for k in strips:
+		var z0 := mast_z + 0.05 + 1.85 * k / strips
+		var z1 := mast_z + 0.05 + 1.85 * (k + 1) / strips
+		var top0 := 3.45 - 2.3 * float(k) / strips
+		var top1 := 3.45 - 2.3 * float(k + 1) / strips
+		var belly := 0.08 * sin(PI * (k + 0.5) / strips)
+		var col := Color("d8433a") if k % 2 == 0 else Color("f6ecd6")
+		var a := Vector3(belly, top0, z0)
+		var b := Vector3(belly, top1, z1)
+		var c := Vector3(belly, 0.86, z1)
+		var d := Vector3(belly, 0.86, z0)
+		mb.triangle(a, b, c, col, true)
+		mb.triangle(a, c, d, col, true)
+	# A square patch stitched on, for Shellby's honesty.
+	mb.triangle(Vector3(0.1, 1.6, mast_z + 0.95), Vector3(0.1, 1.6, mast_z + 1.25), Vector3(0.1, 1.3, mast_z + 1.25), Color("6fb0d9"), true)
+	mb.triangle(Vector3(0.1, 1.6, mast_z + 0.95), Vector3(0.1, 1.3, mast_z + 1.25), Vector3(0.1, 1.3, mast_z + 0.95), Color("6fb0d9"), true)
+	# Jib from the masthead down to the bow.
+	mb.triangle(Vector3(0, 3.3, mast_z), Vector3(0, 0.75, mast_z - 0.05), Vector3(0, 0.62, -LENGTH * 0.5 + 0.12), Color("f6ecd6"), true)
+	mb.triangle(Vector3(0, 3.75, mast_z), Vector3(0, 3.5, mast_z), Vector3(0, 3.62, mast_z + 0.6), Palette.COAT, true)
+	return mb.build(null, MaterialLibrary.toon(Color.WHITE, &"soft"))
+
+
 # --- Runtime ------------------------------------------------------------------------
 
 func _on_board(player: Node3D) -> void:
@@ -194,12 +252,12 @@ func drive(stick: Vector3, delta: float) -> void:
 	var mag := clampf(want.length(), 0.0, 1.0)
 	if mag > 0.15:
 		var target_yaw := Player.yaw_of(want)
-		var rate := lerpf(turn_rate_slow, turn_rate_fast, clampf(_speed / max_speed, 0.0, 1.0))
+		var rate := lerpf(turn_rate_slow, turn_rate_fast, clampf(_speed / top_speed(), 0.0, 1.0))
 		var before := _yaw
 		_yaw = rotate_toward(_yaw, target_yaw, rate * delta)
 		_roll = lerpf(_roll, clampf(angle_difference(before, _yaw) / maxf(delta, 0.001) * 0.09, -0.16, 0.16), 1.0 - exp(-delta * 4.0))
 		var align := clampf(Player.dir_from_yaw(_yaw).dot(want.normalized()), 0.0, 1.0)
-		var target := max_speed * mag * lerpf(0.3, 1.0, align * align)
+		var target := top_speed() * mag * lerpf(0.3, 1.0, align * align)
 		_speed = move_toward(_speed, target, (accel if target > _speed else brake) * delta)
 	else:
 		_speed = move_toward(_speed, 0.0, drag * delta)
@@ -229,8 +287,8 @@ func _step(delta: float) -> void:
 	var surface := _surface_height()
 	var v := Player.dir_from_yaw(_yaw) * _speed
 	v.y = (surface + float_offset - global_position.y) * 8.0
-	# The open ocean is endless; the map is not.
-	var flat_pos := Player.flat(global_position)
+	# The open ocean is endless; this island's waters are not.
+	var flat_pos := Player.flat(global_position - limit_center)
 	if flat_pos.length() > world_limit:
 		v += -flat_pos.normalized() * (flat_pos.length() - world_limit) * 2.0
 	velocity = v
@@ -245,7 +303,7 @@ func _step(delta: float) -> void:
 
 func _animate(delta: float) -> void:
 	_bob_t += delta
-	var k := clampf(_speed / max_speed, 0.0, 1.0)
+	var k := clampf(_speed / top_speed(), 0.0, 1.0)
 	_pitch = lerpf(_pitch, -0.07 * k, 1.0 - exp(-delta * 2.0))
 	var bob := sin(_bob_t * 1.7) * 0.045 + sin(_bob_t * 2.9 + 1.0) * 0.02
 	_visual.position = Vector3(0, bob, 0)
@@ -284,8 +342,38 @@ func on_driver_exit(player: Node3D) -> void:
 
 func _save() -> void:
 	var p := global_position
-	WorldState.set_flag(boat_id, "pos", [p.x, p.y, p.z])
-	WorldState.set_flag(boat_id, "yaw", _yaw)
+	WorldState.set_flag(_save_id(), "pos", [p.x, p.y, p.z])
+	WorldState.set_flag(_save_id(), "yaw", _yaw)
+
+
+func _save_id() -> StringName:
+	return boat_id if home_island == &"" else StringName("%s@%s" % [boat_id, home_island])
+
+
+func get_yaw() -> float:
+	return _yaw
+
+
+func get_speed() -> float:
+	return _speed
+
+
+## Puts the boat at `at`, heading along `dir`, already under way at `speed`.
+func place(at: Vector3, dir: Vector3, speed := 0.0) -> void:
+	global_position = at
+	_yaw = Player.yaw_of(dir)
+	_speed = speed
+	rotation = Vector3(0, _yaw, 0)
+
+
+## Seats Patchy at the tiller straight away (arriving from a voyage).
+func board_now(player: Player) -> void:
+	if driver != null:
+		return
+	driver = player
+	_board.enabled = false
+	player.teleport(get_seat_transform().origin, Player.dir_from_yaw(_yaw))
+	player.change_state(&"boat", {"vehicle": self, "seated": true})
 
 
 func _surface_height() -> float:

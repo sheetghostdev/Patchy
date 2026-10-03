@@ -1,4 +1,4 @@
-extends RefCounted
+extends IslandBuilder
 ## Generates res://world/islands/castaway_cay/castaway_cay.tscn — the opening
 ## island (spec §72–77, §146–153). "The sunny wreck-strewn cove where Patchy
 ## washes ashore and his treasure is scattered across the island."
@@ -17,25 +17,17 @@ extends RefCounted
 ##  - Cove's west horn: a hook-ring run to a gem pillar.
 ##   tools/builders/build.sh castaway_cay
 
-const PLAYER := "res://characters/patchy/player.tscn"
-const RIG := "res://systems/camera/camera_rig.tscn"
-const CRAB := "res://enemies/crab/crab.tscn"
 const ISLAND := &"castaway_cay"
 const ISLET := &"driftwood_key"
 ## Driftwood Key: a small neighbor islet south-west of the dock (by boat).
 const DRIFTWOOD := Vector3(-130, 0, 140)
 
-var b: SceneBuilder
-var terrain: Node3D
-var structures: Node3D
-var gameplay: Node3D
-var treasure: Node3D
-var enemies: Node3D
 
 
 func build() -> void:
 	# Deterministic builds: regenerating the island gives an identical scene.
 	seed(20261002)
+	island_id = ISLAND
 	b = SceneBuilder.new("CastawayCay")
 	var info := IslandInfo.new()
 	info.island_id = ISLAND
@@ -89,86 +81,6 @@ func build() -> void:
 
 # --- Helpers ------------------------------------------------------------------------
 
-func plateau(parent: Node, node_name: String, outline: Array, height: float, depth: float, surface: String, opts: Dictionary = {}) -> Plateau:
-	var p := Plateau.new()
-	var pts := PackedVector2Array()
-	for v: Vector2 in outline:
-		pts.append(v)
-	p.outline = pts
-	p.height = height
-	p.depth = depth
-	p.surface = surface
-	p.noise_seed = opts.get("seed", node_name.hash() % 97)
-	if opts.has("shore"):
-		p.shore = true
-		p.shore_width = opts.get("shore_width", 12.0)
-		p.shore_drop = opts.get("shore_drop", 4.0)
-	if opts.has("bevel"):
-		p.bevel = opts.bevel
-	if opts.has("smoothing"):
-		p.smoothing = opts.smoothing
-	p.no_ledge_grab = opts.get("no_ledge_grab", false)
-	p.slide_surface = opts.get("slide", false)
-	b.add(p, parent, node_name)
-	if opts.get("no_wall_kick", false):
-		p.add_to_group(&"no_wall_kick", true)
-	return p
-
-
-func blk(parent: Node, pos: Vector3, size: Vector3, surface: String, rot := Vector3.ZERO, shape: LevelBlock.Shape = LevelBlock.Shape.BOX, node_name: String = "Block") -> LevelBlock:
-	var l := b.block(parent, pos, size, surface, "", shape, 0.0, node_name)
-	l.rotation_degrees = rot
-	return l
-
-
-func coin_trail(pos: Vector3, end: Vector3, count: int, arc: float = 0.0, shape: CoinTrail.TrailShape = CoinTrail.TrailShape.ARC) -> CoinTrail:
-	var t := CoinTrail.new()
-	t.shape = shape if arc > 0.0 or shape != CoinTrail.TrailShape.ARC else CoinTrail.TrailShape.LINE
-	t.end_point = end - pos
-	t.arc_height = arc
-	t.count = count
-	t.position = pos
-	b.add(t, treasure, "CoinTrail")
-	return t
-
-
-func gem(pos: Vector3, id: String, color: Color, kind: String = "gem") -> Collectible:
-	var c := Collectible.new()
-	c.kind = kind
-	c.treasure_id = StringName(id)
-	c.island_id = ISLAND
-	c.gem_color = color
-	c.position = pos
-	b.add(c, treasure, id.capitalize().replace(" ", ""))
-	return c
-
-
-func heart(pos: Vector3) -> void:
-	var c := Collectible.new()
-	c.kind = "heart"
-	c.position = pos
-	b.add(c, treasure, "Heart")
-
-
-func crab(pos: Vector3, variant: CrabModel.Variant = CrabModel.Variant.NORMAL, id: String = "", burrow: Node3D = null) -> Crab:
-	var c: Crab = b.instance(CRAB, enemies, pos, randf() * 360.0, "Crab")
-	c.variant = variant
-	if id != "":
-		c.persistent_id = StringName(id)
-	if burrow != null:
-		c.burrow = burrow
-	return c
-
-
-func cage(pos: Vector3, id: String, plumage: ParrotModel.Plumage, hanging: bool = false) -> ParrotCage:
-	var c := ParrotCage.new()
-	c.parrot_id = StringName(id)
-	c.island_id = ISLAND
-	c.plumage = plumage
-	c.hanging = hanging
-	c.position = pos
-	b.add(c, gameplay, "ParrotCage_" + id)
-	return c
 
 
 # --- Terrain ------------------------------------------------------------------------
@@ -223,6 +135,9 @@ func _sea() -> void:
 func _sea_regions() -> void:
 	var sea := OpenSea.new()
 	b.add(sea, null, "OpenSea")
+	var voyage := Voyage.new()
+	voyage.home = ISLAND
+	b.add(voyage, null, "Voyage")
 	var home := SeaRegion.new()
 	home.region_name = "Castaway Cay"
 	home.island_id = ISLAND
@@ -845,7 +760,7 @@ func _barnacle_betty() -> void:
 	mooring.position = Vector3(-88.5, 0.0, 15.4)
 	mooring.rotation_degrees.y = 90.0
 	b.add(mooring, g, "BettyMooring")
-	var npc := FavorNPC.new()
+	var npc := ShellbyNPC.new()
 	npc.display_name = "Old Shellby"
 	npc.lines = PackedStringArray([
 		"Well, shiver my shell! You washed up with half the sea's driftwood.",
@@ -871,6 +786,11 @@ func _barnacle_betty() -> void:
 	npc.reward_kind = "map"
 	npc.reward_id = &"castaway_map_2"
 	npc.reward_message = "Got Shellby's fishing chart!"
+	npc.sail_lines = PackedStringArray([
+		"Saw that croc rowing off with his snout in the air. 'Admiral of the Archipelago', my barnacles!",
+		"Going after him, are you? That scrap of a sail won't get you past the reef current.",
+		"Here: Betty's spare sail. Stitched it myself... mostly. She'll carry you to any island you can see from here.",
+	])
 	npc.position = Vector3(-84.5, 1.35, 18.4)
 	b.add(npc, gameplay, "OldShellby")
 	var model := TurtleModel.new()
@@ -1188,6 +1108,8 @@ func _beak_rock() -> void:
 func _horizon() -> void:
 	var g := b.group("Horizon")
 	for id in Archipelago.ids():
+		if id == ISLAND or id == ISLET:
+			continue
 		var isl := Archipelago.make_horizon(id)
 		if isl != null:
 			b.add(isl, g, isl.name)
@@ -1219,68 +1141,6 @@ func _hints() -> void:
 
 # --- Dressing (props kit) -----------------------------------------------------------
 
-const COIN_SCENE := "res://collectibles/coin.tscn"
-const HEART_SCENE := "res://collectibles/heart.tscn"
-
-
-func palm(parent: Node, pos: Vector3, height: float, lean: float, lean_dir: float, seed: int) -> PalmTree:
-	var t := PalmTree.new()
-	t.height = height
-	t.lean_degrees = lean
-	t.lean_direction = lean_dir
-	t.seed = seed
-	t.coconut_count = seed % 4
-	t.position = pos
-	b.add(t, parent, "Palm")
-	return t
-
-
-func rock(parent: Node, pos: Vector3, size: Vector3, preset: StylizedRock.Preset, seed: int, yaw: float = 0.0) -> StylizedRock:
-	var r := StylizedRock.new()
-	r.preset = preset
-	r.size = size
-	r.seed = seed
-	r.position = pos
-	r.rotation_degrees.y = yaw
-	b.add(r, parent, "Rock")
-	return r
-
-
-func crate_prop(parent: Node, pos: Vector3, id: String, coins: int = 3, yaw: float = 0.0) -> Crate:
-	var c := Crate.new()
-	c.persistent_id = StringName(id)
-	c.contents = load(COIN_SCENE)
-	c.contents_count = coins
-	c.position = pos
-	c.rotation_degrees.y = yaw
-	b.add(c, parent, "Crate")
-	return c
-
-
-func barrel_prop(parent: Node, pos: Vector3, id: String, coins: int = 2, lying: bool = false) -> Barrel:
-	var c := Barrel.new()
-	c.persistent_id = StringName(id)
-	c.contents = load(COIN_SCENE)
-	c.contents_count = coins
-	c.lying = lying
-	c.position = pos
-	b.add(c, parent, "Barrel")
-	return c
-
-
-func scatter(parent: Node, center: Vector3, area: Vector2, kind: PropScatter.Kind, density: float, surfaces: Array[StringName], seed: int, max_count: int = 3000) -> PropScatter:
-	var sc := PropScatter.new()
-	sc.kind = kind
-	sc.area_size = area
-	sc.density = density
-	sc.surface_filter = surfaces
-	sc.seed = seed
-	sc.max_instances = max_count
-	sc.ray_height = 30.0
-	sc.ray_depth = 40.0
-	sc.position = center
-	b.add(sc, parent, "Scatter")
-	return sc
 
 
 func _decorate() -> void:

@@ -14,10 +14,16 @@ physics:
 - One clear gimmick per island.
 - **Bounties** (stars): a short list of named goals per island.
 
-Status: Castaway Cay, Driftwood Key and Gull Bar are playable. Every other
-island so far is a horizon silhouette (`world/horizon/`) placed by
-`Archipelago` (`world/horizon/archipelago.gd`). Islands get built one at a
-time, each fully polished and tested before the next.
+Status:
+
+- Castaway Cay, Driftwood Key and Gull Bar are playable.
+- Sailing between island scenes works (`Voyage`).
+- Hat Rock's scene is built; its climb and the Spyglass are next.
+- Every other island so far is a horizon silhouette (`world/horizon/`)
+  placed by `Archipelago` (`world/horizon/archipelago.gd`).
+
+Islands get built one at a time, each fully polished and tested before the
+next.
 
 ## The sea at a glance
 
@@ -29,14 +35,14 @@ on the same bearings.
 |---|---|---|---|---|---|---|---|
 | Castaway Cay | — | — | large | the whole moveset | hook, lantern, shovel, grapple, hand cannon | Compass, Ship's Wheel | start |
 | Driftwood Key | 223° | 190 m | small | raft tower, crab pen | — | — | tiny boat |
-| Hat Rock | 345° | 480 m | tiny | a sea stack shaped like a pirate hat | **Spyglass** | — | Patched Sail |
-| Bell Atoll | 160° | 500 m | tiny | five bells and a song | **Shanty sheet** (song) | — | Patched Sail |
-| Pinwheel Isle | 300° | 500 m | tiny | giant pinwheels raise screw platforms | Heart Piece | — | Patched Sail |
-| Teacup Isle | 88° | 480 m | tiny | a whirlpool you ride down into | Golden Teapot | — | Patched Sail |
-| Crabby Coast | 215° | 640 m | large | **the tide**: ring a bell to flood or drain the island | **Spring Fist** | Anchor | Patched Sail |
-| Lantern Lagoon | 272° | 560 m | large | **light and dark**: beams, fireflies, glow-only bridges | **Harpoon** | Rudder | Patched Sail |
-| Shipwreck Shoals | 186° | 580 m | large | **bouncy sails** and a galleon you rotate | — | Sails | Patched Sail |
-| Turtleback | 132° | 560 m | medium | **the island is a turtle**: wake it and it swims | **Conch Shell** (call the turtle: fast travel) | — | Patched Sail; Spring Fist to wake it |
+| Hat Rock | 345° | 480 m | tiny | a sea stack shaped like a pirate hat | **Spyglass** | — | spare sail |
+| Bell Atoll | 160° | 500 m | tiny | five bells and a song | **Shanty sheet** (song) | — | spare sail |
+| Pinwheel Isle | 300° | 500 m | tiny | giant pinwheels raise screw platforms | Heart Piece | — | spare sail |
+| Teacup Isle | 88° | 480 m | tiny | a whirlpool you ride down into | Golden Teapot | — | spare sail |
+| Crabby Coast | 215° | 640 m | large | **the tide**: ring a bell to flood or drain the island | **Spring Fist** | Anchor | spare sail |
+| Lantern Lagoon | 272° | 560 m | large | **light and dark**: beams, fireflies, glow-only bridges | **Harpoon** | Rudder | spare sail |
+| Shipwreck Shoals | 186° | 580 m | large | **bouncy sails** and a galleon you rotate | — | Sails | spare sail |
+| Turtleback | 132° | 560 m | medium | **the island is a turtle**: wake it and it swims | **Conch Shell** (call the turtle: fast travel) | — | spare sail; Spring Fist to wake it |
 | Skullcap Mountain | 10° | 650 m | large | **wind**: gusts, vanes, updrafts | **Parasol** (glide, ride updrafts) | Mast | the restored ship (the tiny boat can't beat the headwind) |
 | Cannonball Cliffs | 70° | 580 m | large | **rhythm barrages**: cannons fire across every path | — | Ship's Cannons | the restored ship (its guns sink rowboats) |
 | Cinder Isle | 40° | 1000 m | large | **the lava tide** and steam vents | **Lodestone Magnet** | Iron Hull | Ship's Cannons (blast the chain boom) |
@@ -80,7 +86,7 @@ lies.
 ## Story order
 
 1. **Castaway Cay** (done). Ends with Brock's cameo. Old Shellby stitches
-   Barnacle Betty's spare sail onto the tiny boat: the **Patched Sail**.
+   Barnacle Betty's spare sail onto the tiny boat: the **spare sail**.
    Ring one opens: the four tiny islands, Crabby Coast, Lantern Lagoon,
    Shipwreck Shoals and Turtleback, in any order.
 2. **Ring one.** Anchor, Rudder and Sails return, and the *Jolly Patch*
@@ -354,14 +360,16 @@ for review, and the README.
 
 1. **Horizon pass** (now): every island's silhouette on every horizon,
    the sea chart on the same bearings, and fog long enough to see them.
-2. **Sailing between scenes.** Each major island is its own scene at its
-   world coordinates, showing the others on its horizon.
+2. **Sailing between scenes** (done). Each island is its own scene at its
+   world coordinates (`IslandBuilder` scaffolds them), showing the others
+   on its horizon.
    - Sailing out of an island's waters toward another starts a short
      sailing transition (a fade under a sea shanty) into the next scene,
      with the boat arriving on the same heading. This is the masked
      loading of spec §180.
    - The helm and the Conch Shell use the same transition.
-3. **Patched Sail**, then the four tiny islands, then **Crabby Coast**:
+3. **The spare sail** (done), Hat Rock (its scene is built; the climb and
+   Spyglass are next), then the other tiny islands, then **Crabby Coast**:
    Blast Barrels, the Tide Bell, the Spring Fist and Duke Pinchwick.
 4. Lantern Lagoon, Shipwreck Shoals, Turtleback, then the *Jolly Patch*.
 5. Skullcap Mountain, Cannonball Cliffs, Cinder Isle, Stormpeak, Crocodile
