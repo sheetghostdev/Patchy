@@ -50,6 +50,7 @@ const STATE_SCRIPTS := {
 	&"locked": "res://characters/patchy/states/locked_state.gd",
 	&"boat": "res://characters/patchy/states/boat_state.gd",
 	&"grapple": "res://characters/patchy/states/grapple_state.gd",
+	&"spyglass": "res://characters/patchy/states/spyglass_state.gd",
 }
 
 @export var settings: PlayerMovementSettings
@@ -106,6 +107,10 @@ var water_depth := 0.0
 ## Velocity before the last move_and_slide (landing impact, wall approach).
 var last_pre_move_velocity := Vector3.ZERO
 var allow_step_up := true
+## Wind blowing Patchy along this tick (m/s), set each physics frame by a
+## WindGust. It moves him without becoming his own momentum, so walking
+## into it holds him still and it stops the moment the gust does.
+var wind := Vector3.ZERO
 ## Cosmetic vertical offset smoothed out by the model after step-ups.
 var visual_y_offset := 0.0
 
@@ -498,9 +503,23 @@ func move() -> void:
 
 	if pre_v.y > 0.0 and is_on_ceiling():
 		_try_ceiling_slip(pre_v)
+	if wind != Vector3.ZERO:
+		_blow(wind * dt)
+		wind = Vector3.ZERO
 
 	_update_wall_info(pre_v)
 	_update_floor_info()
+
+
+## Slides Patchy along `motion` without touching his velocity.
+func _blow(motion: Vector3) -> void:
+	for i in 3:
+		var col := move_and_collide(motion)
+		if col == null:
+			return
+		motion = col.get_remainder().slide(col.get_normal())
+		if motion.length_squared() < 0.000001:
+			return
 
 
 func _try_step_up(motion: Vector3, grounded: bool) -> bool:

@@ -18,7 +18,8 @@ Status:
 
 - Castaway Cay, Driftwood Key and Gull Bar are playable.
 - Sailing between island scenes works (`Voyage`).
-- Hat Rock's scene is built; its climb and the Spyglass are next.
+- Hat Rock is playable: the ledge, the gusts, the lookout, the Spyglass,
+  the hoist and the feather (`tests/hat_rock_tests.gd`).
 - Every other island so far is a horizon silhouette (`world/horizon/`)
   placed by `Archipelago` (`world/horizon/archipelago.gd`).
 
@@ -104,16 +105,25 @@ lies.
 
 - **Horizon:** a black tricorne of rock with a white feather of chalk
   stone, sitting on the sea.
-- **Toy:** the brim is a spiral ledge round and up the crown. Hook rings
-  hang from the hat's buckle and the feather.
+- **Toy:** a ledge spirals once round the crown from the brim to the flat
+  top. Chalk tufts stick out of the feather, with hook rings between them.
 - **Puzzles:**
-  - Climb the brim spiral; gusts off the open sea push you around the
-    outside.
-  - Swing hook ring to hook ring round the feather to the top.
-  - Ground-pound the buckle to open the lookout hatch.
-- **Reward:** the **Spyglass**, an old lookout's telescope. Hold a button
-  to zoom on far islands, read their landmarks and spot cages (spec §194).
-  Also a parrot.
+  - Climb the spiral: jump its four gaps. On its three bare stretches,
+    gusts off the open sea (`WindGust`) blow you over the edge. A pennant
+    and a whistle warn first; crouch to brace until they pass.
+  - Ground-pound the great gold buckle on the crown's top to open the
+    lookout's door. It also frees the hoist (`LookoutHoist`), a basket
+    between the brim and the top, so a fall doesn't cost the climb.
+  - Walk the plank off the back and grapple the feather's iron ring, then
+    swing ring to ring round the tufts to its shoulder and walk up the
+    quill to the crest.
+  - Up the curl of one corner of the brim, grapple the rosette pinned to
+    its tip.
+- **Reward:** the **Spyglass**, an old lookout's telescope. Hold its button
+  (on foot or at the tiller) to zoom far out to sea and aim with the
+  camera. Hold an island in the glass and it's pencilled onto the sea
+  chart, shape and name, before you've landed (spec §194). Also a parrot
+  at the feather's crest and a gem on the rosette.
 
 ## Bell Atoll — "A ring of reef where five bells play a sailor's song."
 
@@ -368,8 +378,8 @@ for review, and the README.
      with the boat arriving on the same heading. This is the masked
      loading of spec §180.
    - The helm and the Conch Shell use the same transition.
-3. **The spare sail** (done), Hat Rock (its scene is built; the climb and
-   Spyglass are next), then the other tiny islands, then **Crabby Coast**:
+3. **The spare sail** (done), **Hat Rock** and the Spyglass (done), then
+   the other tiny islands, then **Crabby Coast**:
    Blast Barrels, the Tide Bell, the Spring Fist and Duke Pinchwick.
 4. Lantern Lagoon, Shipwreck Shoals, Turtleback, then the *Jolly Patch*.
 5. Skullcap Mountain, Cannonball Cliffs, Cinder Isle, Stormpeak, Crocodile

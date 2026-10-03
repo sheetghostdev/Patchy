@@ -1,72 +1,81 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://world/islands/island_info.gd" id="1_sahyg"]
-[ext_resource type="Script" path="res://world/environment/sky_environment.gd" id="2_g7g4l"]
-[ext_resource type="Script" path="res://world/environment/ambience.gd" id="3_dh6co"]
-[ext_resource type="Script" path="res://world/environment/weather.gd" id="4_iw2rf"]
-[ext_resource type="Script" path="res://world/horizon/horizon_hat_rock.gd" id="5_or7wl"]
-[ext_resource type="Script" path="res://world/terrain/plateau.gd" id="6_516gy"]
-[ext_resource type="Script" path="res://props/structures/dock.gd" id="7_gybqh"]
-[ext_resource type="Script" path="res://world/vehicles/tiny_boat.gd" id="8_1cto8"]
-[ext_resource type="Script" path="res://world/ocean/sea_region.gd" id="9_yi2rn"]
-[ext_resource type="Script" path="res://systems/triggers/checkpoint.gd" id="10_vdfs2"]
-[ext_resource type="Script" path="res://props/blocks/level_block.gd" id="11_eue2e"]
-[ext_resource type="Script" path="res://collectibles/coin_trail.gd" id="12_12k1u"]
-[ext_resource type="Script" path="res://props/nature/palm_tree.gd" id="13_trlqr"]
-[ext_resource type="Script" path="res://props/nature/stylized_rock.gd" id="14_iksx3"]
-[ext_resource type="Script" path="res://world/horizon/horizon_castaway.gd" id="15_yp18o"]
-[ext_resource type="Script" path="res://world/horizon/horizon_skullcap.gd" id="16_ff2ha"]
-[ext_resource type="Script" path="res://world/horizon/horizon_cinder_isle.gd" id="17_nvnqe"]
-[ext_resource type="Script" path="res://world/horizon/horizon_cannon_cliffs.gd" id="18_1qatc"]
-[ext_resource type="Script" path="res://world/horizon/horizon_teacup_isle.gd" id="19_uoyga"]
-[ext_resource type="Script" path="res://world/horizon/horizon_stormpeak.gd" id="20_e83vf"]
-[ext_resource type="Script" path="res://world/horizon/horizon_turtleback.gd" id="21_rjp5g"]
-[ext_resource type="Script" path="res://world/horizon/horizon_bell_atoll.gd" id="22_p5ek5"]
-[ext_resource type="Script" path="res://world/horizon/horizon_wreck_shoals.gd" id="23_l17n4"]
-[ext_resource type="Script" path="res://world/horizon/horizon_crabby_coast.gd" id="24_nyerb"]
-[ext_resource type="Script" path="res://world/horizon/horizon_lantern_lagoon.gd" id="25_s01yd"]
-[ext_resource type="Script" path="res://world/horizon/horizon_pinwheel_isle.gd" id="26_xuyjy"]
-[ext_resource type="Script" path="res://world/horizon/horizon_croc_crown.gd" id="27_wjq8t"]
-[ext_resource type="Script" path="res://world/ocean/ocean.gd" id="28_kyf3x"]
-[ext_resource type="Script" path="res://world/ocean/underwater_effect.gd" id="29_6paga"]
-[ext_resource type="Script" path="res://world/ocean/open_sea.gd" id="30_a7pbm"]
-[ext_resource type="Script" path="res://world/ocean/voyage.gd" id="31_4aw4u"]
-[ext_resource type="PackedScene" path="res://characters/patchy/player.tscn" id="32_u3qyx"]
-[ext_resource type="Script" path="res://characters/patchy/player.gd" id="33_mrm28"]
-[ext_resource type="Resource" path="res://resources/settings/patchy_movement.tres" id="34_dr166"]
-[ext_resource type="PackedScene" path="res://systems/camera/camera_rig.tscn" id="35_5j333"]
-[ext_resource type="Script" path="res://systems/camera/camera_rig.gd" id="36_uv2id"]
-[ext_resource type="Resource" path="res://resources/settings/camera_default.tres" id="37_0hns5"]
+[ext_resource type="Script" path="res://world/islands/island_info.gd" id="1_vdfs2"]
+[ext_resource type="Script" path="res://world/environment/sky_environment.gd" id="2_eue2e"]
+[ext_resource type="Script" path="res://world/environment/ambience.gd" id="3_12k1u"]
+[ext_resource type="Script" path="res://world/environment/weather.gd" id="4_trlqr"]
+[ext_resource type="Script" path="res://world/horizon/horizon_hat_rock.gd" id="5_iksx3"]
+[ext_resource type="Script" path="res://world/terrain/plateau.gd" id="6_yp18o"]
+[ext_resource type="Script" path="res://props/blocks/level_block.gd" id="7_ff2ha"]
+[ext_resource type="Script" path="res://props/structures/dock.gd" id="8_nvnqe"]
+[ext_resource type="Script" path="res://world/vehicles/tiny_boat.gd" id="9_1qatc"]
+[ext_resource type="Script" path="res://world/ocean/sea_region.gd" id="10_uoyga"]
+[ext_resource type="Script" path="res://systems/triggers/checkpoint.gd" id="11_e83vf"]
+[ext_resource type="Script" path="res://world/objects/wind_gust.gd" id="12_rjp5g"]
+[ext_resource type="Script" path="res://world/objects/pound_post.gd" id="13_p5ek5"]
+[ext_resource type="Script" path="res://world/objects/gate.gd" id="14_l17n4"]
+[ext_resource type="Script" path="res://world/objects/key_item_pickup.gd" id="15_nyerb"]
+[ext_resource type="Script" path="res://world/objects/lookout_hoist.gd" id="16_s01yd"]
+[ext_resource type="Script" path="res://attachments/hook/hook_point.gd" id="17_xuyjy"]
+[ext_resource type="Script" path="res://world/objects/parrot_cage.gd" id="18_wjq8t"]
+[ext_resource type="Script" path="res://systems/tutorial/tutorial_hint.gd" id="19_kyf3x"]
+[ext_resource type="Script" path="res://collectibles/coin_trail.gd" id="20_6paga"]
+[ext_resource type="Script" path="res://collectibles/collectible.gd" id="21_a7pbm"]
+[ext_resource type="Script" path="res://props/nature/palm_tree.gd" id="22_4aw4u"]
+[ext_resource type="Script" path="res://props/nature/stylized_rock.gd" id="23_u3qyx"]
+[ext_resource type="Script" path="res://world/horizon/horizon_castaway.gd" id="24_mrm28"]
+[ext_resource type="Script" path="res://world/horizon/horizon_skullcap.gd" id="25_dr166"]
+[ext_resource type="Script" path="res://world/horizon/horizon_cinder_isle.gd" id="26_5j333"]
+[ext_resource type="Script" path="res://world/horizon/horizon_cannon_cliffs.gd" id="27_uv2id"]
+[ext_resource type="Script" path="res://world/horizon/horizon_teacup_isle.gd" id="28_0hns5"]
+[ext_resource type="Script" path="res://world/horizon/horizon_stormpeak.gd" id="29_r5mna"]
+[ext_resource type="Script" path="res://world/horizon/horizon_turtleback.gd" id="30_2488o"]
+[ext_resource type="Script" path="res://world/horizon/horizon_bell_atoll.gd" id="31_7plsr"]
+[ext_resource type="Script" path="res://world/horizon/horizon_wreck_shoals.gd" id="32_tp2s8"]
+[ext_resource type="Script" path="res://world/horizon/horizon_crabby_coast.gd" id="33_v4jed"]
+[ext_resource type="Script" path="res://world/horizon/horizon_lantern_lagoon.gd" id="34_xgck2"]
+[ext_resource type="Script" path="res://world/horizon/horizon_pinwheel_isle.gd" id="35_s2ljj"]
+[ext_resource type="Script" path="res://world/horizon/horizon_croc_crown.gd" id="36_htl6e"]
+[ext_resource type="Script" path="res://world/ocean/ocean.gd" id="37_4qm4k"]
+[ext_resource type="Script" path="res://world/ocean/underwater_effect.gd" id="38_c5i1a"]
+[ext_resource type="Script" path="res://world/ocean/open_sea.gd" id="39_ee7yj"]
+[ext_resource type="Script" path="res://world/ocean/voyage.gd" id="40_ryk5g"]
+[ext_resource type="PackedScene" path="res://characters/patchy/player.tscn" id="41_q4ydm"]
+[ext_resource type="Script" path="res://characters/patchy/player.gd" id="42_jrhlo"]
+[ext_resource type="Resource" path="res://resources/settings/patchy_movement.tres" id="43_l1lau"]
+[ext_resource type="PackedScene" path="res://systems/camera/camera_rig.tscn" id="44_nu4mv"]
+[ext_resource type="Script" path="res://systems/camera/camera_rig.gd" id="45_alwvc"]
+[ext_resource type="Resource" path="res://resources/settings/camera_default.tres" id="46_70fmb"]
 
-[node name="HatRock" type="Node3D" unique_id=1741429604]
+[node name="HatRock" type="Node3D" unique_id=1964516493]
 
-[node name="IslandInfo" type="Node" parent="." unique_id=939484188]
-script = ExtResource("1_sahyg")
+[node name="IslandInfo" type="Node" parent="." unique_id=1467245478]
+script = ExtResource("1_vdfs2")
 island_id = &"hat_rock"
 display_name = "Hat Rock"
 music = &"castaway_explore"
 
-[node name="SkyEnvironment" type="Node3D" parent="." unique_id=2075186003]
-script = ExtResource("2_g7g4l")
+[node name="SkyEnvironment" type="Node3D" parent="." unique_id=59372340]
+script = ExtResource("2_eue2e")
 shadow_distance = 160.0
 
-[node name="Ambience" type="Node3D" parent="." unique_id=1722370588]
-script = ExtResource("3_dh6co")
+[node name="Ambience" type="Node3D" parent="." unique_id=1871543705]
+script = ExtResource("3_12k1u")
 
-[node name="Weather" type="Node3D" parent="." unique_id=1181389644]
-script = ExtResource("4_iw2rf")
+[node name="Weather" type="Node3D" parent="." unique_id=839487902]
+script = ExtResource("4_trlqr")
 
-[node name="HatRock" type="Node3D" parent="." unique_id=403380546]
+[node name="HatRock" type="Node3D" parent="." unique_id=1759357734]
 transform = Transform3D(-0.9660966, 0, -0.25818095, 0, 1, 0, 0.25818095, 0, -0.9660966, -124, 0, -464)
 
-[node name="Terrain" type="Node3D" parent="HatRock" unique_id=1180741424]
+[node name="Terrain" type="Node3D" parent="HatRock" unique_id=1740387184]
 
-[node name="Hat" type="Node3D" parent="HatRock/Terrain" unique_id=2147278534]
-script = ExtResource("5_or7wl")
+[node name="Hat" type="Node3D" parent="HatRock/Terrain" unique_id=633647427]
+script = ExtResource("5_iksx3")
 playable = true
 
-[node name="Beach" type="StaticBody3D" parent="HatRock/Terrain" unique_id=843817151]
-script = ExtResource("6_516gy")
+[node name="Beach" type="StaticBody3D" parent="HatRock/Terrain" unique_id=839774322]
+script = ExtResource("6_yp18o")
 outline = PackedVector2Array(44, 0, 44.117146, 12.953962, 37.489174, 24.092829, 27.622507, 31.878073, 17.82908, 39.04024, 6.4769616, 45.048256, -6.4769616, 45.048256, -17.82908, 39.04024, -27.622507, 31.878073, -37.489174, 24.092829, -44.117146, 12.953962, -44, 2.4928371e-14, -44.048767, -12.933886, -45.236015, -29.071423, -41.191605, -47.537647, -28.097755, -61.5255, -9.69058, -67.39947, 9.69058, -67.39947, 28.097755, -61.5255, 41.191605, -47.537647, 45.236015, -29.071423, 44.048767, -12.933886)
 height = 1.0
 depth = 9.0
@@ -76,215 +85,562 @@ shore_width = 14.0
 shore_drop = 5.0
 noise_seed = 61
 
-[node name="Structures" type="Node3D" parent="HatRock" unique_id=1286333652]
+[node name="Structures" type="Node3D" parent="HatRock" unique_id=1821159708]
 
-[node name="Gameplay" type="Node3D" parent="HatRock" unique_id=392001305]
+[node name="Davit" type="StaticBody3D" parent="HatRock/Structures" unique_id=1776825937]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 37.9, -20.925)
+script = ExtResource("7_ff2ha")
+size = Vector3(2.4, 0.4, 13.85)
+surface = "wood"
 
-[node name="Landing" type="Node3D" parent="HatRock/Gameplay" unique_id=2066873313]
+[node name="GantryPost" type="StaticBody3D" parent="HatRock/Structures" unique_id=1836326530]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.75, 38.3, -28.05)
+script = ExtResource("7_ff2ha")
+shape = 3
+size = Vector3(0.3, 5.7, 0.3)
+surface = "wood_dark"
 
-[node name="Jetty" type="StaticBody3D" parent="HatRock/Gameplay/Landing" unique_id=1620972478]
+[node name="DavitRail" type="StaticBody3D" parent="HatRock/Structures" unique_id=1902110689]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.25, 38.25, -20.925)
+script = ExtResource("7_ff2ha")
+size = Vector3(0.2, 0.9, 13.25)
+surface = "wood_dark"
+
+[node name="GantryPost2" type="StaticBody3D" parent="HatRock/Structures" unique_id=177342723]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.75, 38.3, -28.05)
+script = ExtResource("7_ff2ha")
+shape = 3
+size = Vector3(0.3, 5.7, 0.3)
+surface = "wood_dark"
+
+[node name="DavitRail2" type="StaticBody3D" parent="HatRock/Structures" unique_id=693864949]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.25, 38.25, -20.925)
+script = ExtResource("7_ff2ha")
+size = Vector3(0.2, 0.9, 13.25)
+surface = "wood_dark"
+
+[node name="GantryBeam" type="StaticBody3D" parent="HatRock/Structures" unique_id=1322463964]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 43.7, -28.05)
+script = ExtResource("7_ff2ha")
+size = Vector3(3.9, 0.35, 0.35)
+surface = "wood_dark"
+
+[node name="GantryArm" type="StaticBody3D" parent="HatRock/Structures" unique_id=243977938]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 43.7, -28.625)
+script = ExtResource("7_ff2ha")
+size = Vector3(0.35, 0.35, 1.95)
+surface = "wood_dark"
+
+[node name="Pulley" type="StaticBody3D" parent="HatRock/Structures" unique_id=1316077780]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, 43.2, -29.2)
+script = ExtResource("7_ff2ha")
+shape = 3
+size = Vector3(0.7, 0.5, 0.7)
+surface = "metal"
+
+[node name="Gameplay" type="Node3D" parent="HatRock" unique_id=1299265770]
+
+[node name="Landing" type="Node3D" parent="HatRock/Gameplay" unique_id=1004882094]
+
+[node name="Jetty" type="StaticBody3D" parent="HatRock/Gameplay/Landing" unique_id=1934393527]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 1.1, -66)
-script = ExtResource("7_gybqh")
+script = ExtResource("8_nvnqe")
 length = 12.0
 post_depth = 7.0
 water_line = -1.0
 
-[node name="BoatMooring" type="Marker3D" parent="HatRock/Gameplay/Landing" unique_id=292023756]
+[node name="BoatMooring" type="Marker3D" parent="HatRock/Gameplay/Landing" unique_id=1869645867]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 9.6, 0, -75)
 
-[node name="Arrival" type="Marker3D" parent="HatRock/Gameplay/Landing" unique_id=596816914]
+[node name="Arrival" type="Marker3D" parent="HatRock/Gameplay/Landing" unique_id=2109499501]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 6, 1.4, -68)
 
-[node name="TinyBoat" type="CharacterBody3D" parent="HatRock/Gameplay/Landing" unique_id=1318360929]
+[node name="TinyBoat" type="CharacterBody3D" parent="HatRock/Gameplay/Landing" unique_id=783198564]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 9.6, 0, -75)
-script = ExtResource("8_1cto8")
+script = ExtResource("9_1qatc")
 world_limit = 230.0
 limit_center = Vector3(-124, 0, -464)
 home_island = &"hat_rock"
 
-[node name="SeaRegion" type="Marker3D" parent="HatRock/Gameplay/Landing" unique_id=157464301 node_paths=PackedStringArray("boat_dock", "arrival")]
-script = ExtResource("9_yi2rn")
+[node name="SeaRegion" type="Marker3D" parent="HatRock/Gameplay/Landing" unique_id=820660209 node_paths=PackedStringArray("boat_dock", "arrival")]
+script = ExtResource("10_uoyga")
 region_name = "Hat Rock"
 island_id = &"hat_rock"
 boat_dock = NodePath("../BoatMooring")
 arrival = NodePath("../Arrival")
 
-[node name="CpBeach" type="Area3D" parent="HatRock/Gameplay/Landing" unique_id=231141596]
+[node name="CpBeach" type="Area3D" parent="HatRock/Gameplay/Landing" unique_id=755072126]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1, -62)
-script = ExtResource("10_vdfs2")
+script = ExtResource("11_e83vf")
 checkpoint_id = &"cp_hat_rock"
 respawn_yaw = 180.0
 
-[node name="Climb" type="Node3D" parent="HatRock/Gameplay" unique_id=1817330536]
+[node name="Climb" type="Node3D" parent="HatRock/Gameplay" unique_id=161875929]
 
-[node name="Step1" type="StaticBody3D" parent="HatRock/Gameplay/Climb" unique_id=880020623]
-transform = Transform3D(0.9781476, 0, 0.2079117, 0, 1, 0, -0.2079117, 0, 0.9781476, -3.5, 1, -59.5)
-script = ExtResource("11_eue2e")
+[node name="Step1" type="StaticBody3D" parent="HatRock/Gameplay/Climb" unique_id=520280031]
+transform = Transform3D(0.9781476, 0, 0.2079117, 0, 1, 0, -0.2079117, 0, 0.9781476, -3.5, 1, -58.8)
+script = ExtResource("7_ff2ha")
 size = Vector3(4.4, 2.5, 4.4)
 surface = "rock"
 
-[node name="Step2" type="StaticBody3D" parent="HatRock/Gameplay/Climb" unique_id=767886228]
-transform = Transform3D(0.99026805, 0, -0.1391731, 0, 1, 0, 0.1391731, 0, 0.99026805, 0.5, 1, -56.2)
-script = ExtResource("11_eue2e")
+[node name="Step2" type="StaticBody3D" parent="HatRock/Gameplay/Climb" unique_id=1043585099]
+transform = Transform3D(0.99026805, 0, -0.1391731, 0, 1, 0, 0.1391731, 0, 0.99026805, 0.5, 1, -55)
+script = ExtResource("7_ff2ha")
 size = Vector3(3.6, 5.5, 3.6)
 surface = "rock"
 
-[node name="Treasure" type="Node3D" parent="HatRock" unique_id=2120316075]
+[node name="CpBrim" type="Area3D" parent="HatRock/Gameplay/Climb" unique_id=1088583192]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.892906, 11.15201, -19.751686)
+script = ExtResource("11_e83vf")
+checkpoint_id = &"cp_hat_rock_brim"
+respawn_yaw = -129.57971380968172
 
-[node name="CoinTrail" type="Node3D" parent="HatRock/Treasure" unique_id=1843801170]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 4.2, -59.5)
-script = ExtResource("12_12k1u")
-end_point = Vector3(4, 3, 3.2999992)
+[node name="Ledge" type="Node3D" parent="HatRock/Gameplay" unique_id=1368667862]
+
+[node name="Gust1" type="Area3D" parent="HatRock/Gameplay/Ledge" unique_id=220862735]
+transform = Transform3D(0.84147096, 0, -0.54030234, 0, 1, 0, 0.54030234, 0, 0.84147096, 14.230141, 14.88, -20.162128)
+script = ExtResource("12_rjp5g")
+size = Vector3(19.650589, 7.74, 8.274569)
+pennant_at = Vector3(-6.0687532, 1.5288, 1.4045261)
+
+[node name="Gust2" type="Area3D" parent="HatRock/Gameplay/Ledge" unique_id=2007142322]
+transform = Transform3D(-0.6884081, 0, -0.7253236, 0, 1, 0, 0.7253236, 0, -0.6884081, 18.429705, 22.004, 19.49172)
+script = ExtResource("12_rjp5g")
+size = Vector3(25.590158, 8.836, 9.3631)
+offset = 1.6
+pennant_at = Vector3(-9.148692, 1.528801, 1.4257739)
+
+[node name="Gust3" type="Area3D" parent="HatRock/Gameplay/Ledge" unique_id=674877833]
+transform = Transform3D(-0.8058847, 0, 0.5920725, 0, 1, 0, -0.5920725, 0, -0.8058847, -14.13562, 28.853998, 21.240347)
+script = ExtResource("12_rjp5g")
+size = Vector3(18.137661, 7.74, 8.1619215)
+offset = 3.2
+pennant_at = Vector3(-5.616118, 1.528801, 0.80157876)
+
+[node name="Lookout" type="Node3D" parent="HatRock/Gameplay" unique_id=1817264837]
+
+[node name="Buckle" type="StaticBody3D" parent="HatRock/Gameplay/Lookout" unique_id=649168151]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 38, -1)
+script = ExtResource("13_p5ek5")
+post_id = &"hat_rock_buckle"
+post_height = 0.9
+style = "buckle"
+
+[node name="LookoutDoor" type="StaticBody3D" parent="HatRock/Gameplay/Lookout" unique_id=1812632354 node_paths=PackedStringArray("triggers")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 38, 5.175)
+script = ExtResource("14_l17n4")
+gate_id = &"hat_rock_lookout_door"
+size = Vector3(2.2, 3.2, 0.3)
+triggers = [NodePath("../Buckle")]
+
+[node name="Spyglass" type="Area3D" parent="HatRock/Gameplay/Lookout" unique_id=1992876591]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 38.12, 8.6)
+script = ExtResource("15_nyerb")
+
+[node name="CpTop" type="Area3D" parent="HatRock/Gameplay/Lookout" unique_id=280959014]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.740283, 38, -6.8225336)
+script = ExtResource("11_e83vf")
+checkpoint_id = &"cp_hat_rock_top"
+respawn_yaw = -122.7042180981516
+
+[node name="Hoist" type="Node3D" parent="HatRock/Gameplay" unique_id=1815870619]
+
+[node name="Hoist" type="AnimatableBody3D" parent="HatRock/Gameplay/Hoist" unique_id=567115604 node_paths=PackedStringArray("gate")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 38.3, -29.2)
+script = ExtResource("16_s01yd")
+drop = 28.049999999999997
+pulley = 4.9
+gate = NodePath("../../Lookout/LookoutDoor")
+waypoints = PackedVector3Array(0, 0, 0, 6, 0, 0)
+speed = 6.0
+wait_time = 1.4
+
+[node name="Feather" type="Node3D" parent="HatRock/Gameplay" unique_id=1280890974]
+
+[node name="FeatherIron" type="Area3D" parent="HatRock/Gameplay/Feather" unique_id=1925239871]
+transform = Transform3D(1.6, 0, 0, 0, 1.6, 0, 0, 0, 1.6, -23.05329, 50.6, 28.733908)
+script = ExtResource("17_xuyjy")
+grapple_only = true
+grapple_arrival = "hop"
+hang_length = 0.0
+
+[node name="FeatherRing1" type="Area3D" parent="HatRock/Gameplay/Feather" unique_id=1741531616]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27.601042, 53, 25.50496)
+script = ExtResource("17_xuyjy")
+hang_length = 1.4
+
+[node name="FeatherRing2" type="Area3D" parent="HatRock/Gameplay/Feather" unique_id=782022197]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -34.495037, 56, 23.391409)
+script = ExtResource("17_xuyjy")
+hang_length = 1.4
+
+[node name="FeatherRing3" type="Area3D" parent="HatRock/Gameplay/Feather" unique_id=619065877]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -37.11199, 59.5, 28.891922)
+script = ExtResource("17_xuyjy")
+hang_length = 1.4
+
+[node name="CpFeather" type="Area3D" parent="HatRock/Gameplay/Feather" unique_id=303597223]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25.777435, 47, 29.289814)
+script = ExtResource("11_e83vf")
+checkpoint_id = &"cp_hat_rock_feather"
+respawn_yaw = 139.22801564471575
+
+[node name="ParrotCage_hat_rock_parrot_crest" type="Area3D" parent="HatRock/Gameplay" unique_id=1115731702]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31, 64.9, 46)
+script = ExtResource("18_wjq8t")
+parrot_id = &"hat_rock_parrot_crest"
+island_id = &"hat_rock"
+plumage = 1
+
+[node name="Rosette" type="Node3D" parent="HatRock/Gameplay" unique_id=1954011480]
+
+[node name="RosetteIron" type="Area3D" parent="HatRock/Gameplay/Rosette" unique_id=1719258033]
+transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 44.63495, 28.3, -25.77)
+script = ExtResource("17_xuyjy")
+grapple_only = true
+grapple_arrival = "hop"
+hang_length = 0.0
+
+[node name="Hints" type="Node3D" parent="HatRock/Gameplay" unique_id=419271207]
+
+[node name="HintGust" type="Node3D" parent="HatRock/Gameplay/Hints" unique_id=340621045]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.3227034, 15.669, -24.384987)
+script = ExtResource("19_kyf3x")
+hint_id = &"hint_gust"
+text = "Gusts off the sea! Hold {crouch} to brace until they pass"
+
+[node name="HintBuckle" type="Node3D" parent="HatRock/Gameplay/Hints" unique_id=172620249]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 38, -1)
+script = ExtResource("19_kyf3x")
+hint_id = &"hint_buckle"
+text = "A great gold buckle... In the air, press {ground_pound} to pound it"
+size = Vector3(8, 4, 8)
+
+[node name="HintFeatherGrapple" type="Node3D" parent="HatRock/Gameplay/Hints" unique_id=1338871086]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.628328, 38.28, 18.963844)
+script = ExtResource("19_kyf3x")
+hint_id = &"hint_feather_grapple"
+text = "{tool_primary} Grapple the iron ring on the feather"
+size = Vector3(5, 4, 5)
+require_attachment = &"grapple"
+
+[node name="Treasure" type="Node3D" parent="HatRock" unique_id=1993998361]
+
+[node name="CoinTrail" type="Node3D" parent="HatRock/Treasure" unique_id=620985754]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 4.2, -58.8)
+script = ExtResource("20_6paga")
+end_point = Vector3(4, 3, 3.7999992)
 arc_height = 1.0
 count = 3
 
-[node name="Enemies" type="Node3D" parent="HatRock" unique_id=1385966249]
+[node name="CoinTrail2" type="Node3D" parent="HatRock/Treasure" unique_id=312511136]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9788122, 10.900214, -32.940617)
+script = ExtResource("20_6paga")
+shape = 0
+end_point = Vector3(-5.4801693, 0.028614998, 0.7946434)
+arc_height = 0.0
+count = 2
 
-[node name="Nature" type="Node3D" parent="HatRock" unique_id=563313333]
+[node name="CoinTrail3" type="Node3D" parent="HatRock/Treasure" unique_id=393947326]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.4589815, 10.928829, -32.145973)
+script = ExtResource("20_6paga")
+shape = 0
+end_point = Vector3(-5.2701416, 0.14136887, 1.6998005)
+arc_height = 0.0
+count = 2
 
-[node name="Palm" type="StaticBody3D" parent="HatRock/Nature" unique_id=826945669]
+[node name="CoinTrail4" type="Node3D" parent="HatRock/Treasure" unique_id=86755173]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.729123, 11.070198, -30.446173)
+script = ExtResource("20_6paga")
+shape = 0
+end_point = Vector3(-4.9117193, 0.3690138, 2.5570946)
+arc_height = 0.0
+count = 2
+
+[node name="CoinTrail5" type="Node3D" parent="HatRock/Treasure" unique_id=2049231912]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.640842, 11.439212, -27.889078)
+script = ExtResource("20_6paga")
+shape = 0
+end_point = Vector3(-4.4149933, 0.52019787, 3.3423862)
+arc_height = 0.0
+count = 2
+
+[node name="CoinTrail6" type="Node3D" parent="HatRock/Treasure" unique_id=515251963]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.055836, 11.95941, -24.546692)
+script = ExtResource("20_6paga")
+shape = 0
+end_point = Vector3(-3.793953, 0.45491505, 4.0335636)
+arc_height = 0.0
+count = 2
+
+[node name="CoinTrail7" type="Node3D" parent="HatRock/Treasure" unique_id=1081017888]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.477043, 12.322, -15.536646)
+script = ExtResource("20_6paga")
+shape = 0
+end_point = Vector3(3.454606, 0.8220005, -3.3725357)
+arc_height = 0.0
+count = 3
+
+[node name="CoinTrail8" type="Node3D" parent="HatRock/Treasure" unique_id=116376351]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.36193, 13.691999, -20.771841)
+script = ExtResource("20_6paga")
+shape = 0
+end_point = Vector3(4.4183, 0.8220005, -2.1251717)
+arc_height = 0.0
+count = 3
+
+[node name="CoinTrail9" type="Node3D" parent="HatRock/Treasure" unique_id=152354374]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.14039415, 15.884, -24.441189)
+script = ExtResource("20_6paga")
+shape = 0
+end_point = Vector3(4.980592, 0.82199955, 0.34947586)
+arc_height = 0.0
+count = 3
+
+[node name="CoinTrail10" type="Node3D" parent="HatRock/Treasure" unique_id=926313804]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.665327, 20.542, -10.846964)
+script = ExtResource("20_6paga")
+shape = 0
+end_point = Vector3(1.9865055, 0.8220005, 4.662504)
+arc_height = 0.0
+count = 3
+
+[node name="CoinTrail11" type="Node3D" parent="HatRock/Treasure" unique_id=371147258]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.782106, 23.008, 3.8278005)
+script = ExtResource("20_6paga")
+shape = 0
+end_point = Vector3(-0.8942871, 0.8220005, 4.9657784)
+arc_height = 0.0
+count = 3
+
+[node name="CoinTrail12" type="Node3D" parent="HatRock/Treasure" unique_id=1458741463]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.6839304, 28.762, 27.282618)
+script = ExtResource("20_6paga")
+shape = 0
+end_point = Vector3(-4.818995, 0.8220005, 0.15392303)
+arc_height = 0.0
+count = 3
+
+[node name="CoinTrail13" type="Node3D" parent="HatRock/Treasure" unique_id=661741549]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.934923, 34.516003, 11.715797)
+script = ExtResource("20_6paga")
+shape = 0
+end_point = Vector3(-0.578249, 0.4109993, -2.09937)
+arc_height = 0.0
+count = 3
+
+[node name="CoinTrail14" type="Node3D" parent="HatRock/Treasure" unique_id=1739046314]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.944355, 36.16, 3.263685)
+script = ExtResource("20_6paga")
+shape = 0
+end_point = Vector3(0.7676773, 0.8220024, -4.0532355)
+arc_height = 0.0
+count = 3
+
+[node name="CoinTrail15" type="Node3D" parent="HatRock/Treasure" unique_id=1917204208]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.231052, 37.530003, -3.3091085)
+script = ExtResource("20_6paga")
+shape = 0
+end_point = Vector3(1.9972515, 0.8219986, -3.3896196)
+arc_height = 0.0
+count = 3
+
+[node name="Heart" type="Area3D" parent="HatRock/Treasure" unique_id=119489880]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.2291656, 30.032, 26.513994)
+script = ExtResource("21_a7pbm")
+kind = "heart"
+
+[node name="CoinTrail16" type="Node3D" parent="HatRock/Treasure" unique_id=1925051942]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 38.9, 1)
+script = ExtResource("20_6paga")
+shape = 0
+end_point = Vector3(6, 0, 0)
+arc_height = 0.0
+count = 4
+
+[node name="CoinTrail17" type="Node3D" parent="HatRock/Treasure" unique_id=1641889627]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.420992, 48.2, 27.361698)
+script = ExtResource("20_6paga")
+end_point = Vector3(-2.2528229, 1.5999985, -3.5446835)
+arc_height = 2.0
+count = 3
+
+[node name="CoinTrail18" type="Node3D" parent="HatRock/Treasure" unique_id=2111442203]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32.32306, 51.2, 23.04139)
+script = ExtResource("20_6paga")
+end_point = Vector3(-4.1465034, 1.5999985, 0.6682186)
+arc_height = 2.0
+count = 3
+
+[node name="CoinTrail19" type="Node3D" parent="HatRock/Treasure" unique_id=2044337862]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -37.853096, 54.2, 26.820505)
+script = ExtResource("20_6paga")
+end_point = Vector3(1.4148331, 2.0999985, 3.954523)
+arc_height = 2.0
+count = 3
+
+[node name="CoinTrail20" type="Node3D" parent="HatRock/Treasure" unique_id=1327994645]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -35.25, 58.29, 34.1)
+script = ExtResource("20_6paga")
+shape = 0
+end_point = Vector3(3, 5.16, 8.400002)
+arc_height = 0.0
+count = 5
+
+[node name="HatRockGemRosette" type="Area3D" parent="HatRock/Treasure" unique_id=1968710189]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 46.62681, 26.199999, -26.92)
+script = ExtResource("21_a7pbm")
+kind = "gem"
+treasure_id = &"hat_rock_gem_rosette"
+island_id = &"hat_rock"
+
+[node name="Enemies" type="Node3D" parent="HatRock" unique_id=1157739104]
+
+[node name="Nature" type="Node3D" parent="HatRock" unique_id=130957987]
+
+[node name="Palm" type="StaticBody3D" parent="HatRock/Nature" unique_id=1233194589]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26, 1, -48)
-script = ExtResource("13_trlqr")
+script = ExtResource("22_4aw4u")
 height = 7.0
 lean_degrees = 14.0
 lean_direction = 200.0
 seed = 307
 
-[node name="Palm2" type="StaticBody3D" parent="HatRock/Nature" unique_id=1564987310]
+[node name="Palm2" type="StaticBody3D" parent="HatRock/Nature" unique_id=1589145840]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 1, -50)
-script = ExtResource("13_trlqr")
+script = ExtResource("22_4aw4u")
 height = 6.5
 lean_degrees = 18.0
 lean_direction = -30.0
 coconut_count = 2
 seed = 314
 
-[node name="Palm3" type="StaticBody3D" parent="HatRock/Nature" unique_id=276921942]
+[node name="Palm3" type="StaticBody3D" parent="HatRock/Nature" unique_id=1699309251]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -36, 1, -30)
-script = ExtResource("13_trlqr")
+script = ExtResource("22_4aw4u")
 lean_direction = 250.0
 coconut_count = 1
 seed = 321
 
-[node name="Palm4" type="StaticBody3D" parent="HatRock/Nature" unique_id=1181239875]
+[node name="Palm4" type="StaticBody3D" parent="HatRock/Nature" unique_id=100358395]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 34, 1, -34)
-script = ExtResource("13_trlqr")
+script = ExtResource("22_4aw4u")
 height = 7.5
 lean_degrees = 16.0
 lean_direction = -70.0
 coconut_count = 0
 seed = 328
 
-[node name="Palm5" type="StaticBody3D" parent="HatRock/Nature" unique_id=280270553]
+[node name="Palm5" type="StaticBody3D" parent="HatRock/Nature" unique_id=599581297]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 1, -62)
-script = ExtResource("13_trlqr")
+script = ExtResource("22_4aw4u")
 lean_degrees = 20.0
 lean_direction = 160.0
 seed = 335
 
-[node name="Rock" type="StaticBody3D" parent="HatRock/Nature" unique_id=1451779310]
+[node name="Rock" type="StaticBody3D" parent="HatRock/Nature" unique_id=1751957650]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 1, -64)
-script = ExtResource("14_iksx3")
+script = ExtResource("23_u3qyx")
 preset = 0
 size = Vector3(2, 1.4, 1.8)
 seed = 81
 
-[node name="Rock2" type="StaticBody3D" parent="HatRock/Nature" unique_id=966998389]
+[node name="Rock2" type="StaticBody3D" parent="HatRock/Nature" unique_id=1053230975]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 1, -56)
-script = ExtResource("14_iksx3")
+script = ExtResource("23_u3qyx")
 preset = 3
 seed = 83
 
-[node name="Horizon" type="Node3D" parent="." unique_id=1200458203]
+[node name="Horizon" type="Node3D" parent="." unique_id=724357388]
 
-[node name="Horizon_CastawayCay" type="Node3D" parent="Horizon" unique_id=853268998]
-script = ExtResource("15_yp18o")
+[node name="Horizon_CastawayCay" type="Node3D" parent="Horizon" unique_id=1996130330]
+script = ExtResource("24_mrm28")
 
-[node name="Horizon_SkullcapMountain" type="Node3D" parent="Horizon" unique_id=1107391110]
+[node name="Horizon_SkullcapMountain" type="Node3D" parent="Horizon" unique_id=749253179]
 transform = Transform3D(-0.98476803, 0, 0.17387322, 0, 1, 0, -0.17387322, 0, -0.98476803, 113, 0, -640)
-script = ExtResource("16_ff2ha")
+script = ExtResource("25_dr166")
 
-[node name="Horizon_CinderIsle" type="Node3D" parent="Horizon" unique_id=1461079927]
+[node name="Horizon_CinderIsle" type="Node3D" parent="Horizon" unique_id=447346908]
 transform = Transform3D(-0.76592153, 0, 0.6429341, 0, 1, 0, -0.6429341, 0, -0.76592153, 643, 0, -766)
-script = ExtResource("17_nvnqe")
+script = ExtResource("26_5j333")
 
-[node name="Horizon_CannonballCliffs" type="Node3D" parent="Horizon" unique_id=238370011]
+[node name="Horizon_CannonballCliffs" type="Node3D" parent="Horizon" unique_id=1414209851]
 transform = Transform3D(-0.34146613, 0, 0.9398941, 0, 1, 0, -0.9398941, 0, -0.34146613, 545, 0, -198)
-script = ExtResource("18_1qatc")
+script = ExtResource("27_uv2id")
 
-[node name="Horizon_TeacupIsle" type="Node3D" parent="Horizon" unique_id=1814386489]
+[node name="Horizon_TeacupIsle" type="Node3D" parent="Horizon" unique_id=1878340470]
 transform = Transform3D(0.59891576, 0, 1.4836779, 0, 1.6, 0, -1.4836779, 0, 0.59891576, 436, 0, 176)
-script = ExtResource("19_uoyga")
+script = ExtResource("28_0hns5")
 
-[node name="Horizon_Stormpeak" type="Node3D" parent="Horizon" unique_id=1939444581]
+[node name="Horizon_Stormpeak" type="Node3D" parent="Horizon" unique_id=1074447373]
 transform = Transform3D(0.24189368, 0, 0.97030276, 0, 1, 0, -0.97030276, 0, 0.24189368, 1067, 0, 266)
-script = ExtResource("20_e83vf")
+script = ExtResource("29_r5mna")
 
-[node name="Horizon_Turtleback" type="Node3D" parent="Horizon" unique_id=322691589]
+[node name="Horizon_Turtleback" type="Node3D" parent="Horizon" unique_id=590659556]
 transform = Transform3D(-0.30293006, 0, 1.3155735, 0, 1.35, 0, -1.3155735, 0, -0.30293006, 416, 0, 375)
-script = ExtResource("21_rjp5g")
+script = ExtResource("30_2488o")
 
-[node name="Horizon_BellAtoll" type="Node3D" parent="Horizon" unique_id=588425196]
+[node name="Horizon_BellAtoll" type="Node3D" parent="Horizon" unique_id=550032015]
 transform = Transform3D(1.7854966, 0, 0.64961684, 0, 1.9, 0, -0.64961684, 0, 1.7854966, 171, 0, 470)
-script = ExtResource("22_p5ek5")
+script = ExtResource("31_7plsr")
 
-[node name="Horizon_ShipwreckShoals" type="Node3D" parent="Horizon" unique_id=1073105638]
+[node name="Horizon_ShipwreckShoals" type="Node3D" parent="Horizon" unique_id=2040512239]
 transform = Transform3D(1.2927955, 0, -0.13667336, 0, 1.3, 0, 0.13667336, 0, 1.2927955, -61, 0, 577)
-script = ExtResource("23_l17n4")
+script = ExtResource("32_tp2s8")
 
-[node name="Horizon_CrabbyCoast" type="Node3D" parent="Horizon" unique_id=186945951]
+[node name="Horizon_CrabbyCoast" type="Node3D" parent="Horizon" unique_id=1716447641]
 transform = Transform3D(0.81908506, 0, -0.5736721, 0, 1, 0, 0.5736721, 0, 0.81908506, -367, 0, 524)
-script = ExtResource("24_nyerb")
+script = ExtResource("33_v4jed")
 
-[node name="Horizon_LanternLagoon" type="Node3D" parent="Horizon" unique_id=501481449]
+[node name="Horizon_LanternLagoon" type="Node3D" parent="Horizon" unique_id=1559323344]
 transform = Transform3D(-0.03569147, 0, -0.9993629, 0, 1, 0, 0.9993629, 0, -0.03569147, -560, 0, -20)
-script = ExtResource("25_s01yd")
+script = ExtResource("34_xgck2")
 
-[node name="Horizon_PinwheelIsle" type="Node3D" parent="Horizon" unique_id=1886635507]
+[node name="Horizon_PinwheelIsle" type="Node3D" parent="Horizon" unique_id=1106049363]
 transform = Transform3D(-0.8500187, 0, -1.4722325, 0, 1.7, 0, 1.4722325, 0, -0.8500187, -433, 0, -250)
-script = ExtResource("26_xuyjy")
+script = ExtResource("35_s2ljj")
 
-[node name="Horizon_CrocodileCrown" type="Node3D" parent="Horizon" unique_id=1704256183]
+[node name="Horizon_CrocodileCrown" type="Node3D" parent="Horizon" unique_id=155540664]
 transform = Transform3D(-1.1671394, 0, 0.4475327, 0, 1.25, 0, -0.4475327, 0, -1.1671394, -834, 0, -863)
-script = ExtResource("27_wjq8t")
+script = ExtResource("36_htl6e")
 
-[node name="Ocean" type="Node3D" parent="." unique_id=1998983300]
+[node name="Ocean" type="Node3D" parent="." unique_id=169640504]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -124, 0, -464)
-script = ExtResource("28_kyf3x")
+script = ExtResource("37_4qm4k")
 swim_area_size = Vector2(420, 420)
 swim_depth = 14.0
 gameplay_wave_scale = 0.6
 
-[node name="UnderwaterEffect" type="CanvasLayer" parent="." unique_id=1094934514]
+[node name="UnderwaterEffect" type="CanvasLayer" parent="." unique_id=359324528]
 layer = -1
-script = ExtResource("29_6paga")
+script = ExtResource("38_c5i1a")
 
-[node name="Seabed" type="StaticBody3D" parent="." unique_id=1425258639]
+[node name="Seabed" type="StaticBody3D" parent="." unique_id=886353618]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -124, -11, -464)
-script = ExtResource("11_eue2e")
+script = ExtResource("7_ff2ha")
 size = Vector3(420, 1, 420)
 surface = "sand"
 
-[node name="OpenSea" type="Node" parent="." unique_id=2081034129]
-script = ExtResource("30_a7pbm")
+[node name="OpenSea" type="Node" parent="." unique_id=557021368]
+script = ExtResource("39_ee7yj")
 
-[node name="Voyage" type="Node" parent="." unique_id=380602521]
-script = ExtResource("31_4aw4u")
+[node name="Voyage" type="Node" parent="." unique_id=709825945]
+script = ExtResource("40_ryk5g")
 home = &"hat_rock"
 
-[node name="Player" type="CharacterBody3D" parent="." unique_id=321109075 groups=["player"] instance=ExtResource("32_u3qyx")]
+[node name="Player" type="CharacterBody3D" parent="." unique_id=1042299862 groups=["player"] instance=ExtResource("41_q4ydm")]
 transform = Transform3D(0.9660966, 0, 0.25818095, 0, 1, 0, -0.25818095, 0, 0.9660966, -111.46573, 1.5, -393.85806)
 collision_layer = 2
 collision_mask = 1033
-script = ExtResource("33_mrm28")
-settings = ExtResource("34_dr166")
+script = ExtResource("42_jrhlo")
+settings = ExtResource("43_l1lau")
 
-[node name="CameraRig" type="Node3D" parent="." unique_id=1119739317 node_paths=PackedStringArray("target") instance=ExtResource("35_5j333")]
+[node name="CameraRig" type="Node3D" parent="." unique_id=1936082662 node_paths=PackedStringArray("target") instance=ExtResource("44_nu4mv")]
 transform = Transform3D(0.9660966, 0, 0.25818095, 0, 1, 0, -0.25818095, 0, 0.9660966, -109.65846, 4.5, -387.0954)
-script = ExtResource("36_uv2id")
-settings = ExtResource("37_0hns5")
+script = ExtResource("45_alwvc")
+settings = ExtResource("46_70fmb")
 target = NodePath("../Player")
 
-[node name="SpawnDock" type="Marker3D" parent="." unique_id=1562953905 groups=["spawn_point"]]
+[node name="SpawnDock" type="Marker3D" parent="." unique_id=525563253 groups=["spawn_point"]]
 transform = Transform3D(0.9660966, 0, 0.25818095, 0, 1, 0, -0.25818095, 0, 0.9660966, -111.46573, 1.5, -393.85806)
 metadata/spawn_id = &"dock"

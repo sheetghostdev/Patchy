@@ -27,6 +27,12 @@ signal camera_cut(previous_basis: Basis)
 var yaw := 0.0
 ## Camera pitch (radians), negative looks down.
 var pitch := 0.0
+## Multiplies manual look input (the Spyglass slows it right down so a
+## zoomed view can be aimed precisely).
+var look_scale := 1.0
+## True while something else looks through the rig's yaw and pitch (the
+## Spyglass): no auto-align or auto-pitch tugs the view about.
+var scoping := false
 
 var _yaw_rate := 0.0
 var _pitch_rate := 0.0
@@ -124,7 +130,7 @@ func snap_behind_target() -> void:
 
 ## Smoothly but quickly swing behind Patchy (spec §42).
 func start_recenter() -> void:
-	if target == null:
+	if target == null or scoping:
 		return
 	var to_yaw := yaw
 	if target is Player:
@@ -187,7 +193,7 @@ func _update_manual(delta: float) -> void:
 	var stick := Input.get_vector(&"camera_left", &"camera_right", &"camera_up", &"camera_down")
 	var mag := pow(minf(stick.length(), 1.0), s.stick_response_exponent)
 	var dir := stick.normalized() if stick.length() > 0.0001 else Vector2.ZERO
-	var sens := s.controller_sensitivity * Settings.stick_sensitivity
+	var sens := s.controller_sensitivity * Settings.stick_sensitivity * look_scale
 	var target_yaw_rate := -dir.x * mag * s.yaw_speed * sens * inv_x
 	var target_pitch_rate := -dir.y * mag * s.pitch_speed * sens * inv_y
 	_yaw_rate = move_toward(_yaw_rate, target_yaw_rate, s.stick_acceleration * delta)
@@ -195,7 +201,7 @@ func _update_manual(delta: float) -> void:
 	yaw += deg_to_rad(_yaw_rate) * delta
 	pitch += deg_to_rad(_pitch_rate) * delta
 
-	var m := _mouse_delta * s.mouse_sensitivity * Settings.mouse_sensitivity
+	var m := _mouse_delta * s.mouse_sensitivity * Settings.mouse_sensitivity * look_scale
 	_mouse_delta = Vector2.ZERO
 	yaw -= deg_to_rad(m.x) * inv_x
 	pitch -= deg_to_rad(m.y) * inv_y
@@ -263,6 +269,9 @@ func _update_auto(delta: float, player: Player) -> void:
 	if player == null:
 		return
 	var limits := _pitch_limits(player)
+	if scoping:
+		pitch = clampf(pitch, limits.x, limits.y)
+		return
 
 	# Swing: settle behind the swing direction, gently (spec §43).
 	if player.state_id == &"swing" and _since_manual_yaw > 0.4:

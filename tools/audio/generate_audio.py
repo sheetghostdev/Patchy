@@ -1188,6 +1188,23 @@ def fall_whoosh(rng):
     return mix((whistle * env, 0.55), (nz(breath) * env, 0.12), (wind, 0.35))
 
 
+@sfx("wind_gust", volume_db=-4.0)
+def wind_gust(rng):
+    """A sea gust (Hat Rock's WindGust): a thin whistle rising for a second
+    as a warning, then a big rush of air that blows past and dies away."""
+    dur = 2.6
+    n = ns(dur)
+    t = tn(n)
+    pts = [(0, 520), (1.0, 1150), (1.5, 980), (dur, 620)]
+    f = curve(t, pts, "exp") * (1 + 0.02 * np.sin(2 * np.pi * 4.2 * t))
+    howl = shaped_noise(n, rng, lambda ff, tt: gauss_band(ff, curve(tt, pts, "exp"), 0.1))
+    whistle = harmonic_tone(f * 1.5, n, [1, 0.08])
+    rush = whoosh(dur, rng, [(0, 500), (1.0, 900), (1.3, 1700), (2.0, 1100), (dur, 600)], 1.4,
+                  [(0, 0.05), (0.9, 0.2), (1.15, 1.0), (1.9, 0.75), (dur, 0)])
+    env = curve(t, [(0, 0), (0.15, 0.35), (1.0, 0.8), (1.3, 1.0), (2.0, 0.6), (dur, 0)], "cos")
+    return mix((nz(howl) * env, 0.45), (whistle * env, 0.12), (rush, 0.9))
+
+
 @sfx("respawn_poof", volume_db=-4.0)
 def respawn_poof(rng):
     """Soft cloud pop: tiny pitch-dropping pop + airy puff (no magic)."""

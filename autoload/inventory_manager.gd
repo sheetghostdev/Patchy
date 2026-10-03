@@ -15,6 +15,9 @@ var _attachments: Array[StringName] = []
 var equipped_attachment: StringName = &"hook"
 var _ship_parts: Array[StringName] = []
 var _maps: Dictionary = {}           # map_id -> {"solved": bool}
+## Key items: tools that aren't hook attachments (the Spyglass, the Conch
+## Shell, a sheet of sea shanty...).
+var _key_items: Array[StringName] = []
 var max_health: int = 4
 ## Unique treasures per island, registered by islands as they load.
 var _island_treasure_totals: Dictionary = {}
@@ -135,6 +138,21 @@ func get_treasure_maps() -> Dictionary:
 	return _maps.duplicate(true)
 
 
+func add_key_item(item_id: StringName) -> void:
+	if item_id in _key_items:
+		return
+	_key_items.append(item_id)
+	Events.key_item_found.emit(item_id)
+
+
+func has_key_item(item_id: StringName) -> bool:
+	return item_id in _key_items
+
+
+func get_key_items() -> Array[StringName]:
+	return _key_items.duplicate()
+
+
 # --- Persistence --------------------------------------------------------------
 
 func serialize() -> Dictionary:
@@ -145,6 +163,7 @@ func serialize() -> Dictionary:
 		"equipped": String(equipped_attachment),
 		"ship_parts": _ship_parts.map(func(a: StringName) -> String: return String(a)),
 		"maps": _maps.duplicate(true),
+		"key_items": _key_items.map(func(a: StringName) -> String: return String(a)),
 		"max_health": max_health,
 	}
 
@@ -160,6 +179,8 @@ func deserialize(data: Dictionary) -> void:
 	for p in data.get("ship_parts", []):
 		_ship_parts.append(StringName(p))
 	_maps = data.get("maps", {}).duplicate(true)
+	for k in data.get("key_items", []):
+		_key_items.append(StringName(k))
 	max_health = int(data.get("max_health", 4))
 	gold_changed.emit(gold_value)
 	attachments_changed.emit()
@@ -173,6 +194,7 @@ func reset() -> void:
 	equipped_attachment = &"hook"
 	_ship_parts.clear()
 	_maps.clear()
+	_key_items.clear()
 	max_health = 4
 	gold_changed.emit(0)
 	attachments_changed.emit()

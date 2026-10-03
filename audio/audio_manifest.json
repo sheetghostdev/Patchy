@@ -231,6 +231,13 @@
       "bus": "SFX",
       "volume_db": -3.0
     },
+    "wind_gust": {
+      "file": "res://audio/sfx/wind_gust.wav",
+      "duration": 2.5554,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -4.0
+    },
     "respawn_poof": {
       "file": "res://audio/sfx/respawn_poof.wav",
       "duration": 0.387,

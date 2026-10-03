@@ -29,6 +29,7 @@ const ROWS := [
 	{"name": "Move Left", "actions": [&"move_left"], "pad": false},
 	{"name": "Move Right", "actions": [&"move_right"], "pad": false},
 	{"name": "Sea Chart", "actions": [&"map"]},
+	{"name": "Spyglass (hold)", "actions": [&"spyglass"]},
 	{"name": "Pause", "actions": [&"pause"]},
 ]
 

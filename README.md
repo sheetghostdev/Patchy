@@ -55,6 +55,7 @@ Debug keys:
 | Cycle attachments | Mouse wheel or Z / X | LB / RB |
 | Pause | Esc or P | Start |
 | Map | M | Back |
+| Spyglass (once found, hold) | V | D-pad up |
 
 ### Moves
 
@@ -70,6 +71,8 @@ Debug keys:
 | Hook swing | Jump at a glowing ring with the hook equipped. Pump with the stick; jump to release. |
 | Swimming | Surface paddle or dive under. |
 | Boat | Board Patchy's dinghy with E and steer with the stick. Jump hops out near shore. Once an island is discovered, the pause-menu sea chart offers "Sail to ..." fast travel. |
+| Brace | Crouch on the ground and gusts of wind can't blow you over. |
+| Spyglass | Hold V (or D-pad up), on foot or at the tiller, and aim with the camera. Hold a far island in the middle of the glass and it's pencilled onto the sea chart. |
 
 ### Hand attachments
 
@@ -292,7 +295,8 @@ godot --headless --path . --fixed-fps 60 res://tests/run_camera_tests.tscn     #
 godot --headless --path . --fixed-fps 60 res://tests/run_gameplay_tests.tscn   # 68 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 162 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_voyage_tests.tscn     # 8 checks
-godot --headless --path . --fixed-fps 60 res://ui/tests/ui_flow_test.tscn      # 88 checks
+godot --headless --path . --fixed-fps 60 res://tests/run_hat_rock_tests.tscn   # 40 checks
+godot --headless --path . --fixed-fps 60 res://ui/tests/ui_flow_test.tscn      # 89 checks
 godot --headless --path . --fixed-fps 60 res://props/tests/prop_tests.tscn     # 74 checks
 godot --headless --path . --fixed-fps 60 res://world/ocean/tests/ocean_swim_check.tscn
 godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn -- sail
@@ -320,6 +324,13 @@ What each suite covers:
   Betty's spare sail and home again, arriving at the tiller. The little
   patched sail is turned back by the current, and islands not built yet
   are wrapped in sea mist.
+- **Hat Rock**: played through on the real island: up the boulders to the
+  brim, the whole spiral ledge (jumping its gaps, bracing through the
+  gusts), a gust blowing Patchy off when he doesn't brace, the buckle
+  opening the lookout and starting the hoist, the Spyglass inside and
+  sighting Bell Atoll with it, the hoist ride back up, the grapple from the
+  plank, three ring swings round the feather, the quill to the parrot, and
+  the rosette's gem.
 - **Island**: Castaway Cay end to end:
   - the opening sequence;
   - key routes (beach to meadow jump, the ledge-grab ridge, the wreck climb
@@ -410,9 +421,23 @@ With it, steer out past Castaway Cay's waters with an island dead ahead
 and the voyage begins: "Sailing for Hat Rock...", a short iris card while
 the next island loads, then the boat comes in off the new shore with
 Patchy at the tiller. Each island is its own scene in its true place, so
-the horizon looks right from every shore. **Hat Rock**, the giant tricorne
-north of Castaway Cay, is the first port of call; its climb and Spyglass
-come next.
+the horizon looks right from every shore.
+
+**Hat Rock**, the giant tricorne north of Castaway Cay, is the first port
+of call. From the jetty, boulders lead up to the brim, and a ledge spirals
+once round the crown to the top. Its gaps have to be jumped, and on its
+bare stretches gusts off the open sea blow you over the edge: a pennant
+lifts and the wind whistles first, so crouch and brace until they pass.
+On top, pound the great gold buckle to open the lookout. Inside is the
+**Spyglass**: hold its button on foot or at the tiller to zoom far out to
+sea, and any island you hold in the glass is pencilled onto the sea chart,
+shape and name, before you ever land there. The buckle also frees the
+lookout's hoist, a basket that shuttles between the brim and the top, so a
+fall never costs the whole climb. Off the back, walk the plank and grapple
+the iron ring on the feather, swing ring to ring round its tufts to the
+shoulder, and walk up the quill to a parrot at the crest. A gem waits on
+the rosette pinned to one corner of the brim, reached by grapple from up
+the brim's curl.
 
 **The crossing** between them is never empty water (spec §117). A bell
 buoy clangs midway to steer by, and floating barrels burst into coins

@@ -96,6 +96,10 @@ func open() -> void:
 	opened.emit()
 
 
+func is_open() -> bool:
+	return _open
+
+
 ## Raises the gate back up out of the ground (arena barriers).
 func close() -> void:
 	if not _open:

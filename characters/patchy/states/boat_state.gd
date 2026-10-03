@@ -8,6 +8,9 @@ const BOARD_TIME := 0.32
 var vehicle: Node3D
 var _board_from := Vector3.ZERO
 var _board_t := 0.0
+## The Spyglass works from the boat too: she drifts to a stop while it's up.
+var _view: SpyglassView
+var _view_t := 0.0
 
 
 func enter(_previous: StringName, msg: Dictionary) -> void:
@@ -21,6 +24,7 @@ func enter(_previous: StringName, msg: Dictionary) -> void:
 
 
 func exit(_next: StringName) -> void:
+	_lower_spyglass()
 	if is_instance_valid(vehicle) and vehicle.has_method(&"on_driver_exit"):
 		vehicle.call(&"on_driver_exit", p)
 	vehicle = null
@@ -35,7 +39,8 @@ func physics_update(delta: float) -> void:
 		p.change_state(&"air")
 		return
 	var stick := p.input.move_dir_3d
-	if _board_t < BOARD_TIME:
+	_update_spyglass(delta)
+	if _board_t < BOARD_TIME or _view != null:
 		stick = Vector3.ZERO
 	vehicle.call(&"drive", stick, delta)
 	var seat: Transform3D = vehicle.call(&"get_seat_transform")
@@ -49,13 +54,35 @@ func physics_update(delta: float) -> void:
 	p.velocity = vehicle.get(&"velocity")
 	p.facing = Player.flat(-seat.basis.z).normalized()
 	p.anim_state = &"boat_sit"
-	if _board_t >= BOARD_TIME and p.input.is_buffered(&"jump", s.jump_buffer_time):
+	if _board_t >= BOARD_TIME and _view == null and p.input.is_buffered(&"jump", s.jump_buffer_time):
 		if vehicle.call(&"can_disembark"):
 			p.input.consume(&"jump")
 			_hop_off(stick)
 		else:
 			p.input.consume(&"jump")
 			Events.hud_message.emit("Too far from shore to hop out!", 1.6)
+
+
+func _update_spyglass(delta: float) -> void:
+	if _view != null:
+		_view_t += delta
+		if (_view_t > 0.2 and not p.input.is_held(&"spyglass")) or p.input.is_buffered(&"jump", 0.1):
+			p.input.consume(&"jump")
+			_lower_spyglass()
+		return
+	if _board_t >= BOARD_TIME and p.input.is_buffered(&"spyglass", 0.1) and InventoryManager.has_key_item(&"spyglass"):
+		p.input.consume(&"spyglass")
+		_view_t = 0.0
+		_view = SpyglassView.new()
+		_view.name = "SpyglassView"
+		p.add_child(_view)
+		_view.open(p)
+
+
+func _lower_spyglass() -> void:
+	if is_instance_valid(_view):
+		_view.close()
+	_view = null
 
 
 func _hop_off(stick: Vector3) -> void:

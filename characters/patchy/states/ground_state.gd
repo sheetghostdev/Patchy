@@ -38,6 +38,10 @@ func physics_update(delta: float) -> void:
 	if p.is_deep_water():
 		p.change_state(&"swim")
 		return
+	if inp.is_buffered(&"spyglass", 0.1) and InventoryManager.has_key_item(&"spyglass"):
+		inp.consume(&"spyglass")
+		p.change_state(&"spyglass")
+		return
 
 	if _skidding:
 		_update_skid(delta)

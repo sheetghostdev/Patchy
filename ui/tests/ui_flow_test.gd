@@ -151,6 +151,12 @@ func _test_sea_chart() -> void:
 	check(rad_to_deg(worst) < 1.0, "each island sits on its true bearing (worst %.2f deg)" % rad_to_deg(worst))
 	check(overlaps.is_empty(), "no two islands overlap on the chart %s" % [overlaps])
 	check(outside.is_empty(), "every island fits on the parchment %s (chart %s)" % [outside, chart.size])
+	var was_sighted := GameManager.is_island_sighted(&"bell_atoll")
+	var first := GameManager.sight_island(&"bell_atoll")
+	var again := GameManager.sight_island(&"bell_atoll")
+	chart.refresh()
+	check((first or was_sighted) and not again and &"bell_atoll" in chart.sighted and not &"bell_atoll" in chart.discovered,
+		"an island seen through the Spyglass is pencilled in, not charted")
 	ui.close_pause_menu()
 	await _frames(12)
 

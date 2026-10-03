@@ -9,11 +9,11 @@ extends Node
 
 const BUFFERED_ACTIONS: Array[StringName] = [
 	&"jump", &"dive", &"attack", &"ground_pound", &"crouch", &"interact",
-	&"tool_primary", &"tool_secondary", &"tool_next", &"tool_previous",
+	&"tool_primary", &"tool_secondary", &"tool_next", &"tool_previous", &"spyglass",
 ]
 const HELD_ACTIONS: Array[StringName] = [
 	&"jump", &"crouch", &"dive", &"attack", &"interact", &"tool_primary",
-	&"tool_secondary", &"walk",
+	&"tool_secondary", &"walk", &"spyglass",
 ]
 ## Stick magnitude applied while the keyboard walk modifier is held.
 const KEYBOARD_WALK_MAGNITUDE := 0.42

@@ -3,8 +3,9 @@ extends Control
 ## A hand-drawn pirate sea chart painted entirely in code: aged parchment,
 ## rhumb lines radiating from a compass rose, wave marks, and island
 ## coastlines with little doodles. Undiscovered islands are faint dashed
-## sketches with a "?"; the current island gets a pulsing ring and Patchy's
-## ship bobs beside it.
+## sketches with a "?" (islands seen through the Spyglass are pencilled in:
+## a faint shape and name); the current island gets a pulsing ring and
+## Patchy's ship bobs beside it.
 
 @export var chart_title: String = "The Parrot Isles"
 ## Debug: draw every island as discovered.
@@ -12,6 +13,8 @@ extends Control
 
 var current_island: StringName = &""
 var discovered: Array[StringName] = []
+## Seen through the Spyglass but not yet visited.
+var sighted: Array[StringName] = []
 var _t := 0.0
 var _coasts: Dictionary = {}
 
@@ -29,9 +32,12 @@ func _ready() -> void:
 ## Pull discovery state from GameManager.
 func refresh() -> void:
 	discovered.clear()
+	sighted.clear()
 	for id in UIChartData.ids():
 		if reveal_all or GameManager.is_island_discovered(id):
 			discovered.append(id)
+		elif GameManager.is_island_sighted(id):
+			sighted.append(id)
 	current_island = GameManager.current_island
 	queue_redraw()
 
@@ -198,6 +204,9 @@ func _draw_island(isl: Dictionary) -> void:
 	var id: StringName = isl["id"]
 	var c := island_center(isl)
 	var r := island_radius(isl)
+	if id in sighted:
+		_draw_pencilled(isl)
+		return
 	if not _is_discovered(id):
 		_dashed_poly(_coast(isl), Color(INK, 0.32), 2.5)
 		UIIcons.text(self, c + Vector2(0, r * 0.35), "?", int(r * 0.9), Color(INK, 0.38), 0)
@@ -221,6 +230,18 @@ func _draw_island(isl: Dictionary) -> void:
 			var hc := c + Vector2(-r * 0.35 + r * 0.35 * k, -r * 0.05 + (k % 2) * r * 0.12)
 			draw_arc(hc, r * 0.16, PI * 1.1, PI * 1.9, 8, Color("4f8f3a"), 2.5, true)
 	_draw_motif(motif, c, r)
+
+
+## An island seen through the Spyglass: its shape and landmark sketched in
+## pencil, then half rubbed out (a wash of parchment over the top).
+func _draw_pencilled(isl: Dictionary) -> void:
+	var c := island_center(isl)
+	var r := island_radius(isl)
+	var coast := _coast(isl)
+	draw_colored_polygon(coast, Color("ecd49a", 0.6))
+	_draw_motif(isl["motif"], c, r)
+	draw_colored_polygon(UIIcons.ellipse_pts(c, r * 1.45, r * 1.3, 28), Color("f3e2bd", 0.5))
+	_dashed_poly(coast, Color(INK, 0.55), 2.5)
 
 
 func _draw_motif(motif: StringName, c: Vector2, r: float) -> void:
@@ -341,20 +362,25 @@ func _draw_label(isl: Dictionary) -> void:
 	var pos := c + Vector2(0, r * 0.95 + (26.0 if small else 34.0))
 	if isl.get("label", &"") == &"above":
 		pos = c - Vector2(0, r * 0.85 + 10.0)
-	if not _is_discovered(id):
+	var pencilled := id in sighted
+	if not pencilled and not _is_discovered(id):
 		# Tiny unknown isles get just their "?": the chart stays readable.
 		if not small:
 			UIIcons.text(self, pos, "Uncharted", 22, Color(INK, 0.4), 0, INK, HORIZONTAL_ALIGNMENT_CENTER, -1.0, UIStyle.font(&"bold"))
 		return
-	var title := String(isl["name"])
-	var f := UIStyle.font(&"heavy")
-	var fs := 19 if small else 25
+	var title := String(isl["name"]) + ("?" if pencilled else "")
+	var f := UIStyle.font(&"bold" if pencilled else &"heavy")
+	var fs := (17 if small else 21) if pencilled else (19 if small else 25)
 	var w := f.get_string_size(title, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x + 30.0
 	match isl.get("label", &""):
 		&"right":
 			pos = c + Vector2(r * 1.3 + w * 0.5 + 4.0, fs * 0.45)
 		&"left":
 			pos = c - Vector2(r * 1.3 + w * 0.5 + 4.0, -fs * 0.45)
+	if pencilled:
+		# Pencilled in from the Spyglass: no name plate until it's charted.
+		UIIcons.text(self, pos, title, fs, Color(INK, 0.6), 0, INK, HORIZONTAL_ALIGNMENT_CENTER, -1.0, f)
+		return
 	var plate := Rect2(pos - Vector2(w * 0.5, fs + 1), Vector2(w, fs + 11))
 	var sb := UIStyle.box(Color("fbf1d8"), 8, 2, Color(INK, 0.8), 0, 0)
 	sb.shadow_color = Color(0.3, 0.18, 0.08, 0.25)

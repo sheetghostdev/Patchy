@@ -24,6 +24,8 @@ var resume_pending := false
 var _checkpoint_transform := Transform3D.IDENTITY
 var _has_checkpoint := false
 var _discovered_islands: Array[StringName] = []
+## Islands glimpsed through the Spyglass: pencilled onto the sea chart.
+var _sighted_islands: Array[StringName] = []
 ## Set when a voyage casts off (Voyage): the island scene that loads next
 ## seats Patchy in his boat, sailing in from `from`. {to, from}
 var voyage_arrival: Dictionary = {}
@@ -92,6 +94,19 @@ func is_island_discovered(island_id: StringName) -> bool:
 
 func get_discovered_islands() -> Array[StringName]:
 	return _discovered_islands.duplicate()
+
+
+## Marks an island seen through the Spyglass. True the first time.
+func sight_island(island_id: StringName) -> bool:
+	if island_id == &"" or island_id in _sighted_islands or is_island_discovered(island_id):
+		return false
+	_sighted_islands.append(island_id)
+	Events.island_sighted.emit(island_id)
+	return true
+
+
+func is_island_sighted(island_id: StringName) -> bool:
+	return island_id in _sighted_islands
 
 
 func get_island_scene(island_id: StringName) -> String:
@@ -200,6 +215,7 @@ func serialize() -> Dictionary:
 		"checkpoint_pos": [o.x, o.y, o.z],
 		"checkpoint_yaw": _checkpoint_transform.basis.get_euler().y,
 		"islands": _discovered_islands.map(func(i: StringName) -> String: return String(i)),
+		"sighted": _sighted_islands.map(func(i: StringName) -> String: return String(i)),
 	}
 
 
@@ -216,6 +232,9 @@ func deserialize(data: Dictionary) -> void:
 	_discovered_islands.clear()
 	for i in data.get("islands", []):
 		_discovered_islands.append(StringName(i))
+	_sighted_islands.clear()
+	for i in data.get("sighted", []):
+		_sighted_islands.append(StringName(i))
 
 
 func reset() -> void:
@@ -227,3 +246,4 @@ func reset() -> void:
 	_has_checkpoint = false
 	_checkpoint_transform = Transform3D.IDENTITY
 	_discovered_islands.clear()
+	_sighted_islands.clear()
