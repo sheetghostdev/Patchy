@@ -18,6 +18,8 @@ var _maps: Dictionary = {}           # map_id -> {"solved": bool}
 ## Key items: tools that aren't hook attachments (the Spyglass, the Conch
 ## Shell, a sheet of sea shanty...).
 var _key_items: Array[StringName] = []
+## Heart Pieces found (ids); every four make a new heart container.
+var _heart_pieces: Array[StringName] = []
 var max_health: int = 4
 ## Unique treasures per island, registered by islands as they load.
 var _island_treasure_totals: Dictionary = {}
@@ -149,6 +151,30 @@ func has_key_item(item_id: StringName) -> bool:
 	return item_id in _key_items
 
 
+const PIECES_PER_HEART := 4
+
+
+## Adds a Heart Piece. Returns true when it completes a new heart container
+## (max_health goes up by one).
+func add_heart_piece(piece_id: StringName) -> bool:
+	if piece_id in _heart_pieces:
+		return false
+	_heart_pieces.append(piece_id)
+	if _heart_pieces.size() % PIECES_PER_HEART == 0:
+		max_health += 1
+		return true
+	return false
+
+
+func has_heart_piece(piece_id: StringName) -> bool:
+	return piece_id in _heart_pieces
+
+
+## Pieces toward the next heart container (0..3).
+func heart_pieces_held() -> int:
+	return _heart_pieces.size() % PIECES_PER_HEART
+
+
 func get_key_items() -> Array[StringName]:
 	return _key_items.duplicate()
 
@@ -164,6 +190,7 @@ func serialize() -> Dictionary:
 		"ship_parts": _ship_parts.map(func(a: StringName) -> String: return String(a)),
 		"maps": _maps.duplicate(true),
 		"key_items": _key_items.map(func(a: StringName) -> String: return String(a)),
+		"heart_pieces": _heart_pieces.map(func(a: StringName) -> String: return String(a)),
 		"max_health": max_health,
 	}
 
@@ -181,6 +208,8 @@ func deserialize(data: Dictionary) -> void:
 	_maps = data.get("maps", {}).duplicate(true)
 	for k in data.get("key_items", []):
 		_key_items.append(StringName(k))
+	for k in data.get("heart_pieces", []):
+		_heart_pieces.append(StringName(k))
 	max_health = int(data.get("max_health", 4))
 	gold_changed.emit(gold_value)
 	attachments_changed.emit()
@@ -195,6 +224,7 @@ func reset() -> void:
 	_ship_parts.clear()
 	_maps.clear()
 	_key_items.clear()
+	_heart_pieces.clear()
 	max_health = 4
 	gold_changed.emit(0)
 	attachments_changed.emit()

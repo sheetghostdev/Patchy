@@ -7,6 +7,7 @@ extends Node
 const CASTAWAY := "res://world/islands/castaway_cay/castaway_cay.tscn"
 const HAT_ROCK := "res://world/islands/hat_rock/hat_rock.tscn"
 const BELL_ATOLL := "res://world/islands/bell_atoll/bell_atoll.tscn"
+const PINWHEEL := "res://world/islands/pinwheel_isle/pinwheel_isle.tscn"
 
 var _checks := 0
 var _fails := 0
@@ -171,4 +172,22 @@ func test_voyage_to_bell_atoll() -> void:
 	var boat := get_tree().get_first_node_in_group(&"boat") as TinyBoat
 	var d := Player.flat(boat.global_position - bell).length()
 	check("and comes in off the atoll at the tiller, the island charted", p.state_id == &"boat" and d > 60.0 and d < 130.0 and GameManager.is_island_discovered(&"bell_atoll"), "state=%s d=%.0f" % [p.state_id, d])
+	p.input.virtual_reset()
+
+
+func test_voyage_to_pinwheel_isle() -> void:
+	var p := await load_island(CASTAWAY, true)
+	_said.clear()
+	var isle := Archipelago.world_position(&"pinwheel_isle")
+	var at := Vector3(-225, 0, -130)
+	await sail_from(p, at, isle - at)
+	var took := await until_scene(PINWHEEL, 1200, isle)
+	check("north-west from Castaway Cay to Pinwheel Isle", took >= 0 and _said.any(func(t: String) -> bool: return "Sailing for Pinwheel Isle" in t), "frames=%d said=%s" % [took, _said])
+	if took < 0:
+		return
+	await frames(10)
+	p = GameManager.player as Player
+	var boat := get_tree().get_first_node_in_group(&"boat") as TinyBoat
+	var d := Player.flat(boat.global_position - isle).length()
+	check("and comes in off the isle at the tiller, the island charted", p.state_id == &"boat" and d > 60.0 and d < 130.0 and GameManager.is_island_discovered(&"pinwheel_isle"), "state=%s d=%.0f" % [p.state_id, d])
 	p.input.virtual_reset()

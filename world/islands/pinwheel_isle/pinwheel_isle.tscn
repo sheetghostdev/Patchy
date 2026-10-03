@@ -1,0 +1,383 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://world/islands/island_info.gd" id="1_a6ils"]
+[ext_resource type="Script" path="res://world/environment/sky_environment.gd" id="2_o205m"]
+[ext_resource type="Script" path="res://world/environment/ambience.gd" id="3_morsy"]
+[ext_resource type="Script" path="res://world/environment/weather.gd" id="4_m17w7"]
+[ext_resource type="Script" path="res://world/horizon/horizon_pinwheel_isle.gd" id="5_ydrvk"]
+[ext_resource type="Script" path="res://props/blocks/level_block.gd" id="6_478k5"]
+[ext_resource type="Script" path="res://props/structures/dock.gd" id="7_she8o"]
+[ext_resource type="Script" path="res://world/vehicles/tiny_boat.gd" id="8_ggfqw"]
+[ext_resource type="Script" path="res://world/ocean/sea_region.gd" id="9_d8qc7"]
+[ext_resource type="Script" path="res://systems/triggers/checkpoint.gd" id="10_abcwf"]
+[ext_resource type="Script" path="res://world/objects/pinwheel_lift.gd" id="11_j8fjt"]
+[ext_resource type="Script" path="res://world/objects/heart_piece.gd" id="12_56hcf"]
+[ext_resource type="Script" path="res://world/objects/parrot_cage.gd" id="13_2yhcl"]
+[ext_resource type="Script" path="res://systems/tutorial/tutorial_hint.gd" id="14_rl6hm"]
+[ext_resource type="Script" path="res://collectibles/coin_trail.gd" id="15_y566e"]
+[ext_resource type="Script" path="res://collectibles/collectible.gd" id="16_g1njd"]
+[ext_resource type="PackedScene" path="res://enemies/crab/crab.tscn" id="17_tqvcy"]
+[ext_resource type="Script" path="res://enemies/crab/crab.gd" id="18_k6tpf"]
+[ext_resource type="Script" path="res://world/horizon/horizon_castaway.gd" id="19_5pg4b"]
+[ext_resource type="Script" path="res://world/horizon/horizon_skullcap.gd" id="20_dauqn"]
+[ext_resource type="Script" path="res://world/horizon/horizon_cinder_isle.gd" id="21_8wj8m"]
+[ext_resource type="Script" path="res://world/horizon/horizon_cannon_cliffs.gd" id="22_6hopi"]
+[ext_resource type="Script" path="res://world/horizon/horizon_teacup_isle.gd" id="23_tguxr"]
+[ext_resource type="Script" path="res://world/horizon/horizon_stormpeak.gd" id="24_lj3ak"]
+[ext_resource type="Script" path="res://world/horizon/horizon_turtleback.gd" id="25_3sbdg"]
+[ext_resource type="Script" path="res://world/horizon/horizon_bell_atoll.gd" id="26_xaayt"]
+[ext_resource type="Script" path="res://world/horizon/horizon_wreck_shoals.gd" id="27_fw7f7"]
+[ext_resource type="Script" path="res://world/horizon/horizon_crabby_coast.gd" id="28_68wbp"]
+[ext_resource type="Script" path="res://world/horizon/horizon_lantern_lagoon.gd" id="29_tswa8"]
+[ext_resource type="Script" path="res://world/horizon/horizon_croc_crown.gd" id="30_xevxn"]
+[ext_resource type="Script" path="res://world/horizon/horizon_hat_rock.gd" id="31_ld20u"]
+[ext_resource type="Script" path="res://world/ocean/ocean.gd" id="32_tw1ov"]
+[ext_resource type="Script" path="res://world/ocean/underwater_effect.gd" id="33_5jaf4"]
+[ext_resource type="Script" path="res://world/ocean/open_sea.gd" id="34_7rox0"]
+[ext_resource type="Script" path="res://world/ocean/voyage.gd" id="35_kwq55"]
+[ext_resource type="PackedScene" path="res://characters/patchy/player.tscn" id="36_cw66d"]
+[ext_resource type="Script" path="res://characters/patchy/player.gd" id="37_4pnt0"]
+[ext_resource type="Resource" path="res://resources/settings/patchy_movement.tres" id="38_po23h"]
+[ext_resource type="PackedScene" path="res://systems/camera/camera_rig.tscn" id="39_1iph6"]
+[ext_resource type="Script" path="res://systems/camera/camera_rig.gd" id="40_8ehn7"]
+[ext_resource type="Resource" path="res://resources/settings/camera_default.tres" id="41_hke8h"]
+
+[node name="PinwheelIsle" type="Node3D" unique_id=997896022]
+
+[node name="IslandInfo" type="Node" parent="." unique_id=432342533]
+script = ExtResource("1_a6ils")
+island_id = &"pinwheel_isle"
+display_name = "Pinwheel Isle"
+music = &"castaway_explore"
+
+[node name="SkyEnvironment" type="Node3D" parent="." unique_id=526344027]
+script = ExtResource("2_o205m")
+shadow_distance = 160.0
+
+[node name="Ambience" type="Node3D" parent="." unique_id=2075361885]
+script = ExtResource("3_morsy")
+
+[node name="Weather" type="Node3D" parent="." unique_id=1803773044]
+script = ExtResource("4_m17w7")
+
+[node name="PinwheelIsle" type="Node3D" parent="." unique_id=1891238057]
+transform = Transform3D(-0.50001097, 0, -0.86601907, 0, 1, 0, 0.86601907, 0, -0.50001097, -433, 0, -250)
+
+[node name="Terrain" type="Node3D" parent="PinwheelIsle" unique_id=1543872425]
+
+[node name="Isle" type="Node3D" parent="PinwheelIsle/Terrain" unique_id=1629428501]
+script = ExtResource("5_ydrvk")
+playable = true
+
+[node name="Structures" type="Node3D" parent="PinwheelIsle" unique_id=1700274662]
+
+[node name="Landing1" type="StaticBody3D" parent="PinwheelIsle/Structures" unique_id=376451242]
+transform = Transform3D(1, 0, -6.123234e-17, 0, 1, 0, 6.123234e-17, 0, 1, 1.1419832e-15, 6.7, -18.65)
+script = ExtResource("6_478k5")
+size = Vector3(2.6, 0.35, 1.7000008)
+surface = "wood"
+
+[node name="Landing2" type="StaticBody3D" parent="PinwheelIsle/Structures" unique_id=957864452]
+transform = Transform3D(-0.34202012, 0, 0.9396926, 0, 1, 0, -0.9396926, 0, -0.34202012, -10.557447, 12.7, 7.5705366)
+script = ExtResource("6_478k5")
+size = Vector3(2.6, 0.35, 1.7000003)
+surface = "wood"
+
+[node name="Landing3" type="StaticBody3D" parent="PinwheelIsle/Structures" unique_id=907995384]
+transform = Transform3D(-0.57357645, 0, -0.819152, 0, 1, 0, 0.819152, 0, -0.57357645, 8.712656, 18.7, 9.000045)
+script = ExtResource("6_478k5")
+size = Vector3(2.6, 0.35, 1.7000008)
+surface = "wood"
+
+[node name="GemNook" type="StaticBody3D" parent="PinwheelIsle/Structures" unique_id=1930940216]
+transform = Transform3D(-0.05233594, 0, 0.9986295, 0, 1, 0, -0.9986295, 0, -0.05233594, -12.17363, 9.799999, 3.7428083)
+script = ExtResource("6_478k5")
+size = Vector3(2.4, 0.6, 2.6)
+surface = "rock"
+
+[node name="Gameplay" type="Node3D" parent="PinwheelIsle" unique_id=222752899]
+
+[node name="Landing" type="Node3D" parent="PinwheelIsle/Gameplay" unique_id=1302720566]
+
+[node name="Jetty" type="StaticBody3D" parent="PinwheelIsle/Gameplay/Landing" unique_id=1956646686]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -29)
+script = ExtResource("7_she8o")
+length = 10.0
+post_depth = 6.0
+water_line = -0.9
+
+[node name="BoatMooring" type="Marker3D" parent="PinwheelIsle/Gameplay/Landing" unique_id=294727618]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 3, 0, -37.5)
+
+[node name="Arrival" type="Marker3D" parent="PinwheelIsle/Gameplay/Landing" unique_id=159913948]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 1.4, -36)
+
+[node name="TinyBoat" type="CharacterBody3D" parent="PinwheelIsle/Gameplay/Landing" unique_id=2128166626]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 3, 0, -37.5)
+script = ExtResource("8_ggfqw")
+world_limit = 220.0
+limit_center = Vector3(-433, 0, -250)
+home_island = &"pinwheel_isle"
+
+[node name="SeaRegion" type="Marker3D" parent="PinwheelIsle/Gameplay/Landing" unique_id=152943820 node_paths=PackedStringArray("boat_dock", "arrival")]
+script = ExtResource("9_d8qc7")
+region_name = "Pinwheel Isle"
+island_id = &"pinwheel_isle"
+radius = 75.0
+boat_dock = NodePath("../BoatMooring")
+arrival = NodePath("../Arrival")
+
+[node name="CpBeach" type="Area3D" parent="PinwheelIsle/Gameplay/Landing" unique_id=1840448338]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1, -25)
+script = ExtResource("10_abcwf")
+checkpoint_id = &"cp_pinwheel_beach"
+
+[node name="Lifts" type="Node3D" parent="PinwheelIsle/Gameplay" unique_id=555960645]
+
+[node name="Lift1" type="Node3D" parent="PinwheelIsle/Gameplay/Lifts" unique_id=1114700554]
+transform = Transform3D(1, 0, -6.123234e-17, 0, 1, 0, 6.123234e-17, 0, 1, 1.3103721e-15, 1.25, -21.4)
+script = ExtResource("11_j8fjt")
+travel = 5.75
+
+[node name="Lift2" type="Node3D" parent="PinwheelIsle/Gameplay/Lifts" unique_id=1836914576]
+transform = Transform3D(-0.34202015, 0, 0.9396926, 0, 1, 0, -0.9396926, 0, -0.34202015, -13.141602, 7.25, 8.511092)
+script = ExtResource("11_j8fjt")
+travel = 5.75
+colors = 2
+
+[node name="Lift3" type="Node3D" parent="PinwheelIsle/Gameplay/Lifts" unique_id=5326929]
+transform = Transform3D(-0.57357645, 0, -0.81915206, 0, 1, 0, 0.81915206, 0, -0.57357645, 10.965324, 13.25, 10.57738)
+script = ExtResource("11_j8fjt")
+travel = 5.75
+colors = 4
+
+[node name="Summit" type="Node3D" parent="PinwheelIsle/Gameplay" unique_id=485761339]
+
+[node name="GreatLift" type="Node3D" parent="PinwheelIsle/Gameplay/Summit" unique_id=1964364526]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 19.25, 5.5)
+script = ExtResource("11_j8fjt")
+travel = 10.75
+pole_extra = 6.0
+wheel_radius = 4.4
+colors = 3
+
+[node name="HeartPiece" type="Area3D" parent="PinwheelIsle/Gameplay/Summit" unique_id=825487293]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.3, 30, 5.5)
+script = ExtResource("12_56hcf")
+piece_id = &"pinwheel_heart_piece"
+
+[node name="CpSummit" type="Area3D" parent="PinwheelIsle/Gameplay/Summit" unique_id=1015191358]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 19, 1.5)
+script = ExtResource("10_abcwf")
+checkpoint_id = &"cp_pinwheel_summit"
+
+[node name="ParrotCage_pinwheel_parrot_summit" type="Area3D" parent="PinwheelIsle/Gameplay" unique_id=1577861426]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.6, 19.05, 3.5)
+script = ExtResource("13_2yhcl")
+parrot_id = &"pinwheel_parrot_summit"
+island_id = &"pinwheel_isle"
+plumage = 4
+
+[node name="Hints" type="Node3D" parent="PinwheelIsle/Gameplay" unique_id=113606432]
+
+[node name="HintPinwheel" type="Node3D" parent="PinwheelIsle/Gameplay/Hints" unique_id=1522868905]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3103721e-15, 1.25, -21.4)
+script = ExtResource("14_rl6hm")
+hint_id = &"hint_pinwheel"
+text = "Stand on the platform and spin the pinwheel above: {tool_primary} with the cannon or the grapple"
+size = Vector3(5, 4, 5)
+
+[node name="Treasure" type="Node3D" parent="PinwheelIsle" unique_id=813604305]
+
+[node name="CoinTrail" type="Node3D" parent="PinwheelIsle/Treasure" unique_id=1471605976]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.15, 2.25, -21.4)
+script = ExtResource("15_y566e")
+shape = 0
+end_point = Vector3(0, 5.35, 0)
+arc_height = 0.0
+count = 5
+
+[node name="CoinTrail2" type="Node3D" parent="PinwheelIsle/Treasure" unique_id=1668197681]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.748279, 8.25, 9.591739)
+script = ExtResource("15_y566e")
+shape = 0
+end_point = Vector3(0, 5.3500004, 0)
+arc_height = 0.0
+count = 5
+
+[node name="CoinTrail3" type="Node3D" parent="PinwheelIsle/Treasure" unique_id=4638166]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.624937, 14.25, 9.635355)
+script = ExtResource("15_y566e")
+shape = 0
+end_point = Vector3(0, 5.3500004, 0)
+arc_height = 0.0
+count = 5
+
+[node name="PinwheelGemNook" type="Area3D" parent="PinwheelIsle/Treasure" unique_id=1567048646]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.373355, 11.2, 3.7532756)
+script = ExtResource("16_g1njd")
+kind = "gem"
+treasure_id = &"pinwheel_gem_nook"
+island_id = &"pinwheel_isle"
+gem_color = Color(0.30980393, 0.7647059, 1, 1)
+
+[node name="CoinTrail4" type="Node3D" parent="PinwheelIsle/Treasure" unique_id=1148351683]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 30.8, 5.5)
+script = ExtResource("15_y566e")
+shape = 0
+end_point = Vector3(2.7, 0, -2.7)
+arc_height = 0.0
+count = 3
+
+[node name="Heart" type="Area3D" parent="PinwheelIsle/Treasure" unique_id=26386002]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.7094588, 13.6, -5.1570215)
+script = ExtResource("16_g1njd")
+kind = "heart"
+
+[node name="CoinTrail5" type="Node3D" parent="PinwheelIsle/Treasure" unique_id=400577467]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.183302, 1.9, -24.566198)
+script = ExtResource("15_y566e")
+shape = 0
+end_point = Vector3(12.102289, 0, 9.390204)
+arc_height = 0.0
+count = 4
+
+[node name="CoinTrail6" type="Node3D" parent="PinwheelIsle/Treasure" unique_id=686800143]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6838894e-15, 1.9, 27.5)
+script = ExtResource("15_y566e")
+shape = 0
+end_point = Vector3(-14.183302, 0, -2.9338017)
+arc_height = 0.0
+count = 4
+
+[node name="CoinTrail7" type="Node3D" parent="PinwheelIsle/Treasure" unique_id=1811467303]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.5, 7.9, 0)
+script = ExtResource("15_y566e")
+shape = 0
+end_point = Vector3(-5.6362305, 0, 11.633084)
+arc_height = 0.0
+count = 4
+
+[node name="CoinTrail8" type="Node3D" parent="PinwheelIsle/Treasure" unique_id=512731272]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.86377, 7.9, -11.633084)
+script = ExtResource("15_y566e")
+shape = 0
+end_point = Vector3(8.121637, 0, -4.1432943)
+arc_height = 0.0
+count = 4
+
+[node name="CoinTrail9" type="Node3D" parent="PinwheelIsle/Treasure" unique_id=1163583454]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9594588, 13.9, 11.5900345)
+script = ExtResource("15_y566e")
+shape = 0
+end_point = Vector3(-4.487025, 0, -3.1361046)
+arc_height = 0.0
+count = 4
+
+[node name="Enemies" type="Node3D" parent="PinwheelIsle" unique_id=122107491]
+
+[node name="Crab" type="CharacterBody3D" parent="PinwheelIsle/Enemies" unique_id=858649294 groups=["enemy", "stompable"] instance=ExtResource("17_tqvcy")]
+transform = Transform3D(0.9999889, 0, -0.004708098, 0, 1, 0, 0.004708098, 0, 0.9999889, -8, 7.05, -9)
+collision_layer = 4
+script = ExtResource("18_k6tpf")
+persistent_id = &"pinwheel_crab_1"
+
+[node name="Crab2" type="CharacterBody3D" parent="PinwheelIsle/Enemies" unique_id=268896611 groups=["enemy", "stompable"] instance=ExtResource("17_tqvcy")]
+transform = Transform3D(-0.75234383, 0, -0.6587706, 0, 1, 0, 0.6587706, 0, -0.75234383, 10, 7.05, 6)
+collision_layer = 4
+script = ExtResource("18_k6tpf")
+persistent_id = &"pinwheel_crab_2"
+
+[node name="Horizon" type="Node3D" parent="." unique_id=1381855939]
+
+[node name="Horizon_CastawayCay" type="Node3D" parent="Horizon" unique_id=1922000628]
+script = ExtResource("19_5pg4b")
+
+[node name="Horizon_SkullcapMountain" type="Node3D" parent="Horizon" unique_id=289138810]
+transform = Transform3D(-0.98476803, 0, 0.17387322, 0, 1, 0, -0.17387322, 0, -0.98476803, 113, 0, -640)
+script = ExtResource("20_dauqn")
+
+[node name="Horizon_CinderIsle" type="Node3D" parent="Horizon" unique_id=1754706612]
+transform = Transform3D(-0.76592153, 0, 0.6429341, 0, 1, 0, -0.6429341, 0, -0.76592153, 643, 0, -766)
+script = ExtResource("21_8wj8m")
+
+[node name="Horizon_CannonballCliffs" type="Node3D" parent="Horizon" unique_id=1902810285]
+transform = Transform3D(-0.34146613, 0, 0.9398941, 0, 1, 0, -0.9398941, 0, -0.34146613, 545, 0, -198)
+script = ExtResource("22_6hopi")
+
+[node name="Horizon_TeacupIsle" type="Node3D" parent="Horizon" unique_id=2092671070]
+transform = Transform3D(0.59891576, 0, 1.4836779, 0, 1.6, 0, -1.4836779, 0, 0.59891576, 436, 0, 176)
+script = ExtResource("23_tguxr")
+
+[node name="Horizon_Stormpeak" type="Node3D" parent="Horizon" unique_id=1985692965]
+transform = Transform3D(0.24189368, 0, 0.97030276, 0, 1, 0, -0.97030276, 0, 0.24189368, 1067, 0, 266)
+script = ExtResource("24_lj3ak")
+
+[node name="Horizon_Turtleback" type="Node3D" parent="Horizon" unique_id=1561995380]
+transform = Transform3D(-0.30293006, 0, 1.3155735, 0, 1.35, 0, -1.3155735, 0, -0.30293006, 416, 0, 375)
+script = ExtResource("25_3sbdg")
+
+[node name="Horizon_BellAtoll" type="Node3D" parent="Horizon" unique_id=799949574]
+transform = Transform3D(1.8794701, 0, 0.6838072, 0, 2, 0, -0.6838072, 0, 1.8794701, 171, 0, 470)
+script = ExtResource("26_xaayt")
+
+[node name="Horizon_ShipwreckShoals" type="Node3D" parent="Horizon" unique_id=720173256]
+transform = Transform3D(1.2927955, 0, -0.13667336, 0, 1.3, 0, 0.13667336, 0, 1.2927955, -61, 0, 577)
+script = ExtResource("27_fw7f7")
+
+[node name="Horizon_CrabbyCoast" type="Node3D" parent="Horizon" unique_id=1673760034]
+transform = Transform3D(0.81908506, 0, -0.5736721, 0, 1, 0, 0.5736721, 0, 0.81908506, -367, 0, 524)
+script = ExtResource("28_68wbp")
+
+[node name="Horizon_LanternLagoon" type="Node3D" parent="Horizon" unique_id=1857626478]
+transform = Transform3D(-0.03569147, 0, -0.9993629, 0, 1, 0, 0.9993629, 0, -0.03569147, -560, 0, -20)
+script = ExtResource("29_tswa8")
+
+[node name="Horizon_CrocodileCrown" type="Node3D" parent="Horizon" unique_id=1234849135]
+transform = Transform3D(-1.1671394, 0, 0.4475327, 0, 1.25, 0, -0.4475327, 0, -1.1671394, -834, 0, -863)
+script = ExtResource("30_xevxn")
+
+[node name="Horizon_HatRock" type="Node3D" parent="Horizon" unique_id=1786684962]
+transform = Transform3D(-0.9660966, 0, -0.25818095, 0, 1, 0, 0.25818095, 0, -0.9660966, -124, 0, -464)
+script = ExtResource("31_ld20u")
+
+[node name="Ocean" type="Node3D" parent="." unique_id=1675494686]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -433, 0, -250)
+script = ExtResource("32_tw1ov")
+swim_area_size = Vector2(420, 420)
+swim_depth = 14.0
+gameplay_wave_scale = 0.6
+
+[node name="UnderwaterEffect" type="CanvasLayer" parent="." unique_id=902660749]
+layer = -1
+script = ExtResource("33_5jaf4")
+
+[node name="Seabed" type="StaticBody3D" parent="." unique_id=827058010]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -433, -11, -250)
+script = ExtResource("6_478k5")
+size = Vector3(420, 1, 420)
+surface = "sand"
+
+[node name="OpenSea" type="Node" parent="." unique_id=200395195]
+script = ExtResource("34_7rox0")
+
+[node name="Voyage" type="Node" parent="." unique_id=1994076348]
+script = ExtResource("35_kwq55")
+home = &"pinwheel_isle"
+
+[node name="Player" type="CharacterBody3D" parent="." unique_id=1553744478 groups=["player"] instance=ExtResource("36_cw66d")]
+transform = Transform3D(0.5000109, 0, 0.8660191, 0, 1, 0, -0.8660191, 0, 0.5000109, -400.9573, 1.5, -231.49959)
+collision_layer = 2
+collision_mask = 1033
+script = ExtResource("37_4pnt0")
+settings = ExtResource("38_po23h")
+
+[node name="CameraRig" type="Node3D" parent="." unique_id=1923647248 node_paths=PackedStringArray("target") instance=ExtResource("39_1iph6")]
+transform = Transform3D(0.5000109, 0, 0.8660191, 0, 1, 0, -0.8660191, 0, 0.5000109, -394.89517, 4.5, -227.99951)
+script = ExtResource("40_8ehn7")
+settings = ExtResource("41_hke8h")
+target = NodePath("../Player")
+
+[node name="SpawnDock" type="Marker3D" parent="." unique_id=29740680 groups=["spawn_point"]]
+transform = Transform3D(0.5000109, 0, 0.8660191, 0, 1, 0, -0.8660191, 0, 0.5000109, -400.9573, 1.5, -231.49959)
+metadata/spawn_id = &"dock"

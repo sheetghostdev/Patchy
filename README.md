@@ -255,7 +255,7 @@ and heights for checking any change by feel.
 
 ```bash
 # Regenerate procedural scenes (labs, islands, hub) from code:
-tools/builders/build.sh movement_lab camera_lab castaway_cay captains_cabin hat_rock bell_atoll
+tools/builders/build.sh movement_lab camera_lab castaway_cay captains_cabin hat_rock bell_atoll pinwheel_isle
 
 # Render screenshots on a headless machine (xvfb + Vulkan). flags= marks
 # WorldState ids, progress=demo fakes mid-game progress, hud=0 hides the HUD:
@@ -294,9 +294,10 @@ godot --headless --path . --fixed-fps 60 res://tests/run_movement_tests.tscn   #
 godot --headless --path . --fixed-fps 60 res://tests/run_camera_tests.tscn     # 21 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_gameplay_tests.tscn   # 68 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 162 checks
-godot --headless --path . --fixed-fps 60 res://tests/run_voyage_tests.tscn     # 10 checks
+godot --headless --path . --fixed-fps 60 res://tests/run_voyage_tests.tscn     # 12 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_hat_rock_tests.tscn   # 43 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_bell_atoll_tests.tscn # 35 checks
+godot --headless --path . --fixed-fps 60 res://tests/run_pinwheel_isle_tests.tscn # 23 checks
 godot --headless --path . --fixed-fps 60 res://ui/tests/ui_flow_test.tscn      # 89 checks
 godot --headless --path . --fixed-fps 60 res://props/tests/prop_tests.tscn     # 74 checks
 godot --headless --path . --fixed-fps 60 res://world/ocean/tests/ocean_swim_check.tscn
@@ -323,7 +324,7 @@ What each suite covers:
   - the cabin hub's displays.
 - **Voyage**: real scene changes. Sail from Castaway Cay to Hat Rock with
   Betty's spare sail and home again, arriving at the tiller, and on to
-  Bell Atoll. The little
+  Bell Atoll and Pinwheel Isle. The little
   patched sail is turned back by the current, and islands not built yet
   are wrapped in sea mist.
 - **Hat Rock**: played through on the real island: up the boulders to the
@@ -341,6 +342,12 @@ What each suite covers:
   slow song back (and Patchy swimming over the drowned reef), a cannonball
   from the islet ringing a bell, and the great bell's hint up in the
   belfry.
+- **Pinwheel Isle**: riding the first lift up after a cannonball spins its
+  wheel and stepping off onto the tier, the grapple yanking the second
+  wheel round, a little spin running down and the platform sinking back,
+  hopping off onto the gem nook, the summit's parrot, keeping the great
+  wheel spinning all the way up to the crow's nest and its Heart Piece, and
+  four pieces making a new heart container.
 - **Island**: Castaway Cay end to end:
   - the opening sequence;
   - key routes (beach to meadow jump, the ledge-grab ridge, the wreck climb
@@ -462,6 +469,17 @@ sand spit are under water, and if the song isn't finished by high tide
 it's lost. Standing on the islet, the cannon reaches every bell. Grapple
 up into the belfry and swipe the great bell: it plays the song through the
 reef bells, lighting each one in turn.
+
+**Pinwheel Isle**, north-west of Castaway Cay, is a mossy knob in steep
+tiers bristling with pinwheels. Three of them drive screw lifts up the
+cliffs between the tiers: stand on a lift's platform, blast its pinwheel
+with the cannon or yank it round with the grapple, and the platform
+corkscrews up the striped pole while the wheel spins, sinking back as it
+runs down. One lift passes a nook in the cliff with a gem on it. A parrot
+waits on the summit. The great pole there climbs to a crow's nest under
+the biggest wheel of all, a long ride that needs the wheel kept spinning,
+and in the nest is the first **Heart Piece**. Four make a new heart
+container.
 
 **The crossing** between them is never empty water (spec §117). A bell
 buoy clangs midway to steer by, and floating barrels burst into coins

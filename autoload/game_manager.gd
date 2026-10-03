@@ -9,6 +9,7 @@ const ISLAND_SCENES := {
 	&"driftwood_key": "res://world/islands/castaway_cay/castaway_cay.tscn",
 	&"hat_rock": "res://world/islands/hat_rock/hat_rock.tscn",
 	&"bell_atoll": "res://world/islands/bell_atoll/bell_atoll.tscn",
+	&"pinwheel_isle": "res://world/islands/pinwheel_isle/pinwheel_isle.tscn",
 	&"captains_cabin": "res://world/hub/captains_cabin.tscn",
 }
 const FIRST_ISLAND := &"castaway_cay"

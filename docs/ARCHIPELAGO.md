@@ -22,6 +22,8 @@ Status:
   the hoist and the feather (`tests/hat_rock_tests.gd`).
 - Bell Atoll is playable: the bells, the song, the tide, the belfry and
   the dais (`tests/bell_atoll_tests.gd`).
+- Pinwheel Isle is playable: the screw lifts, the nook, the summit and the
+  crow's nest (`tests/pinwheel_isle_tests.gd`).
 - Every other island so far is a horizon silhouette (`world/horizon/`)
   placed by `Archipelago` (`world/horizon/archipelago.gd`).
 
@@ -152,18 +154,22 @@ lies.
 
 ## Pinwheel Isle — "A tiny island bristling with giant spinning pinwheels."
 
-- **Horizon:** a rocky knob crowded with tall striped pinwheels turning in
-  the wind.
-- **Toy:** each pinwheel drives a screw platform: while it spins, the
-  platform corkscrews up its post.
+- **Horizon:** a mossy knob in steep tiers crowded with striped pinwheels
+  turning in the wind.
+- **Toy:** each lift's pinwheel (`PinwheelLift`) drives a screw platform:
+  while the wheel spins, the platform corkscrews up its striped pole; as
+  the wheel runs down it sinks back.
 - **Puzzles:**
-  - Get pinwheels spinning by pulling them round with the hook or blasting
-    them with the cannon.
-  - Ride the screws to higher pinwheels.
+  - Stand on a platform and spin the wheel above you: a cannonball, a yank
+    of the grapple, or the hook where it reaches. Three lifts climb the
+    tiers round the knob, each topping out at a landing deck.
+  - Hop off the second lift as it passes a nook in the cliff for a gem.
+  - The great pole on the summit is a long ride: keep its wheel spinning
+    on the way up to the crow's nest under the biggest wheel.
   - Later, the Parasol rides the island's updraft to the top-most
     pinwheel's hub.
-- **Reward:** a parrot, a gem, and a **Heart Piece** (four make a new heart
-  container).
+- **Reward:** a parrot on the summit, a gem, and a **Heart Piece** in the
+  crow's nest (`HeartPiece`: four make a new heart container).
 
 ## Teacup Isle — "A round island with tea... a whirlpool... in the middle."
 
@@ -391,8 +397,8 @@ for review, and the README.
      loading of spec §180.
    - The helm and the Conch Shell use the same transition.
 3. **The spare sail** (done), **Hat Rock** and the Spyglass (done),
-   **Bell Atoll** and the Shanty Sheet (done), then Pinwheel Isle and
-   Teacup Isle, then **Crabby Coast**:
+   **Bell Atoll** and the Shanty Sheet (done), **Pinwheel Isle** and the
+   first Heart Piece (done), then Teacup Isle, then **Crabby Coast**:
    Blast Barrels, the Tide Bell, the Spring Fist and Duke Pinchwick.
 4. Lantern Lagoon, Shipwreck Shoals, Turtleback, then the *Jolly Patch*.
 5. Skullcap Mountain, Cannonball Cliffs, Cinder Isle, Stormpeak, Crocodile
