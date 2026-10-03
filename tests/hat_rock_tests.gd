@@ -449,3 +449,26 @@ func test_grapple_to_the_rosette_gem() -> void:
 		"d=%.2f dy=%.2f" % [Player.flat(rc - player.global_position).length(), player.global_position.y - rc.y])
 	await frames(20)
 	check("and picks up its gem", InventoryManager.has_treasure(&"hat_rock_gem_rosette"), "")
+
+
+func test_spyglass_from_the_tiller() -> void:
+	InventoryManager.add_key_item(&"spyglass")
+	var boat := get_tree().get_first_node_in_group(&"boat") as TinyBoat
+	boat.place(at(Vector3(0, 0, -120)), frame.basis * Vector3.BACK, boat.top_speed())
+	boat.board_now(player)
+	await frames(30)
+	rig.snap_behind_target()
+	move(Vector2(0, -1))
+	await frames(40)
+	var cruising := Player.flat(boat.velocity).length()
+	press(&"spyglass")
+	await frames(5)
+	var view := player.get_node_or_null("SpyglassView") as SpyglassView
+	check("the Spyglass comes up at the tiller too", view != null and view.cam.current and player.state_id == &"boat", "state=%s" % player.state_id)
+	await frames(150)
+	var drifting := Player.flat(boat.velocity).length()
+	check("and the boat drifts to a stop while it's up", drifting < cruising * 0.5, "%.1f -> %.1f m/s" % [cruising, drifting])
+	release(&"spyglass")
+	await frames(20)
+	check("letting go: back to sailing", player.get_node_or_null("SpyglassView") == null and rig.camera.current and player.state_id == &"boat", "state=%s" % player.state_id)
+	move(Vector2.ZERO)

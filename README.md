@@ -295,7 +295,7 @@ godot --headless --path . --fixed-fps 60 res://tests/run_camera_tests.tscn     #
 godot --headless --path . --fixed-fps 60 res://tests/run_gameplay_tests.tscn   # 68 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 162 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_voyage_tests.tscn     # 8 checks
-godot --headless --path . --fixed-fps 60 res://tests/run_hat_rock_tests.tscn   # 40 checks
+godot --headless --path . --fixed-fps 60 res://tests/run_hat_rock_tests.tscn   # 43 checks
 godot --headless --path . --fixed-fps 60 res://ui/tests/ui_flow_test.tscn      # 89 checks
 godot --headless --path . --fixed-fps 60 res://props/tests/prop_tests.tscn     # 74 checks
 godot --headless --path . --fixed-fps 60 res://world/ocean/tests/ocean_swim_check.tscn
@@ -328,7 +328,8 @@ What each suite covers:
   brim, the whole spiral ledge (jumping its gaps, bracing through the
   gusts), a gust blowing Patchy off when he doesn't brace, the buckle
   opening the lookout and starting the hoist, the Spyglass inside and
-  sighting Bell Atoll with it, the hoist ride back up, the grapple from the
+  sighting Bell Atoll with it (and using it at the tiller, where the boat
+  drifts to a stop), the hoist ride back up, the grapple from the
   plank, three ring swings round the feather, the quill to the parrot, and
   the rosette's gem.
 - **Island**: Castaway Cay end to end:

@@ -96,7 +96,7 @@ func _update_sighting(delta: float) -> void:
 		return
 	_held += delta
 	if _held >= SIGHT_TIME and GameManager.sight_island(id):
-		AudioManager.play(&"switch_click", player.global_position, -2.0, 1.1)
-		Events.hud_message.emit("Sighted %s! Pencilled onto your sea chart." % UIChartData.display_name(id), 2.5)
+		AudioManager.play(&"ui_map", player.global_position, -2.0, 1.15)
+		_eyepiece.flash("Pencilled onto your sea chart!")
 	var note := "Charted" if GameManager.is_island_discovered(id) else ("Sighted" if GameManager.is_island_sighted(id) else "Uncharted...")
 	_eyepiece.show_island(UIChartData.display_name(id), note)

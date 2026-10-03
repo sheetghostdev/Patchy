@@ -9,6 +9,10 @@ const DARK := Color(0.03, 0.03, 0.05)
 
 var _title := ""
 var _note := ""
+var _flash := ""
+var _flash_t := 0.0
+
+const FLASH_TIME := 2.2
 
 
 func _ready() -> void:
@@ -22,6 +26,20 @@ func show_island(title: String, note: String) -> void:
 	_title = title
 	_note = note
 	queue_redraw()
+
+
+## A line that pops up under the island's name for a moment ("Pencilled
+## onto your sea chart!").
+func flash(text: String) -> void:
+	_flash = text
+	_flash_t = FLASH_TIME
+	queue_redraw()
+
+
+func _process(delta: float) -> void:
+	if _flash_t > 0.0:
+		_flash_t -= delta
+		queue_redraw()
 
 
 func _draw() -> void:
@@ -41,4 +59,13 @@ func _draw() -> void:
 		var f := UIStyle.font(&"heavy")
 		var fs := int(clampf(r * 0.1, 22.0, 48.0))
 		UIIcons.text(self, c + Vector2(0, r * 0.62), _title, fs, Color("fbf1d8"), 8, Color(0.06, 0.05, 0.12), HORIZONTAL_ALIGNMENT_CENTER, -1.0, f)
-		UIIcons.text(self, c + Vector2(0, r * 0.62 + fs * 0.95), _note, int(fs * 0.6), Color("f2c14e"), 6, Color(0.06, 0.05, 0.12), HORIZONTAL_ALIGNMENT_CENTER, -1.0, UIStyle.font(&"bold"))
+		var note := _note
+		var note_size := int(fs * 0.6)
+		if _flash_t > 0.0:
+			# Pops in big, settles, fades out at the end.
+			var age := FLASH_TIME - _flash_t
+			note = _flash
+			note_size = int(fs * lerpf(0.95, 0.72, clampf(age / 0.25, 0.0, 1.0)))
+		var col := Color("f2c14e")
+		col.a = clampf(_flash_t / 0.4, 0.0, 1.0) if _flash_t > 0.0 and _flash_t < 0.4 else 1.0
+		UIIcons.text(self, c + Vector2(0, r * 0.62 + fs * 0.95), note, note_size, col, 6, Color(0.06, 0.05, 0.12, col.a), HORIZONTAL_ALIGNMENT_CENTER, -1.0, UIStyle.font(&"bold"))

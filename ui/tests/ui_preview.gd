@@ -7,7 +7,8 @@ extends Node
 ##   attachments, quests, settings, controls, confirm, debug, debug_world,
 ##   title, title_settings, treasure_map (map=<id> zoom=<x> turn=<deg>).
 ## Extra args: pad=xbox|ps|nintendo forces gamepad glyphs; hud_scale=1.2
-## previews the HUD size option (not saved).
+## previews the HUD size option (not saved); sighted=<id,...> pencils
+## islands onto the chart as if seen through the Spyglass.
 ## Run without the photo tool to click around:
 ##   godot --path . res://ui/tests/ui_preview.tscn -- state=hud
 
@@ -42,6 +43,9 @@ func _ready() -> void:
 	_add_teleport_markers(lab)
 	await _frames(4)
 	_seed_progress()
+	# sighted=bell_atoll,teacup_isle: islands seen through the Spyglass.
+	for id in String(args.get("sighted", "")).split(",", false):
+		GameManager.sight_island(StringName(id))
 	await _frames(2)
 	match state:
 		"hud": _stage_hud(false)

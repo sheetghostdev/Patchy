@@ -120,6 +120,7 @@ func _demo_progress() -> void:
 		InventoryManager.unlock_attachment(id)
 	InventoryManager.add_ship_part(&"compass")
 	InventoryManager.add_ship_part(&"ships_wheel")
+	InventoryManager.add_key_item(&"spyglass")
 
 
 func _save(img: Image, index: int) -> void:
