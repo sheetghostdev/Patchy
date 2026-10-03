@@ -34,6 +34,7 @@ func _ready() -> void:
 	await _frames(6)
 	await _test_pause_cycle()
 	await _test_map_action()
+	await _test_sea_chart()
 	await _test_menu_navigation()
 	await _test_treasure_maps()
 	await _test_settings_toggle()
@@ -109,6 +110,49 @@ func _test_map_action() -> void:
 	await press(&"map")
 	await _frames(12)
 	check(not ui.pause_menu.is_open, "map action again closes the chart")
+
+
+## The sea chart and the world agree (docs/ARCHIPELAGO.md): every island on
+## its true bearing from Castaway Cay, none overlapping, all on the paper.
+func _test_sea_chart() -> void:
+	print("sea chart")
+	ui.open_pause_menu(&"map")
+	await _frames(4)
+	var chart := (ui.pause_menu.get_page(&"map") as UIMapPage).chart
+	var chart_ids := UIChartData.ids()
+	var world_ids := Archipelago.ids()
+	chart_ids.sort()
+	world_ids.sort()
+	check(chart_ids == world_ids, "the chart lists every island of the archipelago")
+	var home := chart.island_center(UIChartData.get_island(&"castaway_cay"))
+	var worst := 0.0
+	var overlaps: Array[String] = []
+	var outside: Array[String] = []
+	var area := Rect2(Vector2.ZERO, chart.size).grow(-20.0)
+	for id in chart_ids:
+		var isl := UIChartData.get_island(id)
+		var c := chart.island_center(isl)
+		var r := chart.island_radius(isl)
+		if id != &"castaway_cay":
+			var d := c - home
+			var on_chart := fposmod(rad_to_deg(atan2(d.x / UIChartData.STRETCH_X, -d.y)), 360.0)
+			var w := Archipelago.bearing(Vector3.ZERO, Archipelago.world_position(id))
+			worst = maxf(worst, absf(angle_difference(deg_to_rad(on_chart), deg_to_rad(w))))
+		if not area.has_point(c + Vector2(r * 1.25, r * 0.85)) or not area.has_point(c - Vector2(r * 1.25, r * 0.85)):
+			outside.append(String(id))
+		for other in chart_ids:
+			if String(other) <= String(id):
+				continue
+			var o := UIChartData.get_island(other)
+			var gap := chart.island_center(o) - c
+			var sum := r + chart.island_radius(o)
+			if Vector2(gap.x / (1.25 * sum), gap.y / (0.85 * sum)).length() < 1.0:
+				overlaps.append("%s/%s" % [id, other])
+	check(rad_to_deg(worst) < 1.0, "each island sits on its true bearing (worst %.2f deg)" % rad_to_deg(worst))
+	check(overlaps.is_empty(), "no two islands overlap on the chart %s" % [overlaps])
+	check(outside.is_empty(), "every island fits on the parchment %s (chart %s)" % [outside, chart.size])
+	ui.close_pause_menu()
+	await _frames(12)
 
 
 func _test_menu_navigation() -> void:

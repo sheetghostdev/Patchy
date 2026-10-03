@@ -14,6 +14,9 @@ Design priorities, in order:
 
 Gameplay always drives animation, and animation never delays control.
 
+The world plan, island by island (Super Mario Galaxy's toy-box islands
+meet The Wind Waker's sea), is in [docs/ARCHIPELAGO.md](docs/ARCHIPELAGO.md).
+
 ## Running
 
 ```bash
@@ -103,7 +106,8 @@ collectibles/       Coins, gems, treasure kinds, coin trails
 world/              Terrain (Plateau); ocean (stylized Ocean, underwater effect,
                     sea regions, open-sea current); sea/ (bell buoy, floating
                     barrels, dolphins, fish schools); islands (Castaway Cay and
-                    Driftwood Key, IslandInfo, IslandZone); hub (captain's
+                    Driftwood Key, IslandInfo, IslandZone); horizon/ (the
+                    Archipelago registry and far-island silhouettes); hub (captain's
                     cabin); vehicles (TinyBoat); objects (cages, parrot tasks,
                     chests, dig spots, braziers, gates, targets, cracked rock,
                     doors, Shellby's fishing boat, drag marks...)
@@ -250,14 +254,18 @@ tools/photo/shoot.sh scene=res://ui/tests/ui_preview.tscn size=1600x900 state=tr
 # treasure, misc, landmarks):
 tools/photo/shoot.sh scene=res://props/tests/prop_viewer.tscn show=landmarks "cams=-7,3.2,-1>0,2.4,-0.8"
 
+# One far-off island over the real ocean and sky (an Archipelago id), or
+# island=archipelago for all of them as seen from Castaway Cay:
+tools/photo/shoot.sh scene=res://world/horizon/tests/horizon_viewer.tscn island=skullcap_mountain "cams=0,30,-380>0,50,0"
+
 # The islanders (and Patchy for scale) lined up for a close look:
 tools/photo/shoot.sh scene=res://tests/npc_gallery.tscn hud=0 "cams=-0.6,1.3,3.6>-0.6,0.65,0"
 
 # Regenerate the original sound effects and music:
 python3 tools/audio/generate_audio.py
 
-# CPU cost of a level (logic + physics, headless). Castaway Cay: about 2 ms
-# per frame and a 1.6 s load:
+# CPU cost of a level (logic + physics, headless). Castaway Cay: about 3 ms
+# per frame and a 2.1 s load (0.4 s of it builds the far-off islands):
 godot --headless --path . --fixed-fps 60 res://tools/perf_probe.tscn -- scene=res://world/hub/captains_cabin.tscn
 ```
 
@@ -270,8 +278,8 @@ An optional argument after `--` filters test names.
 godot --headless --path . --fixed-fps 60 res://tests/run_movement_tests.tscn   # 53 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_camera_tests.tscn     # 21 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_gameplay_tests.tscn   # 68 checks
-godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 152 checks
-godot --headless --path . --fixed-fps 60 res://ui/tests/ui_flow_test.tscn      # 84 checks
+godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 156 checks
+godot --headless --path . --fixed-fps 60 res://ui/tests/ui_flow_test.tscn      # 88 checks
 godot --headless --path . --fixed-fps 60 res://props/tests/prop_tests.tscn     # 74 checks
 godot --headless --path . --fixed-fps 60 res://world/ocean/tests/ocean_swim_check.tscn
 godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn -- sail
@@ -316,9 +324,35 @@ What each suite covers:
   - diving to the Sunken Sloop and opening its chest underwater;
   - the sloop's map of Beak Rock: the sketch matches the world, the X lies
     where the stone beak points, and digging there turns up a crown;
+  - the archipelago on the horizon: every island in its place, out of the
+    boat's reach, with nothing to bump into;
   - a check that no pickup is buried or floating.
 
 ## Content
+
+**The archipelago.** Every island still to come stands on the horizon
+where it lies, distinct even a kilometer off (docs/ARCHIPELAGO.md):
+
+- Hat Rock, a sea stack shaped like a pirate's hat.
+- Skullcap Mountain, a skull wearing a jungle cap, with a waterfall
+  spilling from one eye.
+- Cinder Isle, a smoking volcano with glowing lava seams.
+- Cannonball Cliffs, striped sandstone stacks under Brock's fort, its
+  cannons puffing.
+- Teacup Isle, a china-banded cup with a whirlpool inside.
+- Stormpeak, a needle under a thundercloud full of lightning.
+- Turtleback, a jungle island on a sleeping turtle that slowly breathes.
+- Bell Atoll, a reef ring of swaying bells.
+- Shipwreck Shoals, a thicket of masts.
+- Crabby Coast, with its giant pincer arch.
+- Lantern Lagoon, whose cave glows teal.
+- Pinwheel Isle, with its spinning pinwheels.
+- Crocodile Crown, Brock's fortress, a crowned crocodile's head far to the
+  north-west.
+
+The sea chart draws them all on the same bearings; undiscovered ones are
+dashed outlines with a "?". The haze is long and light, so their shapes
+read from Castaway Cay's summit, and a rain shower hides them.
 
 The game boots to the title screen. **New Game** plays the opening: a
 storm at sea, then Patchy wakes on the beach as crabs make off with his

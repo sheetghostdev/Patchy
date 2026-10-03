@@ -434,6 +434,36 @@ func test_beak_rock_marks_the_spot() -> void:
 		and QuestLog.build().any(func(q: Dictionary) -> bool: return q.title == "Where the Beak Points" and q.done), "")
 
 
+## Spec §194 / docs/ARCHIPELAGO.md: the islands still to come stand on the
+## horizon, each in its place, out of the boat's reach and never in the way.
+func test_the_archipelago_on_the_horizon() -> void:
+	var group := node("Horizon")
+	var found := {}
+	for c in group.get_children():
+		if c is HorizonIsland:
+			found[String(c.name)] = c
+	var expected := 0
+	var misplaced: Array[String] = []
+	var bare: Array[String] = []
+	for id in Archipelago.ids():
+		if String(Archipelago.get_island(id).get("horizon", "")) == "":
+			continue
+		expected += 1
+		var isl := found.get("Horizon_%s" % String(id).to_pascal_case()) as HorizonIsland
+		if isl == null or isl.global_position.distance_to(Archipelago.world_position(id)) > 0.5:
+			misplaced.append(String(id))
+		elif isl.find_children("*", "MeshInstance3D", true, false).is_empty():
+			bare.append(String(id))
+	check("every island still to come stands on the horizon", found.size() == expected and misplaced.is_empty(), "found=%d expected=%d misplaced=%s" % [found.size(), expected, misplaced])
+	check("and each one is built", bare.is_empty(), "bare=%s" % [bare])
+	var boat := island.find_children("*", "TinyBoat", true, false)[0] as TinyBoat
+	var nearest := INF
+	for isl: HorizonIsland in found.values():
+		nearest = minf(nearest, Player.flat(isl.global_position).length())
+	check("all far beyond the little boat's reach", nearest > boat.world_limit + 120.0, "nearest=%.0f limit=%.0f" % [nearest, boat.world_limit])
+	check("and nothing out there to bump into", group.find_children("*", "CollisionObject3D", true, false).is_empty(), "")
+
+
 func test_crab_bumps_tnt_snail_and_the_rock_goes_too() -> void:
 	var snail := node("Enemies/SnailGrotto") as TNTSnail
 	var rock := node("Structures/CannonSecrets/GrottoCrackedRock") as Node3D

@@ -78,6 +78,7 @@ func build() -> void:
 	_grotto_mischief()
 	_sunken_reef()
 	_beak_rock()
+	_horizon()
 
 	var player := b.instance(PLAYER, null, Vector3(0, 1.25, 33), 0.0, "Player")
 	var rig := b.instance(RIG, null, Vector3(0, 3, 40), 0.0, "CameraRig")
@@ -1180,6 +1181,16 @@ func _beak_rock() -> void:
 	x_spot.marked_by_map = &"driftwood_map_1"
 	x_spot.position = rock.transform * rock.beak_target()
 	b.add(x_spot, g, "BeakX")
+
+
+## The rest of the archipelago on the horizon (docs/ARCHIPELAGO.md): every
+## island still to come, as a silhouette in its place in the world.
+func _horizon() -> void:
+	var g := b.group("Horizon")
+	for id in Archipelago.ids():
+		var isl := Archipelago.make_horizon(id)
+		if isl != null:
+			b.add(isl, g, isl.name)
 
 
 # --- Tutorial hints -----------------------------------------------------------------

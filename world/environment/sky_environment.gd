@@ -95,9 +95,11 @@ func _apply() -> void:
 	env.ssao_light_affect = 0.15
 	env.fog_enabled = true
 	env.fog_mode = Environment.FOG_MODE_DEPTH
-	env.fog_depth_begin = 70.0
-	env.fog_depth_end = 700.0
-	env.fog_depth_curve = 1.6
+	# Long, light haze: islands a kilometer off still show their shapes
+	# (spec §194: "across the bright ocean are several strange islands").
+	env.fog_depth_begin = 110.0
+	env.fog_depth_end = 2300.0
+	env.fog_depth_curve = 1.3
 	env.fog_sky_affect = 0.0
 	env.fog_aerial_perspective = 0.55
 	env.adjustment_enabled = true

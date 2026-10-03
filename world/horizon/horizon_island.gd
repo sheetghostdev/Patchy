@@ -136,16 +136,23 @@ static func mesa(outline: PackedVector2Array, height: float, band: float, taper:
 				var c := ring[k2]
 				var d := ring[k]
 				var mid := (a + b + c + d) * 0.25
-				var out := Vector3(mid.x - at.x - center.x, 0, mid.z - at.z - center.y)
-				var n := (b - a).cross(d - a).normalized()
-				if n.dot(out) < 0.0:
-					n = -n
-				mb.flat_quad(a, b, c, d, n, Color.WHITE)
+				face(mb, a, b, c, d, Vector3(mid.x - at.x - center.x, 0, mid.z - at.z - center.y))
 		prev = ring
 	var cap := at + Vector3(center.x, height, center.y)
 	for k in prev.size():
 		mb.flat_tri(prev[k], prev[(k + 1) % prev.size()], cap, Color.WHITE, Vector3.UP)
 	return mb
+
+
+## A flat quad with its true face normal, turned to face `outward`.
+static func face(mb: PropBuilder, a: Vector3, b: Vector3, c: Vector3, d: Vector3, outward: Vector3) -> void:
+	var n := (b - a).cross(d - a)
+	if n.length_squared() < 0.000001:
+		n = (c - b).cross(a - b)
+	n = n.normalized()
+	if n.dot(outward) < 0.0:
+		n = -n
+	mb.flat_quad(a, b, c, d, n, Color.WHITE)
 
 
 ## A jagged, roughly round outline for mesa(): `radius` with `jag` wobble.
@@ -264,11 +271,12 @@ static func _waterfall_material() -> ShaderMaterial:
 
 # --- Smoke puffs -------------------------------------------------------------------
 
-## A soft round puff that swells and fades (cannon fire, a steam vent...).
-func puff(at: Vector3, size: float, time := 1.6, color := Color("f6f2ea")) -> void:
+## A soft round puff that swells, rises (and drifts by `drift`) and fades:
+## cannon fire, chimney smoke, a volcano's plume. Puffs are pooled per color.
+func puff(at: Vector3, size: float, time := 1.6, color := Color("f6f2ea"), drift := Vector3.ZERO) -> void:
 	var mi: MeshInstance3D = null
 	for p in _puffs:
-		if not p.visible:
+		if not p.visible and p.get_meta(&"color") == color:
 			mi = p
 			break
 	if mi == null:
@@ -277,6 +285,7 @@ func puff(at: Vector3, size: float, time := 1.6, color := Color("f6f2ea")) -> vo
 		mb.sphere(1.0, Transform3D.IDENTITY, Color.WHITE, 4, 7)
 		mi.mesh = mb.build(null, MaterialLibrary.toon(color, &"soft"))
 		mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		mi.set_meta(&"color", color)
 		_root.add_child(mi)
 		_puffs.append(mi)
 	mi.visible = true
@@ -285,6 +294,6 @@ func puff(at: Vector3, size: float, time := 1.6, color := Color("f6f2ea")) -> vo
 	mi.transparency = 0.0
 	var tw := mi.create_tween().set_parallel(true)
 	tw.tween_property(mi, "scale", Vector3.ONE * size, time).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	tw.tween_property(mi, "position", at + Vector3.UP * size * 0.6, time)
+	tw.tween_property(mi, "position", at + Vector3.UP * size * 0.6 + drift, time)
 	tw.tween_property(mi, "transparency", 1.0, time).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	tw.chain().tween_callback(func() -> void: mi.visible = false)

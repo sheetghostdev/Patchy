@@ -46,13 +46,24 @@ func _area() -> Rect2:
 	return Rect2(Vector2.ZERO, size).grow(-26.0)
 
 
+## Castaway Cay's place on the chart (fraction of the drawing area).
+const HOME := Vector2(0.48, 0.5)
+
+
 func island_center(isl: Dictionary) -> Vector2:
 	var a := _area()
-	return a.position + (isl["pos"] as Vector2) * a.size
+	return a.position + a.size * HOME + UIChartData.chart_offset(isl["id"]) * _unit()
 
 
 func island_radius(isl: Dictionary) -> float:
-	return float(isl["size"]) * _area().size.y
+	return float(isl["size"]) * _unit()
+
+
+## The chart's scale: its height, or less when the parchment is too narrow
+## to fit the archipelago's east-west spread.
+func _unit() -> float:
+	var a := _area()
+	return minf(a.size.y, a.size.x / 1.8)
 
 
 func _coast(isl: Dictionary, k_scale: float = 1.0) -> PackedVector2Array:
@@ -80,7 +91,7 @@ func _draw() -> void:
 	var full := Rect2(Vector2.ZERO, size)
 	_draw_paper(full)
 	var area := _area()
-	var compass_c := area.position + area.size * Vector2(0.91, 0.82)
+	var compass_c := area.position + area.size * Vector2(0.925, 0.86)
 	_draw_rhumbs(area, compass_c)
 	_draw_grid(area)
 	_draw_waves(area)
@@ -91,7 +102,7 @@ func _draw() -> void:
 	for isl: Dictionary in UIChartData.ISLANDS:
 		_draw_label(isl)
 	_draw_current_marker()
-	_draw_compass(compass_c, minf(area.size.x, area.size.y) * 0.12)
+	_draw_compass(compass_c, minf(area.size.x, area.size.y) * 0.1)
 	_draw_cartouche(area)
 	_draw_frame(full)
 
@@ -265,6 +276,56 @@ func _draw_motif(motif: StringName, c: Vector2, r: float) -> void:
 			for k in 3:
 				var hx := c + Vector2(-12.0 + k * 12.0, -2.0 + (k % 2) * 5.0) * s
 				UIIcons.shape(self, UIIcons.ellipse_pts(hx, 5.5 * s, 5.0 * s, 6), Color("7fbf55"), Color(INK, 0.7), 1.5)
+		&"hat":
+			var brim := PackedVector2Array([c + Vector2(-34, 6) * s, c + Vector2(-22, -2) * s, c + Vector2(0, 2) * s, c + Vector2(22, -2) * s, c + Vector2(34, 6) * s, c + Vector2(0, 14) * s])
+			UIIcons.shape(self, UIIcons.ellipse_pts(c + Vector2(0, -8) * s, 16.0 * s, 13.0 * s, 18), Color("4a3f63"), INK, 2.5)
+			UIIcons.shape(self, brim, Color("3d3450"), INK, 2.5)
+			draw_line(c + Vector2(-15, -2) * s, c + Vector2(15, -2) * s, Color("e2a03f"), 3.0 * s, true)
+			UIIcons.shape(self, UIIcons.leaf_pts(c + Vector2(-10, -14) * s, c + Vector2(-22, -38) * s, 5.0 * s, 6), Color("f6f1e6"), INK, 2.0)
+		&"bell":
+			var bc := c + Vector2(0, -4) * s
+			var bell := PackedVector2Array([bc + Vector2(-14, 14) * s, bc + Vector2(-10, -4) * s, bc + Vector2(-6, -14) * s, bc + Vector2(6, -14) * s, bc + Vector2(10, -4) * s, bc + Vector2(14, 14) * s])
+			UIIcons.shape(self, bell, Color("e8b84a"), INK, 2.5)
+			draw_circle(bc + Vector2(0, 17) * s, 3.5 * s, INK, true, -1.0, true)
+			for k in 3:
+				draw_arc(bc + Vector2(-26 + k * 26, 20) * s, 5.0 * s, PI, TAU, 8, Color(SEA_INK, 0.8), 2.0, true)
+		&"pinwheel":
+			var hub := c + Vector2(0, -12) * s
+			draw_line(hub, c + Vector2(0, 22) * s, INK, 3.0, true)
+			var cols := [Color("ef4f4f"), Color("ffcf3f"), Color("3fa7ef"), Color("5fcf5f")]
+			for k in 4:
+				var a := k * PI * 0.5 + _t * 1.5
+				var tip := hub + Vector2(cos(a), sin(a)) * 18.0 * s
+				var fold := hub + Vector2(cos(a + 0.8), sin(a + 0.8)) * 13.0 * s
+				UIIcons.shape(self, PackedVector2Array([hub, tip, fold]), cols[k], INK, 1.5)
+		&"teacup":
+			var cup := PackedVector2Array([c + Vector2(-20, -10) * s, c + Vector2(20, -10) * s, c + Vector2(14, 12) * s, c + Vector2(-14, 12) * s])
+			UIIcons.shape(self, UIIcons.ellipse_pts(c + Vector2(0, 14) * s, 28.0 * s, 6.0 * s, 18), Color("ecd49a"), INK, 2.0)
+			draw_arc(c + Vector2(22, 0) * s, 7.0 * s, -PI * 0.5, PI * 0.5, 10, INK, 3.0 * s, true)
+			UIIcons.shape(self, cup, Color("f4f1ea"), INK, 2.5)
+			draw_line(c + Vector2(-17, -3) * s, c + Vector2(17, -3) * s, Color("4f7fc0"), 3.0 * s, true)
+			draw_arc(c + Vector2(0, -10) * s, 8.0 * s, 0.0, TAU * 0.8, 12, Color(SEA_INK, 0.8), 2.0, true)
+		&"volcano":
+			var cone := PackedVector2Array([c + Vector2(-34, 20) * s, c + Vector2(-8, -24) * s, c + Vector2(8, -24) * s, c + Vector2(34, 20) * s])
+			UIIcons.shape(self, cone, Color("6d6276"), INK, 2.5)
+			draw_line(c + Vector2(-3, -22) * s, c + Vector2(-10, 4) * s, Color("ff7a2e"), 3.0 * s, true)
+			draw_line(c + Vector2(4, -22) * s, c + Vector2(12, 0) * s, Color("ff7a2e"), 3.0 * s, true)
+			for k in 3:
+				draw_circle(c + Vector2(4 + k * 6, -30 - k * 9) * s, (5.0 + k * 2.0) * s, Color(0.45, 0.42, 0.45, 0.6), true, -1.0, true)
+		&"storm":
+			var spire := PackedVector2Array([c + Vector2(-14, 22) * s, c + Vector2(-3, -18) * s, c + Vector2(3, -18) * s, c + Vector2(14, 22) * s])
+			UIIcons.shape(self, spire, Color("7c8598"), INK, 2.5)
+			for k in 3:
+				draw_circle(c + Vector2(-14 + k * 14, -24) * s, 11.0 * s, Color("555c6e"), true, -1.0, true)
+			var bolt := PackedVector2Array([c + Vector2(8, -16) * s, c + Vector2(2, -4) * s, c + Vector2(9, -4) * s, c + Vector2(1, 10) * s])
+			draw_polyline(bolt, Color("ffe08a"), 3.0, true)
+		&"crown":
+			var head := UIIcons.ellipse_pts(c + Vector2(0, 8) * s, 30.0 * s, 13.0 * s, 20)
+			UIIcons.shape(self, head, Color("5a7c60"), INK, 2.5)
+			var crown := PackedVector2Array([c + Vector2(-14, -2) * s, c + Vector2(-16, -22) * s, c + Vector2(-8, -12) * s, c + Vector2(0, -26) * s, c + Vector2(8, -12) * s, c + Vector2(16, -22) * s, c + Vector2(14, -2) * s])
+			UIIcons.shape(self, crown, Color("f2c14e"), INK, 2.5)
+			draw_circle(c + Vector2(-8, 4) * s, 3.0 * s, Color("ffcf4a"), true, -1.0, true)
+			draw_circle(c + Vector2(8, 4) * s, 3.0 * s, Color("ffcf4a"), true, -1.0, true)
 		&"wreck":
 			var hull := PackedVector2Array([c + Vector2(-28, 2) * s, c + Vector2(20, -8) * s, c + Vector2(14, 10) * s, c + Vector2(-22, 16) * s])
 			UIIcons.shape(self, hull, Color("8b5a32"), INK, 2.5)
@@ -276,15 +337,25 @@ func _draw_label(isl: Dictionary) -> void:
 	var id: StringName = isl["id"]
 	var c := island_center(isl)
 	var r := island_radius(isl)
-	var pos := c + Vector2(0, r * 0.95 + 34.0)
+	var small := float(isl["size"]) < 0.045
+	var pos := c + Vector2(0, r * 0.95 + (26.0 if small else 34.0))
+	if isl.get("label", &"") == &"above":
+		pos = c - Vector2(0, r * 0.85 + 10.0)
 	if not _is_discovered(id):
-		UIIcons.text(self, pos, "Uncharted", 22, Color(INK, 0.4), 0, INK, HORIZONTAL_ALIGNMENT_CENTER, -1.0, UIStyle.font(&"bold"))
+		# Tiny unknown isles get just their "?": the chart stays readable.
+		if not small:
+			UIIcons.text(self, pos, "Uncharted", 22, Color(INK, 0.4), 0, INK, HORIZONTAL_ALIGNMENT_CENTER, -1.0, UIStyle.font(&"bold"))
 		return
 	var title := String(isl["name"])
 	var f := UIStyle.font(&"heavy")
-	var fs := 25
+	var fs := 19 if small else 25
 	var w := f.get_string_size(title, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x + 30.0
-	var plate := Rect2(pos - Vector2(w * 0.5, 26), Vector2(w, 36))
+	match isl.get("label", &""):
+		&"right":
+			pos = c + Vector2(r * 1.3 + w * 0.5 + 4.0, fs * 0.45)
+		&"left":
+			pos = c - Vector2(r * 1.3 + w * 0.5 + 4.0, -fs * 0.45)
+	var plate := Rect2(pos - Vector2(w * 0.5, fs + 1), Vector2(w, fs + 11))
 	var sb := UIStyle.box(Color("fbf1d8"), 8, 2, Color(INK, 0.8), 0, 0)
 	sb.shadow_color = Color(0.3, 0.18, 0.08, 0.25)
 	sb.shadow_size = 4
@@ -324,7 +395,7 @@ func _draw_current_marker() -> void:
 	var ship_pos := c + Vector2(r * 1.25 + 34.0, -r * 0.35) + Vector2(0, sin(_t * 2.0) * 3.0)
 	var sz := 64.0
 	UIIcons.draw_icon(self, &"ship", Rect2(ship_pos - Vector2(sz, sz) * 0.5, Vector2(sz, sz)), 1.0, sin(_t * 1.7) * 0.08)
-	var label_pos := c + Vector2(0, r * 0.95 + 66.0)
+	var label_pos := c - Vector2(0, r * 0.85 + 14.0)
 	UIIcons.text(self, label_pos, "YOU ARE HERE", 21, P.RED_DARK, 6, Color("fbf1d8"), HORIZONTAL_ALIGNMENT_CENTER, -1.0, UIStyle.font(&"heavy"))
 
 
@@ -373,7 +444,7 @@ func _draw_serpent(c: Vector2, s: float) -> void:
 
 
 func _draw_cartouche(area: Rect2) -> void:
-	var r := Rect2(area.position + Vector2(18, 16), Vector2(minf(area.size.x * 0.3, 380.0), 92))
+	var r := Rect2(area.position + Vector2(18, area.size.y - 108), Vector2(minf(area.size.x * 0.3, 380.0), 92))
 	var sb := UIStyle.box(Color("fbf1d8"), 12, 3, INK, 0, 0)
 	sb.shadow_color = Color(0.3, 0.18, 0.08, 0.3)
 	sb.shadow_size = 6
