@@ -595,6 +595,20 @@
       "bus": "SFX",
       "volume_db": -3.0
     },
+    "reef_bell": {
+      "file": "res://audio/sfx/reef_bell.wav",
+      "duration": 2.8153,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -3.0
+    },
+    "gull_laugh": {
+      "file": "res://audio/sfx/gull_laugh.wav",
+      "duration": 1.708,
+      "loop": false,
+      "bus": "SFX",
+      "volume_db": -4.0
+    },
     "sail_flap": {
       "file": "res://audio/sfx/sail_flap.wav",
       "duration": 0.8842,

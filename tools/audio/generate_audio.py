@@ -1808,6 +1808,36 @@ def bell_ring(rng):
     return fit(mix((strike(), 1.0), (strike(), 0.8, 0.34)), 2.4, 0.6)
 
 
+@sfx("reef_bell", volume_db=-3.0, sharp=True)
+def reef_bell(rng):
+    """One clear strike of a small brass bell on Bell Atoll, tuned to C5 so
+    the game can play the other notes by pitch (C D E G A)."""
+    strike = mix((bell(523.25, 3.2), 1.0), (click(rng, 0.004, 2500, 9000), 0.2))
+    return fit(strike, 3.0, 0.8)
+
+
+@sfx("gull_laugh", volume_db=-4.0)
+def gull_laugh(rng):
+    """Gulls laughing at a wrong note: a quick cackle of rising-falling
+    cries from two birds, one after the other."""
+    def syl(dur, f0, f1):
+        n = ns(dur)
+        t = tn(n)
+        f = curve(t, [(0, f0), (dur * 0.35, f1), (dur, f0 * 0.92)], "exp")
+        src = fm(f, n, 1.0, 1.8) * (1 + 0.3 * nz(lp(white(n, rng), 90)))
+        voiced = reson(src, 2300, 3) + 0.6 * reson(src, 3500, 4) + 0.3 * src
+        return nz(voiced) * curve(t, [(0, 0), (0.012, 1), (dur * 0.5, 0.8), (dur, 0)], "cos")
+    parts = []
+    start = 0.0
+    for k in range(5):
+        parts.append((syl(0.11, 900 + 40 * k, 1500 + 60 * k), 1.0 - 0.1 * k, start))
+        start += 0.15
+    for k in range(4):
+        parts.append((syl(0.1, 1150 + 30 * k, 1800 + 50 * k), 0.7 - 0.08 * k, start + 0.08))
+        start += 0.13
+    return reverb(lp(mix(*parts), 6500), "outdoor", 0.2)
+
+
 @sfx("sail_flap", volume_db=-4.0)
 def sail_flap(rng):
     parts = []

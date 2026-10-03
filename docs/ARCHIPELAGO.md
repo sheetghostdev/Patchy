@@ -20,6 +20,8 @@ Status:
 - Sailing between island scenes works (`Voyage`).
 - Hat Rock is playable: the ledge, the gusts, the lookout, the Spyglass,
   the hoist and the feather (`tests/hat_rock_tests.gd`).
+- Bell Atoll is playable: the bells, the song, the tide, the belfry and
+  the dais (`tests/bell_atoll_tests.gd`).
 - Every other island so far is a horizon silhouette (`world/horizon/`)
   placed by `Archipelago` (`world/horizon/archipelago.gd`).
 
@@ -129,14 +131,24 @@ lies.
 
 - **Horizon:** a ring of low rocks around a turquoise lagoon, with a
   little bell tower in the middle.
-- **Toy:** five bells on posts around the ring, each a different note.
-  The song is carved on the tower, as notes shaped like waves.
+- **Toy:** five bells (`ReefBell`) on the five tall rocks of the reef ring,
+  each a note of a pentatonic scale, its note painted on a plaque as a wave
+  with that many crests. The song is carved on a stone by the belfry
+  (`SongStone`) as a row of those waves.
 - **Puzzles:**
-  - Ring the bells in the carved order by hitting them with the hook, the
-    hand cannon or a ground pound. A wrong note makes the gulls laugh.
-  - Rising water between the reef rocks means hopping on the bells' posts.
-- **Reward:** a chest rises from the lagoon with a Crown, a parrot and the
-  **Shanty sheet**. The song opens the Skullcap's teeth (see below).
+  - Ring the bells in the carved order (`BellSong`) with the hook, the hand
+    cannon or a ground pound. A wrong note makes the gulls (`ReefGull`)
+    laugh and the song starts over.
+  - The first right note brings the tide in (`Tide`, about a minute): the
+    low reef between the bell rocks and the sand spit go under, so the
+    last notes mean swimming. If the tide is in before the song is done,
+    it's lost. From the islet the cannon reaches every bell.
+  - Grapple up into the belfry: its great bell plays the song through the
+    reef bells, lighting each in turn. A gem is up there, and another lies
+    on the lagoon floor.
+- **Reward:** a dais rises from the lagoon (`RisingDais`) with a chest (a
+  Crown and the **Shanty Sheet**) and a parrot. The song opens the
+  Skullcap's teeth (see below).
 
 ## Pinwheel Isle — "A tiny island bristling with giant spinning pinwheels."
 
@@ -378,8 +390,9 @@ for review, and the README.
      with the boat arriving on the same heading. This is the masked
      loading of spec §180.
    - The helm and the Conch Shell use the same transition.
-3. **The spare sail** (done), **Hat Rock** and the Spyglass (done), then
-   the other tiny islands, then **Crabby Coast**:
+3. **The spare sail** (done), **Hat Rock** and the Spyglass (done),
+   **Bell Atoll** and the Shanty Sheet (done), then Pinwheel Isle and
+   Teacup Isle, then **Crabby Coast**:
    Blast Barrels, the Tide Bell, the Spring Fist and Duke Pinchwick.
 4. Lantern Lagoon, Shipwreck Shoals, Turtleback, then the *Jolly Patch*.
 5. Skullcap Mountain, Cannonball Cliffs, Cinder Isle, Stormpeak, Crocodile

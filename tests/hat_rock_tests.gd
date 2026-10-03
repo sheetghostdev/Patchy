@@ -1,4 +1,4 @@
-extends PatchyTestHarness
+extends IslandSceneHarness
 ## Headless suite for Hat Rock (docs/ARCHIPELAGO.md): played through like a
 ## player would, on the real island scene. Up the boulders to the brim, the
 ## spiral ledge with its gaps and gusts, the buckle, the lookout and its
@@ -6,93 +6,23 @@ extends PatchyTestHarness
 ## the rosette's gem.
 ##   godot --headless --path . --fixed-fps 60 res://tests/run_hat_rock_tests.tscn [filter]
 
-const ISLAND_PATH := "res://world/islands/hat_rock/hat_rock.tscn"
 const H := preload("res://world/horizon/horizon_hat_rock.gd")
-
-var island: Node3D
-var frame := Transform3D.IDENTITY
-var _island_scene: PackedScene
 
 
 func suite_name() -> String:
 	return "PATCHY HAT ROCK TESTS"
 
 
-func _setup() -> void:
-	if _island_scene == null:
-		_island_scene = load(ISLAND_PATH)
-	WorldState.reset()
-	ParrotManager.reset()
-	InventoryManager.reset()
-	GameManager.reset()
-	WorldState.mark_completed(&"castaway_intro_seen")
-	_arena = Node3D.new()
-	_arena.name = "Arena"
-	add_child(_arena)
-	island = _island_scene.instantiate()
-	_arena.add_child(island)
-	player = island.get_node("Player") as Player
-	rig = island.get_node("CameraRig") as CameraRig
-	s = player.settings
-	frame = (island.get_node("HatRock") as Node3D).global_transform
-	player.input.virtual_mode = true
-	player.input.virtual_reset()
-	_jumps = 0
-	await frames(6)
+func island_path() -> String:
+	return "res://world/islands/hat_rock/hat_rock.tscn"
 
 
-func _teardown() -> void:
-	player.input.virtual_reset()
-	_arena.queue_free()
-	_arena = null
-	island = null
-
-
-func node(path: String) -> Node:
-	return island.get_node(path)
-
-
-## Island-local point to world.
-func at(local: Vector3) -> Vector3:
-	return frame * local
-
-
-func place(pos: Vector3, face: Vector3) -> void:
-	player.teleport(pos, Player.flat(face).normalized())
-	await frames(2)
-	rig.snap_behind_target()
-	await frames(4)
-
-
-## Points the stick at `target` (world) the way a player would: it is
-## camera-relative.
-func steer_to(target: Vector3, mag := 1.0) -> void:
-	var cam := rig.camera
-	var fwd := Player.flat(-cam.global_basis.z).normalized()
-	var right := Player.flat(cam.global_basis.x).normalized()
-	var want := Player.flat(target - player.global_position)
-	if want.length() < 0.05:
-		move(Vector2.ZERO)
-		return
-	want = want.normalized()
-	move(Vector2(want.dot(right), -want.dot(fwd)).normalized() * mag)
-
-
-func give(id: StringName) -> void:
-	InventoryManager.unlock_attachment(id)
-	await frames(1)
-	player.attachments.equip(id, false)
-	await frames(1)
+func frame_node() -> String:
+	return "HatRock"
 
 
 func gust(k: int) -> WindGust:
 	return node("HatRock/Gameplay/Ledge/Gust%d" % k) as WindGust
-
-
-## Waits until Patchy stands still on something.
-func until_landed(max_frames: int) -> int:
-	await frames(3)
-	return await wait_until(func() -> bool: return player.is_on_floor() and player.state_id == &"ground", max_frames)
 
 
 # --- Contents ----------------------------------------------------------------------
@@ -118,21 +48,7 @@ func test_island_contents() -> void:
 
 
 func test_everything_rests_on_something() -> void:
-	var bad: Array[String] = []
-	var space := player.get_world_3d().direct_space_state
-	var items: Array[Node3D] = []
-	for type in ["Collectible", "ParrotCage", "Checkpoint", "KeyItemPickup", "PoundPost"]:
-		for n in island.find_children("*", type, true, false):
-			items.append(n)
-	for it in items:
-		if it.get_parent() is CoinTrail:
-			continue
-		var p := it.global_position
-		var q := PhysicsRayQueryParameters3D.create(p + Vector3.UP * 0.3, p + Vector3.DOWN * 3.0, Layers.WORLD)
-		var hit := space.intersect_ray(q)
-		if hit.is_empty():
-			bad.append("%s floats" % it.name)
-	check("pickups, cages and checkpoints stand on solid ground", bad.is_empty(), "%s" % [bad])
+	check_everything_rests_on_something()
 
 
 # --- The climb ----------------------------------------------------------------------

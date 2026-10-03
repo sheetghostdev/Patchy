@@ -21,6 +21,8 @@ signal opened
 @export var attachment_reward: StringName = &""
 ## Treasure map tucked in with the prize (TreasureMaps id).
 @export var map_reward: StringName = &""
+## A key item packed inside too (KeyItemPickup id), handed over last.
+@export var key_item_reward: StringName = &""
 
 var _lid: Node3D
 var _chains: Node3D
@@ -127,6 +129,18 @@ func open(player: Player) -> void:
 	if chest_id != &"":
 		WorldState.mark_completed(chest_id)
 	opened.emit()
+	if key_item_reward != &"" and not InventoryManager.has_key_item(key_item_reward):
+		var item := KeyItemPickup.new()
+		item.item_id = key_item_reward
+		item.bare = true
+		get_tree().current_scene.add_child(item)
+		item.global_position = global_position + Vector3.UP * 0.4
+		await get_tree().create_timer(0.9, false).timeout
+		if player != null and is_instance_valid(item):
+			if player.state_id == &"locked":
+				player.set_locked(false)
+			item.call(&"_on_body", player)
+		return
 	if attachment_reward != &"" and not InventoryManager.has_attachment(attachment_reward):
 		var gift := AttachmentPickup.new()
 		gift.attachment_id = attachment_reward

@@ -1,0 +1,437 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://world/islands/island_info.gd" id="1_wc6dl"]
+[ext_resource type="Script" path="res://world/environment/sky_environment.gd" id="2_vnebn"]
+[ext_resource type="Script" path="res://world/environment/ambience.gd" id="3_c42eo"]
+[ext_resource type="Script" path="res://world/environment/weather.gd" id="4_1mp2t"]
+[ext_resource type="Script" path="res://world/horizon/horizon_bell_atoll.gd" id="5_3j1i3"]
+[ext_resource type="Script" path="res://props/structures/dock.gd" id="6_aqwa0"]
+[ext_resource type="Script" path="res://world/vehicles/tiny_boat.gd" id="7_vmp73"]
+[ext_resource type="Script" path="res://world/ocean/sea_region.gd" id="8_vppeb"]
+[ext_resource type="Script" path="res://systems/triggers/checkpoint.gd" id="9_q4fxk"]
+[ext_resource type="Script" path="res://world/objects/reef_bell.gd" id="10_5t1q2"]
+[ext_resource type="Script" path="res://world/objects/song_stone.gd" id="11_mglwa"]
+[ext_resource type="Script" path="res://world/ocean/tide.gd" id="12_kuefg"]
+[ext_resource type="Script" path="res://attachments/hook/hook_point.gd" id="13_wc84d"]
+[ext_resource type="Script" path="res://world/objects/reef_gull.gd" id="14_udugq"]
+[ext_resource type="Script" path="res://world/objects/rising_dais.gd" id="15_nwq8d"]
+[ext_resource type="Script" path="res://world/objects/treasure_chest.gd" id="16_0q1no"]
+[ext_resource type="Script" path="res://world/objects/parrot_cage.gd" id="17_2mvqw"]
+[ext_resource type="Script" path="res://world/objects/bell_song.gd" id="18_v4sft"]
+[ext_resource type="Script" path="res://systems/tutorial/tutorial_hint.gd" id="19_khdi3"]
+[ext_resource type="Script" path="res://collectibles/collectible.gd" id="20_711cc"]
+[ext_resource type="Script" path="res://collectibles/coin_trail.gd" id="21_u1is1"]
+[ext_resource type="PackedScene" path="res://enemies/crab/crab.tscn" id="22_sxoxy"]
+[ext_resource type="Script" path="res://enemies/crab/crab.gd" id="23_b1vh2"]
+[ext_resource type="Script" path="res://world/horizon/horizon_castaway.gd" id="24_0bbof"]
+[ext_resource type="Script" path="res://world/horizon/horizon_skullcap.gd" id="25_bsonc"]
+[ext_resource type="Script" path="res://world/horizon/horizon_cinder_isle.gd" id="26_x3nal"]
+[ext_resource type="Script" path="res://world/horizon/horizon_cannon_cliffs.gd" id="27_2k1eh"]
+[ext_resource type="Script" path="res://world/horizon/horizon_teacup_isle.gd" id="28_0wa8h"]
+[ext_resource type="Script" path="res://world/horizon/horizon_stormpeak.gd" id="29_oclsr"]
+[ext_resource type="Script" path="res://world/horizon/horizon_turtleback.gd" id="30_jmipc"]
+[ext_resource type="Script" path="res://world/horizon/horizon_wreck_shoals.gd" id="31_x3fer"]
+[ext_resource type="Script" path="res://world/horizon/horizon_crabby_coast.gd" id="32_negd8"]
+[ext_resource type="Script" path="res://world/horizon/horizon_lantern_lagoon.gd" id="33_7eb5p"]
+[ext_resource type="Script" path="res://world/horizon/horizon_pinwheel_isle.gd" id="34_6xgp8"]
+[ext_resource type="Script" path="res://world/horizon/horizon_croc_crown.gd" id="35_crypd"]
+[ext_resource type="Script" path="res://world/horizon/horizon_hat_rock.gd" id="36_7321l"]
+[ext_resource type="Script" path="res://world/ocean/ocean.gd" id="37_pdlk6"]
+[ext_resource type="Script" path="res://world/ocean/underwater_effect.gd" id="38_yjly2"]
+[ext_resource type="Script" path="res://props/blocks/level_block.gd" id="39_q1o3j"]
+[ext_resource type="Script" path="res://world/ocean/open_sea.gd" id="40_81r58"]
+[ext_resource type="Script" path="res://world/ocean/voyage.gd" id="41_kngie"]
+[ext_resource type="PackedScene" path="res://characters/patchy/player.tscn" id="42_oe76n"]
+[ext_resource type="Script" path="res://characters/patchy/player.gd" id="43_xl2me"]
+[ext_resource type="Resource" path="res://resources/settings/patchy_movement.tres" id="44_5ucfl"]
+[ext_resource type="PackedScene" path="res://systems/camera/camera_rig.tscn" id="45_q8o88"]
+[ext_resource type="Script" path="res://systems/camera/camera_rig.gd" id="46_6lr3p"]
+[ext_resource type="Resource" path="res://resources/settings/camera_default.tres" id="47_1si3i"]
+
+[node name="BellAtoll" type="Node3D" unique_id=1058965335]
+
+[node name="IslandInfo" type="Node" parent="." unique_id=1248958567]
+script = ExtResource("1_wc6dl")
+island_id = &"bell_atoll"
+display_name = "Bell Atoll"
+music = &"castaway_explore"
+
+[node name="SkyEnvironment" type="Node3D" parent="." unique_id=792972069]
+script = ExtResource("2_vnebn")
+shadow_distance = 160.0
+
+[node name="Ambience" type="Node3D" parent="." unique_id=1717814633]
+script = ExtResource("3_c42eo")
+
+[node name="Weather" type="Node3D" parent="." unique_id=225067903]
+script = ExtResource("4_1mp2t")
+
+[node name="BellAtoll" type="Node3D" parent="." unique_id=753216223]
+transform = Transform3D(0.93973505, 0, 0.3419036, 0, 1, 0, -0.3419036, 0, 0.93973505, 171, 0, 470)
+
+[node name="Terrain" type="Node3D" parent="BellAtoll" unique_id=277558714]
+
+[node name="Atoll" type="Node3D" parent="BellAtoll/Terrain" unique_id=821144865]
+script = ExtResource("5_3j1i3")
+playable = true
+
+[node name="Structures" type="Node3D" parent="BellAtoll" unique_id=1028937291]
+
+[node name="Gameplay" type="Node3D" parent="BellAtoll" unique_id=2003492477]
+
+[node name="Landing" type="Node3D" parent="BellAtoll/Gameplay" unique_id=1168374936]
+
+[node name="Jetty" type="StaticBody3D" parent="BellAtoll/Gameplay/Landing" unique_id=1615875300]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, -38)
+script = ExtResource("6_aqwa0")
+length = 10.0
+post_depth = 6.0
+water_line = -0.9
+
+[node name="BoatMooring" type="Marker3D" parent="BellAtoll/Gameplay/Landing" unique_id=1208341894]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 3, 0, -46.5)
+
+[node name="Arrival" type="Marker3D" parent="BellAtoll/Gameplay/Landing" unique_id=1116447039]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 1.6, -45)
+
+[node name="TinyBoat" type="CharacterBody3D" parent="BellAtoll/Gameplay/Landing" unique_id=186351350]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 3, 0, -46.5)
+script = ExtResource("7_vmp73")
+world_limit = 220.0
+limit_center = Vector3(171, 0, 470)
+home_island = &"bell_atoll"
+
+[node name="SeaRegion" type="Marker3D" parent="BellAtoll/Gameplay/Landing" unique_id=1970760046 node_paths=PackedStringArray("boat_dock", "arrival")]
+script = ExtResource("8_vppeb")
+region_name = "Bell Atoll"
+island_id = &"bell_atoll"
+radius = 75.0
+boat_dock = NodePath("../BoatMooring")
+arrival = NodePath("../Arrival")
+
+[node name="CpLanding" type="Area3D" parent="BellAtoll/Gameplay/Landing" unique_id=921246581]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 2.2, -34)
+script = ExtResource("9_q4fxk")
+checkpoint_id = &"cp_bell_landing"
+
+[node name="Bells" type="Node3D" parent="BellAtoll/Gameplay" unique_id=1405097706]
+
+[node name="Bell1" type="StaticBody3D" parent="BellAtoll/Gameplay/Bells" unique_id=1291204968]
+transform = Transform3D(-0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, -0.8660254, 15.3, 2.3, -26.500378)
+script = ExtResource("10_5t1q2")
+note = 3
+
+[node name="Bell2" type="StaticBody3D" parent="BellAtoll/Gameplay/Bells" unique_id=1556659518]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 30.6, 2.3, 0)
+script = ExtResource("10_5t1q2")
+
+[node name="Bell3" type="StaticBody3D" parent="BellAtoll/Gameplay/Bells" unique_id=928401773]
+transform = Transform3D(0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254, 15.3, 2.3, 26.500378)
+script = ExtResource("10_5t1q2")
+note = 5
+
+[node name="Bell4" type="StaticBody3D" parent="BellAtoll/Gameplay/Bells" unique_id=1339693910]
+transform = Transform3D(0.8660254, 0, -0.5, 0, 1, 0, 0.5, 0, 0.8660254, -15.3, 2.3, 26.500378)
+script = ExtResource("10_5t1q2")
+note = 2
+
+[node name="Bell5" type="StaticBody3D" parent="BellAtoll/Gameplay/Bells" unique_id=1955489888]
+transform = Transform3D(1.2246467e-16, 0, -1, 0, 1, 0, 1, 0, 1.2246467e-16, -30.6, 2.3, 3.747419e-15)
+script = ExtResource("10_5t1q2")
+note = 4
+
+[node name="SongStone" type="StaticBody3D" parent="BellAtoll/Gameplay/Bells" unique_id=586223535]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, -6.6)
+script = ExtResource("11_mglwa")
+song = PackedInt32Array(4, 3, 5, 2, 1)
+
+[node name="Tide" type="Node" parent="BellAtoll/Gameplay/Bells" unique_id=1233634450]
+script = ExtResource("12_kuefg")
+high = 2.0
+
+[node name="Belfry" type="Node3D" parent="BellAtoll/Gameplay" unique_id=224060338]
+
+[node name="GreatBell" type="StaticBody3D" parent="BellAtoll/Gameplay/Belfry" unique_id=843265294]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 13.599999, 0)
+script = ExtResource("10_5t1q2")
+note = 0
+
+[node name="BelfryIron" type="Area3D" parent="BellAtoll/Gameplay/Belfry" unique_id=1575756482]
+transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 3.5, 10.9, 0)
+script = ExtResource("13_wc84d")
+grapple_only = true
+grapple_arrival = "hop"
+hang_length = 0.0
+
+[node name="CpIslet" type="Area3D" parent="BellAtoll/Gameplay/Belfry" unique_id=991182672]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.6, 2.4, -5.6)
+script = ExtResource("9_q4fxk")
+checkpoint_id = &"cp_bell_islet"
+
+[node name="Reef" type="Node3D" parent="BellAtoll/Gameplay" unique_id=347938812]
+
+[node name="Gull" type="Node3D" parent="BellAtoll/Gameplay/Reef" unique_id=420160637]
+transform = Transform3D(-0.86152244, 0, 0.5077195, 0, 1, 0, -0.5077195, 0, -0.86152244, 26.268164, 0.6, -16.03765)
+script = ExtResource("14_udugq")
+
+[node name="Gull2" type="Node3D" parent="BellAtoll/Gameplay/Reef" unique_id=96342355]
+transform = Transform3D(0.07207536, 0, 0.9973992, 0, 1, 0, -0.9973992, 0, 0.07207536, 26.6872, 0.6, 15.029374)
+script = ExtResource("14_udugq")
+
+[node name="Gull3" type="Node3D" parent="BellAtoll/Gameplay/Reef" unique_id=940138048]
+transform = Transform3D(0.66767776, 0, -0.7444504, 0, 1, 0, 0.7444504, 0, 0.66767776, -27.816328, 0.6, 15.243813)
+script = ExtResource("14_udugq")
+
+[node name="Gull4" type="Node3D" parent="BellAtoll/Gameplay/Reef" unique_id=540342467]
+transform = Transform3D(-0.85692054, 0, -0.5154485, 0, 1, 0, 0.5154485, 0, -0.85692054, -26.48528, 0.6, -16.073296)
+script = ExtResource("14_udugq")
+
+[node name="Reward" type="Node3D" parent="BellAtoll/Gameplay" unique_id=805752477]
+
+[node name="Dais" type="AnimatableBody3D" parent="BellAtoll/Gameplay/Reward" unique_id=2123417479]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, 11.54)
+script = ExtResource("15_nwq8d")
+raised_id = &"bell_atoll_dais"
+drop = 5.6
+
+[node name="Chest" type="Area3D" parent="BellAtoll/Gameplay/Reward/Dais" unique_id=458020519]
+transform = Transform3D(-0.95533645, 0, -0.29552025, 0, 1, 0, 0.29552025, 0, -0.95533645, 0.9, 0, 0.9)
+script = ExtResource("16_0q1no")
+chest_id = &"bell_atoll_chest"
+island_id = &"bell_atoll"
+gold_variant = true
+key_item_reward = &"shanty_sheet"
+
+[node name="ParrotCage_bell_atoll_parrot" type="Area3D" parent="BellAtoll/Gameplay/Reward/Dais" unique_id=297555979]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 0.6)
+script = ExtResource("17_2mvqw")
+parrot_id = &"bell_atoll_parrot"
+island_id = &"bell_atoll"
+plumage = 2
+
+[node name="BellSong" type="Node" parent="BellAtoll/Gameplay/Reward" unique_id=258991804 node_paths=PackedStringArray("bells", "great_bell", "tide", "dais", "gulls")]
+script = ExtResource("18_v4sft")
+bells = [NodePath("../../Bells/Bell1"), NodePath("../../Bells/Bell2"), NodePath("../../Bells/Bell3"), NodePath("../../Bells/Bell4"), NodePath("../../Bells/Bell5")]
+great_bell = NodePath("../../Belfry/GreatBell")
+song = PackedInt32Array(4, 3, 5, 2, 1)
+tide = NodePath("../../Bells/Tide")
+dais = NodePath("../Dais")
+gulls = [NodePath("../../Reef/Gull"), NodePath("../../Reef/Gull2"), NodePath("../../Reef/Gull3"), NodePath("../../Reef/Gull4")]
+
+[node name="Hints" type="Node3D" parent="BellAtoll/Gameplay" unique_id=741582694]
+
+[node name="HintSongStone" type="Node3D" parent="BellAtoll/Gameplay/Hints" unique_id=1868122000]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, -8.2)
+script = ExtResource("19_khdi3")
+hint_id = &"hint_song_stone"
+text = "The song: count each wave's crests, and ring the bell with that wave"
+size = Vector3(6, 4, 4)
+
+[node name="HintBell" type="Node3D" parent="BellAtoll/Gameplay/Hints" unique_id=1608162989]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.3, 2.3, -26.500378)
+script = ExtResource("19_khdi3")
+hint_id = &"hint_bell"
+text = "{attack} Swipe a bell to ring it  ·  the cannon or a ground pound works too"
+size = Vector3(7, 4, 7)
+
+[node name="HintBelfryGrapple" type="Node3D" parent="BellAtoll/Gameplay/Hints" unique_id=551545112]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 2.4, 0)
+script = ExtResource("19_khdi3")
+hint_id = &"hint_belfry_grapple"
+text = "{tool_primary} Grapple up into the belfry"
+size = Vector3(4, 4, 6)
+require_attachment = &"grapple"
+
+[node name="Treasure" type="Node3D" parent="BellAtoll" unique_id=1026222083]
+
+[node name="Heart" type="Area3D" parent="BellAtoll/Treasure" unique_id=1812286283]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 2.8000002, -29.5)
+script = ExtResource("20_711cc")
+kind = "heart"
+
+[node name="BellAtollGemBelfry" type="Area3D" parent="BellAtoll/Treasure" unique_id=38516669]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4, 10.299999, 1.4)
+script = ExtResource("20_711cc")
+kind = "gem"
+treasure_id = &"bell_atoll_gem_belfry"
+island_id = &"bell_atoll"
+gem_color = Color(0.30980393, 0.7647059, 1, 1)
+
+[node name="CoinTrail" type="Node3D" parent="BellAtoll/Treasure" unique_id=1607003349]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 3.1, -32)
+script = ExtResource("21_u1is1")
+shape = 0
+end_point = Vector3(6, 0, 0)
+arc_height = 0.0
+count = 3
+
+[node name="CoinTrail2" type="Node3D" parent="BellAtoll/Treasure" unique_id=1893419907]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.212812, 1.5, -18.598076)
+script = ExtResource("21_u1is1")
+shape = 0
+end_point = Vector3(3, 0, 5.1961517)
+arc_height = 0.0
+count = 3
+
+[node name="CoinTrail3" type="Node3D" parent="BellAtoll/Treasure" unique_id=1746880318]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.212812, 1.5, 13.401924)
+script = ExtResource("21_u1is1")
+shape = 0
+end_point = Vector3(-3, 0, 5.1961517)
+arc_height = 0.0
+count = 3
+
+[node name="CoinTrail4" type="Node3D" parent="BellAtoll/Treasure" unique_id=1433517165]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 1.5, 32)
+script = ExtResource("21_u1is1")
+shape = 0
+end_point = Vector3(-6, 0, 0)
+arc_height = 0.0
+count = 3
+
+[node name="CoinTrail5" type="Node3D" parent="BellAtoll/Treasure" unique_id=1440284093]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -26.212812, 1.5, 18.598076)
+script = ExtResource("21_u1is1")
+shape = 0
+end_point = Vector3(-3, 0, -5.1961517)
+arc_height = 0.0
+count = 3
+
+[node name="CoinTrail6" type="Node3D" parent="BellAtoll/Treasure" unique_id=1800702888]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -29.212812, 1.5, -13.401924)
+script = ExtResource("21_u1is1")
+shape = 0
+end_point = Vector3(3, 0, -5.1961517)
+arc_height = 0.0
+count = 3
+
+[node name="CoinTrail7" type="Node3D" parent="BellAtoll/Treasure" unique_id=258722024]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.598076, 1.5, -26.212812)
+script = ExtResource("21_u1is1")
+shape = 0
+end_point = Vector3(5.1961517, 0, -3)
+arc_height = 0.0
+count = 3
+
+[node name="BellAtollGemLagoon" type="Area3D" parent="BellAtoll/Treasure" unique_id=1497266593]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, -1.8, -9)
+script = ExtResource("20_711cc")
+kind = "gem"
+treasure_id = &"bell_atoll_gem_lagoon"
+island_id = &"bell_atoll"
+
+[node name="CoinTrail8" type="Node3D" parent="BellAtoll/Treasure" unique_id=1754506153]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.35, -24)
+script = ExtResource("21_u1is1")
+shape = 0
+end_point = Vector3(0, 0, 13.5)
+arc_height = 0.0
+count = 6
+
+[node name="Enemies" type="Node3D" parent="BellAtoll" unique_id=673635935]
+
+[node name="Crab" type="CharacterBody3D" parent="BellAtoll/Enemies" unique_id=1733242598 groups=["enemy", "stompable"] instance=ExtResource("22_sxoxy")]
+transform = Transform3D(-0.06480409, 0, 0.997898, 0, 1, 0, -0.997898, 0, -0.06480409, 1.959435e-15, 0.65000004, 32)
+collision_layer = 4
+script = ExtResource("23_b1vh2")
+persistent_id = &"bell_atoll_crab_6"
+
+[node name="Crab2" type="CharacterBody3D" parent="BellAtoll/Enemies" unique_id=819854300 groups=["enemy", "stompable"] instance=ExtResource("22_sxoxy")]
+transform = Transform3D(0.63651216, 0, 0.77126664, 0, 1, 0, -0.77126664, 0, 0.63651216, -16, 0.65000004, -27.712812)
+collision_layer = 4
+script = ExtResource("23_b1vh2")
+persistent_id = &"bell_atoll_crab_11"
+
+[node name="Horizon" type="Node3D" parent="." unique_id=1217905393]
+
+[node name="Horizon_CastawayCay" type="Node3D" parent="Horizon" unique_id=1675727233]
+script = ExtResource("24_0bbof")
+
+[node name="Horizon_SkullcapMountain" type="Node3D" parent="Horizon" unique_id=1243699453]
+transform = Transform3D(-0.98476803, 0, 0.17387322, 0, 1, 0, -0.17387322, 0, -0.98476803, 113, 0, -640)
+script = ExtResource("25_bsonc")
+
+[node name="Horizon_CinderIsle" type="Node3D" parent="Horizon" unique_id=727125677]
+transform = Transform3D(-0.76592153, 0, 0.6429341, 0, 1, 0, -0.6429341, 0, -0.76592153, 643, 0, -766)
+script = ExtResource("26_x3nal")
+
+[node name="Horizon_CannonballCliffs" type="Node3D" parent="Horizon" unique_id=510227421]
+transform = Transform3D(-0.34146613, 0, 0.9398941, 0, 1, 0, -0.9398941, 0, -0.34146613, 545, 0, -198)
+script = ExtResource("27_2k1eh")
+
+[node name="Horizon_TeacupIsle" type="Node3D" parent="Horizon" unique_id=1613907257]
+transform = Transform3D(0.59891576, 0, 1.4836779, 0, 1.6, 0, -1.4836779, 0, 0.59891576, 436, 0, 176)
+script = ExtResource("28_0wa8h")
+
+[node name="Horizon_Stormpeak" type="Node3D" parent="Horizon" unique_id=1987222567]
+transform = Transform3D(0.24189368, 0, 0.97030276, 0, 1, 0, -0.97030276, 0, 0.24189368, 1067, 0, 266)
+script = ExtResource("29_oclsr")
+
+[node name="Horizon_Turtleback" type="Node3D" parent="Horizon" unique_id=745644300]
+transform = Transform3D(-0.30293006, 0, 1.3155735, 0, 1.35, 0, -1.3155735, 0, -0.30293006, 416, 0, 375)
+script = ExtResource("30_jmipc")
+
+[node name="Horizon_ShipwreckShoals" type="Node3D" parent="Horizon" unique_id=1090703800]
+transform = Transform3D(1.2927955, 0, -0.13667336, 0, 1.3, 0, 0.13667336, 0, 1.2927955, -61, 0, 577)
+script = ExtResource("31_x3fer")
+
+[node name="Horizon_CrabbyCoast" type="Node3D" parent="Horizon" unique_id=748452586]
+transform = Transform3D(0.81908506, 0, -0.5736721, 0, 1, 0, 0.5736721, 0, 0.81908506, -367, 0, 524)
+script = ExtResource("32_negd8")
+
+[node name="Horizon_LanternLagoon" type="Node3D" parent="Horizon" unique_id=66873613]
+transform = Transform3D(-0.03569147, 0, -0.9993629, 0, 1, 0, 0.9993629, 0, -0.03569147, -560, 0, -20)
+script = ExtResource("33_7eb5p")
+
+[node name="Horizon_PinwheelIsle" type="Node3D" parent="Horizon" unique_id=276617991]
+transform = Transform3D(-0.8500187, 0, -1.4722325, 0, 1.7, 0, 1.4722325, 0, -0.8500187, -433, 0, -250)
+script = ExtResource("34_6xgp8")
+
+[node name="Horizon_CrocodileCrown" type="Node3D" parent="Horizon" unique_id=2085469065]
+transform = Transform3D(-1.1671394, 0, 0.4475327, 0, 1.25, 0, -0.4475327, 0, -1.1671394, -834, 0, -863)
+script = ExtResource("35_crypd")
+
+[node name="Horizon_HatRock" type="Node3D" parent="Horizon" unique_id=489059281]
+transform = Transform3D(-0.9660966, 0, -0.25818095, 0, 1, 0, 0.25818095, 0, -0.9660966, -124, 0, -464)
+script = ExtResource("36_7321l")
+
+[node name="Ocean" type="Node3D" parent="." unique_id=1242080059]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 171, 0, 470)
+script = ExtResource("37_pdlk6")
+swim_area_size = Vector2(420, 420)
+swim_depth = 14.0
+gameplay_wave_scale = 0.6
+
+[node name="UnderwaterEffect" type="CanvasLayer" parent="." unique_id=1621342497]
+layer = -1
+script = ExtResource("38_yjly2")
+
+[node name="Seabed" type="StaticBody3D" parent="." unique_id=1043930585]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 171, -11, 470)
+script = ExtResource("39_q1o3j")
+size = Vector3(420, 1, 420)
+surface = "sand"
+
+[node name="OpenSea" type="Node" parent="." unique_id=555072043]
+script = ExtResource("40_81r58")
+
+[node name="Voyage" type="Node" parent="." unique_id=1826113997]
+script = ExtResource("41_kngie")
+home = &"bell_atoll"
+
+[node name="Player" type="CharacterBody3D" parent="." unique_id=1998280334 groups=["player"] instance=ExtResource("42_oe76n")]
+transform = Transform3D(-0.93973505, 0, -0.3419035, 0, 1, 0, 0.3419035, 0, -0.93973505, 156.98195, 1.4, 431.47086)
+collision_layer = 2
+collision_mask = 1033
+script = ExtResource("43_xl2me")
+settings = ExtResource("44_5ucfl")
+
+[node name="CameraRig" type="Node3D" parent="." unique_id=318256035 node_paths=PackedStringArray("target") instance=ExtResource("45_q8o88")]
+transform = Transform3D(-0.93973505, 0, -0.3419035, 0, 1, 0, 0.3419035, 0, -0.93973505, 154.58862, 4.4, 424.8927)
+script = ExtResource("46_6lr3p")
+settings = ExtResource("47_1si3i")
+target = NodePath("../Player")
+
+[node name="SpawnDock" type="Marker3D" parent="." unique_id=2081080053 groups=["spawn_point"]]
+transform = Transform3D(-0.93973505, 0, -0.3419035, 0, 1, 0, 0.3419035, 0, -0.93973505, 156.98195, 1.4, 431.47086)
+metadata/spawn_id = &"dock"

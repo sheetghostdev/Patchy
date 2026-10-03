@@ -255,7 +255,7 @@ and heights for checking any change by feel.
 
 ```bash
 # Regenerate procedural scenes (labs, islands, hub) from code:
-tools/builders/build.sh movement_lab camera_lab castaway_cay captains_cabin hat_rock
+tools/builders/build.sh movement_lab camera_lab castaway_cay captains_cabin hat_rock bell_atoll
 
 # Render screenshots on a headless machine (xvfb + Vulkan). flags= marks
 # WorldState ids, progress=demo fakes mid-game progress, hud=0 hides the HUD:
@@ -294,8 +294,9 @@ godot --headless --path . --fixed-fps 60 res://tests/run_movement_tests.tscn   #
 godot --headless --path . --fixed-fps 60 res://tests/run_camera_tests.tscn     # 21 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_gameplay_tests.tscn   # 68 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 162 checks
-godot --headless --path . --fixed-fps 60 res://tests/run_voyage_tests.tscn     # 8 checks
+godot --headless --path . --fixed-fps 60 res://tests/run_voyage_tests.tscn     # 10 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_hat_rock_tests.tscn   # 43 checks
+godot --headless --path . --fixed-fps 60 res://tests/run_bell_atoll_tests.tscn # 35 checks
 godot --headless --path . --fixed-fps 60 res://ui/tests/ui_flow_test.tscn      # 89 checks
 godot --headless --path . --fixed-fps 60 res://props/tests/prop_tests.tscn     # 74 checks
 godot --headless --path . --fixed-fps 60 res://world/ocean/tests/ocean_swim_check.tscn
@@ -321,7 +322,8 @@ What each suite covers:
     for secrets;
   - the cabin hub's displays.
 - **Voyage**: real scene changes. Sail from Castaway Cay to Hat Rock with
-  Betty's spare sail and home again, arriving at the tiller. The little
+  Betty's spare sail and home again, arriving at the tiller, and on to
+  Bell Atoll. The little
   patched sail is turned back by the current, and islands not built yet
   are wrapped in sea mist.
 - **Hat Rock**: played through on the real island: up the boulders to the
@@ -332,6 +334,13 @@ What each suite covers:
   drifts to a stop), the hoist ride back up, the grapple from the
   plank, three ring swings round the feather, the quill to the parrot, and
   the rosette's gem.
+- **Bell Atoll**: the reef walked from the landing (a gap to jump, the spit
+  and its step), a wrong note setting the gulls laughing, the whole song by
+  hook with the tide coming in and going out again, the dais rising with
+  the chest (a crown, the Shanty Sheet) and the parrot, the tide turning a
+  slow song back (and Patchy swimming over the drowned reef), a cannonball
+  from the islet ringing a bell, and the great bell's hint up in the
+  belfry.
 - **Island**: Castaway Cay end to end:
   - the opening sequence;
   - key routes (beach to meadow jump, the ledge-grab ridge, the wreck climb
@@ -439,6 +448,20 @@ the iron ring on the feather, swing ring to ring round its tufts to the
 shoulder, and walk up the quill to a parrot at the crest. A gem waits on
 the rosette pinned to one corner of the brim, reached by grapple from up
 the brim's curl.
+
+**Bell Atoll**, south-east of Castaway Cay, is a ring of reef rocks round
+a turquoise lagoon. Five brass bells stand on the tall rocks, each with
+its note painted on a plaque as a wave with that many crests. By the
+belfry on the islet in the middle, a stone carves the sailor's song as a
+row of those waves. Ring the bells in that order (swipe them, cannon them
+or ground-pound beside them) and a dais rises from the lagoon with a chest
+holding a crown and the **Shanty Sheet**, and a parrot. Play a wrong note
+and the gulls loafing on the reef throw back their heads and laugh. The
+first right note brings the tide in: within a minute the low reef and the
+sand spit are under water, and if the song isn't finished by high tide
+it's lost. Standing on the islet, the cannon reaches every bell. Grapple
+up into the belfry and swipe the great bell: it plays the song through the
+reef bells, lighting each one in turn.
 
 **The crossing** between them is never empty water (spec §117). A bell
 buoy clangs midway to steer by, and floating barrels burst into coins

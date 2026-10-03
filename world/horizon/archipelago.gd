@@ -17,7 +17,7 @@ const ISLANDS := [
 	{"id": &"teacup_isle", "gate": &"spare_sail", "at": Vector2(436, 176), "scale": 1.6, "horizon": "res://world/horizon/horizon_teacup_isle.gd"},
 	{"id": &"stormpeak", "gate": &"iron_hull", "at": Vector2(1067, 266), "horizon": "res://world/horizon/horizon_stormpeak.gd"},
 	{"id": &"turtleback", "gate": &"spare_sail", "at": Vector2(416, 375), "turn": 55.0, "scale": 1.35, "horizon": "res://world/horizon/horizon_turtleback.gd"},
-	{"id": &"bell_atoll", "gate": &"spare_sail", "at": Vector2(171, 470), "scale": 1.9, "horizon": "res://world/horizon/horizon_bell_atoll.gd"},
+	{"id": &"bell_atoll", "gate": &"spare_sail", "at": Vector2(171, 470), "scale": 2.0, "horizon": "res://world/horizon/horizon_bell_atoll.gd"},
 	{"id": &"shipwreck_shoals", "gate": &"spare_sail", "at": Vector2(-61, 577), "scale": 1.3, "horizon": "res://world/horizon/horizon_wreck_shoals.gd"},
 	{"id": &"crabby_coast", "gate": &"spare_sail", "at": Vector2(-367, 524), "horizon": "res://world/horizon/horizon_crabby_coast.gd"},
 	{"id": &"lantern_lagoon", "gate": &"spare_sail", "at": Vector2(-560, -20), "horizon": "res://world/horizon/horizon_lantern_lagoon.gd"},
