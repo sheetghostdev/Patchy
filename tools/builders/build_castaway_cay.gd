@@ -221,7 +221,7 @@ func _sea_regions() -> void:
 	var islet := SeaRegion.new()
 	islet.region_name = "Driftwood Key"
 	islet.island_id = ISLET
-	islet.radius = 42.0
+	islet.radius = 36.0
 	islet.position = DRIFTWOOD
 	islet.boat_dock = gameplay.get_node("DriftwoodKey/BoatLanding")
 	var islet_arrival := Marker3D.new()
@@ -1256,8 +1256,9 @@ func _crossing() -> void:
 	var pod := DolphinPod.new()
 	pod.position = Vector3(-80, 0, 100)
 	b.add(pod, g, "DolphinPod")
-	# Gull Bar: a sandbar with a palm, a crate of coins and a gem.
-	var bar := Vector2(-106, 72)
+	# Gull Bar: a sandbar off the harbor mouth, in Castaway's own waters,
+	# with a palm, a crate of coins and a gem.
+	var bar := Vector2(-30, 98)
 	plateau(terrain, "GullBar", [bar + Vector2(-6, -2), bar + Vector2(-2, -4.5), bar + Vector2(4, -3.5), bar + Vector2(6.5, 0.5),
 		bar + Vector2(2, 3.5), bar + Vector2(-4.5, 2.5)], 0.9, 4.0, "sand", {"shore": true, "shore_width": 6.0, "shore_drop": 2.6, "seed": 51})
 	palm(g, Vector3(bar.x - 2.0, 0.9, bar.y - 0.8), 6.5, 18.0, 30.0, 131)
@@ -1268,6 +1269,7 @@ func _crossing() -> void:
 	b.add(dock, g, "GullBarMooring")
 	var region := SeaRegion.new()
 	region.region_name = "Gull Bar"
+	region.island_id = ISLAND
 	region.radius = 13.0
 	region.position = Vector3(bar.x, 0, bar.y)
 	region.boat_dock = dock

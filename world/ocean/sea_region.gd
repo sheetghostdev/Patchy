@@ -29,9 +29,11 @@ func excess(pos: Vector3) -> float:
 	return Vector2(pos.x - global_position.x, pos.z - global_position.z).length() - radius
 
 
+## The island's waters (its biggest region, when an islet off it has its own).
 static func find(tree: SceneTree, id: StringName) -> SeaRegion:
+	var best: SeaRegion = null
 	for n in tree.get_nodes_in_group(&"sea_region"):
 		var r := n as SeaRegion
-		if r != null and r.island_id == id:
-			return r
-	return null
+		if r != null and r.island_id == id and (best == null or r.radius > best.radius):
+			best = r
+	return best

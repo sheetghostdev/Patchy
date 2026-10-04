@@ -16,6 +16,7 @@ var attachment: UIAttachmentBadge
 var requirement: UIParrotRequirement
 var prompt: UIInteractionPrompt
 var banner: UIIslandBanner
+var swim: UISwimMeter
 var toasts: UIToastStack
 var subtitles: UISubtitles
 var dialogue: UIDialogueBox
@@ -94,6 +95,10 @@ func _build() -> void:
 	banner = UIIslandBanner.new()
 	banner.name = "IslandBanner"
 	add_child(banner)
+
+	swim = UISwimMeter.new()
+	swim.name = "SwimMeter"
+	add_child(swim)
 
 	toasts = UIToastStack.new()
 	toasts.name = "Toasts"

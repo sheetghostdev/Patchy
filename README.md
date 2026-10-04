@@ -193,6 +193,11 @@ tools/              Scene builders, photo tool, project setup, audio generator
     the discovery banner, the music and the landing as respawn point.
   - Islands not built yet are wrapped in sea mist (`MistBank`), and past
     the edge of the chart the fog turns a boat round (`SeaEdge`).
+  - Swimming is free in an island's own waters; out in the open sea
+    Patchy's breath runs down (`SwimStamina`, a ring by him on the HUD)
+    and after six seconds he goes under, a heart down and back on the last
+    safe ground (`PlayerHealth.go_under`). The islands are a sail apart,
+    not a swim.
   - Hat Rock's silhouette, with `playable` set, is also its real rock (the
     same goes for the other built islands).
 - **Treasure maps and ship parts** are registries
@@ -310,7 +315,7 @@ godot --headless --path . --fixed-fps 60 res://tests/run_movement_tests.tscn   #
 godot --headless --path . --fixed-fps 60 res://tests/run_camera_tests.tscn     # 21 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_gameplay_tests.tscn   # 68 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 187 checks
-godot --headless --path . --fixed-fps 60 res://tests/run_world_tests.tscn      # 47 checks
+godot --headless --path . --fixed-fps 60 res://tests/run_world_tests.tscn      # 54 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_hat_rock_tests.tscn   # 43 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_bell_atoll_tests.tscn # 35 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_pinwheel_isle_tests.tscn # 23 checks
@@ -347,8 +352,10 @@ What each suite covers:
   Isle and Teacup Isle; no current holding a swimmer back and no limit on
   the boat; the mist round an island not built yet; the fog at the
   chart's edge turning the boat round; Bell Atoll's tide going straight
-  back out when you sail off; fast travel, Continue onto Hat Rock and the
-  captain's cabin and back.
+  back out when you sail off; free swimming in island waters, the open sea
+  taking Patchy's breath (a heart down, back ashore) and no swimming to
+  Driftwood Key; fast travel, Continue onto Hat Rock and the captain's
+  cabin and back.
 - **Hat Rock**: played through on the real island: up the boulders to the
   brim, the whole spiral ledge (jumping its gaps, bracing through the
   gusts), a gust blowing Patchy off when he doesn't brace, the buckle
@@ -481,7 +488,9 @@ little boat at any island you can see and sail: no loading, no walls,
 and the island comes up out of the sea as you near it, its name on a
 banner as you reach its waters. Once Brock has rowed off, Old Shellby
 rigs Betty's spare sail on the boat: bigger, red-striped and a good deal
-faster. Islands still being built hide in a bank of sea mist that turns
+faster. Swim out past an island's waters, though, and Patchy soon runs
+out of breath: a ring by him empties, and he goes under and comes back
+ashore a heart down. Islands still being built hide in a bank of sea mist that turns
 the boat gently away, and out past the edge of the chart the fog turns
 you round.
 

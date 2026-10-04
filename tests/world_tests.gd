@@ -315,6 +315,76 @@ func test_bell_tide_goes_out_when_you_sail_off() -> void:
 	check("and the tide's straight back out: one sea, no flooded shores", is_zero_approx(ocean.sea_level) and tide.level == 0.0, "sea=%.2f" % ocean.sea_level)
 
 
+# --- The open sea takes your breath -----------------------------------------------------
+
+## Swims Patchy along `dir` from `at` (at the surface) until `done` holds.
+func swim(p: Player, at: Vector3, dir: Vector3, done: Callable, max_frames: int) -> int:
+	p.teleport(Vector3(at.x, -0.4, at.z), dir)
+	await frames(2)
+	(p.camera_rig as CameraRig).snap_behind_target()
+	await wait_frames_until(func() -> bool: return p.state_id == &"swim", 60)
+	for i in max_frames:
+		if done.call():
+			p.input.virtual_move = Vector2.ZERO
+			return i
+		steer(p, p.global_position + dir * 10.0)
+		await frames(1)
+	p.input.virtual_move = Vector2.ZERO
+	return -1
+
+
+func wait_frames_until(cond: Callable, max_frames: int) -> int:
+	for i in max_frames:
+		if cond.call():
+			return i
+		await frames(1)
+	return -1
+
+
+func test_island_waters_are_free() -> void:
+	var p := await load_world()
+	var start := Vector3(-48, 0, 48)
+	await swim(p, start, Vector3.LEFT, func() -> bool: return false, 600)
+	check("ten seconds' swimming round the harbor costs no breath", p.state_id == &"swim" and p.stamina.value > 0.999 and not p.stamina.draining,
+		"state=%s breath=%.2f" % [p.state_id, p.stamina.value])
+
+
+func test_open_sea_takes_your_breath() -> void:
+	var p := await load_world()
+	var home := region(&"castaway_cay")
+	var hearts := p.health.health
+	var out := Vector3(0, 0, 1)
+	var at := home.global_position + out * (home.radius + 2.0)
+	# Shared with the lambdas (they capture locals by value).
+	var seen := {"under": false, "lowest": 1.0, "drained": false}
+	p.stamina.went_under.connect(func() -> void: seen.under = true, CONNECT_ONE_SHOT)
+	await swim(p, at, out, func() -> bool:
+		seen.lowest = minf(seen.lowest, p.stamina.value)
+		seen.drained = seen.drained or p.stamina.draining
+		return seen.under, 60 * 12)
+	check("out past the island's waters, Patchy's breath runs down", seen.drained and seen.lowest < 0.2, "lowest=%.2f" % seen.lowest)
+	check("and he goes under within a few seconds", seen.under, "")
+	await wait_frames_until(func() -> bool: return not p.health.is_respawning() and p.state_id == &"ground", 300)
+	await frames(10)
+	check("a heart down", p.health.health == hearts - 1, "%d -> %d" % [hearts, p.health.health])
+	check("and back on the last safe ground, ashore on Castaway Cay", p.state_id == &"ground" and p.global_position.y > 0.5 and home.contains(p.global_position),
+		"pos=%v state=%s" % [p.global_position, p.state_id])
+	check("breath back to full", p.stamina.value > 0.99, "")
+
+
+func test_no_swimming_to_driftwood_key() -> void:
+	var p := await load_world()
+	var home := region(&"castaway_cay")
+	var islet := region(&"driftwood_key")
+	var dir := Player.flat(islet.global_position - home.global_position).normalized()
+	var at := home.global_position + dir * (home.radius - 1.0)
+	var seen := {"under": false}
+	p.stamina.went_under.connect(func() -> void: seen.under = true, CONNECT_ONE_SHOT)
+	var reached := await swim(p, at, dir, func() -> bool: return seen.under or islet.contains(p.global_position), 60 * 14)
+	check("Driftwood Key is a boat's sail away, not a swim", seen.under and not islet.contains(p.global_position), "reached=%d pos=%v" % [reached, p.global_position])
+	await wait_frames_until(func() -> bool: return not p.health.is_respawning(), 300)
+
+
 # --- Getting about --------------------------------------------------------------------
 
 func test_fast_travel_in_the_one_world() -> void:

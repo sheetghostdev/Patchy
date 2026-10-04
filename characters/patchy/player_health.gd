@@ -70,6 +70,17 @@ func refill() -> void:
 
 ## Fell into a pit / kill volume: quick wipe, back to the last safe ground.
 func fall_out() -> void:
+	await _back_to_safe_ground(&"fall_whoosh", &"fall", 0.0)
+
+
+## Out of breath in the open sea (SwimStamina): down he goes, a heart lost,
+## and he's back on the last safe ground.
+func go_under() -> void:
+	Events.hud_message.emit("Glub... too far out to sea! Islands are a sail apart, not a swim.", 3.0)
+	await _back_to_safe_ground(&"boat_splash", &"swim_idle", 0.5)
+
+
+func _back_to_safe_ground(sound: StringName, anim: StringName, linger: float) -> void:
 	if _respawning:
 		return
 	if not invincible:
@@ -80,8 +91,10 @@ func fall_out() -> void:
 		die()
 		return
 	_respawning = true
-	AudioManager.play(&"fall_whoosh")
-	_p.set_locked(true, {"anim": &"fall"})
+	AudioManager.play(sound, _p.global_position)
+	_p.set_locked(true, {"anim": anim})
+	if linger > 0.0:
+		await get_tree().create_timer(linger).timeout
 	await SceneTransition.fade_out(0.3)
 	_p.teleport(_p.safe_position, _p.safe_facing)
 	await get_tree().create_timer(0.12).timeout

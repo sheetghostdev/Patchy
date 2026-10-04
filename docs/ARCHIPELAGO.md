@@ -107,6 +107,11 @@ lies.
   - Islands not built yet hide in a bank of sea mist hugging their shore
     (`MistBank`) that turns the boat gently away. Far past the last island
     the fog at the edge of the chart turns a boat round (`SeaEdge`).
+  - Swimming is free in an island's own waters. In the open sea Patchy's
+    breath runs down (`SwimStamina`): six seconds, about 30 m, and he goes
+    under, a heart down and back on the last safe ground. Even Driftwood
+    Key, Castaway's nearest neighbor, is over 40 m of open sea away, so
+    every island past the first is a boat ride.
 - **Ship.** Each ship part appears on the wreck at Castaway Cay (spec
   §79). With the Anchor, Rudder and Sails back, the wreck floats as the
   *Jolly Patch* and replaces the tiny boat.

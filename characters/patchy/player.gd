@@ -115,6 +115,8 @@ var wind := Vector3.ZERO
 var visual_y_offset := 0.0
 
 # Respawn safety
+## Breath for swimming the open sea (SwimStamina).
+var stamina: SwimStamina
 var safe_position := Vector3.ZERO
 var safe_facing := Vector3.FORWARD
 var _safe_timer := 0.0
@@ -160,6 +162,9 @@ func _ready() -> void:
 	change_state(&"ground")
 	if camera_rig == null:
 		_find_camera_rig.call_deferred()
+	stamina = SwimStamina.new()
+	stamina.name = "Stamina"
+	add_child(stamina)
 	GameManager.register_player(self)
 	CompanionParrot.setup(self)
 

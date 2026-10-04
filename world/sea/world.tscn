@@ -36,44 +36,44 @@
 [ext_resource type="Resource" path="res://resources/settings/camera_default.tres" id="34_f04lf"]
 [ext_resource type="Script" path="res://world/vehicles/tiny_boat.gd" id="35_t2ytk"]
 
-[node name="World" type="Node3D" unique_id=342621665]
+[node name="World" type="Node3D" unique_id=162277544]
 
-[node name="WorldDirector" type="Node" parent="." unique_id=1014029342]
+[node name="WorldDirector" type="Node" parent="." unique_id=1443553308]
 script = ExtResource("1_wkwxi")
 
-[node name="SkyEnvironment" type="Node3D" parent="." unique_id=1942917044]
+[node name="SkyEnvironment" type="Node3D" parent="." unique_id=177079826]
 script = ExtResource("2_34ad1")
 shadow_distance = 160.0
 
-[node name="Ambience" type="Node3D" parent="." unique_id=713818652]
+[node name="Ambience" type="Node3D" parent="." unique_id=297182481]
 script = ExtResource("3_34lp4")
 
-[node name="Weather" type="Node3D" parent="." unique_id=43649736]
+[node name="Weather" type="Node3D" parent="." unique_id=603881367]
 script = ExtResource("4_1kalf")
 
-[node name="Ocean" type="Node3D" parent="." unique_id=1003300412]
+[node name="Ocean" type="Node3D" parent="." unique_id=762703958]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 116, 0, -143)
 script = ExtResource("5_0kepm")
 swim_area_size = Vector2(3500, 3500)
 gameplay_wave_scale = 0.6
 
-[node name="UnderwaterEffect" type="CanvasLayer" parent="." unique_id=1257728901]
+[node name="UnderwaterEffect" type="CanvasLayer" parent="." unique_id=1727692928]
 layer = -1
 script = ExtResource("6_ywyxu")
 
-[node name="SeaFloor" type="StaticBody3D" parent="." unique_id=1603869527]
+[node name="SeaFloor" type="StaticBody3D" parent="." unique_id=1409793894]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 116, -45, -143)
 script = ExtResource("7_pck1j")
 size = Vector3(3500, 1, 3500)
 surface = "sand"
 
-[node name="SeaEdge" type="Node3D" parent="." unique_id=1454707798]
+[node name="SeaEdge" type="Node3D" parent="." unique_id=1614526142]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 116, 0, -143)
 script = ExtResource("8_30opu")
 
-[node name="Islands" type="Node3D" parent="." unique_id=1595851998]
+[node name="Islands" type="Node3D" parent="." unique_id=1970455115]
 
-[node name="CastawayCay" type="Node3D" parent="Islands" unique_id=1261939901 instance=ExtResource("9_upc2r")]
+[node name="CastawayCay" type="Node3D" parent="Islands" unique_id=872438090 instance=ExtResource("9_upc2r")]
 
 [node name="HatRock" type="Node3D" parent="Islands" unique_id=1608696170 instance=ExtResource("10_vu6ey")]
 
@@ -83,138 +83,138 @@ script = ExtResource("8_30opu")
 
 [node name="TeacupIsle" type="Node3D" parent="Islands" unique_id=1370560187 instance=ExtResource("13_6h6yg")]
 
-[node name="Horizon" type="Node3D" parent="." unique_id=471313156]
+[node name="Horizon" type="Node3D" parent="." unique_id=416723329]
 
-[node name="Horizon_CastawayCay" type="Node3D" parent="Horizon" unique_id=174727713 groups=["horizon_island"]]
+[node name="Horizon_CastawayCay" type="Node3D" parent="Horizon" unique_id=880840368 groups=["horizon_island"]]
 script = ExtResource("14_hb5lt")
 metadata/island_id = &"castaway_cay"
 
-[node name="Horizon_SkullcapMountain" type="Node3D" parent="Horizon" unique_id=246724552 groups=["horizon_island"]]
+[node name="Horizon_SkullcapMountain" type="Node3D" parent="Horizon" unique_id=1051472987 groups=["horizon_island"]]
 transform = Transform3D(-0.98476803, 0, 0.17387322, 0, 1, 0, -0.17387322, 0, -0.98476803, 113, 0, -640)
 script = ExtResource("15_o088m")
 metadata/island_id = &"skullcap_mountain"
 
-[node name="Horizon_CinderIsle" type="Node3D" parent="Horizon" unique_id=226788615 groups=["horizon_island"]]
+[node name="Horizon_CinderIsle" type="Node3D" parent="Horizon" unique_id=1065000579 groups=["horizon_island"]]
 transform = Transform3D(-0.76592153, 0, 0.6429341, 0, 1, 0, -0.6429341, 0, -0.76592153, 643, 0, -766)
 script = ExtResource("16_fyayc")
 metadata/island_id = &"cinder_isle"
 
-[node name="Horizon_CannonballCliffs" type="Node3D" parent="Horizon" unique_id=84030742 groups=["horizon_island"]]
+[node name="Horizon_CannonballCliffs" type="Node3D" parent="Horizon" unique_id=448520832 groups=["horizon_island"]]
 transform = Transform3D(-0.34146613, 0, 0.9398941, 0, 1, 0, -0.9398941, 0, -0.34146613, 545, 0, -198)
 script = ExtResource("17_5rg5b")
 metadata/island_id = &"cannonball_cliffs"
 
-[node name="Horizon_TeacupIsle" type="Node3D" parent="Horizon" unique_id=477858160 groups=["horizon_island"]]
+[node name="Horizon_TeacupIsle" type="Node3D" parent="Horizon" unique_id=903892994 groups=["horizon_island"]]
 transform = Transform3D(0.59891576, 0, 1.4836779, 0, 1.6, 0, -1.4836779, 0, 0.59891576, 436, 0, 176)
 script = ExtResource("18_nkgn7")
 metadata/island_id = &"teacup_isle"
 
-[node name="Horizon_Stormpeak" type="Node3D" parent="Horizon" unique_id=1154561055 groups=["horizon_island"]]
+[node name="Horizon_Stormpeak" type="Node3D" parent="Horizon" unique_id=74490758 groups=["horizon_island"]]
 transform = Transform3D(0.24189368, 0, 0.97030276, 0, 1, 0, -0.97030276, 0, 0.24189368, 1067, 0, 266)
 script = ExtResource("19_mw47k")
 metadata/island_id = &"stormpeak"
 
-[node name="Horizon_Turtleback" type="Node3D" parent="Horizon" unique_id=752942338 groups=["horizon_island"]]
+[node name="Horizon_Turtleback" type="Node3D" parent="Horizon" unique_id=1508148605 groups=["horizon_island"]]
 transform = Transform3D(-0.30293006, 0, 1.3155735, 0, 1.35, 0, -1.3155735, 0, -0.30293006, 416, 0, 375)
 script = ExtResource("20_l2thb")
 metadata/island_id = &"turtleback"
 
-[node name="Horizon_BellAtoll" type="Node3D" parent="Horizon" unique_id=1578340176 groups=["horizon_island"]]
+[node name="Horizon_BellAtoll" type="Node3D" parent="Horizon" unique_id=1403476999 groups=["horizon_island"]]
 transform = Transform3D(1.8794701, 0, 0.6838072, 0, 2, 0, -0.6838072, 0, 1.8794701, 171, 0, 470)
 script = ExtResource("21_64vxi")
 metadata/island_id = &"bell_atoll"
 
-[node name="Horizon_ShipwreckShoals" type="Node3D" parent="Horizon" unique_id=1116909850 groups=["horizon_island"]]
+[node name="Horizon_ShipwreckShoals" type="Node3D" parent="Horizon" unique_id=1884098050 groups=["horizon_island"]]
 transform = Transform3D(1.2927955, 0, -0.13667336, 0, 1.3, 0, 0.13667336, 0, 1.2927955, -61, 0, 577)
 script = ExtResource("22_1lpn2")
 metadata/island_id = &"shipwreck_shoals"
 
-[node name="Horizon_CrabbyCoast" type="Node3D" parent="Horizon" unique_id=672677288 groups=["horizon_island"]]
+[node name="Horizon_CrabbyCoast" type="Node3D" parent="Horizon" unique_id=1227956774 groups=["horizon_island"]]
 transform = Transform3D(0.81908506, 0, -0.5736721, 0, 1, 0, 0.5736721, 0, 0.81908506, -367, 0, 524)
 script = ExtResource("23_owlc1")
 metadata/island_id = &"crabby_coast"
 
-[node name="Horizon_LanternLagoon" type="Node3D" parent="Horizon" unique_id=208859302 groups=["horizon_island"]]
+[node name="Horizon_LanternLagoon" type="Node3D" parent="Horizon" unique_id=1470461114 groups=["horizon_island"]]
 transform = Transform3D(-0.03569147, 0, -0.9993629, 0, 1, 0, 0.9993629, 0, -0.03569147, -560, 0, -20)
 script = ExtResource("24_8iwhx")
 metadata/island_id = &"lantern_lagoon"
 
-[node name="Horizon_PinwheelIsle" type="Node3D" parent="Horizon" unique_id=763550572 groups=["horizon_island"]]
+[node name="Horizon_PinwheelIsle" type="Node3D" parent="Horizon" unique_id=615720307 groups=["horizon_island"]]
 transform = Transform3D(-0.8500187, 0, -1.4722325, 0, 1.7, 0, 1.4722325, 0, -0.8500187, -433, 0, -250)
 script = ExtResource("25_1r5id")
 metadata/island_id = &"pinwheel_isle"
 
-[node name="Horizon_CrocodileCrown" type="Node3D" parent="Horizon" unique_id=1254129479 groups=["horizon_island"]]
+[node name="Horizon_CrocodileCrown" type="Node3D" parent="Horizon" unique_id=179610753 groups=["horizon_island"]]
 transform = Transform3D(-1.1671394, 0, 0.4475327, 0, 1.25, 0, -0.4475327, 0, -1.1671394, -834, 0, -863)
 script = ExtResource("26_rs404")
 metadata/island_id = &"crocodile_crown"
 
-[node name="Horizon_HatRock" type="Node3D" parent="Horizon" unique_id=1129541307 groups=["horizon_island"]]
+[node name="Horizon_HatRock" type="Node3D" parent="Horizon" unique_id=34782257 groups=["horizon_island"]]
 transform = Transform3D(-0.9660966, 0, -0.25818095, 0, 1, 0, 0.25818095, 0, -0.9660966, -124, 0, -464)
 script = ExtResource("27_lvldq")
 metadata/island_id = &"hat_rock"
 
-[node name="Mist" type="Node3D" parent="." unique_id=526996656]
+[node name="Mist" type="Node3D" parent="." unique_id=71305157]
 
-[node name="Mist_SkullcapMountain" type="Node3D" parent="Mist" unique_id=1264606328]
+[node name="Mist_SkullcapMountain" type="Node3D" parent="Mist" unique_id=446471291]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 113, 0, -640)
 script = ExtResource("28_2g13r")
 island_id = &"skullcap_mountain"
 
-[node name="Mist_CinderIsle" type="Node3D" parent="Mist" unique_id=1765284599]
+[node name="Mist_CinderIsle" type="Node3D" parent="Mist" unique_id=1805144418]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 643, 0, -766)
 script = ExtResource("28_2g13r")
 island_id = &"cinder_isle"
 
-[node name="Mist_CannonballCliffs" type="Node3D" parent="Mist" unique_id=553207952]
+[node name="Mist_CannonballCliffs" type="Node3D" parent="Mist" unique_id=2060103610]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 545, 0, -198)
 script = ExtResource("28_2g13r")
 island_id = &"cannonball_cliffs"
 
-[node name="Mist_Stormpeak" type="Node3D" parent="Mist" unique_id=1679648706]
+[node name="Mist_Stormpeak" type="Node3D" parent="Mist" unique_id=1452997391]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1067, 0, 266)
 script = ExtResource("28_2g13r")
 island_id = &"stormpeak"
 
-[node name="Mist_Turtleback" type="Node3D" parent="Mist" unique_id=433241757]
+[node name="Mist_Turtleback" type="Node3D" parent="Mist" unique_id=1573183364]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 416, 0, 375)
 script = ExtResource("28_2g13r")
 island_id = &"turtleback"
 
-[node name="Mist_ShipwreckShoals" type="Node3D" parent="Mist" unique_id=989250290]
+[node name="Mist_ShipwreckShoals" type="Node3D" parent="Mist" unique_id=149656149]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -61, 0, 577)
 script = ExtResource("28_2g13r")
 island_id = &"shipwreck_shoals"
 
-[node name="Mist_CrabbyCoast" type="Node3D" parent="Mist" unique_id=788355746]
+[node name="Mist_CrabbyCoast" type="Node3D" parent="Mist" unique_id=1438087169]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -367, 0, 524)
 script = ExtResource("28_2g13r")
 island_id = &"crabby_coast"
 
-[node name="Mist_LanternLagoon" type="Node3D" parent="Mist" unique_id=1782265054]
+[node name="Mist_LanternLagoon" type="Node3D" parent="Mist" unique_id=1856926470]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -560, 0, -20)
 script = ExtResource("28_2g13r")
 island_id = &"lantern_lagoon"
 
-[node name="Mist_CrocodileCrown" type="Node3D" parent="Mist" unique_id=1956916753]
+[node name="Mist_CrocodileCrown" type="Node3D" parent="Mist" unique_id=1587798306]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -834, 0, -863)
 script = ExtResource("28_2g13r")
 island_id = &"crocodile_crown"
 
-[node name="Player" type="CharacterBody3D" parent="." unique_id=1334854573 groups=["player"] instance=ExtResource("29_hq1kb")]
+[node name="Player" type="CharacterBody3D" parent="." unique_id=66499173 groups=["player"] instance=ExtResource("29_hq1kb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 33)
 collision_layer = 2
 collision_mask = 1033
 script = ExtResource("30_adtqh")
 settings = ExtResource("31_td37x")
 
-[node name="CameraRig" type="Node3D" parent="." unique_id=330562376 node_paths=PackedStringArray("target") instance=ExtResource("32_b2ir2")]
+[node name="CameraRig" type="Node3D" parent="." unique_id=1324144669 node_paths=PackedStringArray("target") instance=ExtResource("32_b2ir2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 40)
 script = ExtResource("33_1iiuu")
 settings = ExtResource("34_f04lf")
 target = NodePath("../Player")
 
-[node name="TinyBoat" type="CharacterBody3D" parent="." unique_id=1125867254]
+[node name="TinyBoat" type="CharacterBody3D" parent="." unique_id=1726542138]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -44.6, 0, 58)
 script = ExtResource("35_t2ytk")
 unlock_flag = &"castaway_dinghy"
