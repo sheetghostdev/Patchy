@@ -38,6 +38,16 @@ func _ready() -> void:
 			dais.raise(false)
 
 
+## Sailing away mid-song (the atoll goes to sleep): the song's forgotten
+## and the bells go dark, ready to start again.
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_DISABLED and not done and progress > 0:
+		progress = 0
+		for b in bells:
+			if b != null:
+				b.set_lit(false)
+
+
 func bell_for(n: int) -> ReefBell:
 	for b in bells:
 		if b != null and b.note == n:

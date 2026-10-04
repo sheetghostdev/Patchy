@@ -17,7 +17,12 @@ physics:
 Status:
 
 - Castaway Cay, Driftwood Key and Gull Bar are playable.
-- Sailing between island scenes works (`Voyage`).
+- **One sea** (`world/sea/world.tscn`, `WorldDirector`): every island in a
+  single world, joined by open water. Sail (or swim) from any island to any
+  other: no invisible walls and no scene changes. Islands not built yet
+  are wrapped in sea mist (`MistBank`); past the edge of the chart the fog
+  turns a boat round (`SeaEdge`). See "The open sea" below
+  (`tests/world_tests.gd`).
 - Hat Rock is playable: the ledge, the gusts, the lookout, the Spyglass,
   the hoist and the feather (`tests/hat_rock_tests.gd`).
 - Bell Atoll is playable: the bells, the song, the tide, the belfry and
@@ -38,23 +43,23 @@ Bearings and distances are measured from Castaway Cay (world origin, north
 is -Z). The silhouettes stand at these places, and the sea chart draws them
 on the same bearings.
 
-| Island | Bearing | Distance | Kind | Gimmick | Item / unlock | Ship part | Gate to reach it |
+| Island | Bearing | Distance | Kind | Gimmick | Item / unlock | Ship part | Sea hazard round it |
 |---|---|---|---|---|---|---|---|
-| Castaway Cay | — | — | large | the whole moveset | hook, lantern, shovel, grapple, hand cannon | Compass, Ship's Wheel | start |
-| Driftwood Key | 223° | 190 m | small | raft tower, crab pen | — | — | tiny boat |
-| Hat Rock | 345° | 480 m | tiny | a sea stack shaped like a pirate hat | **Spyglass** | — | spare sail |
-| Bell Atoll | 160° | 500 m | tiny | five bells and a song | **Shanty sheet** (song) | — | spare sail |
-| Pinwheel Isle | 300° | 500 m | tiny | giant pinwheels raise screw platforms | Heart Piece | — | spare sail |
-| Teacup Isle | 88° | 480 m | tiny | a whirlpool you ride down into | Golden Teapot | — | spare sail |
-| Crabby Coast | 215° | 640 m | large | **the tide**: ring a bell to flood or drain the island | **Spring Fist** | Anchor | spare sail |
-| Lantern Lagoon | 272° | 560 m | large | **light and dark**: beams, fireflies, glow-only bridges | **Harpoon** | Rudder | spare sail |
-| Shipwreck Shoals | 186° | 580 m | large | **bouncy sails** and a galleon you rotate | — | Sails | spare sail |
-| Turtleback | 132° | 560 m | medium | **the island is a turtle**: wake it and it swims | **Conch Shell** (call the turtle: fast travel) | — | spare sail; Spring Fist to wake it |
-| Skullcap Mountain | 10° | 650 m | large | **wind**: gusts, vanes, updrafts | **Parasol** (glide, ride updrafts) | Mast | the restored ship (the tiny boat can't beat the headwind) |
-| Cannonball Cliffs | 70° | 580 m | large | **rhythm barrages**: cannons fire across every path | — | Ship's Cannons | the restored ship (its guns sink rowboats) |
-| Cinder Isle | 40° | 1000 m | large | **the lava tide** and steam vents | **Lodestone Magnet** | Iron Hull | Ship's Cannons (blast the chain boom) |
-| Stormpeak | 104° | 1100 m | large | **lightning**: route it through rods; storm clouds you can stand on | — | Figurehead | Iron Hull (survive the storm wall) |
-| Crocodile Crown | 316° | 1200 m | final | Brock's fortress | — | — | the full ship and 50 parrots |
+| Castaway Cay | — | — | large | the whole moveset | hook, lantern, shovel, grapple, hand cannon | Compass, Ship's Wheel | — (start) |
+| Driftwood Key | 223° | 190 m | small | raft tower, crab pen | — | — | — |
+| Hat Rock | 345° | 480 m | tiny | a sea stack shaped like a pirate hat | **Spyglass** | — | — |
+| Bell Atoll | 160° | 500 m | tiny | five bells and a song | **Shanty sheet** (song) | — | — |
+| Pinwheel Isle | 300° | 500 m | tiny | giant pinwheels raise screw platforms | Heart Piece | — | — |
+| Teacup Isle | 88° | 480 m | tiny | a whirlpool you ride down into | Golden Teapot | — | — |
+| Crabby Coast | 215° | 640 m | large | **the tide**: ring a bell to flood or drain the island | **Spring Fist** | Anchor | — |
+| Lantern Lagoon | 272° | 560 m | large | **light and dark**: beams, fireflies, glow-only bridges | **Harpoon** | Rudder | — |
+| Shipwreck Shoals | 186° | 580 m | large | **bouncy sails** and a galleon you rotate | — | Sails | — |
+| Turtleback | 132° | 560 m | medium | **the island is a turtle**: wake it and it swims | **Conch Shell** (call the turtle: fast travel) | — | —; Spring Fist to wake it |
+| Skullcap Mountain | 10° | 650 m | large | **wind**: gusts, vanes, updrafts | **Parasol** (glide, ride updrafts) | Mast | — |
+| Cannonball Cliffs | 70° | 580 m | large | **rhythm barrages**: cannons fire across every path | — | Ship's Cannons | Brock's fort guns (ship's cannons to answer them) |
+| Cinder Isle | 40° | 1000 m | large | **the lava tide** and steam vents | **Lodestone Magnet** | Iron Hull | the boiling sea (a stronger hull) |
+| Stormpeak | 104° | 1100 m | large | **lightning**: route it through rods; storm clouds you can stand on | — | Figurehead | the storm wall (the Iron Hull) |
+| Crocodile Crown | 316° | 1200 m | final | Brock's fortress | — | — | the reef maze (the full ship); 50 parrots for the jaw gate |
 
 Brock's barge rows off north-west after his cameo, the way his fortress
 lies.
@@ -81,21 +86,35 @@ lies.
   - Parasol: updrafts up to Castaway's sky ledges.
   - Magnet: iron crates and cables.
   - Spyglass: zooms on far islands and spots cages.
-- **Sailing range.** Each gate is something you can see:
-  - A headwind pushes the tiny boat back.
-  - Cannon splashes rock the boat.
-  - A chain boom bars a harbor.
-  - A storm wall surrounds Stormpeak.
+- **The open sea.** The whole archipelago is one world: every island in
+  its true place on one ocean. Point the boat at any island you can see
+  and sail there; nothing in between stops you.
+  - Islands load as you near them and sleep when you're far off
+    (`WorldDirector`), drawn as their silhouettes from afar. The
+    silhouettes grow a little with distance (up to the "scale" in
+    `Archipelago`) so a far island still reads, but never faster than
+    the distance grows, so sailing in an island only looms larger.
+  - Sailing into an island's waters (`SeaRegion`) announces it, makes it
+    the current island and its landing the respawn point. In between are
+    "Uncharted Waters".
+  - The only limits are local and visible: hazards round a few late
+    islands, each answered by a ship upgrade (the table's last column:
+    Brock's fort guns, the boiling sea, the storm wall, the reef maze).
+    Everything else is open from the moment Patchy has a boat.
+  - Islands not built yet hide in a bank of sea mist hugging their shore
+    (`MistBank`) that turns the boat gently away. Far past the last island
+    the fog at the edge of the chart turns a boat round (`SeaEdge`).
 - **Ship.** Each ship part appears on the wreck at Castaway Cay (spec
   §79). With the Anchor, Rudder and Sails back, the wreck floats as the
-  *Jolly Patch* and replaces the tiny boat for open-sea sailing.
+  *Jolly Patch* and replaces the tiny boat.
 
 ## Story order
 
 1. **Castaway Cay** (done). Ends with Brock's cameo. Old Shellby stitches
-   Barnacle Betty's spare sail onto the tiny boat: the **spare sail**.
-   Ring one opens: the four tiny islands, Crabby Coast, Lantern Lagoon,
-   Shipwreck Shoals and Turtleback, in any order.
+   Barnacle Betty's spare sail onto the tiny boat: the **spare sail**, a
+   good deal faster. Every island without a hazard is open: the four tiny
+   islands, Crabby Coast, Lantern Lagoon, Shipwreck Shoals, Turtleback and
+   Skullcap Mountain, in any order.
 2. **Ring one.** Anchor, Rudder and Sails return, and the *Jolly Patch*
    sails. The Spring Fist wakes Turtleback, which gives the Conch Shell.
 3. **Ring two.** Skullcap Mountain (Mast, Parasol) and Cannonball Cliffs
@@ -396,14 +415,11 @@ for review, and the README.
 
 1. **Horizon pass** (now): every island's silhouette on every horizon,
    the sea chart on the same bearings, and fog long enough to see them.
-2. **Sailing between scenes** (done). Each island is its own scene at its
-   world coordinates (`IslandBuilder` scaffolds them), showing the others
-   on its horizon.
-   - Sailing out of an island's waters toward another starts a short
-     sailing transition (a fade under a sea shanty) into the next scene,
-     with the boat arriving on the same heading. This is the masked
-     loading of spec §180.
-   - The helm and the Conch Shell use the same transition.
+2. **One sea** (done). Every island in one world (`world/sea/world.tscn`,
+   `tools/builders/build_world.gd`), each built island a chunk at its
+   world coordinates (`IslandBuilder`), far ones asleep behind their
+   silhouettes (`WorldDirector`). Sailing between islands is just
+   sailing. The helm's chart and the Conch Shell fast-travel within it.
 3. **The spare sail** (done), **Hat Rock** and the Spyglass (done),
    **Bell Atoll** and the Shanty Sheet (done), **Pinwheel Isle** and the
    first Heart Piece (done), **Teacup Isle** and the Golden Teapot (done),

@@ -1,10 +1,13 @@
 class_name IslandInfo
 extends Node
-## Per-island metadata and the bridge between a loaded island scene and the
-## game loop: registers the island's parrot and treasure totals for the
-## collection screens, places Patchy (saved checkpoint, a named arrival
-## point, or the scene's default spawn), then announces the island and
-## starts its music once any opening sequence has finished.
+## Per-island metadata at the root of an island's chunk. In the world
+## (WorldDirector: every island in one sea) it registers the island's
+## parrot and treasure totals for the collection screens, and the director
+## does the rest from it: music, the discovery banner, placing Patchy.
+## On its own (the captain's cabin, an island loaded by a test) it does
+## that itself: places Patchy (saved checkpoint or a named spawn point),
+## then announces the island and starts its music once any opening
+## sequence has finished.
 
 @export var island_id: StringName = &""
 @export var display_name := ""
@@ -13,7 +16,7 @@ extends Node
 @export var extra_parrots := 0
 ## Unique treasures that are spawned at runtime (chest contents, rewards).
 @export var extra_treasures := 0
-## Smaller islands that live in this scene (each has an IslandZone).
+## Smaller islands that live in this chunk (each has an IslandZone).
 @export var sub_islands: Array[StringName] = []
 ## Show the discovery banner (off for interiors like the captain's cabin).
 @export var announce := true
@@ -21,10 +24,12 @@ extends Node
 
 func _ready() -> void:
 	add_to_group(&"island_info")
-	GameManager.current_island = island_id
 	# Let every level node finish _ready (cages, chests, the player).
 	await get_tree().process_frame
 	_register_totals()
+	if get_tree().get_first_node_in_group(&"world_director") != null:
+		return
+	GameManager.current_island = island_id
 	_place_player(GameManager.player as Player)
 	var seq := _pending_sequence()
 	if seq != null:
@@ -40,7 +45,7 @@ func _ready() -> void:
 func _register_totals() -> void:
 	var parrots := {island_id: extra_parrots}
 	var treasures := {island_id: extra_treasures}
-	for n in _walk(get_tree().current_scene):
+	for n in _walk(get_parent()):
 		if n is ParrotCage:
 			var id := (n as ParrotCage).island_id
 			parrots[id] = int(parrots.get(id, 0)) + 1
@@ -83,10 +88,6 @@ func _place_player(player: Player) -> void:
 		_snap_camera(player)
 		return
 	GameManager.resume_pending = false
-	var voyage := GameManager.voyage_arrival
-	GameManager.voyage_arrival = {}
-	if not voyage.is_empty() and covers(voyage.get("to", &"")) and _arrive_by_boat(player, voyage):
-		return
 	var spawn_id := SceneTransition.pending_spawn_id
 	SceneTransition.pending_spawn_id = &""
 	if spawn_id != &"":
@@ -98,35 +99,6 @@ func _place_player(player: Player) -> void:
 				break
 	# Arriving fresh: falling or fainting returns here until a flag is raised.
 	GameManager.set_checkpoint(StringName(String(island_id) + "_arrival"), player.global_transform, true)
-
-
-## Off the end of a voyage: Patchy's boat comes in toward the island's
-## waters on the course it sailed, already under way, with him at the
-## tiller. A fall or a faint before he lands returns him to the island's
-## arrival point.
-func _arrive_by_boat(player: Player, voyage: Dictionary) -> bool:
-	var to: StringName = voyage.get("to", island_id)
-	var region := SeaRegion.find(get_tree(), to)
-	var boat: TinyBoat = null
-	for b in get_tree().get_nodes_in_group(&"boat"):
-		if b is TinyBoat:
-			boat = b
-			break
-	if region == null or boat == null:
-		return false
-	var from: Vector3 = voyage.get("from", Vector3.ZERO)
-	var dir := Player.flat(region.global_position - from).normalized()
-	if dir == Vector3.ZERO:
-		dir = Vector3.FORWARD
-	var at := region.global_position - dir * (region.radius + 30.0)
-	at.y = 0.0
-	boat.place(at, dir, boat.top_speed() * 0.6)
-	boat.board_now(player)
-	_snap_camera(player)
-	var land := region.arrival if region.arrival != null else region.boat_dock
-	if land != null:
-		GameManager.set_checkpoint(StringName(String(to) + "_arrival"), land.global_transform, true)
-	return true
 
 
 func _snap_camera(player: Player) -> void:

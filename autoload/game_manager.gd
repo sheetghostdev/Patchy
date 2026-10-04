@@ -3,14 +3,11 @@ extends Node
 ## we're on and how long we've played. Not a dumping ground (spec §130):
 ## progression lives in Inventory/Parrot/WorldState managers.
 
-## Island id -> scene. Saves store ids, never paths, so scenes can move.
-const ISLAND_SCENES := {
-	&"castaway_cay": "res://world/islands/castaway_cay/castaway_cay.tscn",
-	&"driftwood_key": "res://world/islands/castaway_cay/castaway_cay.tscn",
-	&"hat_rock": "res://world/islands/hat_rock/hat_rock.tscn",
-	&"bell_atoll": "res://world/islands/bell_atoll/bell_atoll.tscn",
-	&"pinwheel_isle": "res://world/islands/pinwheel_isle/pinwheel_isle.tscn",
-	&"teacup_isle": "res://world/islands/teacup_isle/teacup_isle.tscn",
+## The sea and every island in it, one world (WorldDirector). Saves store
+## island ids, never paths, so scenes can move.
+const WORLD_SCENE := "res://world/sea/world.tscn"
+## Places that are scenes of their own (interiors), by island id.
+const INTERIOR_SCENES := {
 	&"captains_cabin": "res://world/hub/captains_cabin.tscn",
 }
 const FIRST_ISLAND := &"castaway_cay"
@@ -29,9 +26,6 @@ var _has_checkpoint := false
 var _discovered_islands: Array[StringName] = []
 ## Islands glimpsed through the Spyglass: pencilled onto the sea chart.
 var _sighted_islands: Array[StringName] = []
-## Set when a voyage casts off (Voyage): the island scene that loads next
-## seats Patchy in his boat, sailing in from `from`. {to, from}
-var voyage_arrival: Dictionary = {}
 
 
 func _ready() -> void:
@@ -112,30 +106,26 @@ func is_island_sighted(island_id: StringName) -> bool:
 	return island_id in _sighted_islands
 
 
+## The scene `island_id` is in: the world, or an interior of its own.
 func get_island_scene(island_id: StringName) -> String:
-	return ISLAND_SCENES.get(island_id, ISLAND_SCENES[FIRST_ISLAND])
+	return INTERIOR_SCENES.get(island_id, WORLD_SCENE)
 
 
 ## Fast travel by the sea chart (spec §83): sail to a discovered island.
-## Islands sharing this scene: a fade, then Patchy (and his boat) arrive at
-## the destination's dock. Other islands: a scene change to their "dock"
-## spawn point.
+## A fade, then Patchy (and his boat) arrive at the destination's dock.
 func can_sail_to(island_id: StringName) -> bool:
 	if not is_island_discovered(island_id) or island_id == current_island:
 		return false
 	var p := player as Player
 	if p == null or not p.state_id in [&"ground", &"swim", &"boat"]:
 		return false
-	return SeaRegion.find(get_tree(), island_id) != null or ISLAND_SCENES.has(island_id)
+	return SeaRegion.find(get_tree(), island_id) != null
 
 
 func sail_to(island_id: StringName) -> void:
 	if not can_sail_to(island_id) or SceneTransition.is_busy():
 		return
 	var region := SeaRegion.find(get_tree(), island_id)
-	if region == null:
-		SceneTransition.change_scene(get_island_scene(island_id), &"dock")
-		return
 	var p := player as Player
 	await SceneTransition.fade_out(0.45)
 	if not is_instance_valid(p):
@@ -158,44 +148,11 @@ func sail_to(island_id: StringName) -> void:
 	await SceneTransition.fade_in(0.5)
 
 
-## Why Patchy's boat can't make the voyage to `island_id` ("" if it can):
-## each island's sailing gate (Archipelago "gate", docs/ARCHIPELAGO.md),
-## in words the player sees out on the water.
-func voyage_blocker(island_id: StringName) -> String:
-	var name := UIChartData.display_name(island_id)
-	match StringName(Archipelago.get_island(island_id).get("gate", &"")):
-		&"spare_sail":
-			if not TinyBoat.has_spare_sail():
-				return "The little patched sail can't fight the open-sea current. The boat's turned back... a bigger sail might do it."
-		&"jolly_patch":
-			if not (InventoryManager.has_ship_part(&"anchor") and InventoryManager.has_ship_part(&"rudder") and InventoryManager.has_ship_part(&"sails")):
-				return "A fierce headwind blows the little boat back from %s. It'll take a real ship to get there." % name
-		&"ship_cannons":
-			if not InventoryManager.has_ship_part(&"cannons"):
-				return "Brock's chain boom bars the way into %s. Something would have to blast it." % name
-		&"iron_hull":
-			if not InventoryManager.has_ship_part(&"iron_hull"):
-				return "The storm wall round %s would smash the boat to splinters." % name
-		&"full_ship":
-			return "Reefs, currents and cannons ring %s. Not without a whole ship... and a whole flock." % name
-	if not ISLAND_SCENES.has(island_id):
-		return "Sea mist hides the way to %s. (This island isn't built yet.)" % name
-	return ""
-
-
-## Casts off for `island_id` from `from` (the boat's position).
-func set_sail(island_id: StringName, from: Vector3) -> void:
-	if SceneTransition.is_busy() or voyage_blocker(island_id) != "":
-		return
-	voyage_arrival = {"to": island_id, "from": from}
-	SceneTransition.voyage(get_island_scene(island_id), UIChartData.display_name(island_id))
-
-
 ## Title screen -> New Game: wipe progression and wash ashore.
 func start_new_game(slot: int = 0) -> void:
 	SaveManager.new_game(slot)
 	SaveManager.autosave_enabled = true
-	SceneTransition.change_scene(get_island_scene(FIRST_ISLAND))
+	SceneTransition.change_scene(WORLD_SCENE)
 
 
 ## Title screen -> Continue: load the slot and return to its checkpoint.
@@ -204,7 +161,7 @@ func continue_game(slot: int = 0) -> bool:
 		return false
 	SaveManager.autosave_enabled = true
 	resume_pending = true
-	SceneTransition.change_scene(get_island_scene(current_island if current_island != &"" else FIRST_ISLAND))
+	SceneTransition.change_scene(get_island_scene(current_island))
 	return true
 
 

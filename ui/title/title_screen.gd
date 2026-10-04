@@ -5,7 +5,7 @@ extends Control
 ## save slot 0 exists and loads the island the player was on.
 
 ## First level for a new game; falls back to `fallback_scene` if missing.
-@export_file("*.tscn") var start_scene: String = "res://world/islands/castaway_cay/castaway_cay.tscn"
+@export_file("*.tscn") var start_scene: String = "res://world/sea/world.tscn"
 @export_file("*.tscn") var fallback_scene: String = "res://tests/scenes/movement_test.tscn"
 ## Optional music track name from the audio manifest ("" = none).
 @export var title_music: StringName = &""

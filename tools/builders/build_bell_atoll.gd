@@ -40,10 +40,7 @@ func build() -> void:
 	_reef()
 	_dais_and_reward()
 	_hints()
-	horizon([ISLAND])
-	open_sea(root.position, 420.0)
-	var spawn_at := Vector3(0, 1.4, -A.RING_R - 9.0)
-	spawn(root.transform * spawn_at, root.transform.basis * Vector3(0, 0, 1))
+	seabed(root.position, 300.0)
 	b.save("res://world/islands/bell_atoll/bell_atoll.tscn")
 
 
@@ -72,7 +69,6 @@ func _landing() -> void:
 	arrival.position = Vector3(0, 1.6, edge - 6.0)
 	arrival.rotation.y = PI
 	b.add(arrival, g, "Arrival")
-	boat(g, mooring, 220.0)
 	waters(g, Vector3.ZERO, 75.0, mooring, arrival, "Bell Atoll")
 	_checkpoint(g, "cp_bell_landing", A.rock_top(0) + Vector3(-2.5, 0, -2.0), 0.0, "CpLanding")
 	heart(A.rock_top(0) + Vector3(4.0, 0.6, 2.5))

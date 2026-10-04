@@ -35,9 +35,7 @@ func build() -> void:
 	_feather()
 	_rosette()
 	_hints()
-	horizon([ISLAND])
-	open_sea(root.position, 420.0)
-	spawn(root.transform * Vector3(6, 1.5, -71), root.transform.basis * Vector3(0, 0, 1))
+	seabed(root.position, 300.0)
 	b.save("res://world/islands/hat_rock/hat_rock.tscn")
 
 
@@ -83,7 +81,6 @@ func _landing() -> void:
 	arrival.position = Vector3(6, 1.4, -68)
 	b.add(arrival, g, "Arrival")
 	arrival.rotation.y = PI
-	boat(g, mooring, 230.0)
 	waters(g, Vector3.ZERO, 100.0, mooring, arrival, "Hat Rock")
 	_checkpoint(g, "cp_hat_rock", Vector3(-4, 1.0, -62), 180.0, "CpBeach")
 

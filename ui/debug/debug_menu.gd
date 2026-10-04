@@ -332,6 +332,7 @@ func quick_load() -> void:
 	var here := get_tree().current_scene.scene_file_path if get_tree().current_scene != null else ""
 	if scene != "" and scene != here:
 		close()
+		GameManager.resume_pending = true
 		SceneTransition.change_scene(scene)
 		return
 	var p := _player()

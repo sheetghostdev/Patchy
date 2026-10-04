@@ -29,10 +29,7 @@ func build() -> void:
 	_summit()
 	_extras()
 	_hints()
-	horizon([ISLAND])
-	open_sea(root.position, 420.0)
-	var front: float = -float(P.TIERS[0][1].y)
-	spawn(root.transform * Vector3(0, 1.5, front - 7.0), root.transform.basis * Vector3(0, 0, 1))
+	seabed(root.position, 300.0)
 	b.save("res://world/islands/pinwheel_isle/pinwheel_isle.tscn")
 
 
@@ -60,7 +57,6 @@ func _landing() -> void:
 	arrival.position = Vector3(0, 1.4, front - 6.0)
 	arrival.rotation.y = PI
 	b.add(arrival, g, "Arrival")
-	boat(g, mooring, 220.0)
 	waters(g, Vector3.ZERO, 75.0, mooring, arrival, "Pinwheel Isle")
 	_checkpoint(g, "cp_pinwheel_beach", Vector3(-4.0, P.TIERS[0][2], front + 5.0), 0.0, "CpBeach")
 

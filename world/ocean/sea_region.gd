@@ -1,10 +1,10 @@
 @tool
 class_name SeaRegion
 extends Marker3D
-## A circle of friendly water around an island. Swimming is free inside;
-## beyond it the open-sea current (OpenSea) pushes swimmers back, so the
-## other islands are reached by boat. `boat_dock` is where a stray boat
-## washes up when Patchy is here without it.
+## An island's own waters: a circle round it. Being inside makes it the
+## current island (WorldDirector: discovery, music, the landing as the
+## respawn point); Patchy can hop out of his boat here, and `boat_dock` is
+## where a stray boat washes up when he's here without it.
 
 @export var region_name := ""
 ## Island this water belongs to (fast travel destination id).

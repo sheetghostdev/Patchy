@@ -1,14 +1,16 @@
 extends PatchyTestHarness
 ## Headless suite for Castaway Cay: the opening, the main routes, the dark-cave
 ## refusal, the parrot log bridge, the chained chest and the crab burrow.
-## Loads the real island scene for every test.
+## Loads the real world (every island in one sea) for every test and plays
+## Castaway Cay's chunk of it.
 ##   godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn [filter]
 
-const ISLAND_PATH := "res://world/islands/castaway_cay/castaway_cay.tscn"
+const WORLD_PATH := "res://world/sea/world.tscn"
 const DRIFTWOOD_CENTER := Vector3(-130, 0, 140)
 
+var world: Node3D
 var island: Node3D
-var _island_scene: PackedScene
+var _world_scene: PackedScene
 
 
 func suite_name() -> String:
@@ -16,8 +18,8 @@ func suite_name() -> String:
 
 
 func _setup() -> void:
-	if _island_scene == null:
-		_island_scene = load(ISLAND_PATH)
+	if _world_scene == null:
+		_world_scene = load(WORLD_PATH)
 	WorldState.reset()
 	ParrotManager.reset()
 	InventoryManager.reset()
@@ -27,10 +29,7 @@ func _setup() -> void:
 	_arena = Node3D.new()
 	_arena.name = "Arena"
 	add_child(_arena)
-	island = _island_scene.instantiate()
-	_arena.add_child(island)
-	player = island.get_node("Player") as Player
-	rig = island.get_node("CameraRig") as CameraRig
+	_load_world()
 	s = player.settings
 	player.input.virtual_mode = true
 	player.input.virtual_reset()
@@ -39,11 +38,25 @@ func _setup() -> void:
 	await frames(6)
 
 
+func _load_world() -> void:
+	world = _world_scene.instantiate()
+	_arena.add_child(world)
+	island = world.get_node("Islands/CastawayCay")
+	player = world.get_node("Player") as Player
+	rig = world.get_node("CameraRig") as CameraRig
+
+
 func _teardown() -> void:
 	player.input.virtual_reset()
 	_arena.queue_free()
 	_arena = null
 	island = null
+	world = null
+
+
+## Patchy's boat (the world's).
+func the_boat() -> TinyBoat:
+	return world.get_node("TinyBoat") as TinyBoat
 
 
 ## Teleports Patchy facing `face` and turns the camera behind him so forward
@@ -434,37 +447,6 @@ func test_beak_rock_marks_the_spot() -> void:
 		and QuestLog.build().any(func(q: Dictionary) -> bool: return q.title == "Where the Beak Points" and q.done), "")
 
 
-## Spec §194 / docs/ARCHIPELAGO.md: the islands still to come stand on the
-## horizon, each in its place, out of the boat's reach and never in the way.
-func test_the_archipelago_on_the_horizon() -> void:
-	var group := node("Horizon")
-	var found := {}
-	for c in group.get_children():
-		if c is HorizonIsland:
-			found[String(c.name)] = c
-	var expected := 0
-	var misplaced: Array[String] = []
-	var bare: Array[String] = []
-	var info := island.find_children("*", "IslandInfo", true, false)[0] as IslandInfo
-	for id in Archipelago.ids():
-		if String(Archipelago.get_island(id).get("horizon", "")) == "" or info.covers(id):
-			continue
-		expected += 1
-		var isl := found.get("Horizon_%s" % String(id).to_pascal_case()) as HorizonIsland
-		if isl == null or isl.global_position.distance_to(Archipelago.world_position(id)) > 0.5:
-			misplaced.append(String(id))
-		elif isl.find_children("*", "MeshInstance3D", true, false).is_empty():
-			bare.append(String(id))
-	check("every island still to come stands on the horizon", found.size() == expected and misplaced.is_empty(), "found=%d expected=%d misplaced=%s" % [found.size(), expected, misplaced])
-	check("and each one is built", bare.is_empty(), "bare=%s" % [bare])
-	var boat := island.find_children("*", "TinyBoat", true, false)[0] as TinyBoat
-	var nearest := INF
-	for isl: HorizonIsland in found.values():
-		nearest = minf(nearest, Player.flat(isl.global_position).length())
-	check("all far beyond the little boat's reach", nearest > boat.world_limit + 120.0, "nearest=%.0f limit=%.0f" % [nearest, boat.world_limit])
-	check("and nothing out there to bump into", group.find_children("*", "CollisionObject3D", true, false).is_empty(), "")
-
-
 func test_crab_bumps_tnt_snail_and_the_rock_goes_too() -> void:
 	var snail := node("Enemies/SnailGrotto") as TNTSnail
 	var rock := node("Structures/CannonSecrets/GrottoCrackedRock") as Node3D
@@ -572,21 +554,21 @@ func test_barnacle_betty_side_quest() -> void:
 
 
 ## After Brock rows off, Old Shellby rigs Betty's spare sail on the little
-## boat: the way out to the islands on the horizon (Voyage).
+## boat: a good deal quicker out to the islands on the horizon.
 func test_shellby_rigs_bettys_spare_sail() -> void:
 	await clear_enemies()
 	var shellby := node("Gameplay/OldShellby") as ShellbyNPC
-	var boat := island.find_children("*", "TinyBoat", true, false)[0] as TinyBoat
+	var boat := the_boat()
 	var slow := boat.top_speed()
 	check("no sail before Brock shows his snout", not shellby.sail_pending() and not TinyBoat.has_spare_sail(), "")
 	WorldState.mark_completed(&"brock_cameo_seen")
-	check("the log says to find a bigger sail", QuestLog.build().any(func(q: Dictionary) -> bool: return q.title == "Set Sail" and not q.done), "")
+	check("the log says to find a bigger sail", QuestLog.build().any(func(q: Dictionary) -> bool: return q.title == "A Bigger Sail" and not q.done), "")
+	check("and that the islands are out there to sail to", QuestLog.build().any(func(q: Dictionary) -> bool: return q.title == "Beyond the Horizon" and not q.done), "")
 	await place(shellby.global_position + Vector3(1.6, 0.1, 0), Vector3.LEFT)
 	check("Shellby offers Betty's spare", "spare sail" in "".join(shellby.get_lines()), "")
 	await converse(shellby)
 	check("and rigs it on the boat: bigger, faster", TinyBoat.has_spare_sail() and boat.top_speed() > slow * 1.2, "speed %.1f -> %.1f" % [slow, boat.top_speed()])
-	check("the log moves on to the horizon", QuestLog.build().any(func(q: Dictionary) -> bool: return q.title == "Set Sail" and q.done)
-		and QuestLog.build().any(func(q: Dictionary) -> bool: return q.title == "Beyond the Horizon" and not q.done), "")
+	check("the log ticks it off", QuestLog.build().any(func(q: Dictionary) -> bool: return q.title == "A Bigger Sail" and q.done), "")
 	check("then he's back to his usual self", "spare sail" not in "".join(shellby.get_lines()), "")
 
 
@@ -639,7 +621,7 @@ func stick_toward(dir: Vector3) -> Vector2:
 
 
 func board_boat() -> TinyBoat:
-	var boat := node("Structures/Dock/TinyBoat") as TinyBoat
+	var boat := the_boat()
 	await place(Vector3(-52.0, 1.4, 80.0), Vector3.RIGHT)
 	await frames(6)
 	tap(&"interact")
@@ -748,24 +730,9 @@ func test_cannot_hop_out_in_open_sea() -> void:
 	check("stays aboard between islands", player.state_id == &"boat", "state=%s" % player.state_id)
 
 
-func test_open_sea_current_pushes_back() -> void:
-	await clear_enemies()
-	var region := node("Gameplay/SeaRegionCastaway") as SeaRegion
-	var start := Vector3(0, -0.4, 115)
-	await place(start, Vector3.BACK)
-	await wait_until(func() -> bool: return player.state_id == &"swim", 60)
-	var e0 := region.excess(player.global_position)
-	for i in 300:
-		move(stick_toward(Vector3.BACK))
-		await frames(1)
-	move(Vector2.ZERO)
-	var e1 := region.excess(player.global_position)
-	check("swimming out to sea is held back", player.state_id == &"swim" and e1 < e0 + 3.0, "excess %.1f -> %.1f" % [e0, e1])
-
-
 func test_boat_washes_back_to_dock() -> void:
 	await clear_enemies()
-	var boat := node("Structures/Dock/TinyBoat") as TinyBoat
+	var boat := the_boat()
 	var mooring := node("Structures/Dock/BoatMooring") as Node3D
 	boat.global_position = DRIFTWOOD_CENTER + Vector3(14, 0, -30)
 	await place(Vector3(0, 1.3, 33), Vector3.FORWARD)
@@ -982,10 +949,7 @@ func test_save_and_continue_returns_to_checkpoint() -> void:
 	await frames(2)
 	_arena = Node3D.new()
 	add_child(_arena)
-	island = _island_scene.instantiate()
-	_arena.add_child(island)
-	player = island.get_node("Player") as Player
-	rig = island.get_node("CameraRig") as CameraRig
+	_load_world()
 	await frames(12)
 	check("Patchy wakes at the summit flag", player.global_position.distance_to(cp_pos) < 2.0, "pos=%v" % player.global_position)
 	check("progress restored", InventoryManager.gold_value == 37 and ParrotManager.is_rescued(&"castaway_parrot_summit") and InventoryManager.has_attachment(&"lantern"), "gold=%d" % InventoryManager.gold_value)
@@ -1028,7 +992,7 @@ func test_sea_chart_fast_travel() -> void:
 	GameManager.sail_to(&"driftwood_key")
 	await frames(90)
 	var arrival := node("Gameplay/DriftwoodArrival") as Node3D
-	var boat := node("Structures/Dock/TinyBoat") as Node3D
+	var boat := the_boat()
 	var dock := node("Gameplay/DriftwoodKey/BoatLanding") as Node3D
 	check("arrives at Driftwood Key", player.global_position.distance_to(arrival.global_position) < 1.5, "pos=%v" % player.global_position)
 	check("the boat comes too", Player.flat(boat.global_position - dock.global_position).length() < 1.0, "boat=%v" % boat.global_position)
@@ -1041,8 +1005,8 @@ func test_sea_chart_fast_travel() -> void:
 
 
 func test_passing_shower_comes_and_goes() -> void:
-	var weather := node("Weather") as Weather
-	var sky := node("SkyEnvironment") as SkyEnvironment
+	var weather := world.get_node("Weather") as Weather
+	var sky := world.get_node("SkyEnvironment") as SkyEnvironment
 	weather.start_shower(true)
 	await frames(3)
 	check("shower: rain and grey sky", weather.phase == Weather.Phase.RAIN and sky.get_weather() > 0.99, "phase=%s" % Weather.Phase.keys()[weather.phase])

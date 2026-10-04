@@ -1,9 +1,11 @@
 class_name IslandSceneHarness
 extends PatchyTestHarness
 ## Base for the suites that play one island of the archipelago on its real
-## scene (Hat Rock, Bell Atoll...): loads `island_path()` fresh for every
-## test with the intro done, and works in the island's own frame
-## (`frame_node()`: its place in the archipelago, -Z toward Castaway Cay).
+## scene (Hat Rock, Bell Atoll...): loads the island's chunk
+## (`island_path()`) fresh for every test with the intro done, sets the sea
+## round it, Patchy, his camera and his boat the way the world would
+## (`compose()`), and works in the island's own frame (`frame_node()`: its
+## place in the archipelago, -Z toward Castaway Cay).
 
 var island: Node3D
 var frame := Transform3D.IDENTITY
@@ -33,14 +35,36 @@ func _setup() -> void:
 	add_child(_arena)
 	island = _island_scene.instantiate()
 	_arena.add_child(island)
-	player = island.get_node("Player") as Player
-	rig = island.get_node("CameraRig") as CameraRig
+	compose(_arena, island)
 	s = player.settings
 	frame = (island.get_node(frame_node()) as Node3D).global_transform
 	player.input.virtual_mode = true
 	player.input.virtual_reset()
 	_jumps = 0
 	await frames(6)
+
+
+## What the world gives an island chunk (tools/builders/build_world.gd):
+## the ocean round it, Patchy at its landing, his camera, and his boat at
+## its mooring.
+func compose(parent: Node, chunk: Node) -> void:
+	var region := chunk.find_children("*", "SeaRegion", true, false)[0] as SeaRegion
+	var ocean := Ocean.new()
+	ocean.position = Vector3(region.global_position.x, 0, region.global_position.z)
+	ocean.swim_area_size = Vector2(700, 700)
+	ocean.swim_depth = 14.0
+	ocean.gameplay_wave_scale = 0.6
+	parent.add_child(ocean)
+	var land := region.arrival if region.arrival != null else region.boat_dock
+	player = PLAYER_SCENE.instantiate()
+	parent.add_child(player)
+	player.teleport(land.global_position, -land.global_basis.z)
+	rig = RIG_SCENE.instantiate()
+	rig.target = player
+	parent.add_child(rig)
+	var boat := TinyBoat.new()
+	parent.add_child(boat)
+	boat.place(region.boat_dock.global_position, -region.boat_dock.global_basis.z)
 
 
 func _teardown() -> void:

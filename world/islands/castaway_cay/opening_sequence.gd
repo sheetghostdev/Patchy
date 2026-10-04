@@ -12,6 +12,7 @@ extends Node3D
 
 signal finished
 
+## Patchy (the world's player when left empty).
 @export var player: Player
 @export var crab_dragging: Crab
 @export var crab_noticing: Crab
@@ -47,9 +48,9 @@ func _ready() -> void:
 				c.home = spot
 			k += 1
 		return
-	# Hold Patchy down before the first rendered frame.
-	if player != null:
-		player.set_locked(true, {"anim": &"knocked_out"})
+	# Hold Patchy down before the first rendered frame (once the world has
+	# him: he's the world's, not the island's).
+	_hold_player.call_deferred()
 	await get_tree().process_frame
 	await get_tree().process_frame
 	if player == null:
@@ -58,6 +59,13 @@ func _ready() -> void:
 		_begin_play(false)
 		return
 	_run()
+
+
+func _hold_player() -> void:
+	if player == null:
+		player = GameManager.player as Player
+	if player != null:
+		player.set_locked(true, {"anim": &"knocked_out"})
 
 
 func is_pending() -> bool:

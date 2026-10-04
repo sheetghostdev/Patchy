@@ -8,7 +8,7 @@ func _ready() -> void:
 		var kv := a.split("=", true, 1)
 		if kv.size() == 2:
 			args[kv[0]] = kv[1]
-	var path: String = args.get("scene", "res://world/islands/castaway_cay/castaway_cay.tscn")
+	var path: String = args.get("scene", "res://world/sea/world.tscn")
 	var count := int(args.get("frames", "600"))
 	WorldState.mark_completed(&"castaway_intro_seen")
 	var t0 := Time.get_ticks_usec()

@@ -4,7 +4,9 @@ extends Node
 ## couple of meters, slowly coming in and quickly going out. Everything that
 ## floats or swims reads the Ocean, so boats rise with it and the low reef
 ## goes under. Bell Atoll's song brings it in; Crabby Coast's Tide Bell
-## will swap it (docs/ARCHIPELAGO.md).
+## will swap it (docs/ARCHIPELAGO.md). The sea is one sea, so when its
+## island goes to sleep (Patchy sails off: WorldDirector) the tide drops
+## straight back out rather than leave every other shore flooded.
 
 signal peaked
 signal ebbed
@@ -23,6 +25,14 @@ var _ocean: Ocean
 
 func _ready() -> void:
 	_apply.call_deferred()
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_DISABLED and (level > 0.0 or _dir != 0):
+		level = 0.0
+		_dir = 0
+		_apply()
+		ebbed.emit()
 
 
 ## The scene's Ocean (one on its way out after a scene change doesn't count).

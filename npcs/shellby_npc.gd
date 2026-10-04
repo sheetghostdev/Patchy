@@ -3,9 +3,9 @@ class_name ShellbyNPC
 extends FavorNPC
 ## Old Shellby: the Barnacle Betty favor (FavorNPC), and then the way out
 ## to sea. Once Brock has rowed off (`sail_after`), Shellby hands over the
-## Betty's spare sail, which rigs onto Patchy's little boat so it can brave
-## the open-sea current and sail for the islands on the horizon (Voyage,
-## docs/ARCHIPELAGO.md). The gift comes first; the favor talk resumes after.
+## Betty's spare sail, which rigs onto Patchy's little boat and makes it a
+## good deal quicker for the islands on the horizon (docs/ARCHIPELAGO.md).
+## The gift comes first; the favor talk resumes after.
 
 ## WorldState id that makes Shellby offer the sail.
 @export var sail_after: StringName = &"brock_cameo_seen"
@@ -33,5 +33,5 @@ func _after_talk(player: Player) -> void:
 	AudioManager.play_stinger(&"stinger_treasure")
 	if player != null:
 		player.play_tool_anim(&"hold_up", 0.9)
-	Events.hud_message.emit("Betty's spare sail! The little boat can brave the open sea now.", 3.5)
+	Events.hud_message.emit("Betty's spare sail! The little boat flies along now.", 3.5)
 	GameManager.quest_log_refresh()

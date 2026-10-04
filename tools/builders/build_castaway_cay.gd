@@ -35,12 +35,6 @@ func build() -> void:
 	info.music = &"castaway_explore"
 	info.sub_islands = [ISLET]
 	b.add(info, null, "IslandInfo")
-	var env := SkyEnvironment.new()
-	env.preset = SkyEnvironment.Preset.CASTAWAY_DAY
-	env.shadow_distance = 160.0
-	b.add(env, null, "SkyEnvironment")
-	b.add(Ambience.new(), null, "Ambience")
-	b.add(Weather.new(), null, "Weather")
 	terrain = b.group("Terrain")
 	structures = b.group("Structures")
 	gameplay = b.group("Gameplay")
@@ -70,12 +64,7 @@ func build() -> void:
 	_grotto_mischief()
 	_sunken_reef()
 	_beak_rock()
-	_horizon()
-
-	var player := b.instance(PLAYER, null, Vector3(0, 1.25, 33), 0.0, "Player")
-	var rig := b.instance(RIG, null, Vector3(0, 3, 40), 0.0, "CameraRig")
-	rig.set(&"target", player)
-	_opening(player)
+	_opening()
 	b.save("res://world/islands/castaway_cay/castaway_cay.tscn")
 
 
@@ -119,25 +108,11 @@ func _terrain() -> void:
 
 
 func _sea() -> void:
-	# The stylized ocean: endless LOD surface, waves synced with swimming and
-	# the boat, shallows that show the sand, shoreline foam.
-	var ocean := Ocean.new()
-	ocean.swim_area_size = Vector2(560, 560)
-	ocean.swim_depth = 14.0
-	# Gentler bob for swimming than the drawn waves (readable platforming).
-	ocean.gameplay_wave_scale = 0.6
-	b.add(ocean, null, "Ocean")
-	b.add(UnderwaterEffect.new(), null, "UnderwaterEffect")
-	# Sandy seabed so the water shades consistently.
+	# Sandy seabed so the water shades consistently (the ocean is the world's).
 	blk(terrain, Vector3(0, -11, 0), Vector3(560, 1, 560), "sand", Vector3.ZERO, LevelBlock.Shape.BOX, "Seabed")
 
 
 func _sea_regions() -> void:
-	var sea := OpenSea.new()
-	b.add(sea, null, "OpenSea")
-	var voyage := Voyage.new()
-	voyage.home = ISLAND
-	b.add(voyage, null, "Voyage")
 	var home := SeaRegion.new()
 	home.region_name = "Castaway Cay"
 	home.island_id = ISLAND
@@ -190,7 +165,7 @@ func _shipwreck() -> void:
 	# The captain's cabin door: the hub where treasure, parrots and ship parts
 	# are on display.
 	var cabin_door := SceneDoor.new()
-	cabin_door.target_scene = "res://world/hub/captains_cabin.tscn"
+	cabin_door.target_scene = GameManager.get_island_scene(&"captains_cabin")
 	cabin_door.spawn_id = &"door"
 	cabin_door.label = "Captain's cabin"
 	cabin_door.position = Vector3(51.25, 1.2, 40.95)
@@ -315,12 +290,10 @@ func _dock() -> void:
 	coin_trail(Vector3(x, 1.35, 70.4), Vector3(x, 1.35, 74.6), 4, 1.6)
 	var goblet := gem(Vector3(x, 2.2, 83), "castaway_goblet_dock", Palette.GOLD, "goblet")
 	goblet.gem_color = Palette.GEM_RED
-	# Patchy's tiny patched sailboat, tied up beside the dock's far end.
-	var boat := TinyBoat.new()
-	boat.position = Vector3(x + 3.4, 0.0, 80)
-	b.add(boat, g, "TinyBoat")
+	# Where Patchy's tiny patched sailboat ties up, beside the dock's far end
+	# (the boat is the world's: it sails anywhere).
 	var mooring := Marker3D.new()
-	mooring.position = boat.position
+	mooring.position = Vector3(x + 3.4, 0.0, 80)
 	b.add(mooring, g, "BoatMooring")
 
 
@@ -788,8 +761,8 @@ func _barnacle_betty() -> void:
 	npc.reward_message = "Got Shellby's fishing chart!"
 	npc.sail_lines = PackedStringArray([
 		"Saw that croc rowing off with his snout in the air. 'Admiral of the Archipelago', my barnacles!",
-		"Going after him, are you? That scrap of a sail won't get you past the reef current.",
-		"Here: Betty's spare sail. Stitched it myself... mostly. She'll carry you to any island you can see from here.",
+		"Going after him, are you? That scrap of a sail will get you there... about a week behind him.",
+		"Here: Betty's spare sail. Stitched it myself... mostly. She'll fly you to any island you can see from here.",
 	])
 	npc.position = Vector3(-84.5, 1.35, 18.4)
 	b.add(npc, gameplay, "OldShellby")
@@ -1103,18 +1076,6 @@ func _beak_rock() -> void:
 	b.add(x_spot, g, "BeakX")
 
 
-## The rest of the archipelago on the horizon (docs/ARCHIPELAGO.md): every
-## island still to come, as a silhouette in its place in the world.
-func _horizon() -> void:
-	var g := b.group("Horizon")
-	for id in Archipelago.ids():
-		if id == ISLAND or id == ISLET:
-			continue
-		var isl := Archipelago.make_horizon(id)
-		if isl != null:
-			b.add(isl, g, isl.name)
-
-
 # --- Tutorial hints -----------------------------------------------------------------
 
 func _hints() -> void:
@@ -1210,10 +1171,9 @@ func _decorate() -> void:
 	b.add(gun, props, "TowerCannon")
 
 
-func _opening(player: Node3D) -> void:
+func _opening() -> void:
 	var seq := OpeningSequence.new()
 	b.add(seq, null, "OpeningSequence")
-	seq.player = player
 	var cam := Marker3D.new()
 	cam.position = Vector3(6, 5.5, 118)
 	b.add(cam, seq, "VignetteCamera")

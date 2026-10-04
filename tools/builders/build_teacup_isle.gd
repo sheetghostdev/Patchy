@@ -31,9 +31,7 @@ func build() -> void:
 	_grotto()
 	_outside()
 	_hints()
-	horizon([ISLAND])
-	open_sea(root.position, 440.0)
-	spawn(root.transform * Vector3(0, 1.5, -T.saucer_top_r(Vector3.FORWARD) - 5.0), root.transform.basis * Vector3(0, 0, 1))
+	seabed(root.position, 300.0)
 	b.save("res://world/islands/teacup_isle/teacup_isle.tscn")
 
 
@@ -61,7 +59,6 @@ func _landing() -> void:
 	arrival.position = Vector3(0, 1.4, front - 6.0)
 	arrival.rotation.y = PI
 	b.add(arrival, g, "Arrival")
-	boat(g, mooring, 230.0)
 	waters(g, Vector3.ZERO, 85.0, mooring, arrival, "Teacup Isle")
 	_checkpoint(g, "cp_teacup_saucer", Vector3(-4.0, T.SAUCER_TOP, front + 6.0), 0.0, "CpSaucer")
 

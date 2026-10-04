@@ -4,10 +4,11 @@ extends CharacterBody3D
 ## Patchy's patched-up dinghy (spec §75): "[E] Board", steer with the stick
 ## (camera-relative, like walking), jump to hop out near any shore. Floats on
 ## the water with a gentle bob, leans into turns and lifts its bow when it
-## gets going. Remembers where it was left; if Patchy ends up on another
-## island without it, it washes up at that island's dock. Old Shellby's gift
-## of Betty's spare sail (docs/ARCHIPELAGO.md) makes it bigger-sailed and
-## quicker, fit for the open sea (Voyage).
+## gets going. Nothing holds it to one island: the whole sea is one world
+## (WorldDirector), so it sails anywhere the water goes. Remembers where it
+## was left; if Patchy ends up on another island without it, it washes up
+## at that island's dock. Old Shellby's gift of Betty's spare sail
+## (docs/ARCHIPELAGO.md) makes it bigger-sailed and quicker.
 
 @export var boat_id: StringName = &"tiny_boat"
 @export_range(1.0, 30.0, 0.1) var max_speed := 10.5
@@ -18,13 +19,6 @@ extends CharacterBody3D
 @export_range(0.1, 6.0, 0.05) var turn_rate_fast := 1.25
 ## Hull origin sits this far above the water surface.
 @export_range(-1.0, 1.0, 0.01) var float_offset := 0.0
-## The boat is pushed back beyond this distance from `limit_center` (the
-## scene's own island: the open sea between islands is crossed by Voyage).
-@export_range(50.0, 2000.0, 1.0) var world_limit := 330.0
-@export var limit_center := Vector3.ZERO
-## Island scene this boat belongs to: each remembers its own mooring
-## (empty for Castaway Cay, which saved under the plain boat id).
-@export var home_island: StringName = &""
 
 ## WorldState id of Betty's spare sail (Old Shellby's gift).
 const SPARE_SAIL := &"boat_spare_sail"
@@ -287,10 +281,6 @@ func _step(delta: float) -> void:
 	var surface := _surface_height()
 	var v := Player.dir_from_yaw(_yaw) * _speed
 	v.y = (surface + float_offset - global_position.y) * 8.0
-	# The open ocean is endless; this island's waters are not.
-	var flat_pos := Player.flat(global_position - limit_center)
-	if flat_pos.length() > world_limit:
-		v += -flat_pos.normalized() * (flat_pos.length() - world_limit) * 2.0
 	velocity = v
 	move_and_slide()
 	if get_slide_collision_count() > 0 and _speed > 2.0 and _bump_cool <= 0.0:
@@ -347,7 +337,7 @@ func _save() -> void:
 
 
 func _save_id() -> StringName:
-	return boat_id if home_island == &"" else StringName("%s@%s" % [boat_id, home_island])
+	return boat_id
 
 
 func get_yaw() -> float:
@@ -358,6 +348,11 @@ func get_speed() -> float:
 	return _speed
 
 
+## Holds the boat to `speed` at most (sea mist, a headwind).
+func slow_to(speed: float) -> void:
+	_speed = minf(_speed, speed)
+
+
 ## Puts the boat at `at`, heading along `dir`, already under way at `speed`.
 func place(at: Vector3, dir: Vector3, speed := 0.0) -> void:
 	global_position = at
@@ -366,7 +361,7 @@ func place(at: Vector3, dir: Vector3, speed := 0.0) -> void:
 	rotation = Vector3(0, _yaw, 0)
 
 
-## Seats Patchy at the tiller straight away (arriving from a voyage).
+## Seats Patchy at the tiller straight away.
 func board_now(player: Player) -> void:
 	if driver != null:
 		return

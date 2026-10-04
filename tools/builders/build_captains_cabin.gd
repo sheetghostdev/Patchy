@@ -5,7 +5,7 @@ extends RefCounted
 
 const PLAYER := "res://characters/patchy/player.tscn"
 const RIG := "res://systems/camera/camera_rig.tscn"
-const CASTAWAY := "res://world/islands/castaway_cay/castaway_cay.tscn"
+const WORLD := "res://world/sea/world.tscn"
 
 var b: SceneBuilder
 
@@ -66,7 +66,7 @@ func build() -> void:
 	cabin.rack.rotation_degrees.y = 90.0
 	# Way out: back on deck by the wreck.
 	var door := SceneDoor.new()
-	door.target_scene = CASTAWAY
+	door.target_scene = WORLD
 	door.spawn_id = &"cabin_door"
 	door.label = "Go on deck"
 	door.position = Vector3(0, 0, 4.55)

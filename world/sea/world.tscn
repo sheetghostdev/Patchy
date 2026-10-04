@@ -1,0 +1,219 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://world/sea/world_director.gd" id="1_wkwxi"]
+[ext_resource type="Script" path="res://world/environment/sky_environment.gd" id="2_34ad1"]
+[ext_resource type="Script" path="res://world/environment/ambience.gd" id="3_34lp4"]
+[ext_resource type="Script" path="res://world/environment/weather.gd" id="4_1kalf"]
+[ext_resource type="Script" path="res://world/ocean/ocean.gd" id="5_0kepm"]
+[ext_resource type="Script" path="res://world/ocean/underwater_effect.gd" id="6_ywyxu"]
+[ext_resource type="Script" path="res://props/blocks/level_block.gd" id="7_pck1j"]
+[ext_resource type="Script" path="res://world/sea/sea_edge.gd" id="8_30opu"]
+[ext_resource type="PackedScene" path="res://world/islands/castaway_cay/castaway_cay.tscn" id="9_upc2r"]
+[ext_resource type="PackedScene" path="res://world/islands/hat_rock/hat_rock.tscn" id="10_vu6ey"]
+[ext_resource type="PackedScene" path="res://world/islands/bell_atoll/bell_atoll.tscn" id="11_p74yy"]
+[ext_resource type="PackedScene" path="res://world/islands/pinwheel_isle/pinwheel_isle.tscn" id="12_oskkl"]
+[ext_resource type="PackedScene" path="res://world/islands/teacup_isle/teacup_isle.tscn" id="13_6h6yg"]
+[ext_resource type="Script" path="res://world/horizon/horizon_castaway.gd" id="14_hb5lt"]
+[ext_resource type="Script" path="res://world/horizon/horizon_skullcap.gd" id="15_o088m"]
+[ext_resource type="Script" path="res://world/horizon/horizon_cinder_isle.gd" id="16_fyayc"]
+[ext_resource type="Script" path="res://world/horizon/horizon_cannon_cliffs.gd" id="17_5rg5b"]
+[ext_resource type="Script" path="res://world/horizon/horizon_teacup_isle.gd" id="18_nkgn7"]
+[ext_resource type="Script" path="res://world/horizon/horizon_stormpeak.gd" id="19_mw47k"]
+[ext_resource type="Script" path="res://world/horizon/horizon_turtleback.gd" id="20_l2thb"]
+[ext_resource type="Script" path="res://world/horizon/horizon_bell_atoll.gd" id="21_64vxi"]
+[ext_resource type="Script" path="res://world/horizon/horizon_wreck_shoals.gd" id="22_1lpn2"]
+[ext_resource type="Script" path="res://world/horizon/horizon_crabby_coast.gd" id="23_owlc1"]
+[ext_resource type="Script" path="res://world/horizon/horizon_lantern_lagoon.gd" id="24_8iwhx"]
+[ext_resource type="Script" path="res://world/horizon/horizon_pinwheel_isle.gd" id="25_1r5id"]
+[ext_resource type="Script" path="res://world/horizon/horizon_croc_crown.gd" id="26_rs404"]
+[ext_resource type="Script" path="res://world/horizon/horizon_hat_rock.gd" id="27_lvldq"]
+[ext_resource type="Script" path="res://world/sea/mist_bank.gd" id="28_2g13r"]
+[ext_resource type="PackedScene" path="res://characters/patchy/player.tscn" id="29_hq1kb"]
+[ext_resource type="Script" path="res://characters/patchy/player.gd" id="30_adtqh"]
+[ext_resource type="Resource" path="res://resources/settings/patchy_movement.tres" id="31_td37x"]
+[ext_resource type="PackedScene" path="res://systems/camera/camera_rig.tscn" id="32_b2ir2"]
+[ext_resource type="Script" path="res://systems/camera/camera_rig.gd" id="33_1iiuu"]
+[ext_resource type="Resource" path="res://resources/settings/camera_default.tres" id="34_f04lf"]
+[ext_resource type="Script" path="res://world/vehicles/tiny_boat.gd" id="35_t2ytk"]
+
+[node name="World" type="Node3D" unique_id=809011327]
+
+[node name="WorldDirector" type="Node" parent="." unique_id=1559600059]
+script = ExtResource("1_wkwxi")
+
+[node name="SkyEnvironment" type="Node3D" parent="." unique_id=1045756402]
+script = ExtResource("2_34ad1")
+shadow_distance = 160.0
+
+[node name="Ambience" type="Node3D" parent="." unique_id=1124732063]
+script = ExtResource("3_34lp4")
+
+[node name="Weather" type="Node3D" parent="." unique_id=2118234019]
+script = ExtResource("4_1kalf")
+
+[node name="Ocean" type="Node3D" parent="." unique_id=553277956]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 116, 0, -143)
+script = ExtResource("5_0kepm")
+swim_area_size = Vector2(3500, 3500)
+gameplay_wave_scale = 0.6
+
+[node name="UnderwaterEffect" type="CanvasLayer" parent="." unique_id=851389853]
+layer = -1
+script = ExtResource("6_ywyxu")
+
+[node name="SeaFloor" type="StaticBody3D" parent="." unique_id=145046868]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 116, -45, -143)
+script = ExtResource("7_pck1j")
+size = Vector3(3500, 1, 3500)
+surface = "sand"
+
+[node name="SeaEdge" type="Node3D" parent="." unique_id=221105043]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 116, 0, -143)
+script = ExtResource("8_30opu")
+
+[node name="Islands" type="Node3D" parent="." unique_id=2026939036]
+
+[node name="CastawayCay" type="Node3D" parent="Islands" unique_id=2006932202 instance=ExtResource("9_upc2r")]
+
+[node name="HatRock" type="Node3D" parent="Islands" unique_id=1608696170 instance=ExtResource("10_vu6ey")]
+
+[node name="BellAtoll" type="Node3D" parent="Islands" unique_id=1169155295 instance=ExtResource("11_p74yy")]
+
+[node name="PinwheelIsle" type="Node3D" parent="Islands" unique_id=516609566 instance=ExtResource("12_oskkl")]
+
+[node name="TeacupIsle" type="Node3D" parent="Islands" unique_id=1370560187 instance=ExtResource("13_6h6yg")]
+
+[node name="Horizon" type="Node3D" parent="." unique_id=2024253864]
+
+[node name="Horizon_CastawayCay" type="Node3D" parent="Horizon" unique_id=1880620267 groups=["horizon_island"]]
+script = ExtResource("14_hb5lt")
+metadata/island_id = &"castaway_cay"
+
+[node name="Horizon_SkullcapMountain" type="Node3D" parent="Horizon" unique_id=2021063009 groups=["horizon_island"]]
+transform = Transform3D(-0.98476803, 0, 0.17387322, 0, 1, 0, -0.17387322, 0, -0.98476803, 113, 0, -640)
+script = ExtResource("15_o088m")
+metadata/island_id = &"skullcap_mountain"
+
+[node name="Horizon_CinderIsle" type="Node3D" parent="Horizon" unique_id=1887758641 groups=["horizon_island"]]
+transform = Transform3D(-0.76592153, 0, 0.6429341, 0, 1, 0, -0.6429341, 0, -0.76592153, 643, 0, -766)
+script = ExtResource("16_fyayc")
+metadata/island_id = &"cinder_isle"
+
+[node name="Horizon_CannonballCliffs" type="Node3D" parent="Horizon" unique_id=468018156 groups=["horizon_island"]]
+transform = Transform3D(-0.34146613, 0, 0.9398941, 0, 1, 0, -0.9398941, 0, -0.34146613, 545, 0, -198)
+script = ExtResource("17_5rg5b")
+metadata/island_id = &"cannonball_cliffs"
+
+[node name="Horizon_TeacupIsle" type="Node3D" parent="Horizon" unique_id=80080676 groups=["horizon_island"]]
+transform = Transform3D(0.59891576, 0, 1.4836779, 0, 1.6, 0, -1.4836779, 0, 0.59891576, 436, 0, 176)
+script = ExtResource("18_nkgn7")
+metadata/island_id = &"teacup_isle"
+
+[node name="Horizon_Stormpeak" type="Node3D" parent="Horizon" unique_id=1820253370 groups=["horizon_island"]]
+transform = Transform3D(0.24189368, 0, 0.97030276, 0, 1, 0, -0.97030276, 0, 0.24189368, 1067, 0, 266)
+script = ExtResource("19_mw47k")
+metadata/island_id = &"stormpeak"
+
+[node name="Horizon_Turtleback" type="Node3D" parent="Horizon" unique_id=201281452 groups=["horizon_island"]]
+transform = Transform3D(-0.30293006, 0, 1.3155735, 0, 1.35, 0, -1.3155735, 0, -0.30293006, 416, 0, 375)
+script = ExtResource("20_l2thb")
+metadata/island_id = &"turtleback"
+
+[node name="Horizon_BellAtoll" type="Node3D" parent="Horizon" unique_id=1910451766 groups=["horizon_island"]]
+transform = Transform3D(1.8794701, 0, 0.6838072, 0, 2, 0, -0.6838072, 0, 1.8794701, 171, 0, 470)
+script = ExtResource("21_64vxi")
+metadata/island_id = &"bell_atoll"
+
+[node name="Horizon_ShipwreckShoals" type="Node3D" parent="Horizon" unique_id=608093649 groups=["horizon_island"]]
+transform = Transform3D(1.2927955, 0, -0.13667336, 0, 1.3, 0, 0.13667336, 0, 1.2927955, -61, 0, 577)
+script = ExtResource("22_1lpn2")
+metadata/island_id = &"shipwreck_shoals"
+
+[node name="Horizon_CrabbyCoast" type="Node3D" parent="Horizon" unique_id=280820686 groups=["horizon_island"]]
+transform = Transform3D(0.81908506, 0, -0.5736721, 0, 1, 0, 0.5736721, 0, 0.81908506, -367, 0, 524)
+script = ExtResource("23_owlc1")
+metadata/island_id = &"crabby_coast"
+
+[node name="Horizon_LanternLagoon" type="Node3D" parent="Horizon" unique_id=1747677593 groups=["horizon_island"]]
+transform = Transform3D(-0.03569147, 0, -0.9993629, 0, 1, 0, 0.9993629, 0, -0.03569147, -560, 0, -20)
+script = ExtResource("24_8iwhx")
+metadata/island_id = &"lantern_lagoon"
+
+[node name="Horizon_PinwheelIsle" type="Node3D" parent="Horizon" unique_id=1965682881 groups=["horizon_island"]]
+transform = Transform3D(-0.8500187, 0, -1.4722325, 0, 1.7, 0, 1.4722325, 0, -0.8500187, -433, 0, -250)
+script = ExtResource("25_1r5id")
+metadata/island_id = &"pinwheel_isle"
+
+[node name="Horizon_CrocodileCrown" type="Node3D" parent="Horizon" unique_id=2145598765 groups=["horizon_island"]]
+transform = Transform3D(-1.1671394, 0, 0.4475327, 0, 1.25, 0, -0.4475327, 0, -1.1671394, -834, 0, -863)
+script = ExtResource("26_rs404")
+metadata/island_id = &"crocodile_crown"
+
+[node name="Horizon_HatRock" type="Node3D" parent="Horizon" unique_id=18524368 groups=["horizon_island"]]
+transform = Transform3D(-0.9660966, 0, -0.25818095, 0, 1, 0, 0.25818095, 0, -0.9660966, -124, 0, -464)
+script = ExtResource("27_lvldq")
+metadata/island_id = &"hat_rock"
+
+[node name="Mist" type="Node3D" parent="." unique_id=1036181801]
+
+[node name="Mist_SkullcapMountain" type="Node3D" parent="Mist" unique_id=1868867492]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 113, 0, -640)
+script = ExtResource("28_2g13r")
+island_id = &"skullcap_mountain"
+
+[node name="Mist_CinderIsle" type="Node3D" parent="Mist" unique_id=940892951]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 643, 0, -766)
+script = ExtResource("28_2g13r")
+island_id = &"cinder_isle"
+
+[node name="Mist_CannonballCliffs" type="Node3D" parent="Mist" unique_id=1605482958]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 545, 0, -198)
+script = ExtResource("28_2g13r")
+island_id = &"cannonball_cliffs"
+
+[node name="Mist_Stormpeak" type="Node3D" parent="Mist" unique_id=619621857]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1067, 0, 266)
+script = ExtResource("28_2g13r")
+island_id = &"stormpeak"
+
+[node name="Mist_Turtleback" type="Node3D" parent="Mist" unique_id=298430964]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 416, 0, 375)
+script = ExtResource("28_2g13r")
+island_id = &"turtleback"
+
+[node name="Mist_ShipwreckShoals" type="Node3D" parent="Mist" unique_id=187232452]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -61, 0, 577)
+script = ExtResource("28_2g13r")
+island_id = &"shipwreck_shoals"
+
+[node name="Mist_CrabbyCoast" type="Node3D" parent="Mist" unique_id=1788598248]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -367, 0, 524)
+script = ExtResource("28_2g13r")
+island_id = &"crabby_coast"
+
+[node name="Mist_LanternLagoon" type="Node3D" parent="Mist" unique_id=979094855]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -560, 0, -20)
+script = ExtResource("28_2g13r")
+island_id = &"lantern_lagoon"
+
+[node name="Mist_CrocodileCrown" type="Node3D" parent="Mist" unique_id=697816563]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -834, 0, -863)
+script = ExtResource("28_2g13r")
+island_id = &"crocodile_crown"
+
+[node name="Player" type="CharacterBody3D" parent="." unique_id=1743322541 groups=["player"] instance=ExtResource("29_hq1kb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 33)
+collision_layer = 2
+collision_mask = 1033
+script = ExtResource("30_adtqh")
+settings = ExtResource("31_td37x")
+
+[node name="CameraRig" type="Node3D" parent="." unique_id=957509536 node_paths=PackedStringArray("target") instance=ExtResource("32_b2ir2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 40)
+script = ExtResource("33_1iiuu")
+settings = ExtResource("34_f04lf")
+target = NodePath("../Player")
+
+[node name="TinyBoat" type="CharacterBody3D" parent="." unique_id=271690750]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -48.6, 0, 80)
+script = ExtResource("35_t2ytk")

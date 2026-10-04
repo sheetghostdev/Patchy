@@ -21,7 +21,7 @@ meet The Wind Waker's sea), is in [docs/ARCHIPELAGO.md](docs/ARCHIPELAGO.md).
 
 ```bash
 godot --path .                          # title screen -> New Game / Continue
-godot --path . res://world/islands/castaway_cay/castaway_cay.tscn   # jump straight in
+godot --path . res://world/sea/world.tscn                           # jump straight in
 godot --path . res://tests/scenes/movement_test.tscn                # movement lab
 godot --path . res://tests/scenes/camera_test.tscn                  # camera lab
 godot --path . res://props/prop_gallery.tscn                        # props kit
@@ -107,7 +107,8 @@ npcs/               Parrots; islanders (NPC base, FavorNPC quest givers, Lookout
                     and their models (turtle, monkey, otter, Brock the Croc)
 collectibles/       Coins, gems, treasure kinds, coin trails
 world/              Terrain (Plateau); ocean (stylized Ocean, underwater effect,
-                    sea regions, open-sea current); sea/ (bell buoy, floating
+                    sea regions, tide); sea/ (the one world: WorldDirector,
+                    sea mist, the chart's edge; bell buoy, floating
                     barrels, dolphins, fish schools); islands (Castaway Cay and
                     Driftwood Key, IslandInfo, IslandZone); horizon/ (the
                     Archipelago registry and far-island silhouettes); hub (captain's
@@ -171,18 +172,26 @@ tools/              Scene builders, photo tool, project setup, audio generator
   rebinding, title screen and debug menu.
   - Gameplay talks to it mostly through `Events` signals.
   - `QuestLog` derives the quest page from progress.
-- **The archipelago** (`world/horizon/`, docs/ARCHIPELAGO.md):
-  - `Archipelago` says where every island lies, how it faces, what it takes
-    to sail there (its gate), and how far its waters reach.
-  - Each island is its own scene in its true place, built by a
-    `tools/builders/build_*.gd` on `IslandBuilder` (sky, sea, waters, boat,
-    horizon, spawn).
-  - The others stand on its horizon as `HorizonIsland` silhouettes. Hat
-    Rock's silhouette, with `playable` set, is also its real rock.
-  - `Voyage` (one per island scene) casts off when the boat leaves the
-    island's waters with another island dead ahead. `GameManager.
-    voyage_blocker()` names the gate if it can't, and IslandInfo seats
-    Patchy in the boat off the new shore.
+- **The archipelago** (`world/horizon/`, `world/sea/`, docs/ARCHIPELAGO.md):
+  - One world, `world/sea/world.tscn` (`tools/builders/build_world.gd`):
+    the sky, one ocean over the whole chart, Patchy, his camera and his
+    boat, and every island in its true place. No walls between islands and
+    no scene changes: sail (or swim) from any island to any other.
+  - `Archipelago` says where every island lies, how it faces and how far
+    its waters reach.
+  - Each built island is a chunk: its own scene, built in place by a
+    `tools/builders/build_*.gd` on `IslandBuilder` (just the island, its
+    waters, mooring and seabed), instanced into the world.
+  - `WorldDirector` places Patchy on load (checkpoint, spawn point or the
+    beach), wakes the islands near him and puts far ones to sleep (no
+    processing, no physics, hidden) behind their `HorizonIsland`
+    silhouettes, which grow a little with distance so far islands still
+    read. It tracks the waters he's in (`SeaRegion`): the current island,
+    the discovery banner, the music and the landing as respawn point.
+  - Islands not built yet are wrapped in sea mist (`MistBank`), and past
+    the edge of the chart the fog turns a boat round (`SeaEdge`).
+  - Hat Rock's silhouette, with `playable` set, is also its real rock (the
+    same goes for the other built islands).
 - **Treasure maps and ship parts** are registries
   (`systems/treasure/`): `TreasureMaps` holds each map's island, title,
   riddle, dig spot and sketch (landmark doodles in the island's own x/z
@@ -198,13 +207,15 @@ tools/              Scene builders, photo tool, project setup, audio generator
     list that is still locked.
   - Unique treasure that only appears later (dig spots, rewards) counts
     toward an island's totals through the `treasure_source` group.
-- **Islands**: a scene with an `IslandInfo` node. It registers parrot and
-  treasure totals, places Patchy (saved checkpoint, arrival point or
-  default spawn), then announces the island and starts its music after
-  any opening sequence.
-  - Smaller islands in the same scene use `IslandZone`.
-  - `SeaRegion` circles define swimmable water. Beyond them, `OpenSea`
-    pushes swimmers back, so the boat is needed.
+- **Islands**: a chunk scene with an `IslandInfo` node at its root. It
+  registers parrot and treasure totals; in the world the `WorldDirector`
+  does the rest from it (music, the discovery banner). A scene on its own
+  (the captain's cabin) places Patchy (saved checkpoint or spawn point),
+  then announces itself and starts its music after any opening sequence.
+  - Smaller islands in the same chunk use `IslandZone`.
+  - `SeaRegion` circles are an island's own waters: the current island,
+    where Patchy can hop out of the boat, and where a stray boat washes
+    up. The sea beyond them is open.
 - **Audio** (`AudioManager`, driven by `audio/audio_manifest.json`): pooled
   SFX, cross-faded music and stingers.
   - A track's layers (`layer_of` in the manifest) play sample-locked to
@@ -255,11 +266,13 @@ and heights for checking any change by feel.
 
 ```bash
 # Regenerate procedural scenes (labs, islands, hub) from code:
-tools/builders/build.sh movement_lab camera_lab castaway_cay captains_cabin hat_rock bell_atoll pinwheel_isle teacup_isle
+# (the islands first: the world instances them)
+tools/builders/build.sh movement_lab camera_lab castaway_cay captains_cabin hat_rock bell_atoll pinwheel_isle teacup_isle world
 
 # Render screenshots on a headless machine (xvfb + Vulkan). flags= marks
 # WorldState ids, progress=demo fakes mid-game progress, hud=0 hides the HUD:
-tools/photo/shoot.sh scene=res://world/islands/castaway_cay/castaway_cay.tscn \
+# player= puts Patchy somewhere else in the world (its islands wake round him):
+tools/photo/shoot.sh scene=res://world/sea/world.tscn \
     flags=castaway_intro_seen out=/tmp/shot_%d.png "cams=0,120,160>0,0,0;30,10,62>50,3,42"
 
 # UI states (pause pages, a treasure map unrolled at zoom 1.5):
@@ -279,9 +292,9 @@ tools/photo/shoot.sh scene=res://tests/npc_gallery.tscn hud=0 "cams=-0.6,1.3,3.6
 # Regenerate the original sound effects and music:
 python3 tools/audio/generate_audio.py
 
-# CPU cost of a level (logic + physics, headless). Castaway Cay: about 3 ms
-# per frame and a 2.1 s load (0.4 s of it builds the far-off islands):
-godot --headless --path . --fixed-fps 60 res://tools/perf_probe.tscn -- scene=res://world/hub/captains_cabin.tscn
+# CPU cost of a level (logic + physics, headless). The whole world: about
+# 3.7 ms per frame on Castaway Cay and a 2.4 s load:
+godot --headless --path . --fixed-fps 60 res://tools/perf_probe.tscn -- scene=res://world/sea/world.tscn
 ```
 
 ## Tests
@@ -293,8 +306,8 @@ An optional argument after `--` filters test names.
 godot --headless --path . --fixed-fps 60 res://tests/run_movement_tests.tscn   # 53 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_camera_tests.tscn     # 21 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_gameplay_tests.tscn   # 68 checks
-godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 162 checks
-godot --headless --path . --fixed-fps 60 res://tests/run_voyage_tests.tscn     # 14 checks
+godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 158 checks
+godot --headless --path . --fixed-fps 60 res://tests/run_world_tests.tscn      # 47 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_hat_rock_tests.tscn   # 43 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_bell_atoll_tests.tscn # 35 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_pinwheel_isle_tests.tscn # 23 checks
@@ -323,11 +336,16 @@ What each suite covers:
   - Crackers joining after the first rescue, his warnings and his nose
     for secrets;
   - the cabin hub's displays.
-- **Voyage**: real scene changes. Sail from Castaway Cay to Hat Rock with
-  Betty's spare sail and home again, arriving at the tiller, and on to
-  Bell Atoll, Pinwheel Isle and Teacup Isle. The little
-  patched sail is turned back by the current, and islands not built yet
-  are wrapped in sea mist.
+- **World**: the one sea. Every built island in its place with a
+  silhouette for far off; far islands asleep and near ones awake; sailing
+  the little patched boat from Castaway Cay to Hat Rock with no scene
+  change (discovery, the current island, the landing as respawn point,
+  uncharted waters in between) and straight in to Bell Atoll, Pinwheel
+  Isle and Teacup Isle; no current holding a swimmer back and no limit on
+  the boat; the mist round an island not built yet; the fog at the
+  chart's edge turning the boat round; Bell Atoll's tide going straight
+  back out when you sail off; fast travel, Continue onto Hat Rock and the
+  captain's cabin and back.
 - **Hat Rock**: played through on the real island: up the boulders to the
   brim, the whole spiral ledge (jumping its gaps, bracing through the
   gusts), a gust blowing Patchy off when he doesn't brace, the buckle
@@ -363,7 +381,7 @@ What each suite covers:
   - the Barnacle Betty side quest (drag marks, the ramp and ledge grab up
     Gull Rock, the three-parrot lift, Shellby's chart and its X), Tok's
     parrot tips and Pip's clam;
-  - sailing to Driftwood Key and the open-sea current;
+  - sailing to Driftwood Key;
   - the crossing: ramming a barrel for coins, the dolphin escort and
     hopping out at Gull Bar;
   - the attachment chain: lantern, braziers, shovel, the treasure map's spot,
@@ -376,14 +394,12 @@ What each suite covers:
   - diving to the Sunken Sloop and opening its chest underwater;
   - the sloop's map of Beak Rock: the sketch matches the world, the X lies
     where the stone beak points, and digging there turns up a crown;
-  - the archipelago on the horizon: every island in its place, out of the
-    boat's reach, with nothing to bump into;
   - a check that no pickup is buried or floating.
 
 ## Content
 
-**The archipelago.** Every island still to come stands on the horizon
-where it lies, distinct even a kilometer off (docs/ARCHIPELAGO.md):
+**The archipelago.** Every island stands where it lies on one open sea,
+distinct even a kilometer off (docs/ARCHIPELAGO.md):
 
 - Hat Rock, a sea stack shaped like a pirate's hat.
 - Skullcap Mountain, a skull wearing a jungle cap, with a waterfall
@@ -438,13 +454,14 @@ an X. It's Beak Rock on Driftwood Key, sailed past on the way to the tower
 parrot, and the crown is buried where the beak points. Dive with the dive or crouch button and rise with jump; chests and
 chats work underwater too.
 
-**Sailing the archipelago.** Once Brock has rowed off, Old Shellby rigs
-Betty's spare sail on the little boat: bigger, red-striped and faster.
-With it, steer out past Castaway Cay's waters with an island dead ahead
-and the voyage begins: "Sailing for Hat Rock...", a short iris card while
-the next island loads, then the boat comes in off the new shore with
-Patchy at the tiller. Each island is its own scene in its true place, so
-the horizon looks right from every shore.
+**Sailing the archipelago.** The islands are all on one sea. Point the
+little boat at any island you can see and sail: no loading, no walls,
+and the island comes up out of the sea as you near it, its name on a
+banner as you reach its waters. Once Brock has rowed off, Old Shellby
+rigs Betty's spare sail on the boat: bigger, red-striped and a good deal
+faster. Islands still being built hide in a bank of sea mist that turns
+the boat gently away, and out past the edge of the chart the fog turns
+you round.
 
 **Hat Rock**, the giant tricorne north of Castaway Cay, is the first port
 of call. From the jetty, boulders lead up to the brim, and a ledge spirals

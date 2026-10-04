@@ -2,9 +2,12 @@ class_name IslandBuilder
 extends RefCounted
 ## Shared kit for the island scene builders (tools/builders/build_*.gd):
 ## terrain plateaus and level blocks, coins, gems, hearts, crabs, cages and
-## props, plus the scaffolding every island scene in the archipelago needs
-## (docs/ARCHIPELAGO.md): sky and weather, the ocean, its waters and the
-## voyage out, the boat, the horizon, Patchy and his camera.
+## props, plus the scaffolding every island of the archipelago needs
+## (docs/ARCHIPELAGO.md). An island scene is a chunk of the one sea
+## (world/sea/world.tscn, tools/builders/build_world.gd): just the island,
+## built in place at its Archipelago position, with its waters (SeaRegion),
+## mooring and a sandy seabed round it. The sky, the ocean, the boat,
+## Patchy and the other islands are the world's.
 
 const PLAYER := "res://characters/patchy/player.tscn"
 const RIG := "res://systems/camera/camera_rig.tscn"
@@ -22,9 +25,9 @@ var enemies: Node3D
 
 # --- Scaffolding (islands of the archipelago) --------------------------------------
 
-## Starts an island scene: its IslandInfo, sky, ambience, weather, and the
-## usual groups, all under `root` (the island's own frame: Archipelago
-## position, facing Castaway Cay) when given.
+## Starts an island chunk: its IslandInfo and the usual groups, all under
+## `root` (the island's own frame: Archipelago position, facing Castaway
+## Cay) when given.
 func begin(scene_name: String, id: StringName, display: String, music: StringName, root: Node3D = null) -> IslandInfo:
 	island_id = id
 	b = SceneBuilder.new(scene_name)
@@ -33,12 +36,6 @@ func begin(scene_name: String, id: StringName, display: String, music: StringNam
 	info.display_name = display
 	info.music = music
 	b.add(info, null, "IslandInfo")
-	var env := SkyEnvironment.new()
-	env.preset = SkyEnvironment.Preset.CASTAWAY_DAY
-	env.shadow_distance = 160.0
-	b.add(env, null, "SkyEnvironment")
-	b.add(Ambience.new(), null, "Ambience")
-	b.add(Weather.new(), null, "Weather")
 	if root != null:
 		b.add(root, null, root.name)
 	terrain = b.group("Terrain", root)
@@ -59,29 +56,19 @@ func island_root(id: StringName, node_name: String) -> Node3D:
 	return root
 
 
-## The sea round the island: swimmable ocean, sandy seabed, the open-sea
-## current beyond its waters, and the voyage out to the other islands.
-func open_sea(center: Vector3, size: float = 380.0) -> void:
-	var ocean := Ocean.new()
-	ocean.position = Vector3(center.x, 0.0, center.z)
-	ocean.swim_area_size = Vector2(size, size)
-	ocean.swim_depth = 14.0
-	ocean.gameplay_wave_scale = 0.6
-	b.add(ocean, null, "Ocean")
-	b.add(UnderwaterEffect.new(), null, "UnderwaterEffect")
+## Sandy seabed round the island (world `center`), 11 m down, shelving off
+## to the deep sea floor beyond: the shallows shade consistently and
+## there's a bottom to dive to.
+func seabed(center: Vector3, size: float = 380.0) -> void:
 	var bed := LevelBlock.new()
 	bed.size = Vector3(size, 1, size)
 	bed.surface = "sand"
 	bed.position = Vector3(center.x, -11.0, center.z)
 	b.add(bed, null, "Seabed")
-	b.add(OpenSea.new(), null, "OpenSea")
-	var voyage := Voyage.new()
-	voyage.home = island_id
-	b.add(voyage, null, "Voyage")
 
 
-## The island's waters (where Patchy can hop out of the boat and the
-## open-sea current doesn't reach), its mooring and landing point.
+## The island's waters (where it's the current island and Patchy can hop
+## out of the boat), its mooring and landing point.
 func waters(parent: Node, center: Vector3, radius: float, dock: Marker3D, arrival: Marker3D, region_name: String) -> SeaRegion:
 	var region := SeaRegion.new()
 	region.region_name = region_name
@@ -92,45 +79,6 @@ func waters(parent: Node, center: Vector3, radius: float, dock: Marker3D, arriva
 	region.arrival = arrival
 	b.add(region, parent, "SeaRegion")
 	return region
-
-
-## Patchy's boat moored at `dock`, kept within `limit` m of the island.
-func boat(parent: Node, dock: Marker3D, limit: float) -> TinyBoat:
-	var boat := TinyBoat.new()
-	boat.home_island = island_id
-	boat.limit_center = Archipelago.world_position(island_id)
-	boat.world_limit = limit
-	boat.position = dock.position
-	boat.rotation = dock.rotation
-	b.add(boat, parent, "TinyBoat")
-	return boat
-
-
-## Every other island's silhouette, in its place on the horizon.
-func horizon(skip: Array[StringName]) -> void:
-	var g := b.group("Horizon")
-	for id in Archipelago.ids():
-		if id in skip:
-			continue
-		var isl := Archipelago.make_horizon(id)
-		if isl != null:
-			b.add(isl, g, isl.name)
-
-
-## Patchy and his camera at `pos` (world), facing `face`, plus a "dock"
-## spawn point there for scene changes that ask for one.
-func spawn(pos: Vector3, face: Vector3) -> Node3D:
-	var yaw := rad_to_deg(Player.yaw_of(face))
-	var player := b.instance(PLAYER, null, pos, yaw, "Player")
-	var rig := b.instance(RIG, null, pos + Vector3(0, 3, 0) - face.normalized() * 7.0, yaw, "CameraRig")
-	rig.set(&"target", player)
-	var dock := Marker3D.new()
-	dock.position = pos
-	dock.rotation.y = Player.yaw_of(face)
-	dock.set_meta(&"spawn_id", &"dock")
-	b.add(dock, null, "SpawnDock")
-	dock.add_to_group(&"spawn_point", true)
-	return player
 
 
 # --- Pieces -------------------------------------------------------------------------
