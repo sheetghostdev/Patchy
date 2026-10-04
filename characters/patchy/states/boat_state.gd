@@ -1,7 +1,8 @@
 extends PlayerState
 ## Riding a boat (spec §75): Patchy sits in the vehicle's seat and the stick
 ## steers it. The state drives the vehicle inside Patchy's own physics tick
-## so he never lags a frame behind his seat. Jump hops off.
+## so he never lags a frame behind his seat. Jump hops off; with a bow
+## cannon fitted (ShipUpgrades), {tool_primary} or attack fires it.
 
 const BOARD_TIME := 0.32
 
@@ -54,6 +55,11 @@ func physics_update(delta: float) -> void:
 	p.velocity = vehicle.get(&"velocity")
 	p.facing = Player.flat(-seat.basis.z).normalized()
 	p.anim_state = &"boat_sit"
+	if _board_t >= BOARD_TIME and _view == null and ShipUpgrades.has_cannon():
+		for action: StringName in [&"tool_primary", &"attack"]:
+			if p.input.is_buffered(action, 0.1):
+				p.input.consume(action)
+				vehicle.call(&"fire_cannon")
 	if _board_t >= BOARD_TIME and _view == null and p.input.is_buffered(&"jump", s.jump_buffer_time):
 		if vehicle.call(&"can_disembark"):
 			p.input.consume(&"jump")

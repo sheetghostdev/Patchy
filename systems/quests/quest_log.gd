@@ -37,7 +37,7 @@ static func build() -> Array:
 		still.append("the tiller (sunk off the end of the pier)")
 	var asked := WorldState.is_completed(&"castaway_dinghy_quest")
 	q.append({"title": "A Boat of Your Own",
-		"description": "Gus's old dinghy is yours. She's moored at the end of the pier." if dinghy
+		"description": "Gus's old dinghy is yours. She's moored at the end of the pier, and Gus will fit her out for gold." if dinghy
 			else ("Gus the shipwright will fix up his old dinghy for you. Still to find: %s." % " and ".join(PackedStringArray(still)) if asked and not still.is_empty()
 			else ("Take the sail and the tiller to Gus at the shipyard." if asked
 			else "Gus the shipwright in Barnacle Bay might have a boat for a castaway.")),

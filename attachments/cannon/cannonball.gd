@@ -11,6 +11,9 @@ var velocity := Vector3.ZERO
 var shooter: Node3D
 ## Enemy shots hurt Patchy in the blast and spare other enemies.
 var hurts_player := false
+## Shots over the sea (the bow cannon, fort guns) splash down when they
+## reach it rather than sinking to the sea floor.
+var sea_level := -INF
 var _t := 0.0
 var _mesh: MeshInstance3D
 
@@ -39,6 +42,12 @@ func _physics_process(delta: float) -> void:
 	var hit := get_world_3d().direct_space_state.intersect_ray(q)
 	if not hit.is_empty():
 		_burst(hit.position)
+		return
+	if to.y < sea_level:
+		var at := Vector3(to.x, sea_level, to.z)
+		VFX.splash(get_tree().current_scene, at, 1.4)
+		AudioManager.play(&"splash_small", at, -4.0, randf_range(0.85, 1.0))
+		queue_free()
 		return
 	global_position = to
 	_mesh.rotation += Vector3(9.0, 4.0, 0.0) * delta

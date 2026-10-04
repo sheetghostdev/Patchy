@@ -85,6 +85,15 @@ func lose_gold(amount: int) -> void:
 	gold_changed.emit(gold_value)
 
 
+## Pays `amount` (a shop): false, and nothing taken, if there isn't enough.
+func spend_gold(amount: int) -> bool:
+	if amount < 0 or gold_value < amount:
+		return false
+	gold_value -= amount
+	gold_changed.emit(gold_value)
+	return true
+
+
 # --- Attachments --------------------------------------------------------------
 
 func unlock_attachment(id: StringName) -> void:

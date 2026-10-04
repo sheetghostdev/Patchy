@@ -7,26 +7,27 @@ class_name Archipelago
 ## Castaway Cay (plus "turn" degrees for the ones that read best side-on)
 ## and drawn up to "scale" times life size far out at sea, where a small
 ## island would otherwise vanish (Wind Waker's trick). "waters" is how far
-## an island's own sea reaches (when its chunk wakes). "gate" names what
-## keeps the boat out of an island's waters until the ship's ready (sea
-## hazards, still to come). The sea chart (UIChartData) draws them on the
+## an island's own sea reaches (when its chunk wakes). "hazard" is the sea
+## hazard round it (SeaHazard: the storm, Brock's fort guns, the boiling
+## sea, the reef maze), which keeps a boat out until Patchy's ship has the
+## upgrade that answers it. The sea chart (UIChartData) draws them on the
 ## same bearings.
 
 const ISLANDS := [
 	{"id": &"castaway_cay", "at": Vector2(0, 0), "waters": 250.0, "horizon": "res://world/horizon/horizon_castaway.gd"},
 	{"id": &"driftwood_key", "at": Vector2(-130, 140), "horizon": ""},
-	{"id": &"skullcap_mountain", "gate": &"jolly_patch", "at": Vector2(113, -640), "horizon": "res://world/horizon/horizon_skullcap.gd"},
-	{"id": &"cinder_isle", "gate": &"ship_cannons", "at": Vector2(643, -766), "horizon": "res://world/horizon/horizon_cinder_isle.gd"},
-	{"id": &"cannonball_cliffs", "gate": &"jolly_patch", "at": Vector2(545, -198), "horizon": "res://world/horizon/horizon_cannon_cliffs.gd"},
+	{"id": &"skullcap_mountain", "at": Vector2(113, -640), "horizon": "res://world/horizon/horizon_skullcap.gd"},
+	{"id": &"cinder_isle", "hazard": &"boiling_sea", "at": Vector2(643, -766), "horizon": "res://world/horizon/horizon_cinder_isle.gd"},
+	{"id": &"cannonball_cliffs", "hazard": &"fort_guns", "at": Vector2(545, -198), "horizon": "res://world/horizon/horizon_cannon_cliffs.gd"},
 	{"id": &"teacup_isle", "at": Vector2(436, 176), "scale": 1.6, "horizon": "res://world/horizon/horizon_teacup_isle.gd"},
-	{"id": &"stormpeak", "gate": &"iron_hull", "at": Vector2(1067, 266), "horizon": "res://world/horizon/horizon_stormpeak.gd"},
+	{"id": &"stormpeak", "hazard": &"storm", "at": Vector2(1067, 266), "horizon": "res://world/horizon/horizon_stormpeak.gd"},
 	{"id": &"turtleback", "at": Vector2(416, 375), "turn": 55.0, "scale": 1.35, "horizon": "res://world/horizon/horizon_turtleback.gd"},
 	{"id": &"bell_atoll", "at": Vector2(171, 470), "scale": 2.0, "horizon": "res://world/horizon/horizon_bell_atoll.gd"},
 	{"id": &"shipwreck_shoals", "at": Vector2(-61, 577), "scale": 1.3, "horizon": "res://world/horizon/horizon_wreck_shoals.gd"},
 	{"id": &"crabby_coast", "at": Vector2(-367, 524), "horizon": "res://world/horizon/horizon_crabby_coast.gd"},
 	{"id": &"lantern_lagoon", "at": Vector2(-560, -20), "horizon": "res://world/horizon/horizon_lantern_lagoon.gd"},
 	{"id": &"pinwheel_isle", "at": Vector2(-433, -250), "scale": 1.7, "horizon": "res://world/horizon/horizon_pinwheel_isle.gd"},
-	{"id": &"crocodile_crown", "gate": &"full_ship", "at": Vector2(-834, -863), "turn": -65.0, "scale": 1.25, "horizon": "res://world/horizon/horizon_croc_crown.gd"},
+	{"id": &"crocodile_crown", "hazard": &"reef", "at": Vector2(-834, -863), "turn": -65.0, "scale": 1.25, "horizon": "res://world/horizon/horizon_croc_crown.gd"},
 	{"id": &"hat_rock", "at": Vector2(-124, -464), "horizon": "res://world/horizon/horizon_hat_rock.gd"},
 ]
 

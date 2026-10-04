@@ -541,9 +541,13 @@ func _shipyard() -> void:
 		"The sail AND the tiller! You're handier than you look.",
 		"Stand back. This'll take a minute of hammering...",
 	])
-	gus.after_lines = PackedStringArray([
-		"She's yours now. Treat her kindly and she'll take you to any island you can see.",
+	gus.launch_lines = PackedStringArray([
+		"There! She's yours. Treat her kindly and she'll take you to any island you can see.",
 		"Mind, it's a long swim if you sink her. The open sea's no place for paddling.",
+		"Come back with a bit of gold and I'll fit her out proper: a quicker sail, a tougher hull, even a cannon.",
+	])
+	gus.after_lines = PackedStringArray([
+		"Back again? Let's see what she needs. Faster, tougher, louder... or just prettier.",
 	])
 	gus.position = Vector3(-25.4, SAND, 34.0)
 	b.add(gus, gameplay, "Gus")

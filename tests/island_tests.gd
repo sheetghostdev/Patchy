@@ -83,6 +83,8 @@ func converse(npc: NPC) -> bool:
 			return player.state_id != &"locked"
 		if ui != null and i % 20 == 10 and ui.call(&"is_dialogue_active"):
 			ui.get(&"hud").get(&"dialogue").call(&"advance")
+		if ui != null and i % 20 == 15 and (ui as UIRoot).shipyard.is_open:
+			(ui as UIRoot).shipyard.close()
 	return false
 
 

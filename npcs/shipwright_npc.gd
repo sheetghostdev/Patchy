@@ -5,7 +5,9 @@ extends NPC
 ## Patchy's first boat. Gus has the hull sound but it wants its sail and its
 ## tiller, and the village has scattered both: bring them to him and he
 ## fixes it up on the spot. From then on it's Patchy's, moored at the pier,
-## and the whole sea is open to him.
+## and the whole sea is open to him; talk to Gus again and he opens his
+## shipyard (UIShipyard): a faster sail, a tougher hull, a bow cannon, and
+## new colors, flags and figureheads.
 ## Flags: `quest_flag` once asked, `parts` (WorldState ids picked up by
 ## QuestItemPickups), `fixed_flag` once the dinghy's in the water.
 
@@ -16,11 +18,17 @@ extends NPC
 @export var part_hints: PackedStringArray = PackedStringArray()
 @export var waiting_lines: PackedStringArray = PackedStringArray()
 @export var fixing_lines: PackedStringArray = PackedStringArray()
+## Said once she's fixed, as Patchy gets her.
+@export var launch_lines: PackedStringArray = PackedStringArray()
+## Said before the shipyard opens, each visit once the dinghy's fixed.
 @export var after_lines: PackedStringArray = PackedStringArray()
+
+var _yard_next := false
 
 
 func get_lines() -> PackedStringArray:
-	if _flag(fixed_flag):
+	_yard_next = _flag(fixed_flag)
+	if _yard_next:
 		return after_lines
 	if not _flag(quest_flag):
 		return lines
@@ -50,6 +58,12 @@ func _after_talk(player: Player) -> void:
 	if not _flag(quest_flag):
 		WorldState.mark_completed(quest_flag)
 		GameManager.quest_log_refresh()
+	if _yard_next:
+		_yard_next = false
+		var ui := UIRoot.instance
+		if ui != null:
+			await ui.open_shipyard()
+		return
 	if _flag(fixed_flag) or not missing().is_empty():
 		return
 	# Everything's here: a few minutes' hammering, and she floats.
@@ -63,7 +77,12 @@ func _after_talk(player: Player) -> void:
 	AudioManager.play_stinger(&"stinger_treasure")
 	if player != null:
 		player.play_tool_anim(&"hold_up", 0.9)
-	Events.hud_message.emit("The old dinghy's yours! She's waiting at the end of the pier.", 3.5)
+	var ui := UIRoot.instance
+	if ui != null and not launch_lines.is_empty():
+		var arr: Array[String] = []
+		arr.assign(Array(launch_lines))
+		await ui.show_dialogue(display_name, arr)
+	Events.hud_message.emit("The old dinghy's yours! She's waiting at the end of the pier. (Gus can fit her out, too.)", 3.5)
 
 
 func _flag(id: StringName) -> bool:

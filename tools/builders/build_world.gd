@@ -7,8 +7,9 @@ extends IslandBuilder
 ##  - Every built island as a chunk (its own scene, instanced in place),
 ##    and every island's silhouette for when it's far off (WorldDirector
 ##    swaps between them and keeps the far islands asleep).
-##  - Sea mist round the islands still to be built, and the fog at the edge
-##    of the chart that turns a boat round.
+##  - Sea mist round the islands still to be built, the sea hazards round
+##    the late islands (each answered by a ship upgrade), and the fog at the
+##    edge of the chart that turns a boat round.
 ##  - Patchy washed up on Castaway Cay's beach, his camera, and the boat at
 ##    Barnacle Bay's pier (his once Gus has fixed it up).
 ##   tools/builders/build.sh castaway_cay hat_rock ... world  (islands first)
@@ -43,6 +44,7 @@ func build() -> void:
 	_islands()
 	_horizon()
 	_mist()
+	_hazards()
 	_patchy()
 	b.save(OUT)
 
@@ -104,6 +106,15 @@ func _mist() -> void:
 		mist.island_id = id
 		mist.position = Archipelago.world_position(id)
 		b.add(mist, g, "Mist_%s" % String(id).to_pascal_case())
+
+
+## The storm, Brock's fort guns, the boiling sea and the reef maze.
+func _hazards() -> void:
+	var g := b.group("Hazards")
+	for id in Archipelago.ids():
+		var h := SeaHazard.for_island(id)
+		if h != null:
+			b.add(h, g, "Hazard_%s" % String(id).to_pascal_case())
 
 
 func _patchy() -> void:

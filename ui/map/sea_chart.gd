@@ -204,6 +204,9 @@ func _draw_island(isl: Dictionary) -> void:
 	var id: StringName = isl["id"]
 	var c := island_center(isl)
 	var r := island_radius(isl)
+	if Archipelago.get_island(id).has("hazard"):
+		# A sea hazard round it (SeaHazard): a ring of red warning dashes.
+		_dashed_poly(UIIcons.ellipse_pts(c, r * 1.8, r * 1.8, 36), Color(P.RED_DARK, 0.6), 3.0)
 	if id in sighted:
 		_draw_pencilled(isl)
 		return

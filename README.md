@@ -70,7 +70,7 @@ Debug keys:
 | Wall kick | Jump while sliding down a wall. You can't kick the same wall twice in a row. |
 | Hook swing | Jump at a glowing ring with the hook equipped. Pump with the stick; jump to release. |
 | Swimming | Surface paddle or dive under. |
-| Boat | Board Patchy's dinghy with E and steer with the stick. Jump hops out near shore. Once an island is discovered, the pause-menu sea chart offers "Sail to ..." fast travel. |
+| Boat | Board Patchy's dinghy with E and steer with the stick. Jump hops out near shore. With Gus's bow cannon fitted, right mouse or RT (or attack) fires it. Once an island is discovered, the pause-menu sea chart offers "Sail to ..." fast travel. |
 | Brace | Crouch on the ground and gusts of wind can't blow you over. |
 | Spyglass | Hold V (or D-pad up), on foot or at the tiller, and aim with the camera. Hold a far island in the middle of the glass and it's pencilled onto the sea chart. |
 
@@ -172,7 +172,8 @@ tools/              Scene builders, photo tool, project setup, audio generator
 - **UI** (`ui/ui_root.tscn`, autoload `UI`): HUD (hearts, treasure, parrots,
   equipped attachment, prompts, toasts, island banner), dialogue
   (`await UI.show_dialogue(...)`), pause menu, sea chart, settings with
-  rebinding, title screen and debug menu.
+  rebinding, Gus's shipyard (`await UI.open_shipyard()`), title screen and
+  debug menu.
   - Gameplay talks to it mostly through `Events` signals.
   - `QuestLog` derives the quest page from progress.
 - **The archipelago** (`world/horizon/`, `world/sea/`, docs/ARCHIPELAGO.md):
@@ -193,6 +194,16 @@ tools/              Scene builders, photo tool, project setup, audio generator
     the discovery banner, the music and the landing as respawn point.
   - Islands not built yet are wrapped in sea mist (`MistBank`), and past
     the edge of the chart the fog turns a boat round (`SeaEdge`).
+  - Four late islands are ringed by a sea hazard (`SeaHazard`, placed from
+    `Archipelago`'s "hazard"): Stormpeak's storm wall, Brock's fort guns
+    round Cannonball Cliffs, Cinder Isle's boiling sea and Crocodile
+    Crown's reef maze. Each turns the boat back until Patchy's ship has the
+    upgrade that answers it.
+  - Patchy's ship (`systems/ship/ShipUpgrades`, saved in `WorldState`):
+    sail, hull and cannon upgrades (Betty's spare sail from Shellby; the
+    rest bought for gold at Gus's shipyard, `UIShipyard`), plus free looks
+    (sail colors, a flag, a figurehead). `BoatModel` draws the boat from
+    them, the same in the sea and in the shipyard's window.
   - Swimming is free in an island's own waters; out in the open sea
     Patchy's breath runs down (`SwimStamina`, a ring by him on the HUD)
     and after six seconds he goes under, a heart down and back on the last
@@ -315,12 +326,12 @@ godot --headless --path . --fixed-fps 60 res://tests/run_movement_tests.tscn   #
 godot --headless --path . --fixed-fps 60 res://tests/run_camera_tests.tscn     # 21 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_gameplay_tests.tscn   # 68 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 187 checks
-godot --headless --path . --fixed-fps 60 res://tests/run_world_tests.tscn      # 54 checks
+godot --headless --path . --fixed-fps 60 res://tests/run_world_tests.tscn      # 82 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_hat_rock_tests.tscn   # 43 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_bell_atoll_tests.tscn # 35 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_pinwheel_isle_tests.tscn # 23 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_teacup_isle_tests.tscn # 20 checks
-godot --headless --path . --fixed-fps 60 res://ui/tests/ui_flow_test.tscn      # 89 checks
+godot --headless --path . --fixed-fps 60 res://ui/tests/ui_flow_test.tscn      # 96 checks
 godot --headless --path . --fixed-fps 60 res://props/tests/prop_tests.tscn     # 74 checks
 godot --headless --path . --fixed-fps 60 res://world/ocean/tests/ocean_swim_check.tscn
 godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn -- sail
@@ -355,7 +366,12 @@ What each suite covers:
   back out when you sail off; free swimming in island waters, the open sea
   taking Patchy's breath (a heart down, back ashore) and no swimming to
   Driftwood Key; fast travel, Continue onto Hat Rock and the captain's
-  cabin and back.
+  cabin and back; the four sea hazards in their places, each turning the
+  little boat back until its own upgrade carries her through (the storm
+  even with every other upgrade fitted); Brock's guns firing on the boat
+  and the bow cannon silencing one for good; buying upgrades at Gus's
+  (gold, the order they come in, a faster and bigger-sailed boat) and
+  changing her looks; and Gus opening his shipyard.
 - **Hat Rock**: played through on the real island: up the boulders to the
   brim, the whole spiral ledge (jumping its gaps, bracing through the
   gusts), a gust blowing Patchy off when he doesn't brace, the buckle
@@ -459,6 +475,10 @@ village on an island cut in two by a sea channel.
   tower, climbed landing by landing round the outside, with a parrot caged
   at the top) and its tiller (sunk in the harbor). Then it's Patchy's, at
   the end of the pier, and the whole sea is open.
+- **Gus's shipyard:** talk to Gus again and he'll fit the boat out for
+  gold: a racing rig (the fastest sail), a copper bottom, an iron hull and
+  a bow cannon. Sail colors, flags and figureheads are free to change.
+  The boat turns in a window as you shop, trying on whatever you point at.
 - **The bluff and the rope bridge:** a ledge grab (or the stairs) up from
   the village, then a sagging rope bridge across the channel.
 - **The forest:** round trees and palms, the summit (terraces or a
@@ -493,6 +513,20 @@ out of breath: a ring by him empties, and he goes under and comes back
 ashore a heart down. Islands still being built hide in a bank of sea mist that turns
 the boat gently away, and out past the edge of the chart the fog turns
 you round.
+
+**Sea hazards.** Everything is open from the start but four late islands,
+each ringed by something the little boat can't face yet, marked on the sea
+chart with red dashes:
+
+| Island | Hazard | Answered by (at Gus's) |
+|---|---|---|
+| Stormpeak | a wall of black storm cloud, rain and lightning | the Iron Hull |
+| Cannonball Cliffs | Brock's gun towers, lobbing shot at you | the Bow Cannon (shoot back to silence them) |
+| Cinder Isle | the boiling sea: scalding water, steam, lava rocks | the Copper Bottom |
+| Crocodile Crown | three rings of coral with currents pouring out | the Racing Rig, then thread the maze |
+
+Sail in without the right upgrade and the hazard turns you gently back out
+and says what would do.
 
 **Hat Rock**, the giant tricorne north of Castaway Cay, is the first port
 of call. From the jetty, boulders lead up to the brim, and a ledge spirals

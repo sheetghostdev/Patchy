@@ -81,6 +81,14 @@ func _ready() -> void:
 			ui.open_pause_menu(&"title")
 			await _frames(2)
 			ui.pause_menu.call(&"_ask_return_to_title")
+		"shipyard":
+			# upgrades=spare_sail,bow_cannon; look=colors:3,flag:1,figurehead:2
+			for id in String(args.get("upgrades", "spare_sail")).split(",", false):
+				ShipUpgrades.grant(StringName(id))
+			for kv in String(args.get("look", "")).split(",", false):
+				var pair := kv.split(":")
+				ShipUpgrades.set_look(StringName(pair[0]), int(pair[1]))
+			ui.open_shipyard()
 		"debug":
 			Settings.show_movement_hud = true
 			ui.movement_hud.visible = true

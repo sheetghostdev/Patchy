@@ -39,6 +39,7 @@ func _ready() -> void:
 	await _test_treasure_maps()
 	await _test_settings_toggle()
 	await _test_dialogue()
+	await _test_shipyard()
 	await _test_prompt_and_devices()
 	await _test_requirement_and_counters()
 	await _test_subtitles_setting()
@@ -320,6 +321,35 @@ func _action(action: StringName, pressed: bool) -> void:
 	ev.action = action
 	ev.pressed = pressed
 	Input.parse_input_event(ev)
+
+
+## Gus's shipyard (UIShipyard): opens paused with the first upgrade
+## focused, ui_down walks the list, left/right change a look, Back closes it.
+func _test_shipyard() -> void:
+	print("shipyard")
+	InventoryManager.reset()
+	ui.open_shipyard()
+	await _frames(4)
+	check(ui.shipyard.is_open and get_tree().paused, "the shipyard opens and pauses the game")
+	check(ui.is_menu_open() and not ui.can_pause(), "and keeps the pause menu out of the way")
+	var first := focus_owner()
+	check(first is Button and (first as Button).disabled and "Needs" in (first as Button).text, "the Racing Rig is focused, waiting on Betty's sail")
+	await press(&"ui_down")
+	var second := focus_owner()
+	check(second is Button and second != first and "gold" in (second as Button).text.to_lower(), "ui_down moves to the Copper Bottom: not enough gold")
+	var looks: Dictionary = ui.shipyard.get(&"_looks")
+	var flag := looks[&"flag"] as Button
+	flag.grab_focus()
+	await _frames(1)
+	var before := ShipUpgrades.look(&"flag")
+	await press(&"ui_right")
+	var after := ShipUpgrades.look(&"flag")
+	check(after == posmod(before + 1, ShipUpgrades.FLAGS.size()) and ShipUpgrades.look_name(&"flag", after) in flag.text, "ui_right picks the next flag")
+	await press(&"ui_left")
+	check(ShipUpgrades.look(&"flag") == before and focus_owner() == flag, "ui_left puts it back, focus stays put")
+	await press(&"ui_cancel")
+	await _frames(10)
+	check(not ui.shipyard.is_open and not get_tree().paused, "Back closes the shipyard and unpauses")
 
 
 func _test_prompt_and_devices() -> void:

@@ -59,10 +59,10 @@ on the same bearings.
 | Shipwreck Shoals | 186° | 580 m | large | **bouncy sails** and a galleon you rotate | — | Sails | — |
 | Turtleback | 132° | 560 m | medium | **the island is a turtle**: wake it and it swims | **Conch Shell** (call the turtle: fast travel) | — | —; Spring Fist to wake it |
 | Skullcap Mountain | 10° | 650 m | large | **wind**: gusts, vanes, updrafts | **Parasol** (glide, ride updrafts) | Mast | — |
-| Cannonball Cliffs | 70° | 580 m | large | **rhythm barrages**: cannons fire across every path | — | Ship's Cannons | Brock's fort guns (ship's cannons to answer them) |
-| Cinder Isle | 40° | 1000 m | large | **the lava tide** and steam vents | **Lodestone Magnet** | Iron Hull | the boiling sea (a stronger hull) |
-| Stormpeak | 104° | 1100 m | large | **lightning**: route it through rods; storm clouds you can stand on | — | Figurehead | the storm wall (the Iron Hull) |
-| Crocodile Crown | 316° | 1200 m | final | Brock's fortress | — | — | the reef maze (the full ship); 50 parrots for the jaw gate |
+| Cannonball Cliffs | 70° | 580 m | large | **rhythm barrages**: cannons fire across every path | — | Cannon Deck | Brock's fort guns (Gus's **Bow Cannon** answers them) |
+| Cinder Isle | 40° | 1000 m | large | **the lava tide** and steam vents | **Lodestone Magnet** | Iron Plating | the boiling sea (Gus's **Copper Bottom**) |
+| Stormpeak | 104° | 1100 m | large | **lightning**: route it through rods; storm clouds you can stand on | — | Figurehead | the storm wall (Gus's **Iron Hull**) |
+| Crocodile Crown | 316° | 1200 m | final | Brock's fortress | — | — | the reef maze (Gus's **Racing Rig** beats its currents); 50 parrots for the jaw gate |
 
 Brock's barge rows off north-west after his cameo, the way his fortress
 lies.
@@ -100,10 +100,24 @@ lies.
   - Sailing into an island's waters (`SeaRegion`) announces it, makes it
     the current island and its landing the respawn point. In between are
     "Uncharted Waters".
-  - The only limits are local and visible: hazards round a few late
-    islands, each answered by a ship upgrade (the table's last column:
-    Brock's fort guns, the boiling sea, the storm wall, the reef maze).
-    Everything else is open from the moment Patchy has a boat.
+  - The only limits are local and visible: hazards round four late
+    islands (`SeaHazard`, Archipelago's "hazard"), each answered by one
+    ship upgrade (the table's last column). Without it the hazard turns
+    the boat gently back out and says what would do; with it she sails
+    through, though it's rough going. They're drawn on the sea chart as a
+    ring of red dashes. Everything else is open from the moment Patchy
+    has a boat.
+    - **The storm wall** (Stormpeak): black cloud piled high, curtains of
+      rain, lightning and thunder. The Iron Hull rides it out.
+    - **Brock's fort guns** (Cannonball Cliffs): six gun towers on rocks,
+      swinging to follow the boat and lobbing near misses. With the Bow
+      Cannon she sails in, and a hit silences a tower for good.
+    - **The boiling sea** (Cinder Isle): scalding red water, boiling
+      patches, steam and glowing lava rocks. The Copper Bottom takes the
+      heat.
+    - **The reef maze** (Crocodile Crown): three rings of coral, a gap or
+      two in each, and currents pouring out. The Racing Rig beats the
+      currents; then thread the gaps.
   - Islands not built yet hide in a bank of sea mist hugging their shore
     (`MistBank`) that turns the boat gently away. Far past the last island
     the fog at the edge of the chart turns a boat round (`SeaEdge`).
@@ -112,28 +126,41 @@ lies.
     under, a heart down and back on the last safe ground. Even Driftwood
     Key, Castaway's nearest neighbor, is over 40 m of open sea away, so
     every island past the first is a boat ride.
-- **Ship.** Each ship part appears on the wreck at Castaway Cay (spec
-  §79). With the Anchor, Rudder and Sails back, the wreck floats as the
-  *Jolly Patch* and replaces the tiny boat.
+- **Ship.** Patchy's ship (`ShipUpgrades`) has three things that matter
+  at sea, and they belong to whichever boat he sails:
+  - **Sail** (speed): Gus's patched sail, Betty's spare sail (Old
+    Shellby's gift, ×1.3), then Gus's Racing Rig (×1.6, 160 gold).
+  - **Hull** (toughness): Gus's Copper Bottom (120 gold), then his Iron
+    Hull (220 gold), which also keeps her speed through knocks.
+  - **Bow Cannon** (100 gold): fire it from the tiller.
+  - **Looks**, free at the shipyard: six sail colors, five flags, five
+    figureheads (or none).
+  Gus sells the upgrades for gold at his shipyard (`UIShipyard`; talk to
+  him once the dinghy's fixed), with the boat turning in a window and
+  trying on whatever you point at. Each ship part appears on the wreck at
+  Castaway Cay (spec §79). With the Anchor, Rudder and Sails back, the
+  wreck floats as the *Jolly Patch* and replaces the tiny boat, upgrades
+  and all.
 
 ## Story order
 
 1. **Castaway Cay** (done). Patchy washes up with no boat; Gus the
    shipwright fixes up his old dinghy once Patchy finds its sail (up Tok's
    lookout tower) and its tiller (in the harbor), and from then on he can
-   sail anywhere. Ends with Brock's cameo. Old Shellby stitches
-   Barnacle Betty's spare sail onto the tiny boat: the **spare sail**, a
-   good deal faster. Every island without a hazard is open: the four tiny
+   sail anywhere, and fits it out at his shipyard for gold. Ends with
+   Brock's cameo. Old Shellby stitches Barnacle Betty's spare sail onto
+   the tiny boat: the **spare sail**, a good deal faster. Every island without a hazard is open: the four tiny
    islands, Crabby Coast, Lantern Lagoon, Shipwreck Shoals, Turtleback and
    Skullcap Mountain, in any order.
 2. **Ring one.** Anchor, Rudder and Sails return, and the *Jolly Patch*
    sails. The Spring Fist wakes Turtleback, which gives the Conch Shell.
-3. **Ring two.** Skullcap Mountain (Mast, Parasol) and Cannonball Cliffs
-   (Ship's Cannons).
-4. **Ring three.** Cinder Isle (Iron Hull, Magnet), then Stormpeak
-   (Figurehead): the ship is whole.
-5. **Crocodile Crown.** The full ship and 50 parrots raise the croc's jaw
-   gate.
+3. **Ring two.** Skullcap Mountain (Mast, Parasol) and, past Brock's
+   fort guns with a bow cannon, Cannonball Cliffs (Cannon Deck).
+4. **Ring three.** Through the boiling sea with a copper bottom, Cinder
+   Isle (Iron Plating, Magnet); through the storm wall with an iron hull,
+   Stormpeak (Figurehead): the ship is whole.
+5. **Crocodile Crown.** The racing rig beats the reef's currents; the
+   full ship and 50 parrots raise the croc's jaw gate.
 
 ---
 
@@ -362,7 +389,7 @@ lies.
   - Cross the rope bridge before it burns through.
 - **Boss: General Snapjaw**, a croc general in a walking cannon tower.
   Spring Fist his cannonballs back at him.
-- **Rewards:** the Ship's Cannons. The *Jolly Patch* can now blast
+- **Rewards:** the Cannon Deck. The *Jolly Patch* can now blast
   Brock's sea barricades and boulders. 6 parrots.
 
 ## Cinder Isle — "A volcano Brock is strip-mining."
@@ -380,7 +407,7 @@ lies.
   - Cross the caldera between lava beats.
 - **Boss: Foreman Grit**, a croc foreman in a drilling rig that bores up
   through the floor.
-- **Rewards:** the Lodestone Magnet; the Iron Hull; 7 parrots.
+- **Rewards:** the Lodestone Magnet; the Iron Plating; 7 parrots.
 
 ## Stormpeak — "A needle of rock lost in a storm that never ends."
 
@@ -405,8 +432,8 @@ lies.
 
 - **Horizon:** a dark rock shaped like a crocodile's head, its snout
   toward the sea, crowned with towers and purple-and-gold flags.
-- **Gate:** reefs, currents and cannons. The finished ship and 50 parrots
-  are needed to raise the jaw gate.
+- **Gate:** the reef maze round it (the Racing Rig beats its currents),
+  then the finished ship and 50 parrots to raise the jaw gate.
 - **Inside:**
   - the docks;
   - the prison (the last caged parrots);

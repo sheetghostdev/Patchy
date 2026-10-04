@@ -12,6 +12,7 @@ extends CanvasLayer
 ##   UI.set_quests([{title = "...", description = "...", done = false}])
 ##   UI.set_island_totals(&"crabby_coast", {treasure = 35, maps = 2, ship_parts = 1})
 ##   UI.open_pause_menu(&"map") / UI.close_pause_menu() / UI.is_menu_open()
+##   await UI.open_shipyard()   # Gus's shipyard (UIShipyard), pauses the game
 ##   UI.set_hud_hidden(true)   # cutscenes
 ##   UI.peek_hud(3.0)          # briefly show treasure + parrot counters
 ##   UI.is_using_gamepad()
@@ -36,6 +37,7 @@ static var instance: UIRoot
 @onready var movement_hud: UIMovementHud = $Screen/MovementHUD
 
 var world_draw: UIDebugWorldDraw
+var shipyard: UIShipyard
 var _quests: Array = []
 var _island_totals: Dictionary = {}
 var _last_scene: Node = null
@@ -65,6 +67,10 @@ func _ready() -> void:
 	world_draw.name = "DebugWorldDraw"
 	add_child(world_draw)
 	debug_menu.world_draw = world_draw
+	shipyard = UIShipyard.new()
+	shipyard.name = "Shipyard"
+	screen.add_child(shipyard)
+	shipyard.closed.connect(_on_menu_toggled.bind(false))
 	debug_menu.toast_requested.connect(func(text: String, icon: StringName) -> void: show_toast(text, 2.2, icon))
 	pause_menu.return_to_title_requested.connect(go_to_title)
 	pause_menu.opened.connect(_on_menu_toggled.bind(true))
@@ -159,7 +165,23 @@ func open_map() -> void:
 
 
 func is_menu_open() -> bool:
-	return pause_menu.is_open or debug_menu.is_open
+	return pause_menu.is_open or debug_menu.is_open or shipyard.is_open
+
+
+## Gus's shipyard: returns once it's closed, with Patchy's input settled.
+func open_shipyard() -> void:
+	if debug_menu.is_open:
+		debug_menu.close()
+	_on_menu_toggled(true)
+	await shipyard.open()
+	var p := GameManager.player
+	if p != null and is_instance_valid(p):
+		# Let the closing press pass before gameplay reads input again.
+		await get_tree().physics_frame
+		await get_tree().physics_frame
+		var input: Variant = p.get(&"input")
+		if input is Object and (input as Object).has_method(&"clear_buffers"):
+			(input as Object).call(&"clear_buffers")
 
 
 func _on_menu_toggled(open: bool) -> void:

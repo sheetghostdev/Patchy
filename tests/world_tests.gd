@@ -441,3 +441,186 @@ func test_captains_cabin_and_back() -> void:
 		if StringName(sp.get_meta(&"spawn_id", &"")) == &"cabin_door":
 			spawn = sp
 	check("and back out on the wreck's deck in the one world", get_tree().current_scene.scene_file_path == WORLD and spawn != null and p.global_position.distance_to(spawn.global_position) < 1.5, "pos=%v" % p.global_position)
+
+
+# --- Sea hazards and the ship ---------------------------------------------------------
+
+func hazard(id: StringName) -> SeaHazard:
+	for h in get_tree().get_nodes_in_group(&"sea_hazard"):
+		if (h as SeaHazard).island_id == id:
+			return h
+	return null
+
+
+## Sails at hazard `h` from `deg` round its island (from east, toward the
+## south), steering for the island, for `secs`. How deep into the band the
+## boat got (x, m) and the nearest it came to the island's center (y).
+func probe(p: Player, h: SeaHazard, deg: float, secs: float) -> Vector2:
+	var out := Vector3(cos(deg_to_rad(deg)), 0, sin(deg_to_rad(deg)))
+	var b := await sail_from(p, h.global_position + out * (h.outer() + 30.0), -out)
+	var deepest := 0.0
+	var nearest := INF
+	for i in int(secs * 60.0):
+		steer(p, h.global_position)
+		await frames(1)
+		deepest = maxf(deepest, h.depth(b.global_position))
+		nearest = minf(nearest, Player.flat(b.global_position - h.global_position).length())
+	p.input.virtual_move = Vector2.ZERO
+	return Vector2(deepest, nearest)
+
+
+func said(word: String) -> bool:
+	return _said.any(func(t: String) -> bool: return word in t)
+
+
+func test_hazards_round_the_late_islands() -> void:
+	await load_world()
+	var want := {&"stormpeak": SeaHazard.Kind.STORM, &"cannonball_cliffs": SeaHazard.Kind.FORT_GUNS,
+		&"cinder_isle": SeaHazard.Kind.BOILING_SEA, &"crocodile_crown": SeaHazard.Kind.REEF}
+	var hazards := get_tree().get_nodes_in_group(&"sea_hazard")
+	check("four sea hazards, round the four late islands", hazards.size() == 4 and want.keys().all(func(id: StringName) -> bool:
+		return hazard(id) != null and hazard(id).kind == want[id]), "hazards=%d" % hazards.size())
+	var clash: Array[String] = []
+	for h: SeaHazard in hazards:
+		for id in BUILT:
+			var r := region(id)
+			if Player.flat(r.global_position - h.global_position).length() < h.outer() + r.radius * 0.5:
+				clash.append("%s/%s" % [h.island_id, id])
+		for m in get_tree().get_nodes_in_group(&"mist_bank"):
+			var mist := m as MistBank
+			if mist.island_id != h.island_id and Player.flat(mist.global_position - h.global_position).length() < h.outer() + mist.radius:
+				clash.append("%s/%s mist" % [h.island_id, mist.island_id])
+		var own: MistBank = null
+		for m in get_tree().get_nodes_in_group(&"mist_bank"):
+			if (m as MistBank).island_id == h.island_id:
+				own = m
+		if own == null or own.radius <= 0.0 or h.inner < own.radius:
+			clash.append("%s inside its own mist" % h.island_id)
+	check("each one rings its island just outside the mist, clear of every other island", clash.is_empty(), "%s" % [clash])
+	check("and each wants its own upgrade", hazard(&"stormpeak").needs() == &"iron_hull" and hazard(&"cannonball_cliffs").needs() == &"bow_cannon"
+		and hazard(&"cinder_isle").needs() == &"copper_hull" and hazard(&"crocodile_crown").needs() == &"racing_rig", "")
+
+
+func test_the_storm_turns_back_a_little_boat() -> void:
+	var p := await load_world()
+	var h := hazard(&"stormpeak")
+	# Every upgrade but the one that answers it.
+	for id: StringName in [&"spare_sail", &"racing_rig", &"copper_hull", &"bow_cannon"]:
+		ShipUpgrades.grant(id)
+	var r := await probe(p, h, 194.0, 9.0)
+	check("the storm wall turns the boat back out", r.x > 0.0 and r.x < 14.0, "deepest %.1f m into %.0f" % [r.x, h.width])
+	check("and says an iron hull would ride it out", said("storm") and said("iron hull"), "said=%s" % [_said])
+	ShipUpgrades.grant(&"iron_hull")
+	_said.clear()
+	r = await probe(p, h, 194.0, 14.0)
+	check("with the Iron Hull she sails right through", r.y < h.inner, "nearest %.0f m (storm from %.0f)" % [r.y, h.inner])
+	check("riding it out", said("rides out"), "said=%s" % [_said])
+
+
+func test_each_hazard_wants_its_upgrade() -> void:
+	var p := await load_world()
+	# Approaches clear of the fort towers and through the reef's outer gap.
+	var runs := [[&"cannonball_cliffs", 45.0, &"bow_cannon"], [&"cinder_isle", 100.0, &"copper_hull"], [&"crocodile_crown", 65.0, &"racing_rig"]]
+	for run: Array in runs:
+		var h := hazard(run[0])
+		for id: StringName in ShipUpgrades.UPGRADES:
+			ShipUpgrades.revoke(id)
+		ShipUpgrades.grant(&"spare_sail")
+		_said.clear()
+		var r := await probe(p, h, run[1], 8.0)
+		check("%s turns the little boat back" % SeaHazard.NAMES[h.kind], r.x > 0.0 and r.x < 14.0 and _said.any(func(t: String) -> bool: return UIChartData.display_name(h.island_id) in t),
+			"deepest %.1f, said=%s" % [r.x, _said])
+		ShipUpgrades.grant(run[2])
+		r = await probe(p, h, run[1], 14.0)
+		check("the %s carries her in" % ShipUpgrades.display_name(run[2]), r.x > h.width * 0.4, "deepest %.1f of %.0f, nearest %.0f" % [r.x, h.width, r.y])
+
+
+func test_bow_cannon_silences_brocks_guns() -> void:
+	var p := await load_world()
+	ShipUpgrades.grant(&"bow_cannon")
+	var h := hazard(&"cannonball_cliffs")
+	var gun: SeaHazard.FortGun = null
+	for c in h.get_children():
+		if c is SeaHazard.FortGun:
+			gun = c
+			break
+	var out := Player.flat(gun.global_position - h.global_position).normalized()
+	var b := await sail_from(p, gun.global_position + out * (6.0 * SeaHazard.FortGun.SIZE + 18.0), -out)
+	b.place(b.global_position, -out, 0.0)
+	var fired_at := false
+	for i in 200:
+		await frames(1)
+		for n in get_tree().current_scene.get_children():
+			if n is Cannonball and (n as Cannonball).shooter is SeaHazard.FortGun:
+				fired_at = true
+	check("Brock's guns lob shot at Patchy's boat", fired_at, "")
+	check("which can't hurt him at the tiller", p.state_id == &"boat" and p.health.health == p.health.max_health, "hp=%d" % p.health.health)
+	b.place(b.global_position, -out, 0.0)
+	p.input.virtual_tap(&"tool_primary")
+	var hit := -1
+	for i in 180:
+		await frames(1)
+		if gun.is_silenced():
+			hit = i
+			break
+	check("the bow cannon fires and silences a gun", hit >= 0 and h.guns_firing() == SeaHazard.GUN_COUNT - 1, "frames=%d firing=%d" % [hit, h.guns_firing()])
+	check("for good", WorldState.is_completed(gun.gun_id) and said("silenced"), "said=%s" % [_said])
+
+
+func test_gus_fits_out_the_boat() -> void:
+	await load_world()
+	var b := boat()
+	var slow := b.top_speed()
+	check("no gold, no racing rig", not ShipUpgrades.buy(&"racing_rig") and not ShipUpgrades.has(&"racing_rig"), "")
+	InventoryManager.collect_treasure(&"", &"coin", 500)
+	check("and it wants Betty's sail first", ShipUpgrades.why_not(&"racing_rig").begins_with("Needs") and not ShipUpgrades.buy(&"racing_rig")
+		and InventoryManager.gold_value == 500, ShipUpgrades.why_not(&"racing_rig"))
+	ShipUpgrades.grant(&"spare_sail")
+	await frames(2)
+	var spare := b.top_speed()
+	check("Gus sells a racing rig for gold", ShipUpgrades.buy(&"racing_rig") and InventoryManager.gold_value == 500 - ShipUpgrades.price(&"racing_rig"),
+		"gold=%d" % InventoryManager.gold_value)
+	await frames(2)
+	var look := b.get(&"_look") as Node3D
+	var sail := look.get_node(^"Sail") as MeshInstance3D
+	check("she's quicker for it, and wears it", b.top_speed() > spare * 1.15 and spare > slow * 1.2 and sail.mesh.get_aabb().end.y > 4.0,
+		"speed %.1f -> %.1f -> %.1f, mast %.1f" % [slow, spare, b.top_speed(), sail.mesh.get_aabb().end.y])
+	check("the iron hull wants the copper bottom first", not ShipUpgrades.buy(&"iron_hull") and ShipUpgrades.buy(&"copper_hull") and ShipUpgrades.buy(&"iron_hull")
+		and ShipUpgrades.hull_level() == 2, "")
+	check("and gold runs out", InventoryManager.gold_value < ShipUpgrades.price(&"bow_cannon") and ShipUpgrades.why_not(&"bow_cannon") == "Not enough gold"
+		and not ShipUpgrades.buy(&"bow_cannon"), "gold=%d" % InventoryManager.gold_value)
+	ShipUpgrades.set_look(&"figurehead", 3)
+	ShipUpgrades.set_look(&"flag", 1)
+	ShipUpgrades.set_look(&"colors", 4)
+	await frames(2)
+	look = b.get(&"_look") as Node3D
+	check("new looks for free: a figurehead, a flag and colors", look.has_node(^"Figurehead") and ShipUpgrades.spec().flag == 1 and ShipUpgrades.spec().colors == 4, "")
+	ShipUpgrades.set_look(&"figurehead", ShipUpgrades.FIGUREHEADS.size())
+	await frames(2)
+	look = b.get(&"_look") as Node3D
+	check("and the list goes round", ShipUpgrades.look(&"figurehead") == 0 and not look.has_node(^"Figurehead"), "")
+
+
+func test_gus_opens_his_shipyard() -> void:
+	var p := await load_world()
+	var ui := UIRoot.instance
+	var gus := get_tree().current_scene.find_child("Gus", true, false) as ShipwrightNPC
+	p.teleport(gus.global_position + Vector3(0.0, 0.1, 1.8), Vector3.FORWARD)
+	await frames(10)
+	gus.interact(p)
+	var opened := -1
+	for i in 900:
+		await frames(1)
+		if ui.shipyard.is_open:
+			opened = i
+			break
+		if i % 20 == 10 and ui.is_dialogue_active():
+			ui.hud.dialogue.advance()
+	check("Gus opens his shipyard once the dinghy's Patchy's", opened >= 0 and get_tree().paused, "frames=%d" % opened)
+	var now := ShipUpgrades.spec()
+	var shown := ui.shipyard.shown_spec()
+	check("with Patchy's boat in the window, trying on the Racing Rig he's pointing at", shown.sail == 2 and now.sail == 0
+		and shown.hull == now.hull and shown.flag == now.flag and shown.figurehead == now.figurehead, "shown=%s now=%s" % [shown, now])
+	ui.shipyard.close()
+	await frames(10)
+	check("and Done gives Patchy back the game", not get_tree().paused and not ui.shipyard.is_open and p.state_id != &"locked", "state=%s" % p.state_id)

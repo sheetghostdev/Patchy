@@ -108,6 +108,11 @@ func _build() -> void:
 	g.add_child(_button("+5 parrots", func() -> void: ParrotManager.debug_add(5)))
 	g.add_child(_button("-1 parrot", func() -> void: ParrotManager.debug_remove(1)))
 	g.add_child(_button("-5 parrots", func() -> void: ParrotManager.debug_remove(5)))
+	g.add_child(_button("Fit every ship upgrade", func() -> void:
+		WorldState.mark_completed(&"castaway_dinghy")
+		for id: StringName in ShipUpgrades.UPGRADES:
+			ShipUpgrades.grant(id)
+		toast_requested.emit("Every ship upgrade fitted", &"ship_wheel")))
 
 	g = _section(col, "PLAYER")
 	_toggles[&"invincible"] = _button("Invincible: OFF", _toggle_invincible)
