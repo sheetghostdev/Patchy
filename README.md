@@ -103,8 +103,9 @@ attachments/        Hand attachments: hook, lantern, shovel, grapple, cannon
 resources/          Data resources (AttachmentData .tres, movement and camera settings)
 enemies/            Crabs (normal, armored, hermit, cannon), TNT snail, pelican, croc grunt,
                     King Claw boss plus arena
-npcs/               Parrots; islanders (NPC base, FavorNPC quest givers, LookoutNPC)
-                    and their models (turtle, monkey, otter, Brock the Croc)
+npcs/               Parrots; islanders (NPC base, FavorNPC quest givers, LookoutNPC,
+                    ShipwrightNPC) and their models (turtle, monkey, otter, walrus,
+                    octopus, Brock the Croc)
 collectibles/       Coins, gems, treasure kinds, coin trails
 world/              Terrain (Plateau); ocean (stylized Ocean, underwater effect,
                     sea regions, tide); sea/ (the one world: WorldDirector,
@@ -115,9 +116,11 @@ world/              Terrain (Plateau); ocean (stylized Ocean, underwater effect,
                     cabin); vehicles (TinyBoat); objects (cages, parrot tasks,
                     chests, dig spots, braziers, gates, targets, cracked rock,
                     doors, Shellby's fishing boat, drag marks...)
-props/              Art kit: palms, rocks, foliage scatter, coral, kelp, crates and barrels,
-                    docks, rope bridges, wreck pieces, signs, torches, Beak
-                    Rock; plus level blocks
+props/              Art kit: palms, broadleaf trees, rocks, foliage scatter, coral, kelp,
+                    crates and barrels, docks, rope bridges, wreck pieces, signs,
+                    torches, Beak Rock; the village kit (houses, market stalls,
+                    the well, string lines of laundry, bunting and lanterns, net
+                    racks); plus level blocks
 ui/                 HUD, dialogue, pause menu (map, treasure, attachments, quests,
                     settings), title screen, sea chart, debug menu, input glyphs
 effects/            VFX helpers (dust, rings, splashes, sparkles)
@@ -306,7 +309,7 @@ An optional argument after `--` filters test names.
 godot --headless --path . --fixed-fps 60 res://tests/run_movement_tests.tscn   # 53 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_camera_tests.tscn     # 21 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_gameplay_tests.tscn   # 68 checks
-godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 158 checks
+godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn     # 187 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_world_tests.tscn      # 47 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_hat_rock_tests.tscn   # 43 checks
 godot --headless --path . --fixed-fps 60 res://tests/run_bell_atoll_tests.tscn # 35 checks
@@ -374,8 +377,14 @@ What each suite covers:
   cracking the sugar wall to walk out under the handle.
 - **Island**: Castaway Cay end to end:
   - the opening sequence;
-  - key routes (beach to meadow jump, the ledge-grab ridge, the wreck climb
+  - key routes (beach to meadow jump, the ledge grab up the bluff, the
+    village stairs, the rope bridge, the north beach stair, the wreck climb
     and the long jump to the sea stack);
+  - Barnacle Bay and its folk, walking into the Soggy Biscuit and talking
+    to Auntie Ink;
+  - the dinghy quest: no boat at first, Gus's ask, climbing Tok's lookout
+    tower landing by landing for the sail, diving for the tiller, and the
+    dinghy fixed and moored at the pier;
   - the dark-cave refusal, the six-parrot log bridge and the chained chest;
   - the crab burrow, Old Shellby's dialogue and checkpoints;
   - the Barnacle Betty side quest (drag marks, the ramp and ledge grab up
@@ -426,19 +435,32 @@ The game boots to the title screen. **New Game** plays the opening: a
 storm at sea, then Patchy wakes on the beach as crabs make off with his
 gold.
 
-**Castaway Cay** is the opening island, a sunny cove strewn with wreckage:
+**Castaway Cay** is the opening island, Patchy's Outset: a pirate fishing
+village on an island cut in two by a sea channel.
 
-- **Opening:** wake up on the beach while crabs make off with your gold.
-- **Shipwreck:** climb the stern deck, the cabin and the crow's nest
-  (parrot), then long-jump to the sea stack (parrot).
-- **Outpost:** Tok the lookout monkey and a crab-guarded watchtower
-  (parrot).
-- **Ridge and hill:** a ledge-grab ridge, terraces and a wall-kick chimney
-  to the summit, with the Ship's Compass and a parrot.
-- **Dark cave:** Patchy refuses to go in without a light.
-- **Headland:** across the six-parrot log bridge, with a chained-chest
-  ground-pound puzzle and a grapple tease.
-- **The dock:** Patchy's tiny boat.
+- **Opening:** wake up on the cove's beach after the storm while crabs make
+  off with your gold.
+- **Wreck Beach:** Patchy's beached stern (the captain's cabin). Climb the
+  deck, the cabin and the crow's nest (parrot), then long-jump to the sea
+  stack (parrot).
+- **Barnacle Bay**, the village round its harbor: the quay and the pier, a
+  plaza with a well, market stalls and bunting, houses up two terraces,
+  and the **Soggy Biscuit**, a tavern you can walk into, kept by Auntie
+  Ink the octopus. Old Shellby fishes off his jetty, Marlo off the pier.
+- **The old dinghy:** there's no boat at first. Gus the walrus shipwright
+  will fix up his old dinghy if Patchy fetches its sail (up Tok's lookout
+  tower, climbed landing by landing round the outside, with a parrot caged
+  at the top) and its tiller (sunk in the harbor). Then it's Patchy's, at
+  the end of the pier, and the whole sea is open.
+- **The bluff and the rope bridge:** a ledge grab (or the stairs) up from
+  the village, then a sagging rope bridge across the channel.
+- **The forest:** round trees and palms, the summit (terraces or a
+  wall-kick chimney) with the Ship's Compass and a parrot, and the dark
+  cave Patchy won't enter without a light. Under the cliffs, the north
+  beach and a long stair.
+- **The headland:** across the gorge by the six-parrot log bridge, with a
+  chained-chest ground-pound puzzle, Brock's crocs, a grapple tease and
+  King Claw's ring.
 
 **Driftwood Key** is a small islet one short sail away, with parrot 5 on a
 driftwood tower, parrot 6 in a guarded crab pen, and the Storm Lantern.

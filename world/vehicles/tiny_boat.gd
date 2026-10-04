@@ -19,6 +19,9 @@ extends CharacterBody3D
 @export_range(0.1, 6.0, 0.05) var turn_rate_fast := 1.25
 ## Hull origin sits this far above the water surface.
 @export_range(-1.0, 1.0, 0.01) var float_offset := 0.0
+## The boat isn't Patchy's until this WorldState id is completed (Gus fixes
+## up the old dinghy): hidden, solid to nothing and not to be boarded.
+@export var unlock_flag: StringName = &""
 
 ## WorldState id of Betty's spare sail (Old Shellby's gift).
 const SPARE_SAIL := &"boat_spare_sail"
@@ -66,6 +69,27 @@ func _ready() -> void:
 	_board.interact_priority = 1
 	add_child(_board, false, Node.INTERNAL_MODE_FRONT)
 	_board.interacted.connect(_on_board)
+	if unlock_flag != &"" and not WorldState.is_completed(unlock_flag):
+		_set_available(false)
+		WorldState.state_changed.connect(_on_state_changed)
+
+
+## Whether Patchy has a boat yet (see `unlock_flag`).
+func is_available() -> bool:
+	return unlock_flag == &"" or WorldState.is_completed(unlock_flag)
+
+
+func _on_state_changed(id: StringName, _state: Dictionary) -> void:
+	if id == unlock_flag and WorldState.is_completed(unlock_flag):
+		WorldState.state_changed.disconnect(_on_state_changed)
+		_set_available(true)
+
+
+func _set_available(on: bool) -> void:
+	visible = on
+	collision_layer = Layers.PROPS if on else 0
+	_board.enabled = on
+	set_physics_process(on)
 
 
 func _build() -> void:
@@ -83,7 +107,7 @@ func _build() -> void:
 	_visual.set_meta(&"generated", true)
 	add_child(_visual, false, Node.INTERNAL_MODE_FRONT)
 	var mi := MeshInstance3D.new()
-	mi.mesh = _hull_mesh()
+	mi.mesh = hull_mesh()
 	_visual.add_child(mi)
 	var sail := MeshInstance3D.new()
 	sail.name = "Sail"
@@ -138,7 +162,8 @@ static func _hull_rows(scale_w: float, keel_lift: float, top_drop: float) -> Arr
 	return rows
 
 
-func _hull_mesh() -> ArrayMesh:
+## The dinghy's hull (also drawn upside down on Gus's trestles).
+static func hull_mesh() -> ArrayMesh:
 	var mb := MeshBuilder.new()
 	var outer := _hull_rows(1.0, 0.0, 0.0)
 	var inner := _hull_rows(0.86, 0.12, 0.03)

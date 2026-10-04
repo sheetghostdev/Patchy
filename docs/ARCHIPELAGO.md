@@ -16,7 +16,10 @@ physics:
 
 Status:
 
-- Castaway Cay, Driftwood Key and Gull Bar are playable.
+- Castaway Cay (rebuilt as a village island: Barnacle Bay, the channel
+  and the rope bridge, the forest, the headland), Driftwood Key and Gull
+  Bar are playable. Patchy's first boat is Gus's old dinghy, fixed up once
+  he finds its sail and tiller.
 - **One sea** (`world/sea/world.tscn`, `WorldDirector`): every island in a
   single world, joined by open water. Sail (or swim) from any island to any
   other: no invisible walls and no scene changes. Islands not built yet
@@ -110,7 +113,10 @@ lies.
 
 ## Story order
 
-1. **Castaway Cay** (done). Ends with Brock's cameo. Old Shellby stitches
+1. **Castaway Cay** (done). Patchy washes up with no boat; Gus the
+   shipwright fixes up his old dinghy once Patchy finds its sail (up Tok's
+   lookout tower) and its tiller (in the harbor), and from then on he can
+   sail anywhere. Ends with Brock's cameo. Old Shellby stitches
    Barnacle Betty's spare sail onto the tiny boat: the **spare sail**, a
    good deal faster. Every island without a hazard is open: the four tiny
    islands, Crabby Coast, Lantern Lagoon, Shipwreck Shoals, Turtleback and

@@ -170,7 +170,8 @@ func _track(first: bool) -> void:
 	if here == region and not first:
 		return
 	region = here
-	if here == null:
+	# Out at sea, or waters that aren't an island's (a sandbar).
+	if here == null or here.island_id == &"":
 		GameManager.current_island = &""
 		return
 	var id := here.island_id

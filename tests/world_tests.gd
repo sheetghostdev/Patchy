@@ -50,14 +50,16 @@ func frames(n: int) -> void:
 		await get_tree().physics_frame
 
 
-## A fresh game in the world (intro done, optionally with the spare sail);
-## waits for Patchy.
+## A game in the world with the intro done and the dinghy fixed (optionally
+## with the spare sail too); waits for Patchy.
 func load_world(sail := false) -> Player:
 	WorldState.reset()
 	ParrotManager.reset()
 	InventoryManager.reset()
 	GameManager.reset()
 	WorldState.mark_completed(&"castaway_intro_seen")
+	# Gus has fixed up the old dinghy: Patchy has a boat.
+	WorldState.mark_completed(&"castaway_dinghy")
 	if sail:
 		WorldState.mark_completed(TinyBoat.SPARE_SAIL)
 	get_tree().change_scene_to_file(WORLD)

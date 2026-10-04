@@ -13,6 +13,8 @@ extends Node3D
 @export var size := Vector3(6, 4, 6)
 ## Only hint once this attachment is owned (e.g. the ring swing hint).
 @export var require_attachment: StringName = &""
+## Only hint once this WorldState id is completed (e.g. the boat's there).
+@export var require_flag: StringName = &""
 
 var _check_t := 0.0
 
@@ -31,6 +33,8 @@ func _physics_process(delta: float) -> void:
 	if p == null or not p.state_id in [&"ground", &"air", &"swim"]:
 		return
 	if require_attachment != &"" and not InventoryManager.has_attachment(require_attachment):
+		return
+	if require_flag != &"" and not WorldState.is_completed(require_flag):
 		return
 	var local := global_transform.affine_inverse() * p.global_position
 	if absf(local.x) > size.x * 0.5 or absf(local.z) > size.z * 0.5 or local.y < -0.5 or local.y > size.y:

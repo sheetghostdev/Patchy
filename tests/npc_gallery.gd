@@ -13,7 +13,7 @@ func _ready() -> void:
 	patchy.position = Vector3(-2.4, 0, 0)
 	patchy.rotation.y = PI
 	add_child(patchy)
-	var models: Array[Node3D] = [TurtleModel.new(), MonkeyModel.new(), OtterModel.new(), BrockModel.new()]
+	var models: Array[Node3D] = [TurtleModel.new(), MonkeyModel.new(), OtterModel.new(), BrockModel.new(), WalrusModel.new(), OctopusModel.new()]
 	for i in models.size():
 		models[i].position = Vector3(-0.8 + i * 1.3, 0, 0)
 		models[i].rotation.y = PI

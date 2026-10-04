@@ -4,7 +4,7 @@ extends Node3D
 ##   tools/photo/shoot.sh scene=res://props/tests/prop_viewer.tscn show=palms \
 ##       out=/tmp/palms_%d.png "cams=0,4,14>0,3,0"
 ## Sets (show=): palms, rocks, foliage, crates, dock, wreck, treasure, misc,
-## landmarks.
+## landmarks, village.
 ## Options: night=1 (dark preset to judge torches/lanterns), break=N (smash
 ## every breakable after N frames), vcam=x,y,z>lx,ly,lz (own camera, for
 ## the photo tool's snaps=), nossao=1 / noglow=1 / nomsaa=1 (render debug).
@@ -193,6 +193,59 @@ func _show_dock() -> void:
 	var bridge := RopeBridge.new()
 	bridge.end_point = Vector3(0, 0, -10)
 	_place(bridge, Vector3(6, 3, -2))
+
+
+func _show_village() -> void:
+	var a := VillageHouse.new()
+	_place(a, Vector3(-9, 0, 0))
+	var b := VillageHouse.new()
+	b.walls = VillageHouse.Walls.PLASTER
+	b.wall_color = Color("f3ead8")
+	b.trim_color = Color("8a5a36")
+	b.roof_color = Color("3f8fd8")
+	b.gable_front = true
+	b.chimney = true
+	b.size = Vector2(5, 6)
+	b.seed = 2
+	_place(b, Vector3(-1, 0, 0))
+	var c := VillageHouse.new()
+	c.walls = VillageHouse.Walls.STONE
+	c.wall_color = Color("f6e7c8")
+	c.roof_color = Color("2f9e6e")
+	c.trim_color = Color("6e4128")
+	c.accent_color = Color("d9483b")
+	c.size = Vector2(9, 6)
+	c.porch = 2.4
+	c.interior = true
+	c.door_offset = -1.5
+	c.sign_text = "The Soggy Biscuit"
+	c.seed = 3
+	_place(c, Vector3(9, 0, 0))
+	var d := VillageHouse.new()
+	d.wall_color = Color("f2b134")
+	d.roof_color = Color("8a5a36")
+	d.stilts = 2.0
+	d.size = Vector2(4.5, 4.0)
+	d.seed = 4
+	_place(d, Vector3(-9, 2.0, 10))
+	for k in 3:
+		var st := MarketStall.new()
+		st.goods = k
+		st.canvas = [Color("e8483c"), Color("3fa7ef"), Color("5fcf5f")][k]
+		st.seed = k
+		_place(st, Vector3(-2 + k * 3.4, 0, 9))
+	var w := VillageWell.new()
+	_place(w, Vector3(9, 0, 10))
+	for k in 3:
+		var line := StringLine.new()
+		line.kind = k
+		line.start_point = Vector3(-6, 4.2 - k * 0.6, 14 + k * 1.5)
+		line.end_point = Vector3(6, 4.2 - k * 0.6, 14 + k * 1.5)
+		line.posts = 4.2 - k * 0.6
+		line.seed = k
+		add_child(line)
+	var net := NetRack.new()
+	_place(net, Vector3(13, 0, 6), 30)
 
 
 func _show_misc() -> void:

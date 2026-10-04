@@ -9,8 +9,8 @@ extends IslandBuilder
 ##    swaps between them and keeps the far islands asleep).
 ##  - Sea mist round the islands still to be built, and the fog at the edge
 ##    of the chart that turns a boat round.
-##  - Patchy washed up on Castaway Cay's beach, his camera, and his boat at
-##    Castaway's dock.
+##  - Patchy washed up on Castaway Cay's beach, his camera, and the boat at
+##    Barnacle Bay's pier (his once Gus has fixed it up).
 ##   tools/builders/build.sh castaway_cay hat_rock ... world  (islands first)
 
 const OUT := "res://world/sea/world.tscn"
@@ -28,9 +28,10 @@ const PART_OF := {&"driftwood_key": &"castaway_cay"}
 const CENTER := Vector3(116, 0, -143)
 const EDGE := 1500.0
 ## Where Patchy wakes up on Castaway Cay's beach, and the boat's mooring
-## at the end of its dock (build_castaway_cay.gd).
+## at the end of Barnacle Bay's pier (build_castaway_cay.gd). The boat is
+## Gus's old dinghy: not Patchy's until Gus has fixed it up.
 const WASHED_UP := Vector3(0, 1.25, 33)
-const BOAT_AT := Vector3(-48.6, 0, 80)
+const BOAT_AT := Vector3(-44.6, 0, 58)
 
 
 func build() -> void:
@@ -111,4 +112,6 @@ func _patchy() -> void:
 	rig.set(&"target", player)
 	var boat := TinyBoat.new()
 	boat.position = BOAT_AT
+	boat.rotation.y = PI
+	boat.unlock_flag = &"castaway_dinghy"
 	b.add(boat, null, "TinyBoat")
