@@ -244,14 +244,17 @@ func _set_gameplay_visible(on: bool, instant: bool) -> void:
 	for c: Control in [_top_left, _bottom_right, _bottom_center]:
 		# Prompts/requirements make room for the dialogue box.
 		var want := on and not (c == _bottom_center and _dialogue_active)
+		# Compare with where each group is headed, not its alpha: a group
+		# still fading in (e.g. as an opening cutscene hides the HUD) must
+		# turn round and fade out.
+		var target := 1.0 if want else 0.0
 		if instant:
-			c.modulate.a = 1.0 if want else 0.0
+			c.modulate.a = target
 			c.visible = want
-		elif changed or c == _bottom_center or not want:
-			# (Hidden before the player ever bound, e.g. an opening cutscene,
-			# nothing "changed", but what's showing still has to go.)
-			if want != (c.visible and c.modulate.a > 0.5):
-				UIFx.fade(c, 1.0 if want else 0.0, 0.25 if want else 0.18)
+			c.set_meta(&"hud_target", target)
+		elif float(c.get_meta(&"hud_target", -1.0)) != target:
+			c.set_meta(&"hud_target", target)
+			UIFx.fade(c, target, 0.25 if want else 0.18)
 	if on and changed and not instant:
 		UIFx.pop(hearts, 0.06, 0.3)
 
