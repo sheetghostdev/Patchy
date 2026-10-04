@@ -63,6 +63,9 @@ static func terrain(surface: StringName) -> ShaderMaterial:
 		m.set_shader_parameter(&"stripe_strength", 0.0)
 	if String(surface).begins_with("lab"):
 		m.set_shader_parameter(&"grid_strength", 0.55 if surface == &"lab" else 0.25)
+	if surface in [&"cliff_warm", &"cliff_grey"]:
+		m.set_shader_parameter(&"stripe_strength", 0.13)
+		m.set_shader_parameter(&"noise_strength", 0.1)
 	if surface in [&"wood", &"wood_dark", &"thatch", &"roof_red", &"roof_blue"]:
 		m.set_shader_parameter(&"lip_height", 0.0)
 		m.set_shader_parameter(&"stripe_strength", 0.12)

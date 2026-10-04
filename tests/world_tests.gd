@@ -182,7 +182,8 @@ func test_far_islands_sleep_near_ones_wake() -> void:
 	var near := d.silhouette_scale(&"bell_atoll", Archipelago.waters(&"bell_atoll") + WorldDirector.WAKE_MARGIN)
 	var mid := d.silhouette_scale(&"bell_atoll", 600.0)
 	var far := d.silhouette_scale(&"bell_atoll", 1400.0)
-	check("silhouettes are life size up close and grow far out", is_equal_approx(near, 1.0) and mid > near and far >= mid and far <= 2.0 and far_scale > 1.0, "near=%.2f mid=%.2f far=%.2f" % [near, mid, far])
+	var full := float(Archipelago.get_island(&"bell_atoll").get("scale", 1.0))
+	check("silhouettes are life size up close and grow far out", is_equal_approx(near, 1.0) and mid > near and far >= mid and far <= full + 0.001 and far_scale > 1.0, "near=%.2f mid=%.2f far=%.2f" % [near, mid, far])
 	var looms := true
 	for k in 40:
 		var dd := 300.0 + k * 30.0
@@ -199,7 +200,8 @@ func test_sail_to_hat_rock_no_scene_change() -> void:
 	var p := await load_world(false)
 	var scene := get_tree().current_scene
 	var hat := Archipelago.world_position(&"hat_rock")
-	var at := Vector3(-25, 0, -125)
+	# Off Castaway Cay's north beach.
+	var at := Vector3(-30, 0, -172)
 	var b := await sail_from(p, at, hat - at)
 	var hat_region := region(&"hat_rock")
 	var took := await sail_until(p, hat_region.global_position, func() -> bool: return hat_region.contains(b.global_position), 60 * 70)
@@ -343,8 +345,9 @@ func wait_frames_until(cond: Callable, max_frames: int) -> int:
 
 func test_island_waters_are_free() -> void:
 	var p := await load_world()
-	var start := Vector3(-48, 0, 48)
-	await swim(p, start, Vector3.LEFT, func() -> bool: return false, 600)
+	# Down Barnacle Bay from the quay, past the pier.
+	var start := Vector3(-118, 0, 70)
+	await swim(p, start, Vector3.BACK, func() -> bool: return false, 600)
 	check("ten seconds' swimming round the harbor costs no breath", p.state_id == &"swim" and p.stamina.value > 0.999 and not p.stamina.draining,
 		"state=%s breath=%.2f" % [p.state_id, p.stamina.value])
 

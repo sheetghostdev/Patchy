@@ -31,8 +31,8 @@ const EDGE := 1500.0
 ## Where Patchy wakes up on Castaway Cay's beach, and the boat's mooring
 ## at the end of Barnacle Bay's pier (build_castaway_cay.gd). The boat is
 ## Gus's old dinghy: not Patchy's until Gus has fixed it up.
-const WASHED_UP := Vector3(0, 1.25, 33)
-const BOAT_AT := Vector3(-44.6, 0, 58)
+const WASHED_UP := CastawayLayout.WASHED_UP
+const BOAT_AT := CastawayLayout.MOORING
 
 
 func build() -> void:

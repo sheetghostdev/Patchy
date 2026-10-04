@@ -399,10 +399,14 @@ What each suite covers:
   the parrot's shelf, the teapot's shelf and its chest, and the cannon
   cracking the sugar wall to walk out under the handle.
 - **Island**: Castaway Cay end to end:
-  - the opening sequence;
-  - key routes (beach to meadow jump, the ledge grab up the bluff, the
-    village stairs, the rope bridge, the north beach stair, the wreck climb
-    and the long jump to the sea stack);
+  - the opening: aboard the Jolly Patch, the storm, the strike and the
+    sinking, the crabs carrying off Patchy's sea chest, and Esc skipping
+    the lot (without opening the pause menu);
+  - key routes (the jump up from the beach to the meadow, the ledge grab
+    up the bluff, the village stairs terrace by terrace, the rope bridge
+    into the woods, the north beach stair, the basalt columns up beside
+    the waterfall, the giant tree branch by branch to its Heart Piece, the
+    wreck climb and the long jump to the sea stack);
   - Barnacle Bay and its folk, walking into the Soggy Biscuit and talking
     to Auntie Ink;
   - the dinghy quest: no boat at first, Gus's ask, climbing Tok's lookout
@@ -454,22 +458,38 @@ The sea chart draws them all on the same bearings; undiscovered ones are
 dashed outlines with a "?". The haze is long and light, so their shapes
 read from Castaway Cay's summit, and a rain shower hides them.
 
-The game boots to the title screen. **New Game** plays the opening: a
-storm at sea, then Patchy wakes on the beach as crabs make off with his
-gold.
+The game boots to the title screen. **New Game** plays the opening, about
+twenty seconds in letterbox: Captain Patchy at the wheel of the *Jolly
+Patch*, homeward bound in the golden evening with a hold full of
+treasure; a storm out of nowhere, rain and a heavy swell; lightning snaps
+the mainmast, Patchy goes overboard, his gold slides into the sea and the
+ship goes down. Next morning he lies out cold on the beach while a gang of
+crabs carries off his sea chest and another drags away a coin; he comes
+to just in time to see a third grab one more and run. Esc (or Start /
+B) skips it at any point.
 
-**Castaway Cay** is the opening island, Patchy's Outset: a pirate fishing
-village on an island cut in two by a sea channel.
+**Castaway Cay** is the opening island, Patchy's Outset: a big pirate
+island about 400 m across, built in levels from the beaches up to Mount
+Patch's summit 54 m above the sea, with something to find, or a way to
+climb, at every turn (layout: `world/islands/castaway_cay/castaway_layout.gd`).
 
-- **Opening:** wake up on the cove's beach after the storm while crabs make
-  off with your gold.
-- **Wreck Beach:** Patchy's beached stern (the captain's cabin). Climb the
+- **Opening:** wake up on Wreck Shore after the storm while crabs make
+  off with your gold, and your sea chest.
+- **Wreck Shore:** Patchy's beached stern (the captain's cabin). Climb the
   deck, the cabin and the crow's nest (parrot), then long-jump to the sea
-  stack (parrot).
-- **Barnacle Bay**, the village round its harbor: the quay and the pier, a
-  plaza with a well, market stalls and bunting, houses up two terraces,
-  and the **Soggy Biscuit**, a tavern you can walk into, kept by Auntie
-  Ink the octopus. Old Shellby fishes off his jetty, Marlo off the pier.
+  stack (parrot). The crabs' burrow is under the meadow's edge.
+- **The meadow:** rolling hills, a river out of the waterfall pool, a
+  footbridge and stepping stones, an armored crab in a ring of coins. A
+  ledge at the cliff's foot leads in behind the waterfall to a hidden
+  chest; basalt columns climb the cliff beside it to the highlands, a jump
+  or a ledge grab each.
+- **Barnacle Bay**, the village climbing three terraces over its harbor:
+  the quay and the pier, a plaza with a well, market stalls and bunting,
+  houses backed against each terrace wall (their roofs are the climber's
+  shortcut to the next), a bell tower with ledges up to its belfry, and
+  the **Soggy Biscuit**, a tavern you can walk into, kept by Auntie Ink
+  the octopus. Old Shellby fishes off his jetty, Marlo off the pier;
+  Bubbles the otter and Juno the monkey have tips for the curious.
 - **The old dinghy:** there's no boat at first. Gus the walrus shipwright
   will fix up his old dinghy if Patchy fetches its sail (up Tok's lookout
   tower, climbed landing by landing round the outside, with a parrot caged
@@ -480,21 +500,32 @@ village on an island cut in two by a sea channel.
   a bow cannon. Sail colors, flags and figureheads are free to change.
   The boat turns in a window as you shop, trying on whatever you point at.
 - **The bluff and the rope bridge:** a ledge grab (or the stairs) up from
-  the village, then a sagging rope bridge across the channel.
-- **The forest:** round trees and palms, the summit (terraces or a
-  wall-kick chimney) with the Ship's Compass and a parrot, and the dark
-  cave Patchy won't enter without a light. Under the cliffs, the north
-  beach and a long stair.
-- **The headland:** across the gorge by the six-parrot log bridge, with a
-  chained-chest ground-pound puzzle, Brock's crocs, a grapple tease and
-  King Claw's ring.
+  the top terrace to Tok's lookout tower, then a sagging rope bridge over
+  the ravine into the woods.
+- **The Whispering Woods:** old trees and palms over the highlands, an
+  abandoned camp and its chest, a hidden glade, the dark cave Patchy won't
+  enter without a light, and the **giant tree**: a spiral of branches up
+  its trunk to a treehouse with a Heart Piece. A long stair runs down the
+  cliffs to the north beach, its cairn and a smuggler's nook.
+- **Mount Patch:** the miner's stair or rock steps up to the shelf, the
+  wall-kick chimney or the west ledges to the upper rocks, pillars round
+  the summit, and on top the Ship's Compass, a parrot, an old mast with a
+  gem in its nest and the best view in the archipelago. The summit slide
+  is the fast way down.
+- **The old fort:** across the gorge by the six-parrot log bridge, on the
+  headland: ruined walls and towers to clamber along, Brock's crocs, Patchy's
+  sea chest in chains (a ground-pound puzzle), the powder room, a grapple
+  tease off the east cliff and King Claw's ring on the point.
+- **The east downs:** a grassy ramp up from the meadow, the grotto behind
+  a cracked rock (a TNT snail nearby), and the sea arch, climbed by a rock
+  and a ledge grab, with a gem along its top.
 
 **Driftwood Key** is a small islet one short sail away, with parrot 5 on a
 driftwood tower, parrot 6 in a guarded crab pen, and the Storm Lantern.
 Beside the tower stands Beak Rock, a stack of weathered stone that looks
 for all the world like a parrot's head, peering down at the sand.
 
-**The Sunken Sloop** (spec §114) lies on the seabed off the cove: a broken
+**The Sunken Sloop** (spec §114) lies on the seabed off the south coast: a broken
 hull, its bow and a tattered mast among coral, kelp and schools of reef
 fish. A trail of coins leads down from the shallows to a chest in its
 lee. Packed in with its goblet is a soggy map of an island that isn't
@@ -592,7 +623,7 @@ More on Castaway Cay:
   which are the shovel and a treasure map. The map sketches the place
   where a relic is buried.
 - **Treasure maps** (spec §86–87) are parchment sketches of landmarks (a
-  stump under the ridge, a cairn on the north sand, a parrot made of
+  stump behind the tavern, a cairn on the north sand, a parrot made of
   stone) with a riddle, never a marker in the world. Unroll them under Pause > Treasure to zoom, turn
   and inspect them. Dig a few steps off and Patchy can tell something is
   buried close by.

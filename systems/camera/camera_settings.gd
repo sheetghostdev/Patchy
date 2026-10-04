@@ -10,7 +10,7 @@ extends Resource
 @export_range(0.3, 5.0, 0.05) var min_distance: float = 0.9
 ## Height above Patchy's feet the camera looks at (upper torso).
 @export_range(0.0, 3.0, 0.05) var target_height: float = 1.35
-@export_range(-89.0, 0.0, 0.5) var default_pitch: float = -15.0
+@export_range(-89.0, 0.0, 0.5) var default_pitch: float = -11.0
 @export_range(-89.0, 0.0, 0.5) var pitch_min: float = -72.0
 @export_range(-30.0, 89.0, 0.5) var pitch_max: float = 38.0
 ## Vertical field of view.

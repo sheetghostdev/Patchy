@@ -247,7 +247,9 @@ func _set_gameplay_visible(on: bool, instant: bool) -> void:
 		if instant:
 			c.modulate.a = 1.0 if want else 0.0
 			c.visible = want
-		elif changed or c == _bottom_center:
+		elif changed or c == _bottom_center or not want:
+			# (Hidden before the player ever bound, e.g. an opening cutscene,
+			# nothing "changed", but what's showing still has to go.)
 			if want != (c.visible and c.modulate.a > 0.5):
 				UIFx.fade(c, 1.0 if want else 0.0, 0.25 if want else 0.18)
 	if on and changed and not instant:

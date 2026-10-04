@@ -16,9 +16,12 @@ physics:
 
 Status:
 
-- Castaway Cay (rebuilt as a village island: Barnacle Bay, the channel
-  and the rope bridge, the forest, the headland), Driftwood Key and Gull
-  Bar are playable. Patchy's first boat is Gus's old dinghy, fixed up once
+- Castaway Cay (a big island in levels: Wreck Shore, the meadow and the
+  waterfall, Barnacle Bay up its terraces, the bluff and the rope bridge,
+  the woods and the giant tree, Mount Patch, the old fort across the
+  gorge, the east downs and the sea arch; `CastawayLayout`), Driftwood Key
+  and Gull Bar are playable. The opening plays the *Jolly Patch* sailing
+  into the storm and going down; Esc skips it. Patchy's first boat is Gus's old dinghy, fixed up once
   he finds its sail and tiller.
 - **One sea** (`world/sea/world.tscn`, `WorldDirector`): every island in a
   single world, joined by open water. Sail (or swim) from any island to any
@@ -49,7 +52,7 @@ on the same bearings.
 | Island | Bearing | Distance | Kind | Gimmick | Item / unlock | Ship part | Sea hazard round it |
 |---|---|---|---|---|---|---|---|
 | Castaway Cay | — | — | large | the whole moveset | hook, lantern, shovel, grapple, hand cannon | Compass, Ship's Wheel | — (start) |
-| Driftwood Key | 223° | 190 m | small | raft tower, crab pen | — | — | — |
+| Driftwood Key | 227° | 340 m | small | raft tower, crab pen | — | — | — |
 | Hat Rock | 345° | 480 m | tiny | a sea stack shaped like a pirate hat | **Spyglass** | — | — |
 | Bell Atoll | 160° | 500 m | tiny | five bells and a song | **Shanty sheet** (song) | — | — |
 | Pinwheel Isle | 300° | 500 m | tiny | giant pinwheels raise screw platforms | Heart Piece | — | — |
@@ -124,7 +127,7 @@ lies.
   - Swimming is free in an island's own waters. In the open sea Patchy's
     breath runs down (`SwimStamina`): six seconds, about 30 m, and he goes
     under, a heart down and back on the last safe ground. Even Driftwood
-    Key, Castaway's nearest neighbor, is over 40 m of open sea away, so
+    Key, Castaway's nearest neighbor, is some 60 m of open sea away, so
     every island past the first is a boat ride.
 - **Ship.** Patchy's ship (`ShipUpgrades`) has three things that matter
   at sea, and they belong to whichever boat he sails:

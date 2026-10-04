@@ -97,11 +97,11 @@ func _apply() -> void:
 	env.fog_mode = Environment.FOG_MODE_DEPTH
 	# Long, light haze: islands a kilometer off still show their shapes
 	# (spec §194: "across the bright ocean are several strange islands").
-	env.fog_depth_begin = 110.0
-	env.fog_depth_end = 2300.0
-	env.fog_depth_curve = 1.3
+	env.fog_depth_begin = 180.0
+	env.fog_depth_end = 2600.0
+	env.fog_depth_curve = 1.4
 	env.fog_sky_affect = 0.0
-	env.fog_aerial_perspective = 0.55
+	env.fog_aerial_perspective = 0.35
 	env.adjustment_enabled = true
 	env.adjustment_saturation = 1.06
 	env.adjustment_contrast = 1.04
@@ -207,7 +207,9 @@ func set_weather(amount: float) -> void:
 			_sky_mat.set_shader_parameter(key, lerpf(float(a), float(b), _weather))
 	sun.light_energy = lerpf(float(_clear[&"sun_energy"]), float(_clear[&"sun_energy"]) * 0.45, _weather)
 	if world_env != null and world_env.environment != null:
-		world_env.environment.fog_depth_end = lerpf(float(_clear[&"fog_end"]), 260.0, _weather)
+		# Rain closes the horizon in, but the nearer islands still show grey
+		# through it.
+		world_env.environment.fog_depth_end = lerpf(float(_clear[&"fog_end"]), 1100.0, _weather)
 
 
 func get_weather() -> float:

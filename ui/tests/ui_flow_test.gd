@@ -576,6 +576,15 @@ func _test_scene_round_trip() -> void:
 	await _wait_scene(func() -> bool: return GameManager.player != null and is_instance_valid(GameManager.player))
 	await _frames(30)
 	check(GameManager.player != null, "New Game loads a level with a player (start or fallback scene)")
+	# A new game opens on the intro: no HUD over the cutscene, and pause
+	# (Esc) skips it rather than opening the menu.
+	var intro := get_tree().get_first_node_in_group(&"opening_sequence") as OpeningSequence
+	if intro != null and intro.is_pending():
+		check(not ui.hud.is_gameplay_visible(), "HUD hidden while the intro plays")
+		await press(&"pause")
+		await _wait_scene(func() -> bool: return not intro.is_pending())
+		await _frames(30)
+		check(not intro.is_pending() and not ui.pause_menu.is_open, "pause skips the intro instead of pausing")
 	check(ui.hud.is_gameplay_visible(), "HUD visible again in the level")
 	check(InventoryManager.gold_value == 0 and ParrotManager.get_total() == 0, "New Game reset progress")
 	if had_save:

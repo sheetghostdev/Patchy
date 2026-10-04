@@ -1,12 +1,14 @@
 extends PatchyTestHarness
-## Headless suite for Castaway Cay: the opening, the main routes, the dark-cave
-## refusal, the parrot log bridge, the chained chest and the crab burrow.
-## Loads the real world (every island in one sea) for every test and plays
-## Castaway Cay's chunk of it.
+## Headless suite for Castaway Cay: the opening, the routes up and around the
+## island (terraces, stairs, ledges, the rope bridge, the basalt columns,
+## the giant tree, the wreck), the dark-cave refusal, the parrot log bridge,
+## the chained chest, the crab burrow, the quests and the boat. Positions
+## come from CastawayLayout. Loads the real world (every island in one sea)
+## for every test and plays Castaway Cay's chunk of it.
 ##   godot --headless --path . --fixed-fps 60 res://tests/run_island_tests.tscn [filter]
 
 const WORLD_PATH := "res://world/sea/world.tscn"
-const DRIFTWOOD_CENTER := Vector3(-130, 0, 140)
+const L := preload("res://world/islands/castaway_cay/castaway_layout.gd")
 
 var world: Node3D
 var island: Node3D
@@ -143,16 +145,33 @@ func test_everything_rests_on_something() -> void:
 		sq.shape = shape
 		sq.transform = Transform3D(Basis.IDENTITY, p + Vector3.UP * 0.35)
 		sq.collision_mask = Layers.WORLD
-		if not space.intersect_shape(sq, 1).is_empty():
-			bad.append("%s is buried at %v" % [it.name, p])
+		var inside := space.intersect_shape(sq, 1)
+		if not inside.is_empty():
+			bad.append("%s is buried in %s at %v" % [it.name, (inside[0].collider as Node).name, p])
 	check("all pickups sit on reachable ground", bad.is_empty(), "; ".join(bad.slice(0, 4)))
 
 
 func test_opening_sequence() -> void:
 	var seq := node("OpeningSequence") as OpeningSequence
 	check("intro holds Patchy down", player.state_id == &"locked", "state=%s" % player.state_id)
+	# At sea: the Jolly Patch, Captain Patchy at the wheel.
+	var at_sea := await wait_until(func() -> bool: return seq.find_children("*", "PirateShip", true, false).size() == 2, 120)
+	check("it opens at sea, aboard the Jolly Patch", at_sea >= 0 and get_viewport().get_camera_3d().get_parent() == seq, "")
+	var storm := await wait_until(func() -> bool: return (world.get_node("SkyEnvironment") as SkyEnvironment).preset == SkyEnvironment.Preset.STORM, 600)
+	check("then a storm hits", storm >= 0, "")
+	var wreck: PirateShip = null
+	for s: PirateShip in seq.find_children("*", "PirateShip", true, false):
+		if s.damaged:
+			wreck = s
+	var struck := await wait_until(func() -> bool: return wreck != null and is_instance_valid(wreck) and wreck.visible, 600)
+	check("lightning snaps the mainmast", struck >= 0, "")
+	var sunk := await wait_until(func() -> bool: return not is_instance_valid(wreck) or wreck.global_position.y < -8.0, 600)
+	check("and she goes down", sunk >= 0, "")
+	var ashore := await wait_until(func() -> bool: return seq.find_child("ChestPorters", true, false) != null, 600)
+	check("morning: crabs carry off Patchy's sea chest while he's out cold", ashore >= 0 and player.state_id == &"locked"
+		and (world.get_node("SkyEnvironment") as SkyEnvironment).preset != SkyEnvironment.Preset.STORM, "state=%s" % player.state_id)
 	var done := await wait_until(func() -> bool: return not seq.is_pending(), 900)
-	check("intro finishes within 15 s", done >= 0, "frames=%d" % done)
+	check("the whole intro runs under half a minute", done >= 0, "frames=%d" % done)
 	await frames(4)
 	check("control returns", player.state_id != &"locked", "state=%s" % player.state_id)
 	check("gameplay camera is live", rig.get_camera().current, "")
@@ -166,38 +185,87 @@ func test_opening_sequence() -> void:
 	check("crabs run off with gold", thieves >= 2, "thieves=%d" % thieves)
 
 
-func test_cove_jump_to_meadow() -> void:
+## Esc skips the intro at any point: straight to the beach, in control,
+## the storm gone and the thieves already running.
+func test_opening_sequence_skips_with_escape() -> void:
+	var seq := node("OpeningSequence") as OpeningSequence
+	await wait_until(func() -> bool: return seq.is_running() and seq.find_children("*", "PirateShip", true, false).size() == 2, 240)
+	await frames(200)
+	await _skip_intro_and_check(seq)
+
+
+## ...even mid-wreck, with the mast falling and the ship going down.
+func test_opening_sequence_skips_during_the_wreck() -> void:
+	var seq := node("OpeningSequence") as OpeningSequence
+	await wait_until(func() -> bool:
+		for s: PirateShip in seq.find_children("*", "PirateShip", true, false):
+			if s.damaged and s.visible:
+				return true
+		return false, 900)
+	await frames(80)
+	await _skip_intro_and_check(seq)
+	await frames(300)
+	check("nothing of the wreck is left behind", seq.get_child_count() == 0 or seq.find_children("*", "LevelBlock", true, false).is_empty(), "children=%d" % seq.get_child_count())
+
+
+func _skip_intro_and_check(seq: OpeningSequence) -> void:
+	var esc := InputEventKey.new()
+	esc.physical_keycode = KEY_ESCAPE
+	esc.keycode = KEY_ESCAPE
+	esc.pressed = true
+	Input.parse_input_event(esc)
+	await frames(2)
+	esc = esc.duplicate()
+	esc.pressed = false
+	Input.parse_input_event(esc)
+	var done := await wait_until(func() -> bool: return not seq.is_pending() and player.state_id != &"locked", 90)
+	check("Esc skips the intro", done >= 0, "state=%s" % player.state_id)
+	await frames(30)
+	var ui := get_node_or_null(^"/root/UI") as UIRoot
+	check("without opening the pause menu", ui == null or not ui.pause_menu.is_open, "")
+	check("the ship and the storm are gone", seq.find_children("*", "PirateShip", true, false).is_empty()
+		and (world.get_node("SkyEnvironment") as SkyEnvironment).preset != SkyEnvironment.Preset.STORM, "")
+	check("Patchy's on the beach where he washed up, camera behind him", player.global_position.distance_to(L.WASHED_UP) < 1.5 and rig.get_camera().current, "pos=%v" % player.global_position)
+	check("the intro counts as seen", WorldState.is_completed(&"castaway_intro_seen"), "")
+	var thieves := 0
+	for c in island.find_children("*", "Crab", true, false):
+		if (c as Crab).state in [Crab.State.FLEE, Crab.State.STEAL, Crab.State.BURROWED, Crab.State.NOTICE]:
+			thieves += 1
+	check("and the crabs are off with his coins", thieves >= 2, "thieves=%d" % thieves)
+
+
+func test_jump_up_from_the_beach_to_the_meadow() -> void:
 	await clear_enemies()
-	await place(Vector3(0, 1.3, 32.5), Vector3.FORWARD)
+	await place(Vector3(3, L.SAND + 0.1, 66), Vector3.FORWARD)
 	move(Vector2(0, -1))
-	await wait_until(func() -> bool: return player.global_position.z < 28.6, 120)
+	await wait_until(func() -> bool: return player.global_position.z < 60.6, 120)
 	press(&"jump")
 	await frames(24)
 	release(&"jump")
-	await frames(60)
+	var up := await wait_until(func() -> bool: return player.is_on_floor() and player.global_position.y > L.LOW - 0.2, 180)
 	move(Vector2.ZERO)
 	await frames(10)
-	check("jumps from the beach onto the meadow", player.is_on_floor() and player.global_position.y > 2.9, "y=%.2f z=%.2f" % [player.global_position.y, player.global_position.z])
+	check("jumps (or scrambles) up from the beach onto the meadow", up >= 0, "y=%.2f z=%.2f" % [player.global_position.y, player.global_position.z])
 
 
 func test_ledge_grab_up_the_bluff() -> void:
 	await clear_enemies()
-	await place(Vector3(-30, 6.7, -7), Vector3.RIGHT)
+	await place(Vector3(-106, L.TERRACE + 0.1, -30.5), Vector3.FORWARD)
 	move(Vector2(0, -1))
-	await wait_until(func() -> bool: return player.global_position.x > -27.3, 120)
+	await wait_until(func() -> bool: return player.global_position.z < -33.6, 120)
 	press(&"jump")
 	var grabbed := await wait_until(func() -> bool: return player.state_id == &"ledge", 90)
 	release(&"jump")
-	check("catches the bluff's ledge from the upper terrace", grabbed >= 0, "state=%s y=%.2f" % [player.state_id, player.global_position.y])
-	var up := await wait_until(func() -> bool: return player.state_id == &"ground" and player.global_position.y > 10.3, 90)
+	check("catches the bluff's ledge from the top terrace", grabbed >= 0, "state=%s y=%.2f" % [player.state_id, player.global_position.y])
+	var up := await wait_until(func() -> bool: return player.state_id == &"ground" and player.global_position.y > L.BLUFF - 0.2, 90)
 	check("climbs onto the bluff", up >= 0, "y=%.2f state=%s" % [player.global_position.y, player.state_id])
 
 
 func test_dark_cave_refusal() -> void:
 	await clear_enemies()
-	await place(Vector3(11.0, 13.1, -52.5), Vector3.LEFT)
+	await place(Vector3(-155.0, L.HIGH + 0.1, -86.5), Vector3.LEFT)
 	move(Vector2(0, -1))
-	var deepest := 99.0
+	var deepest := 999.0
 	var locked := -1
 	for i in 240:
 		await frames(1)
@@ -206,12 +274,13 @@ func test_dark_cave_refusal() -> void:
 			locked = i
 			move(Vector2.ZERO)
 	check("refuses to enter the dark cave", locked >= 0, "x=%.2f" % player.global_position.x)
-	check("never goes deep", deepest > 5.0, "deepest x=%.2f" % deepest)
+	check("never goes deep", deepest > -161.0, "deepest x=%.2f" % deepest)
 	var free := await wait_until(func() -> bool: return player.state_id != &"locked", 240)
-	check("backs out and regains control", free >= 0 and player.global_position.x > 6.4, "x=%.2f state=%s" % [player.global_position.x, player.state_id])
+	check("backs out and regains control", free >= 0 and player.global_position.x > -159.6, "x=%.2f state=%s" % [player.global_position.x, player.state_id])
 
 
 func test_log_bridge_needs_six_parrots() -> void:
+	await clear_enemies()
 	var task := node("Gameplay/Headland/LogBridgeTask") as ParrotTask
 	var log_body := node("Gameplay/Headland/FallenLog") as Node3D
 	var spot := node("Gameplay/Headland/LogBridgeSpot") as Node3D
@@ -220,49 +289,50 @@ func test_log_bridge_needs_six_parrots() -> void:
 	await frames(30)
 	check("four parrots are not enough", not WorldState.is_completed(&"castaway_log_bridge"), "")
 	ParrotManager.debug_add(2)
-	await place(Vector3(13.5, 13.1, -34.5), Vector3.FORWARD)
+	await place(task.global_position + Vector3(0, 0.1, 1.5), Vector3.FORWARD)
 	task.interact(player)
 	var done := await wait_until(func() -> bool: return WorldState.is_completed(&"castaway_log_bridge"), 900)
 	check("six parrots lay the bridge", done >= 0, "frames=%d" % done)
-	check("log rests at the gorge", log_body.global_position.distance_to(spot.global_position) < 0.05, "d=%.2f" % log_body.global_position.distance_to(spot.global_position))
+	check("log rests across the gorge", log_body.global_position.distance_to(spot.global_position) < 0.05, "d=%.2f" % log_body.global_position.distance_to(spot.global_position))
 	await frames(20)
-	await place(Vector3(19.0, 13.1, -42), Vector3.RIGHT)
+	await place(Vector3(56.0, L.HIGH + 0.1, -80), Vector3.RIGHT)
 	move(Vector2(0, -1))
-	await wait_until(func() -> bool: return player.global_position.x > 47.0 or player.global_position.y < 11.0, 300)
+	await wait_until(func() -> bool: return player.global_position.x > 84.0 or player.global_position.y < L.HIGH - 2.0, 300)
 	move(Vector2.ZERO)
 	await frames(20)
-	check("walks the log to the headland", player.global_position.x > 46.0 and player.global_position.y > 12.9, "pos=%v" % player.global_position)
+	check("walks the log to the old fort's headland", player.global_position.x > 83.0 and player.global_position.y > L.FORT - 0.2, "pos=%v" % player.global_position)
 
 
 func test_headland_unreachable_without_bridge() -> void:
 	await clear_enemies()
-	# The best long jump off the forest's edge must fall short of the headland.
-	await place(Vector3(21.0, 13.1, -47), Vector3.RIGHT)
+	# The best long jump off the highlands' edge must fall short of the headland.
+	await place(Vector3(53.0, L.HIGH + 0.1, -88), Vector3.RIGHT)
 	move(Vector2(0, -1))
-	await wait_until(func() -> bool: return player.global_position.x > 23.6, 120)
+	await wait_until(func() -> bool: return player.global_position.x > 58.6, 120)
 	press(&"crouch")
 	await frames(2)
 	tap(&"jump")
 	await frames(1)
 	release(&"crouch")
-	check("long jump off the forest's edge", player.jump_kind == &"long", String(player.jump_kind))
+	check("long jump off the highlands' edge", player.jump_kind == &"long", String(player.jump_kind))
 	await wait_until(func() -> bool: return player.state_id != &"air", 300)
 	move(Vector2.ZERO)
 	await frames(10)
-	check("long jump falls short of the headland", player.global_position.y < 12.0 and player.global_position.x < 42.0, "pos=%v" % player.global_position)
+	check("long jump falls short of the headland", player.global_position.y < L.HIGH - 1.0 and player.global_position.x < 78.0, "pos=%v" % player.global_position)
 
 
 func test_shipwreck_climb() -> void:
 	await clear_enemies()
-	await place(Vector3(39.6, 1.3, 38), Vector3.RIGHT)
+	var o := L.WRECK
+	await place(o + Vector3(39.6, 1.3, 38), Vector3.RIGHT)
 	move(Vector2(0, -1))
-	await wait_until(func() -> bool: return player.global_position.x > 47.4, 180)
+	await wait_until(func() -> bool: return player.global_position.x > o.x + 47.4, 180)
 	press(&"jump")
 	await frames(20)
 	release(&"jump")
 	await wait_until(func() -> bool: return player.is_on_floor() and player.global_position.y > 6.0, 120)
 	check("onto the cabin roof", player.global_position.y > 6.0, "pos=%v state=%s" % [player.global_position, player.state_id])
-	await wait_until(func() -> bool: return player.global_position.x > 52.4, 90)
+	await wait_until(func() -> bool: return player.global_position.x > o.x + 52.4, 90)
 	press(&"jump")
 	await frames(20)
 	release(&"jump")
@@ -275,8 +345,8 @@ func test_shipwreck_climb() -> void:
 
 func test_long_jump_to_the_stack() -> void:
 	await clear_enemies()
-	var nest := Vector3(55.5, 8.1, 38)
-	var target := Vector3(61.4, 6.2, 48.6)
+	var nest := L.WRECK + Vector3(55.5, 8.1, 38)
+	var target := L.WRECK + Vector3(61.4, 6.2, 48.6)
 	var d := Player.flat(target - nest).normalized()
 	var n := Vector3(d.z, 0, -d.x)
 	await place(nest - d * 1.2 + n * 1.0, d)
@@ -451,7 +521,7 @@ func test_beak_rock_marks_the_spot() -> void:
 
 func test_crab_bumps_tnt_snail_and_the_rock_goes_too() -> void:
 	var snail := node("Enemies/SnailGrotto") as TNTSnail
-	var rock := node("Structures/CannonSecrets/GrottoCrackedRock") as Node3D
+	var rock := node("Structures/EastDowns/GrottoCrackedRock") as Node3D
 	var crab: Crab = null
 	for c in island.find_children("*", "Crab", true, false):
 		if (c as Crab).persistent_id == &"castaway_crab_grotto":
@@ -459,12 +529,13 @@ func test_crab_bumps_tnt_snail_and_the_rock_goes_too() -> void:
 		elif c != crab:
 			c.queue_free()
 	await frames(2)
-	# Patchy is far off: this one is all the crab's doing.
-	await place(Vector3(0, 1.3, 33), Vector3.FORWARD)
+	# Patchy is far off in the village: this one is all the crab's doing.
+	await place(Vector3(-112, L.LOW + 0.1, 36), Vector3.FORWARD)
 	snail.crawl_speed = 0.0
-	snail.global_position = rock.global_position + Vector3(2.2, 0.05, 0.2)
+	# The grotto opens west, toward the meadow.
+	snail.global_position = rock.global_position + Vector3(-2.2, 0.05, 0.2)
 	snail.home = snail.global_position
-	crab.global_position = snail.global_position + Vector3(0.9, 0.05, 0.4)
+	crab.global_position = snail.global_position + Vector3(-0.9, 0.05, 0.4)
 	var lit := await wait_until(func() -> bool: return snail.state == TNTSnail.State.FUSE, 60)
 	check("a crab blundering into the snail lights its fuse", lit >= 0, "state=%s" % TNTSnail.State.keys()[snail.state])
 	var boom := await wait_until(func() -> bool: return WorldState.is_completed(&"castaway_grotto_rock"), 300)
@@ -478,7 +549,7 @@ func test_brock_rows_in_after_king_claw() -> void:
 	if boss != null:
 		boss.queue_free()
 	var cameo := node("Gameplay/BrockCameo/BrockCameo") as BrockCameo
-	await place(Vector3(57, 13.1, -74.0), Vector3.FORWARD)
+	await place(L.CLAW_RING + Vector3(-9.0, 0.1, 13.0), Vector3.FORWARD)
 	await frames(60)
 	check("Brock waits until King Claw is beaten", not cameo.is_running(), "")
 	WorldState.mark_completed(&"king_claw")
@@ -514,15 +585,15 @@ func test_barnacle_betty_side_quest() -> void:
 	check("he asks Patchy to bring her home", await converse(shellby) and WorldState.is_completed(&"castaway_betty_quest"), "")
 	check("the favor goes in the quest log", QuestLog.build().any(func(q: Dictionary) -> bool: return q.title == "The Barnacle Betty" and not q.done), "")
 	# Up Gull Rock: the crabs' plank ramp, then a ledge grab.
-	await place(Vector3(-77.5, 1.3, 15.0), Vector3.LEFT)
+	await place(Vector3(-175.5, 1.3, 14.0), Vector3.LEFT)
 	move(Vector2(0, -1))
-	var on_ledge := await wait_until(func() -> bool: return player.global_position.x < -87.8 and player.global_position.y > 5.2, 300)
+	var on_ledge := await wait_until(func() -> bool: return player.global_position.x < -185.8 and player.global_position.y > 5.2, 300)
 	move(Vector2.ZERO)
 	check("the plank ramp walks up to Gull Rock's ledge", on_ledge >= 0, "pos=%v" % player.global_position)
 	await frames(10)
-	await place(Vector3(-89.6, 5.5, 14.4), Vector3.LEFT)
+	await place(Vector3(-187.6, 5.5, 13.4), Vector3.LEFT)
 	move(Vector2(0, -1))
-	await wait_until(func() -> bool: return player.global_position.x < -91.3, 60)
+	await wait_until(func() -> bool: return player.global_position.x < -189.3, 60)
 	press(&"jump")
 	var grabbed := await wait_until(func() -> bool: return player.state_id == &"ledge", 90)
 	release(&"jump")
@@ -546,7 +617,7 @@ func test_barnacle_betty_side_quest() -> void:
 	check("and hands over his chart", InventoryManager.has_treasure_map(&"castaway_map_2") and WorldState.is_completed(&"castaway_betty_reward"), "")
 	check("the favor is done", QuestLog.build().any(func(q: Dictionary) -> bool: return q.title == "The Barnacle Betty" and q.done), "")
 	await give(&"shovel")
-	var x := node("Gameplay/BarnacleBetty/NorthBeachX") as DigSpot
+	var x := node("Gameplay/NorthBeachX") as DigSpot
 	await place(x.global_position + Vector3(0, 0.1, 1.2), Vector3.FORWARD)
 	for k in 2:
 		tap(&"tool_primary")
@@ -602,10 +673,10 @@ func test_pip_wants_her_clam_back() -> void:
 
 
 func test_checkpoint_respawn() -> void:
-	var cp := node("Gameplay/CpForest") as Checkpoint
+	var cp := node("Gameplay/CpWoods") as Checkpoint
 	await place(cp.global_position + Vector3(0, 0.1, 1.0), Vector3.FORWARD)
 	await frames(10)
-	check("touching the flag sets the checkpoint", GameManager.checkpoint_id == &"cp_forest", "id=%s" % GameManager.checkpoint_id)
+	check("touching the flag sets the checkpoint", GameManager.checkpoint_id == &"cp_woods", "id=%s" % GameManager.checkpoint_id)
 	player.health.die()
 	await frames(90)
 	check("fainting returns to the flag", player.global_position.distance_to(cp.global_position) < 1.5, "pos=%v" % player.global_position)
@@ -629,65 +700,100 @@ func test_the_village_and_its_folk() -> void:
 
 func test_walk_into_the_soggy_biscuit() -> void:
 	await clear_enemies()
-	await place(Vector3(-37.0, 3.1, 15.5), Vector3.RIGHT)
+	# The tavern stands at the plaza's east end, its door facing west.
+	await place(Vector3(-82.5, L.LOW + 0.1, 41.5), Vector3.RIGHT)
 	move(Vector2(0, -1))
-	await wait_until(func() -> bool: return player.global_position.x > -31.5, 150)
+	await wait_until(func() -> bool: return player.global_position.x > -77.0, 150)
 	move(Vector2.ZERO)
 	await frames(20)
 	var p := player.global_position
-	check("through the door and into the tavern", p.x > -33.8 and p.x < -27.2 and p.z > 9.2 and p.z < 18.8 and player.is_on_floor() and absf(p.y - 3.0) < 0.3, "pos=%v" % p)
+	check("through the door and into the tavern", p.x > -79.3 and p.x < -72.7 and p.z > 35.2 and p.z < 44.8 and player.is_on_floor() and absf(p.y - L.LOW) < 0.3, "pos=%v" % p)
 	var ink := node("Gameplay/AuntieInk") as NPC
-	await place(Vector3(-30.0, 3.1, 12.0), Vector3.RIGHT)
+	await place(Vector3(-75.5, L.LOW + 0.1, 38.0), Vector3.RIGHT)
 	await frames(6)
 	check("Auntie Ink serves at the bar", player.interaction.current == ink, "current=%s" % player.interaction.current)
 	check("and has a word for a castaway", await converse(ink) and WorldState.is_completed(&"castaway_met_ink"), "")
 
 
+## Walks Patchy along `dir` from `from` until `arrived` holds; true if it did.
+func walk(from: Vector3, dir: Vector3, arrived: Callable, max_frames := 240) -> bool:
+	await place(from, dir)
+	move(Vector2(0, -1))
+	var ok := await wait_until(arrived, max_frames)
+	move(Vector2.ZERO)
+	await frames(10)
+	return ok >= 0
+
+
 func test_stairs_up_the_village() -> void:
 	await clear_enemies()
-	await place(Vector3(-53.0, 3.1, 15.5), Vector3.FORWARD)
-	move(Vector2(0, -1))
-	var up := await wait_until(func() -> bool: return player.global_position.z < 5.0, 240)
-	move(Vector2.ZERO)
-	await frames(10)
-	check("stairs from the plaza to the upper terrace", up >= 0 and player.global_position.y > 6.5, "pos=%v" % player.global_position)
-	await place(Vector3(-33.5, 6.7, 0.0), Vector3.RIGHT)
-	move(Vector2(0, -1))
-	up = await wait_until(func() -> bool: return player.global_position.x > -22.5, 240)
-	move(Vector2.ZERO)
-	await frames(10)
-	check("and on up to the bluff", up >= 0 and player.global_position.y > 10.3, "pos=%v" % player.global_position)
-	await place(Vector3(-46.0, 1.7, 31.0), Vector3.FORWARD)
-	move(Vector2(0, -1))
-	up = await wait_until(func() -> bool: return player.global_position.z < 24.0, 240)
-	move(Vector2.ZERO)
-	await frames(10)
-	check("and up from the quay to the plaza", up >= 0 and player.global_position.y > 2.9, "pos=%v" % player.global_position)
+	var up := await walk(Vector3(-120, L.LOW + 0.1, 36.5), Vector3.FORWARD, func() -> bool: return player.global_position.z < 21.0)
+	check("stairs from the plaza up to the middle terrace", up and player.global_position.y > L.MID - 0.2, "pos=%v" % player.global_position)
+	up = await walk(Vector3(-104, L.MID + 0.1, 5.0), Vector3.FORWARD, func() -> bool: return player.global_position.z < -15.5)
+	check("on up to the top terrace", up and player.global_position.y > L.TERRACE - 0.2, "pos=%v" % player.global_position)
+	up = await walk(Vector3(-94, L.TERRACE + 0.1, -21.0), Vector3.FORWARD, func() -> bool: return player.global_position.z < -40.5)
+	check("and up to the bluff", up and player.global_position.y > L.BLUFF - 0.2, "pos=%v" % player.global_position)
+	up = await walk(Vector3(-112, L.QUAY + 0.1, 61), Vector3.FORWARD, func() -> bool: return player.global_position.z < 51.5)
+	check("and up from the quay to the plaza", up and player.global_position.y > L.LOW - 0.2, "pos=%v" % player.global_position)
 
 
-func test_rope_bridge_to_the_forest() -> void:
+func test_rope_bridge_to_the_woods() -> void:
 	await clear_enemies()
-	await place(Vector3(-2.0, 10.5, -8.5), Vector3.FORWARD)
-	move(Vector2(0, -1))
-	var crossed := await wait_until(func() -> bool: return player.global_position.z < -30.0 or player.global_position.y < 8.0, 360)
-	move(Vector2.ZERO)
-	await frames(10)
-	check("across the rope bridge over the channel to the forest", crossed >= 0 and player.global_position.y > 12.9 and player.global_position.z < -28.0, "pos=%v" % player.global_position)
+	var crossed := await walk(Vector3(-90, L.BLUFF + 0.1, -52.0), Vector3.FORWARD,
+		func() -> bool: return player.global_position.z < -70.0 or player.global_position.y < L.BLUFF - 2.5, 360)
+	check("across the rope bridge over the ravine into the woods", crossed and player.global_position.y > L.HIGH - 0.2 and player.global_position.z < -68.0, "pos=%v" % player.global_position)
 
 
 func test_north_beach_stairs() -> void:
 	await clear_enemies()
-	await place(Vector3(-27.0, 1.3, -83.2), Vector3.LEFT)
-	move(Vector2(0, -1))
-	var up := await wait_until(func() -> bool: return player.global_position.x < -50.5, 360)
+	var up := await walk(Vector3(-33, L.SAND + 0.1, -123.5), Vector3.LEFT, func() -> bool: return player.global_position.x < -61.5, 420)
+	check("up the long stair from the north beach to the woods", up and player.global_position.y > L.HIGH - 0.3, "pos=%v" % player.global_position)
+
+
+## The basalt columns beside the waterfall: a jump (or a ledge grab) up
+## each, from the meadow to the highlands.
+func test_basalt_columns_up_to_the_highlands() -> void:
+	await clear_enemies()
+	await place(Vector3(14.5, L.LOW + 0.1, -25.5), Vector3(-0.6, 0, -1))
+	var k := 0
+	for n in island.find_children("Basalt*", "LevelBlock", true, false):
+		var col := n as LevelBlock
+		k += 1
+		if not await hop_to(col.global_position + Vector3.UP * col.size.y, 22):
+			break
+	check("hops up all seven basalt columns", k == 7 and player.global_position.y > 17.3, "col=%d pos=%v" % [k, player.global_position])
+	var top := await hop_to(Vector3(-9.7, L.HIGH, -34.7), 22)
+	check("and onto the highlands above the falls", top, "pos=%v" % player.global_position)
+
+
+## The giant tree: branch to branch round the trunk, up to the treehouse
+## and its Heart Piece.
+func test_climb_the_giant_tree() -> void:
+	await clear_enemies()
+	var c := L.GIANT_TREE
+	var first := node("Structures/GiantTree/Branch1") as Node3D
+	var out := Player.flat(first.global_position - c).normalized()
+	await place(c + out * 9.5 + Vector3.UP * 0.1, -out)
+	var reached := 0
+	for k in range(1, 13):
+		var branch := node("Structures/GiantTree/Branch%d" % k) as Node3D
+		if not await hop_to(branch.global_position + Vector3.UP * 0.45, 22):
+			break
+		reached = k
+	check("branch by branch up the giant tree", reached == 12, "branch=%d pos=%v" % [reached, player.global_position])
+	var last := Player.flat((node("Structures/GiantTree/Branch12") as Node3D).global_position - c).normalized()
+	var on_deck := await hop_to(c + last * 2.6 + Vector3.UP * 26.0, 22)
+	check("onto the treehouse deck", on_deck, "pos=%v" % player.global_position)
+	var piece := node("Gameplay/TreeHeartPiece") as Node3D
+	move(stick_toward(Player.flat(piece.global_position - player.global_position)) * 0.5)
+	var got := await wait_until(func() -> bool: return InventoryManager.has_heart_piece(&"castaway_heart_piece_tree"), 180)
 	move(Vector2.ZERO)
-	await frames(10)
-	check("up the long stair from the north beach to the forest", up >= 0 and player.global_position.y > 12.9, "pos=%v" % player.global_position)
+	check("and the Heart Piece up there", got >= 0, "pos=%v" % player.global_position)
 
 
 ## Hops Patchy onto `target` (a landing's top) the way a player would: run
-## at it, jump short of it, steer in, settle.
-func hop_to(target: Vector3) -> bool:
+## at it, jump short of it (holding jump `hold` frames), steer in, settle.
+func hop_to(target: Vector3, hold := 12) -> bool:
 	for i in 200:
 		var to := Player.flat(target - player.global_position)
 		if player.is_on_floor() and absf(player.global_position.y - target.y) < 0.25 and to.length() < 0.8:
@@ -697,7 +803,7 @@ func hop_to(target: Vector3) -> bool:
 		move(stick_toward(to) * clampf(to.length() / 2.0, 0.35, 0.6))
 		if player.is_on_floor() and target.y - player.global_position.y > 0.3 and to.length() < 2.4:
 			press(&"jump")
-			await frames(12)
+			await frames(hold)
 			release(&"jump")
 		await frames(1)
 	move(Vector2.ZERO)
@@ -707,7 +813,7 @@ func hop_to(target: Vector3) -> bool:
 func climb_lookout() -> bool:
 	var c := (node("Structures/Lookout/TowerCore") as Node3D).global_position
 	var first := (node("Structures/Lookout/Landing1") as Node3D).global_position
-	await place(first + Player.flat(first - c).normalized() * 2.4 + Vector3(0, 10.5 - first.y, 0) + Vector3.UP * 0.0, Player.flat(c - first))
+	await place(first + Player.flat(first - c).normalized() * 2.4 + Vector3(0, L.BLUFF + 0.1 - first.y, 0), Player.flat(c - first))
 	for k in range(1, 11):
 		var landing := node("Structures/Lookout/Landing%d" % k) as Node3D
 		if not await hop_to(landing.global_position + Vector3.UP * 0.35):
@@ -730,7 +836,7 @@ func test_dinghy_quest() -> void:
 	check("the log says where to look", QuestLog.build().any(func(q: Dictionary) -> bool: return q.title == "A Boat of Your Own" and "lookout" in q.description and "pier" in q.description), "")
 	# The sail: up Tok's lookout tower, landing by landing.
 	var climbed := await climb_lookout()
-	check("climbs Tok's lookout tower, landing by landing, to its deck", climbed and player.global_position.y > 24.3, "pos=%v" % player.global_position)
+	check("climbs Tok's lookout tower, landing by landing, to its deck", climbed and player.global_position.y > L.TOWER.y + 13.8, "pos=%v" % player.global_position)
 	var sail := node("Gameplay/SailPickup") as Node3D
 	move(stick_toward(Player.flat(sail.global_position - player.global_position)) * 0.5)
 	var got := await wait_until(func() -> bool: return WorldState.is_completed(&"dinghy_sail"), 180)
@@ -773,7 +879,7 @@ func board_boat() -> TinyBoat:
 	# Gus has fixed up the old dinghy: it's Patchy's, at the end of the pier.
 	WorldState.mark_completed(&"castaway_dinghy")
 	await frames(2)
-	await place(Vector3(-47.0, 1.7, 58.0), Vector3.RIGHT)
+	await place(Vector3(-98.8, L.QUAY + 0.1, 87.0), Vector3.RIGHT)
 	await frames(6)
 	tap(&"interact")
 	await wait_until(func() -> bool: return player.state_id == &"boat", 30)
@@ -788,9 +894,9 @@ func test_board_and_sail_to_driftwood_key() -> void:
 	var landing := node("Gameplay/DriftwoodKey/BoatLanding") as Node3D
 	var top := 0.0
 	var arrived := -1
-	# Pull away from the dock's end first, then head for the islet.
-	var waypoints: Array[Vector3] = [Vector3(-46.0, 0, 78.0), landing.global_position]
-	for i in 1500:
+	# Pull away from the pier's end, out of the bay's mouth, then across to the islet.
+	var waypoints: Array[Vector3] = [Vector3(-96.0, 0, 102.0), Vector3(-110.0, 0, 125.0), Vector3(-150.0, 0, 175.0), landing.global_position]
+	for i in 2400:
 		var to := Player.flat(waypoints[0] - boat.global_position)
 		if waypoints.size() > 1 and to.length() < 4.0:
 			waypoints.pop_front()
@@ -808,7 +914,7 @@ func test_board_and_sail_to_driftwood_key() -> void:
 	check("Patchy stays in his seat", player.global_position.distance_to(boat.get_seat_transform().origin) < 0.3, "")
 	move(Vector2.ZERO)
 	await frames(30)
-	var shore := Player.flat(DRIFTWOOD_CENTER - boat.global_position)
+	var shore := Player.flat(L.DRIFTWOOD - boat.global_position)
 	move(stick_toward(shore))
 	await frames(2)
 	tap(&"jump")
@@ -817,7 +923,7 @@ func test_board_and_sail_to_driftwood_key() -> void:
 	if player.state_id == &"swim":
 		# Short swim up the beach.
 		for i in 240:
-			move(stick_toward(Player.flat(DRIFTWOOD_CENTER - player.global_position)))
+			move(stick_toward(Player.flat(L.DRIFTWOOD - player.global_position)))
 			await frames(1)
 			if player.state_id == &"ground":
 				break
@@ -874,7 +980,7 @@ func test_the_crossing_has_things_to_find() -> void:
 
 func test_cannot_hop_out_in_open_sea() -> void:
 	var boat := await board_boat()
-	boat.global_position = Vector3(-90, 0, 115)
+	boat.global_position = Vector3(-200, 0, 195)
 	await frames(10)
 	tap(&"jump")
 	await frames(20)
@@ -887,8 +993,8 @@ func test_boat_washes_back_to_dock() -> void:
 	var mooring := node("Structures/Harbor/BoatMooring") as Node3D
 	WorldState.mark_completed(&"castaway_dinghy")
 	await frames(2)
-	boat.global_position = DRIFTWOOD_CENTER + Vector3(14, 0, -30)
-	await place(Vector3(0, 1.3, 33), Vector3.FORWARD)
+	boat.global_position = L.DRIFTWOOD + Vector3(14, 0, -30)
+	await place(Vector3(-112, L.LOW + 0.1, 36), Vector3.FORWARD)
 	await frames(150)
 	check("stray boat returns to the end of Barnacle Bay's pier", Player.flat(boat.global_position - mooring.global_position).length() < 0.5, "boat=%v" % boat.global_position)
 
@@ -919,16 +1025,16 @@ func test_lantern_found_on_driftwood_key() -> void:
 func test_lantern_cave_braziers_open_the_gate() -> void:
 	await clear_enemies()
 	await give(&"lantern")
-	await place(Vector3(11.0, 13.1, -52.5), Vector3.LEFT)
+	await place(Vector3(-155.0, L.HIGH + 0.1, -86.5), Vector3.LEFT)
 	move(Vector2(0, -1))
 	var refused := false
 	for i in 120:
 		await frames(1)
 		refused = refused or player.state_id == &"locked"
-		if player.global_position.x < 2.5:
+		if player.global_position.x < -163.5:
 			break
 	move(Vector2.ZERO)
-	check("walks into the dark with the lantern", not refused and player.global_position.x < 3.0, "x=%.2f refused=%s" % [player.global_position.x, refused])
+	check("walks into the dark with the lantern", not refused and player.global_position.x < -163.0, "x=%.2f refused=%s" % [player.global_position.x, refused])
 	var a := node("Gameplay/CaveBrazierA") as Brazier
 	var b2 := node("Gameplay/CaveBrazierB") as Brazier
 	var gate := node("Structures/CaveGate") as Gate
@@ -977,14 +1083,15 @@ func test_grapple_zips_to_the_pillar_and_the_cannon() -> void:
 	await clear_enemies()
 	await give(&"grapple")
 	var tease := node("Gameplay/Headland/GrappleTease") as Node3D
-	var from := Vector3(81.0, 13.1, -49.0)
+	# From the headland's east cliff, out across the water to the sea pillar.
+	var from := Vector3(182.5, L.FORT + 0.1, -94.0)
 	await place(from, Player.flat(tease.global_position - from).normalized())
 	tap(&"tool_primary")
 	var zipped := await wait_until(func() -> bool: return player.state_id == &"grapple", 60)
 	check("grapple fires at the iron point", zipped >= 0, "state=%s" % player.state_id)
 	await wait_until(func() -> bool: return player.is_on_floor() and player.state_id == &"ground", 240)
 	await frames(10)
-	check("lands on the pillar top", player.global_position.y > 21.0, "pos=%v state=%s" % [player.global_position, player.state_id])
+	check("lands on the pillar top", player.global_position.y > L.FORT + 8.2, "pos=%v state=%s" % [player.global_position, player.state_id])
 	var got := await wait_until(func() -> bool: return InventoryManager.has_attachment(&"cannon"), 120)
 	if got < 0:
 		var pickup := node("Gameplay/Headland/CannonPickup") as Node3D
@@ -997,21 +1104,20 @@ func test_grapple_zips_to_the_pillar_and_the_cannon() -> void:
 func test_cannon_cracks_the_grotto_and_rings_the_targets() -> void:
 	await clear_enemies()
 	await give(&"cannon")
-	var crack := node("Structures/CannonSecrets/GrottoCrackedRock") as Node3D
-	await place(crack.global_position + Vector3(6.0, 0.1, 0), Vector3.LEFT)
+	var crack := node("Structures/EastDowns/GrottoCrackedRock") as Node3D
+	await place(crack.global_position + Vector3(-6.0, 0.1, 0), Vector3.RIGHT)
 	tap(&"tool_primary")
 	await frames(60)
 	check("cannonball shatters cracked rock", WorldState.is_completed(&"castaway_grotto_rock"), "")
-	for path in ["Structures/CannonSecrets/TargetBeach", "Structures/CannonSecrets/TargetHorn"]:
-		var t := node(path) as Node3D
-		var face := -t.global_basis.z
-		var spot := t.global_position + face * 11.0
-		spot.y = t.global_position.y + 0.15
-		await place(spot, -face)
+	# The powder room's targets: one on the sea arch (shot from the downs),
+	# one on the fort's tall tower (shot from the yard).
+	for d: Array in [["Structures/Fort/TargetArch", Vector3(178, L.DOWNS + 0.1, 4)], ["Structures/Fort/TargetTower", Vector3(136, L.FORT + 0.1, -98)]]:
+		var t := node(d[0]) as CannonTarget
+		await place(d[1], Player.flat(t.global_position - d[1]))
 		await frames(40)
 		tap(&"tool_primary")
 		await frames(70)
-		check("target %s rung" % t.name, (t as CannonTarget).is_active(), "pos=%v" % player.global_position)
+		check("target %s rung" % t.name, t.is_active(), "pos=%v" % player.global_position)
 	await frames(100)
 	check("vault opens", WorldState.is_completed(&"castaway_vault_gate"), "")
 
@@ -1117,7 +1223,7 @@ func test_tutorial_hint_waits_for_control_and_shows_once() -> void:
 		if text.begins_with("{jump} Jump"):
 			shown[0] += 1
 	Events.hud_message.connect(count)
-	await place(Vector3(0, 1.3, 30.0), Vector3.FORWARD)
+	await place(Vector3(86, L.SAND + 0.1, 96.0), Vector3.FORWARD)
 	# Locked (as in a cutscene) inside the box, with the hint re-armed (the
 	# default spawn already triggered it during setup).
 	player.set_locked(true, {"anim": &"idle"})
@@ -1128,8 +1234,8 @@ func test_tutorial_hint_waits_for_control_and_shows_once() -> void:
 	player.set_locked(false)
 	await frames(30)
 	check("hint appears once he can move", shown[0] == 1, "shown=%d" % shown[0])
-	await place(Vector3(0, 1.3, 26.5), Vector3.BACK)
-	await place(Vector3(0, 1.3, 30.0), Vector3.FORWARD)
+	await place(Vector3(86, L.SAND + 0.1, 104.5), Vector3.BACK)
+	await place(Vector3(86, L.SAND + 0.1, 96.0), Vector3.FORWARD)
 	await frames(30)
 	check("and only once", shown[0] == 1 and WorldState.is_completed(&"hint_jump"), "shown=%d" % shown[0])
 	Events.hud_message.disconnect(count)
@@ -1137,7 +1243,7 @@ func test_tutorial_hint_waits_for_control_and_shows_once() -> void:
 
 func test_sea_chart_fast_travel() -> void:
 	await clear_enemies()
-	await place(Vector3(-50, 3.1, 16), Vector3.FORWARD)
+	await place(Vector3(-112, L.LOW + 0.1, 36), Vector3.FORWARD)
 	check("can't sail to an undiscovered island", not GameManager.can_sail_to(&"driftwood_key"), "")
 	GameManager.discover_island(&"driftwood_key", "Driftwood Key")
 	GameManager.current_island = &"castaway_cay"

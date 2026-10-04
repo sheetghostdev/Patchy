@@ -72,6 +72,10 @@ const TERRAIN := {
 	&"sand": [SAND, SAND_DARK, Color("c4a066")],
 	&"rock": [Color("cdbca3"), ROCK, ROCK_DARK],
 	&"cliff": [GRASS, ROCK, ROCK_DARK],
+	# Warm banded sandstone under a grass cap (Castaway Cay's hills and
+	# Mount Patch), and grey sea-cliff stone (the old fort's headland).
+	&"cliff_warm": [GRASS, Color("cf9a62"), Color("8f5c3a")],
+	&"cliff_grey": [Color("7cbf52"), Color("aba69c"), Color("6d6862")],
 	&"wood": [WOOD, WOOD_DARK, Color("5e3820")],
 	&"wood_dark": [WOOD_DARK, Color("5e3820"), Color("472a17")],
 	&"thatch": [Color("e8c66e"), Color("cfa94f"), Color("a8843a")],

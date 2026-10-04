@@ -26,7 +26,7 @@ extends StaticBody3D
 	set(v):
 		smoothing = v
 		_queue()
-@export_enum("grass", "sand", "cliff", "rock", "dirt", "stone", "wood") var surface: String = "cliff":
+@export_enum("grass", "sand", "cliff", "cliff_warm", "cliff_grey", "rock", "dirt", "stone", "wood") var surface: String = "cliff":
 	set(v):
 		surface = v
 		_queue()
@@ -59,7 +59,7 @@ extends StaticBody3D
 @export var slide_surface := false
 @export var no_ledge_grab := false
 
-const FOOTSTEP := {"grass": &"grass", "cliff": &"grass", "dirt": &"grass", "sand": &"sand", "rock": &"stone", "stone": &"stone", "wood": &"wood"}
+const FOOTSTEP := {"grass": &"grass", "cliff": &"grass", "cliff_warm": &"grass", "cliff_grey": &"grass", "dirt": &"grass", "sand": &"sand", "rock": &"stone", "stone": &"stone", "wood": &"wood"}
 
 var _mesh: MeshInstance3D
 var _col: CollisionShape3D
